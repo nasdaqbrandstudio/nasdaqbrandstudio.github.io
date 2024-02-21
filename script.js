@@ -1,21 +1,19 @@
 async function filterData() {
     const symbol = document.getElementById('symbol').value.toUpperCase();
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/'; // CORS proxy service
-    const apiUrl = 'https://api.nasdaq.com/api/quote/list-type/NASDAQ100';
+    console.log('Filtering data for symbol:', symbol);
     
-    try {
-        const response = await fetch(proxyUrl + apiUrl);
-        const data = await response.json();
-        
-        const filteredData = data.data.filter(item => item.symbol.toUpperCase().includes(symbol));
+    const response = await fetch(`https://api.nasdaq.com/api/quote/list-type/NASDAQ100`);
+    const data = await response.json();
+    console.log('API response:', data);
+    
+    const filteredData = data.data.filter(item => item.symbol.toUpperCase().includes(symbol));
+    console.log('Filtered data:', filteredData);
 
-        displayData(filteredData);
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    }
+    displayData(filteredData);
 }
 
 function displayData(data) {
+    console.log('Displaying filtered data:', data);
     const table = document.createElement('table');
     const headerRow = table.insertRow();
     ['Symbol', 'Company', 'Last Sale', 'Net Change', '% Change', 'Market Cap', 'Country', 'IPO Year'].forEach(headerText => {
