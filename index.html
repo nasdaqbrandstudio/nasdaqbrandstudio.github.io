@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nasdaq Compound Interest Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f8f8;
+            color: #08062A;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .calculator {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            position: relative;
+        }
+
+        .eyebrow {
+            background-color: #08062A;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 8px 8px 0 0; /* Rounded top corners only */
+        }
+
+        .eyebrow h2 {
+            font-size: 24px;
+            margin: 0;
+            text-align: center;
+            color: #00EB80;
+            font-weight: bold;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            padding-left: 20px;
+        }
+
+        input[type="number"],
+        select {
+            width: calc(100% - 40px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-left: 20px;
+            box-sizing: border-box; /* Ensure width includes padding and border */
+        }
+
+        button[type="submit"] {
+            width: calc(100% - 40px);
+            padding: 10px;
+            background-color: #00EB80;
+            color: #08062A;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            margin-left: 20px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #08062A;
+            color: #00EB80;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            background-color: #08062A;
+            color: #00EB80;
+            padding: 15px 20px;
+            border-radius: 0 0 8px 8px;
+            text-align: center;
+        }
+
+        #result p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="eyebrow">
+            <h2>Nasdaq Compound Interest Calculator</h2>
+        </div>
+        <form id="compound-interest-form">
+            <label for="principal">Initial Investment</label>
+            <input type="number" id="principal" placeholder="Enter amount" required>
+            <label for="monthly-contribution">Monthly Contribution</label>
+            <input type="number" id="monthly-contribution" placeholder="Enter amount">
+            <label for="num-years">Length of Time in Years</label>
+            <input type="number" id="num-years" placeholder="Enter years" required>
+            <label for="interest-rate">Estimated Annual Interest Rate</label>
+            <input type="number" id="interest-rate" step="0.01" placeholder="Enter rate" required>
+            <label for="compound-frequency">Compound Frequency</label>
+            <select id="compound-frequency" style="width: calc(100% - 40px);">
+                <option value="1">Annually</option>
+                <option value="2">Semiannually</option>
+                <option value="4">Quarterly</option>
+                <option value="12">Monthly</option>
+                <option value="365">Daily</option>
+            </select>
+            <button type="submit">Calculate</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('compound-interest-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const principal = parseFloat(document.getElementById('principal').value) || 0;
+            const monthlyContribution = parseFloat(document.getElementById('monthly-contribution').value) || 0;
+            const numYears = parseInt(document.getElementById('num-years').value) || 0;
+            const interestRate = parseFloat(document.getElementById('interest-rate').value) / 100 || 0;
+            const compoundFrequency = parseInt(document.getElementById('compound-frequency').value) || 1;
+
+            let totalAmount = principal;
+
+            for (let i = 0; i < numYears * compoundFrequency; i++) {
+                totalAmount *= (1 + interestRate / compoundFrequency);
+                totalAmount += monthlyContribution * 12; // Convert monthly contribution to yearly before adding
+            }
+
+            const formattedAmount = totalAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            document.getElementById('result').innerHTML = `<p>Total amount after ${numYears} years: $${formattedAmount}</p>`;
+        });
+    </script>
+</body>
+</html>
