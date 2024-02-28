@@ -120,6 +120,26 @@
             padding: 30px;
             margin-left: 0px;
         }
+
+        /* Media query for screens smaller than 500px */
+@media (max-width: 500px) {
+    #chart-container {
+        display: none; /* Hide chart container */
+    }
+
+    .calculator {
+        border-radius: 8px; /* Adjusted border radius for mobile */
+    }
+
+    .eyebrow {
+        border-radius: 8px 8px 0px 0px; /* Adjusted border radius for mobile */
+    }
+
+    #result {
+        border-radius: 0 0 8px 8px; /* Adjusted border radius for mobile */
+    }
+}
+
     </style>
 </head>
 <body>
@@ -186,7 +206,7 @@
             }
 
             const formattedAmount = totalAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-            document.getElementById('result').innerHTML = `<p style="margin-bottom: 5px;">Total Amount After ${numYears} Years:</p><p style="font-size: 24px; font-weight: bold;">$${formattedAmount}</p>`;
+            document.getElementById('result').innerHTML = `<p style="margin-bottom: 5px;">Total Amount After ${numYears} Years:</p><p style="font-size: 24px; font-weight: bold;">$${formattedAmount}`;
 
             // Re-render the chart with the new data
             renderChart();
