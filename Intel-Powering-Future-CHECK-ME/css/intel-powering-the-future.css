@@ -57,7 +57,7 @@ strong {
 }
 
 .page-wrapper {
-  margin-top: -96px;
+  height: 100svh;
 }
 
 .page-wrapper.has-bg {
