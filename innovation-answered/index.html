@@ -557,6 +557,19 @@ html {
   const tl = gsap.timeline({paused: true});
   const isMobile = window.innerWidth < 768;  
   gsap.set('.hero-logo, .hero-el, .hero-el._02, .active-cta, .cta-button, .headline-xlarge, .scroll-arrow, .video-iframe-wrapper', {yPercent: 100, opacity: 0});
+  if (isMobile) {
+    gsap.set('.hero-headline-line', {clipPath: "inset(0% 100% 0% 0%)"});
+  } else {
+    gsap.set('.hero-headline-line', {clipPath: "inset(0% 0% 100% 0%)"});
+  }
+  tl.to('.loading-portal-quadrant.top-left', {xPercent: -100, duration: 1, ease: "expo.out"}, .5)
+    .to('.loading-portal-quadrant.top-right', {yPercent: -100, duration: 1, ease: "expo.out"}, .5)
+    .to('.loading-portal-quadrant.bottom-left', {yPercent: 100, duration: 1, ease: "expo.out"}, .5)
+    .to('.loading-portal-quadrant.bottom-right', {xPercent: 100, duration: 1, ease: "expo.out"}, .5);
+  if (!isMobile) {
+    tl.to('.hero-headline-line', {clipPath: "inset(0% 0% 0% 0%)", duration: 1, ease: "expo.out"}, 1);
+  }
+  tl.to('.hero-logo', {yPercent: 0, opacity: 1, duration: 1, ease: "expo.out"}, 1)
     .to('.hero-el', {yPercent: 0, opacity: 1, duration: 1, ease: "expo.out"}, 1.1)
     .to('.hero-el._02', {yPercent: 0, opacity: 1, duration: 1, ease: "expo.out"}, 1.2)
     .to('.active-cta', {yPercent: 0, opacity: 1, duration: 1, ease: "expo.out"}, 1.3)
