@@ -1,0 +1,50 @@
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://nasdaqbrandstudio.github.io/images/mkts.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.5;
+    z-index: 0;
+}
+
+.shadow-custom {
+    box-shadow: 0 0 5rem 0.25rem #0092bc;
+}
+
+.shadow-custom-input {
+    box-shadow: 0 0 1rem 0.5rem rgba(0, 0, 0, 0.2);
+}
+
+.text-nasdaq-blue {
+    color: #0092bc;
+}
+
+.bg-nasdaq-blue {
+    background-color: #0092bc;
+}
+
+.bg-nasdaq-blue-dark {
+    background-color: #007a9d;
+}
+
+.angular-arrow {
+    width: 16px;
+    height: 16px;
+}
+
+.angular-arrow path {
+    fill: #00EB80;
+}
+
+.angular-arrow.negative {
+    transform: rotate(180deg);
+}
+
+.angular-arrow.negative path {
+    fill: #ED8082;
+}
