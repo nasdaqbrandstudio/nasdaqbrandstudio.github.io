@@ -1,5 +1,9 @@
+body {
+    background-color: black;
+}
+
 .background-image {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -12,11 +16,26 @@
     z-index: 0;
 }
 
-.shadow-custom {
+.outer-container {
+    width: 75%;
+    max-width: 1000px;
     box-shadow: 0 0 5rem 0.25rem #0092bc;
 }
 
+.inner-container {
+    width: 75%;
+    padding-top: 12.5%;
+    padding-bottom: 12.5%;
+}
+
+@media (min-width: 1024px) {
+    .outer-container {
+        width: 50%;
+    }
+}
+
 .shadow-custom-input {
+    width: 100%;
     box-shadow: 0 0 1rem 0.5rem rgba(0, 0, 0, 0.2);
 }
 
@@ -47,4 +66,18 @@
 
 .angular-arrow.negative path {
     fill: #ED8082;
+}
+
+#stockSymbol {
+    width: 70%;
+    height: 48px;
+}
+
+#searchButton {
+    width: 30%;
+    height: 48px;
+}
+
+#stockData {
+    margin-top: 2rem;
 }
