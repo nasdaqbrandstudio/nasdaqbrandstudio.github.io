@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 {
                     params: {
                         adjusted: true,
-                        apiKey: 'wq6W2F_TIARoEsL7rJp71TYydO2g0dkp'
+                        apiKey: '3a_CVMYVd8EvvCQPALGaQWpAHAKNOFKn'
                     }
                 }
             );
