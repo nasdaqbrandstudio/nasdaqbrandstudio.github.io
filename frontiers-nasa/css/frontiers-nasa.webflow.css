@@ -12,12 +12,13 @@
   height: 60vh;
   display: block;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .body {
   height: auto;
   font-family: Inter, sans-serif;
+  overflow: hidden;
 }
 
 .size-container {
@@ -33,6 +34,7 @@
   height: 100%;
   display: flex;
   position: static;
+  overflow: hidden;
 }
 
 .div-block {
@@ -52,7 +54,7 @@
   height: 100%;
   display: flex;
   position: absolute;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .pattern-container {
@@ -69,7 +71,7 @@
   height: 100%;
   display: flex;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .code-embed {
@@ -91,6 +93,7 @@
   padding-left: 10%;
   display: flex;
   position: absolute;
+  overflow: hidden;
 }
 
 .heading {
