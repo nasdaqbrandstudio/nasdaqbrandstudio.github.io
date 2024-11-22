@@ -9,7 +9,7 @@
   justify-content: space-around;
   align-items: stretch;
   width: 100%;
-  height: 100vh;
+  height: 60svh;
   display: block;
   position: relative;
   overflow: visible;
@@ -20,7 +20,7 @@
 }
 
 .size-container {
-  height: 100vh;
+  height: 60svh;
   font-family: Inter, sans-serif;
 }
 
