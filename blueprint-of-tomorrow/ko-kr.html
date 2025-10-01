@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내일의 청사진</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .video-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .video-container::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #08062a;
+      opacity: 0.7;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100vw;
+      height: 100vh;
+      border: none;
+      pointer-events: none;
+    }
+
+    @media (min-aspect-ratio: 16/9) {
+      .video-container iframe {
+        width: 100vw;
+        height: 56.25vw;
+      }
+    }
+
+    @media (max-aspect-ratio: 16/9) {
+      .video-container iframe {
+        width: 177.78vh;
+        height: 100vh;
+      }
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+      gap: 2rem;
+      color: white;
+      text-align: center;
+    }
+
+    h2 {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5rem;
+      margin: 0;
+    }
+
+    h1 {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-weight: 700;
+      font-size: 4rem;
+      margin: 0;
+      line-height: 1.2;
+      color: #0092BC;
+    }
+
+    p {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-weight: 200;
+      font-size: 1.25rem;
+      max-width: 900px;
+      line-height: 1.6;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="video-container">
+    <iframe 
+      src="https://cdn.jwplayer.com/players/W1DICIPh-O3tAg2oQ.html?autoplay=true&mute=true&controls=false&repeat=true&loop=true" 
+      allowfullscreen
+      allow="autoplay; fullscreen"
+    ></iframe>
+  </div>
+  
+  <div class="content">
+    <h2>나스닥 글로벌 지수</h2>
+    <h1>내일의 청사진</h1>
+    <p>
+나스닥 지수가 현대 경제를 어떻게 형성하는지 알아보세요. 혁신을 촉진하고, 기회를 창출하고, 미래의 금융 인프라를 구축합니다.</p>
+  </div>
+</body>
+</html>
