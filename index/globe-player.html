@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Globe Video Player</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <script type="module">
+    import createGlobe from 'https://cdn.skypack.dev/cobe';
+
+    const videos = [
+      {
+        url: "https://cdn.jwplayer.com/players/X0mQYn16-qeq4Z2nO.html",
+        playerId: "X0mQYn16",
+        title: "Amova Asset Management",
+        description: "Discover how Amova Asset Management is meeting Japan's growing demand for global tech exposure by using Nasdaq indexes to deliver streamlined, currency-hedged access to leading U.S. companies.",
+        location: "Tokyo, Japan",
+        lat: 35.6762,
+        lon: 139.6503
+      },
+      {
+        url: "https://cdn.jwplayer.com/players/bykA1XjJ-qeq4Z2nO.html",
+        playerId: "bykA1XjJ",
+        title: "Mirae Asset Global Investments",
+        description: "Explore how Mirae Asset Global Investments is driving innovation in Korea's investment landscape through its partnership with Nasdaq, offering tech-focused ETFs that turn global trends like AI and semiconductors into accessible opportunities for local investors.",
+        location: "Seoul, South Korea",
+        lat: 37.5665,
+        lon: 126.9780
+      },
+      {
+        url: "https://cdn.jwplayer.com/players/sCNsZhyy-qeq4Z2nO.html",
+        playerId: "sCNsZhyy",
+        title: "Samsung",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        location: "Seoul, South Korea",
+        lat: 37.5665,
+        lon: 127.0080
+      },
+      {
+        url: "https://cdn.jwplayer.com/players/TxY42zod-qeq4Z2nO.html",
+        playerId: "TxY42zod",
+        title: "CME",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        location: "Chicago, USA",
+        lat: 41.8781,
+        lon: -87.6298
+      }
+    ];
+
+    let currentVideoIndex = 0;
+    let phi = 0;
+    let globeInstance = null;
+    let isAutoRotating = true;
+    let lastInteractionTime = Date.now();
+    let pointerInteracting = null;
+    let pointerInteractionMovement = 0;
+    let videoClicked = false;
+    let pauseRotationUntil = 0;
+    let hoveredMarkerIndex = null;
+    let isDragging = false;
+
+    window.addEventListener('load', () => {
+      const canvas = document.getElementById('globe-canvas');
+      let width = 0;
+
+      const onResize = () => {
+        width = canvas.offsetWidth;
+        if (canvas) {
+          canvas.width = width * 2;
+          canvas.height = width * 2;
+        }
+      };
+      
+      window.addEventListener('resize', onResize);
+      onResize();
+
+      globeInstance = createGlobe(canvas, {
+        devicePixelRatio: 2,
+        width: width * 2,
+        height: width * 2,
+        phi: 0,
+        theta: 0.3,
+        dark: 1,
+        diffuse: 1.2,
+        mapSamples: 20000,
+        mapBrightness: 3,
+        baseColor: [0, 0.576, 0.737],
+        markerColor: [1, 1, 1],
+        glowColor: [0, 0.576, 0.737],
+        opacity: 0.6,
+        mapFilter: (dot) => {
+          const dotLat = dot[0];
+          const dotLon = dot[1];
+          
+          // Check if this dot is near any marker
+          for (let video of videos) {
+            const markerLat = video.lat;
+            const markerLon = video.lon;
+            
+            const distance = Math.sqrt(
+              Math.pow(dotLat - markerLat, 2) + 
+              Math.pow(dotLon - markerLon, 2)
+            );
+            
+            // If within 8 degrees of a marker, make it white
+            if (distance < 8) {
+              dot[2] = 1; // Make this dot white
+            }
+          }
+          return true; // Always show the dot
+        },
+        markers: videos.map((video, index) => ({
+          location: [video.lat, video.lon],
+          size: index === currentVideoIndex ? 0.25 : 0.18
+        })),
+        onRender: (state) => {
+          const now = Date.now();
+          if (videoClicked && now - lastInteractionTime > 30000) {
+            videoClicked = false;
+            isAutoRotating = true;
+          }
+          
+          if (now < pauseRotationUntil && !isDragging) {
+            isAutoRotating = false;
+          } else if (!videoClicked) {
+            isAutoRotating = true;
+          }
+
+          if (isAutoRotating && !videoClicked) {
+            phi += 0.002;
+          }
+
+          state.phi = phi + pointerInteractionMovement;
+          state.width = width * 2;
+          state.height = width * 2;
+          
+          state.markers = videos.map((video, index) => ({
+            location: [video.lat, video.lon],
+            size: index === currentVideoIndex 
+              ? 0.25 + Math.sin(Date.now() / 500) * 0.05 
+              : 0.18
+          }));
+        }
+      });
+
+      canvas.addEventListener('pointerdown', (e) => {
+        pointerInteracting = e.clientX - pointerInteractionMovement;
+        isDragging = false;
+        pauseRotationUntil = Date.now() + 5000;
+      });
+      
+      canvas.addEventListener('pointerup', () => {
+        pointerInteracting = null;
+        phi += pointerInteractionMovement;
+        pointerInteractionMovement = 0;
+        setTimeout(() => {
+          isDragging = false;
+        }, 100);
+        updateCursor();
+      });
+      
+      canvas.addEventListener('pointerout', () => {
+        pointerInteracting = null;
+        if (pointerInteractionMovement !== 0) {
+          phi += pointerInteractionMovement;
+          pointerInteractionMovement = 0;
+        }
+        hoveredMarkerIndex = null;
+        isDragging = false;
+        canvas.style.cursor = 'grab';
+      });
+      
+      canvas.addEventListener('pointermove', (e) => {
+        if (pointerInteracting !== null) {
+          const delta = e.clientX - pointerInteracting;
+          pointerInteractionMovement = delta / 100;
+          if (Math.abs(pointerInteractionMovement) > 0.01) {
+            isDragging = true;
+          }
+          canvas.style.cursor = 'grabbing';
+        } else {
+          checkMarkerHover(e);
+        }
+      });
+
+      canvas.addEventListener('click', (event) => {
+        if (isDragging) return;
+        
+        const markerIndex = getMarkerAtPosition(event);
+        if (markerIndex !== null) {
+          console.log('[v0] Marker clicked:', markerIndex, videos[markerIndex].title);
+          loadVideo(markerIndex);
+        }
+      });
+
+      function checkMarkerHover(event) {
+        const markerIndex = getMarkerAtPosition(event);
+        hoveredMarkerIndex = markerIndex;
+        updateCursor();
+      }
+
+      function getMarkerAtPosition(event) {
+        const rect = canvas.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        const y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+        
+        for (let index = 0; index < videos.length; index++) {
+          const video = videos[index];
+          const markerLat = video.lat * (Math.PI / 180);
+          const markerLon = video.lon * (Math.PI / 180);
+          
+          const currentPhi = phi + pointerInteractionMovement;
+          const theta = 0.3;
+          
+          const markerX = Math.cos(markerLat) * Math.sin(markerLon - currentPhi);
+          const markerY = Math.sin(markerLat) * Math.cos(theta) - Math.cos(markerLat) * Math.cos(markerLon - currentPhi) * Math.sin(theta);
+          const markerZ = Math.cos(markerLat) * Math.cos(markerLon - currentPhi) * Math.cos(theta) + Math.sin(markerLat) * Math.sin(theta);
+          
+          if (markerZ > 0) {
+            const distance = Math.sqrt((x - markerX) ** 2 + (y - markerY) ** 2);
+            
+            if (distance < 0.25) {
+              return index;
+            }
+          }
+        }
+        return null;
+      }
+
+      function updateCursor() {
+        if (hoveredMarkerIndex !== null) {
+          canvas.style.cursor = 'pointer';
+        } else {
+          canvas.style.cursor = 'grab';
+        }
+      }
+
+      createPlaylist();
+      
+      console.log('[v0] All video markers:', videos.map(v => `${v.title} at ${v.location} (${v.lat}, ${v.lon})`));
+    });
+
+    function rotateToLocation(video) {
+      videoClicked = true;
+      lastInteractionTime = Date.now();
+      const targetPhi = (video.lon * Math.PI) / 180;
+      phi = targetPhi;
+    }
+
+    function getThumbnailUrl(playerId) {
+      return `https://cdn.jwplayer.com/v2/media/${playerId}/poster.jpg?width=720`;
+    }
+
+    function createPlaylist() {
+      const playlistContainer = document.getElementById('playlist-container');
+      
+      videos.forEach((video, index) => {
+        const item = document.createElement('div');
+        item.className = 'playlist-item' + (index === 0 ? ' active' : '');
+        
+        const thumbnailUrl = getThumbnailUrl(video.playerId);
+        
+        item.innerHTML = `
+          <div class="playlist-item-thumbnail">
+            <img src="${thumbnailUrl}" alt="${video.title}" onerror="this.src='https://content.jwplatform.com/thumbs/${video.playerId}-720.jpg'">
+            <div class="now-playing-overlay">NOW PLAYING</div>
+          </div>
+          <div class="playlist-item-title">${video.title}</div>
+        `;
+        item.onclick = () => loadVideo(index);
+        playlistContainer.appendChild(item);
+      });
+    }
+
+    function loadVideo(index) {
+      currentVideoIndex = index;
+      const video = videos[index];
+      
+      const urlWithAutoplay = video.url + (video.url.includes('?') ? '&' : '?') + 'autoplay=true';
+      document.getElementById('main-video-iframe').src = urlWithAutoplay;
+      
+      document.getElementById('video-title').textContent = video.title;
+      document.getElementById('video-description').textContent = video.description;
+      
+      document.querySelectorAll('.playlist-item').forEach((item, i) => {
+        item.classList.toggle('active', i === index);
+      });
+      
+      rotateToLocation(video);
+    }
+
+    window.loadVideo = loadVideo;
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #000;
+      color: white;
+    }
+
+    #video-player-section {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .globe-video-wrapper {
+      display: flex;
+      gap: 3rem;
+      align-items: flex-start;
+    }
+
+    #globe-container {
+      flex: 0 0 33.33%;
+      aspect-ratio: 1;
+      position: relative;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .video-section {
+      flex: 0 0 calc(66.67% - 3rem);
+      min-width: 0;
+    }
+
+    @media (max-width: 991px) {
+      .globe-video-wrapper {
+        flex-direction: column;
+      }
+      
+      #globe-container {
+        flex: 1;
+        width: 100%;
+      }
+      
+      .video-section {
+        flex: 1;
+        width: 100%;
+      }
+    }
+
+    #globe-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+    }
+
+    #globe-canvas:active {
+      cursor: grabbing;
+    }
+
+    .video-info {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    #video-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: 2rem;
+      line-height: 2.5rem;
+      color: #0092BC;
+      margin-bottom: 1.25rem;
+      text-align: center;
+    }
+
+    #video-description {
+      font-family: 'Inter', sans-serif;
+      font-weight: 200;
+      font-size: 1rem;
+      line-height: 1.25rem;
+      color: white;
+      text-align: center;
+    }
+
+    .main-video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 0.5rem;
+    }
+
+    .main-video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 0.5rem;
+    }
+
+    .playlist-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    @media (max-width: 991px) {
+      .playlist-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 767px) {
+      .playlist-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .playlist-item {
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .playlist-item:hover {
+      transform: scale(1.05);
+    }
+
+    .playlist-item-thumbnail {
+      position: relative;
+      overflow: hidden;
+      border-radius: 0.5rem;
+    }
+
+    .playlist-item-thumbnail img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 0.5rem;
+    }
+
+    .playlist-item-title {
+      margin-top: 0.5rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: 1.25rem;
+      line-height: 1.5rem;
+      color: #0092BC;
+      text-align: center;
+    }
+
+    .now-playing-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 146, 188, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 1rem;
+      letter-spacing: 0.25rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .playlist-item.active .now-playing-overlay {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="video-player-section">
+    <div class="globe-video-wrapper">
+      <div id="globe-container">
+        <canvas id="globe-canvas"></canvas>
+      </div>
+
+      <div class="video-section">
+        <div class="main-video-wrapper" id="main-video-container">
+          <iframe id="main-video-iframe" src="https://cdn.jwplayer.com/players/X0mQYn16-qeq4Z2nO.html" allowfullscreen allow="autoplay"></iframe>
+        </div>
+
+        <div class="video-info">
+          <h3 id="video-title">Amova Asset Management</h3>
+          <p id="video-description">Discover how Amova Asset Management is meeting Japan's growing demand for global tech exposure by using Nasdaq indexes to deliver streamlined, currency-hedged access to leading U.S. companies.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="playlist-container" id="playlist-container"></div>
+  </div>
+</body>
+</html>
