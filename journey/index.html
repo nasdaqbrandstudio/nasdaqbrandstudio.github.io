@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sequential Lottie Journey</title>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent; /* Changed to transparent if you're embedding this */
+            overflow: hidden;
+        }
+        lottie-player {
+            width: 80%;
+            max-width: 500px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <lottie-player 
+        id="main-player" 
+        src="1-cube.json" 
+        speed="1" 
+        autoplay>
+    </lottie-player>
+
+    <script>
+        const player = document.getElementById('main-player');
+        
+        // The list of files in order
+        const playlist = [
+            "1-cube.json",
+            "2-pantograph.json",
+            "3-graph.json",
+            "4-data.json",
+            "5-up-down.json"
+        ];
+
+        let currentIndex = 0;
+
+        // Listen for the 'complete' event
+        player.addEventListener('complete', () => {
+            // Move to the next index, or back to 0 if at the end
+            currentIndex = (currentIndex + 1) % playlist.length;
+            
+            // Update the player source
+            player.load(playlist[currentIndex]);
+            
+            // Small delay to ensure the load is ready before playing
+            player.addEventListener('ready', () => {
+                player.play();
+            }, { once: true });
+        });
+    </script>
+
+</body>
+</html>
