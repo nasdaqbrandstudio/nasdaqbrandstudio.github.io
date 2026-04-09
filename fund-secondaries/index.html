@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timeline</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:       #0092BC;
+      --blue-light: #E0F2F8;
+      --blue-mid:   #99D1E5;
+      --blue-dark:  #006E8E;
+      --bg:         #F5F5FA;
+      --surface:    #FFFFFF;
+      --border:     #D6D6E4;
+      --text:       #0A0A1A;
+      --text-sub:   #3D3D5C;
+      --text-muted: #7A7A9A;
+      --ease:       cubic-bezier(0.4, 0, 0.2, 1);
+      --dot-size:   52px;
+      --dot-r:      26px;
+    }
+
+    html, body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      height: 100%;
+      min-height: 100%;
+    }
+
+    /* ════════════════════════════════════════
+       OUTER CENTERING WRAPPER
+    ════════════════════════════════════════ */
+    .tl-outer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      width: 100%;
+      background: var(--bg);
+      padding: 40px 0;
+    }
+
+    /* ════════════════════════════════════════
+       INNER CONTENT
+    ════════════════════════════════════════ */
+    .tl {
+      width: 100%;
+      max-width: 920px;
+      padding: 0 36px;
+    }
+
+    /* ════════════════════════════════════════
+       CARD AREA — transparent, sized by JS
+    ════════════════════════════════════════ */
+    .tl-card-wrap {
+      position: relative;
+      height: 170px;
+      margin-bottom: 32px;
+    }
+
+    /* Arrows — top-right */
+    .tl-arrows {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: flex;
+      gap: 6px;
+      z-index: 2;
+    }
+    .tl-arrow {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-sub);
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      flex-shrink: 0;
+    }
+    .tl-arrow:hover:not(:disabled) {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: var(--blue-light);
+    }
+    .tl-arrow:disabled { opacity: 0.28; cursor: default; }
+    .tl-arrow svg { width: 14px; height: 14px; display: block; }
+
+    /* Individual cards */
+    .tl-card {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(5px);
+      transition: opacity 0.26s var(--ease), transform 0.26s var(--ease);
+    }
+    .tl-card.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .card-title {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 14px;
+      line-height: 1.15;
+      padding-right: 84px;
+    }
+
+    .card-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .card-bullets li {
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--text-sub);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .card-bullets li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex-shrink: 0;
+      margin-top: 10px;
+      opacity: 0.55;
+    }
+
+    /* ════════════════════════════════════════
+       TRACK
+    ════════════════════════════════════════ */
+    .tl-track-area {
+      position: relative;
+      height: var(--dot-size);
+      margin-bottom: 10px;
+    }
+
+    .track-bg,
+    .track-done,
+    .track-progress {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 2px;
+      border-radius: 2px;
+    }
+    .track-bg       { background: var(--border); }
+    /* No CSS transitions — driven entirely by rAF for seamless animation */
+    .track-done     { background: var(--blue); }
+    .track-progress { background: var(--blue); }
+
+    /* ── Step dots ── */
+    .tl-step {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      font-family: inherit;
+      z-index: 2;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .step-dot {
+      width: var(--dot-size);
+      height: var(--dot-size);
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.28s var(--ease),
+                  border-color 0.28s var(--ease),
+                  box-shadow 0.28s var(--ease);
+    }
+    .step-dot svg {
+      width: 24px;
+      height: 24px;
+      color: var(--text-muted); /* inactive: grey-blue */
+      fill: currentColor;
+      transition: color 0.28s var(--ease);
+    }
+
+    /* past / visited — light blue bg, blue icon */
+    .tl-step.past .step-dot {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+    .tl-step.past .step-dot svg { color: var(--blue); }
+
+    /* active — solid blue, white icon */
+    .tl-step.active .step-dot {
+      border-color: var(--blue);
+      background: var(--blue);
+      box-shadow: 0 0 0 6px rgba(0,146,188,0.14);
+    }
+    .tl-step.active .step-dot svg { color: #ffffff; }
+
+    /* hover (not active) */
+    .tl-step:hover:not(.active) .step-dot {
+      border-color: var(--blue-mid);
+      background: var(--blue-light);
+    }
+    .tl-step:hover:not(.active) .step-dot svg { color: var(--blue); }
+    .tl-step:focus-visible .step-dot { outline: 2px solid var(--blue); outline-offset: 3px; }
+
+    /* ── Labels row ── */
+    .tl-labels {
+      position: relative;
+      height: 24px;
+    }
+    .tl-step-label {
+      position: absolute;
+      transform: translateX(-50%);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      white-space: nowrap;
+      transition: color 0.28s var(--ease);
+      user-select: none;
+    }
+    .tl-step-label.past,
+    .tl-step-label.active { color: var(--blue); }
+
+    /* ════════════════════════════════════════
+       MOBILE — vertical list (≤ 640px)
+    ════════════════════════════════════════ */
+    @media (max-width: 640px) {
+      .tl { padding: 0 20px; }
+      .tl-outer { padding: 32px 0; }
+      .tl-card-wrap, .tl-track-area, .tl-labels { display: none; }
+      .tl-vertical { display: flex; flex-direction: column; }
+
+      .tl-v-step {
+        display: flex;
+        gap: 18px;
+        position: relative;
+      }
+      .tl-v-step:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        left: calc(var(--dot-size) / 2 - 1px);
+        top: var(--dot-size);
+        bottom: 0;
+        width: 2px;
+        /* connector line also blue on mobile */
+        background: var(--blue-mid);
+      }
+
+      /* Mobile dots always show the "visited" state —
+         light blue bg, blue border, blue icon */
+      .tl-v-dot {
+        width: var(--dot-size);
+        height: var(--dot-size);
+        border-radius: 50%;
+        border: 2px solid var(--blue);
+        background: var(--blue-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        position: relative;
+        z-index: 1;
+      }
+      .tl-v-dot svg {
+        width: 24px;
+        height: 24px;
+        color: var(--blue); /* always blue */
+        fill: currentColor;
+      }
+
+      .tl-v-content { padding-bottom: 28px; flex: 1; }
+      .tl-v-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text);
+        letter-spacing: -0.02em;
+        margin-bottom: 10px;
+        padding-top: 12px;
+        line-height: 1.2;
+      }
+      .tl-v-bullets { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+      .tl-v-bullets li {
+        font-size: 15px;
+        line-height: 1.55;
+        color: var(--text-sub);
+        padding-left: 15px;
+        position: relative;
+      }
+      .tl-v-bullets li::before {
+        content: '';
+        position: absolute;
+        left: 0; top: 8px;
+        width: 5px; height: 5px;
+        border-radius: 50%;
+        background: var(--blue);
+        opacity: 0.45;
+      }
+    }
+
+    @media (min-width: 641px) { .tl-vertical { display: none; } }
+  </style>
+</head>
+<body>
+
+<div class="tl-outer" id="tlOuter">
+  <div class="tl" id="tl">
+
+    <div class="tl-card-wrap" id="cardWrap">
+      <div class="tl-arrows">
+        <button class="tl-arrow" id="btnPrev" aria-label="Previous step">
+          <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="tl-arrow" id="btnNext" aria-label="Next step">
+          <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="tl-track-area" id="trackArea">
+      <div class="track-bg"       id="trackBg"></div>
+      <div class="track-done"     id="trackDone"></div>
+      <div class="track-progress" id="trackProg"></div>
+    </div>
+
+    <div class="tl-labels" id="labelsRow"></div>
+
+    <div class="tl-vertical" id="vertList"></div>
+
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════
+   SVG ICONS  (fill="currentColor" so CSS
+   color states drive the appearance)
+═══════════════════════════════════════ */
+const ICONS = {
+  'pre-auction':  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><path fill="currentColor" d="M0,400V20.83h83.33V0h25v20.83h79.17V0h25v20.83h79.17V0h25v20.83h83.33v246.55l-132.62,132.62H0ZM25,375h225v-125h125v-100H25v225ZM275,357.62l82.62-82.62h-82.62v82.62ZM25,125h350V45.83h-58.33v20.83h-25v-20.83h-79.17v20.83h-25v-20.83h-79.17v20.83h-25v-20.83H25v79.17Z"/></svg>`,
+  'bidding':      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><path fill="currentColor" d="M55.9,397.3L2.7,344.1l164.3-164.2,53.1,53.1L55.9,397.3ZM38.2,344.1l17.7,17.7,128.7-128.8-17.6-17.6L38.2,344.1Z"/><path fill="currentColor" d="M291.1,262L138,108.9,224.1,22.8l153.1,153.1-86.1,86.1ZM173.5,108.9l117.6,117.6,50.7-50.7-117.6-117.6-50.7,50.7Z"/><rect fill="currentColor" x="112.32" y="33.41" width="96.7" height="24" transform="translate(14.95 126.91) rotate(-45)"/><rect fill="currentColor" x="306.27" y="227.29" width="96.7" height="24" transform="translate(-65.34 320.84) rotate(-45)"/></svg>`,
+  'allocation':   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><path fill="currentColor" d="M200,1C90.3,1,1,90.3,1,200s89.3,199,199,199,199-89.3,199-199S309.7,1,200,1ZM108.2,52.9l70.5,134.4H27c4.2-56.7,35.6-105.8,81.2-134.4ZM200,373.6c-91.4,0-166.4-71.1-173-160.9h193.6L130.6,41c21.3-9.3,44.7-14.6,69.4-14.6,95.7,0,173.6,77.9,173.6,173.6s-77.9,173.6-173.6,173.6Z"/></svg>`,
+  'finalization': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 336 400"><rect fill="currentColor" x="66.7" y="140.2" width="158.6" height="23.3"/><rect fill="currentColor" x="66.7" y="202.7" width="158.6" height="23.3"/><rect fill="currentColor" x="66.7" y="265.3" width="158.6" height="23.3"/><path fill="currentColor" d="M211.6,1H.9v354h290.2V84.6L211.6,1ZM217.7,41.3l34.5,36.3h-34.5v-36.3ZM24.2,331.7V24.3h170.2v76.6h73.4v230.8H24.2Z"/><polygon fill="currentColor" points="335.1 399 58.3 399 58.3 375.6 311.8 375.6 311.8 118 335.1 118 335.1 399"/></svg>`,
+  'closing':      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><path fill="currentColor" d="M200,398.8C90.3,398.8,1,309.5,1,199.8S90.3.8,200,.8s199,89.3,199,199-89.3,199-199,199ZM200,26.2C104.3,26.2,26.4,104.1,26.4,199.8s77.9,173.6,173.6,173.6,173.6-77.9,173.6-173.6S295.7,26.2,200,26.2Z"/><polygon fill="currentColor" points="156.3 285.3 89.9 218.9 107.9 201 156.3 249.4 273.8 131.8 291.8 149.8 156.3 285.3"/></svg>`,
+};
+
+/* ═══════════════════════════════════════
+   DATA
+═══════════════════════════════════════ */
+const STEPS = [
+  { id: 'pre-auction',  label: 'Pre-Auction',  bullets: ['Onboarding & data room setup', 'Seller indications of interest', 'Auction setup'] },
+  { id: 'bidding',      label: 'Bidding',      bullets: ['First day of bidding announced', 'Buyer due diligence and bid entry'] },
+  { id: 'allocation',   label: 'Allocation',   bullets: ['Allocation of seller indications of interest with buyer bids'] },
+  { id: 'finalization', label: 'Finalization', bullets: ['Coordination of transfer document review and execution', 'Signatures tracked and managed on-platform', 'Final purchase price adjustments made'] },
+  { id: 'closing',      label: 'Closing',      bullets: ['Payment & closing'] },
+];
+
+/* ═══════════════════════════════════════
+   DOM REFS
+═══════════════════════════════════════ */
+const tlOuter   = document.getElementById('tlOuter');
+const cardWrap  = document.getElementById('cardWrap');
+const trackArea = document.getElementById('trackArea');
+const trackBg   = document.getElementById('trackBg');
+const trackDone = document.getElementById('trackDone');
+const trackProg = document.getElementById('trackProg');
+const labelsRow = document.getElementById('labelsRow');
+const btnPrev   = document.getElementById('btnPrev');
+const btnNext   = document.getElementById('btnNext');
+const vertList  = document.getElementById('vertList');
+
+const N     = STEPS.length;
+const DOT_R = 26; /* half of --dot-size (52px) */
+
+let dotEls   = [];
+let cardEls  = [];
+let labelEls = [];
+
+/* ═══════════════════════════════════════
+   BUILD ELEMENTS
+═══════════════════════════════════════ */
+STEPS.forEach((s, i) => {
+  const icon = ICONS[s.id];
+
+  /* Dot */
+  const btn = document.createElement('button');
+  btn.className = 'tl-step';
+  btn.setAttribute('aria-label', s.label);
+  btn.innerHTML = `<div class="step-dot">${icon}</div>`;
+  btn.addEventListener('click', () => { goTo(i); userPause(); });
+  trackArea.appendChild(btn);
+  dotEls.push(btn);
+
+  /* Card */
+  const card = document.createElement('div');
+  card.className = 'tl-card';
+  card.innerHTML = `
+    <div class="card-title">${s.label}</div>
+    <ul class="card-bullets">${s.bullets.map(b => `<li>${b}</li>`).join('')}</ul>`;
+  cardWrap.insertBefore(card, cardWrap.querySelector('.tl-arrows'));
+  cardEls.push(card);
+
+  /* Label */
+  const lbl = document.createElement('span');
+  lbl.className = 'tl-step-label';
+  lbl.textContent = s.label;
+  labelsRow.appendChild(lbl);
+  labelEls.push(lbl);
+});
+
+/* Mobile vertical — icons always blue */
+STEPS.forEach((s) => {
+  const row = document.createElement('div');
+  row.className = 'tl-v-step';
+  row.innerHTML = `
+    <div class="tl-v-dot">${ICONS[s.id]}</div>
+    <div class="tl-v-content">
+      <div class="tl-v-title">${s.label}</div>
+      <ul class="tl-v-bullets">${s.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
+    </div>`;
+  vertList.appendChild(row);
+});
+
+/* ═══════════════════════════════════════
+   GEOMETRY  (dots at 15 % → 85 %)
+═══════════════════════════════════════ */
+let dotPositions = [];
+
+function computePositions() {
+  const W     = trackArea.offsetWidth;
+  const start = W * 0.15;
+  const end   = W * 0.85;
+  dotPositions = STEPS.map((_, i) => start + (i / (N - 1)) * (end - start));
+}
+
+function applyLayout() {
+  computePositions();
+  const first = dotPositions[0];
+  const last  = dotPositions[N - 1];
+
+  dotEls.forEach((el, i)  => { el.style.left = dotPositions[i] + 'px'; });
+  labelEls.forEach((el, i) => { el.style.left = dotPositions[i] + 'px'; });
+
+  trackBg.style.left   = first + 'px';
+  trackBg.style.width  = (last - first) + 'px';
+  trackDone.style.left = first + 'px';
+
+  const cardLeft  = first - DOT_R;
+  const cardRight = last  + DOT_R;
+  cardWrap.style.left  = cardLeft + 'px';
+  cardWrap.style.width = (cardRight - cardLeft) + 'px';
+
+  renderFills(active, liveProgress);
+}
+
+/* ═══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
+let active       = 0;
+let liveProgress = 0;
+let autoPlaying  = false;   /* starts false; IntersectionObserver enables it */
+let cycleStarted = false;   /* has the observer triggered yet */
+let rafId        = null;
+let startTs      = null;
+let resumeTimer  = null;    /* setTimeout handle for resuming after user pause */
+
+const DWELL       = 5000;   /* ms per step */
+const RESUME_WAIT = 60000;  /* ms before auto-resuming after user interaction */
+
+/* ═══════════════════════════════════════
+   RENDER
+═══════════════════════════════════════ */
+function renderCards(idx) {
+  cardEls.forEach((c, i) => c.classList.toggle('visible', i === idx));
+}
+
+function renderDots(idx) {
+  dotEls.forEach((d, i) => {
+    d.classList.toggle('active', i === idx);
+    d.classList.toggle('past',   i < idx);
+  });
+  labelEls.forEach((l, i) => {
+    l.classList.toggle('active', i === idx);
+    l.classList.toggle('past',   i < idx);
+  });
+  btnPrev.disabled = false; /* always enabled — looping */
+  btnNext.disabled = false;
+}
+
+function renderFills(idx, progress) {
+  if (!dotPositions.length) return;
+  const first = dotPositions[0];
+  const cur   = dotPositions[idx];
+  const nxt   = idx < N - 1 ? dotPositions[idx + 1] : dotPositions[N - 1];
+
+  /* Solid completed fill — no CSS transition, set instantly */
+  trackDone.style.width = Math.max(0, cur - first) + 'px';
+
+  /* In-progress fill — rAF driven, full opacity */
+  if (autoPlaying && idx < N - 1) {
+    trackProg.style.left  = cur + 'px';
+    trackProg.style.width = ((nxt - cur) * progress) + 'px';
+  } else {
+    trackProg.style.left  = cur + 'px';
+    trackProg.style.width = '0';
+  }
+}
+
+function goTo(idx) {
+  active       = idx;
+  liveProgress = 0;
+  renderCards(idx);
+  renderDots(idx);
+  renderFills(idx, 0);
+}
+
+/* ═══════════════════════════════════════
+   AUTO-CYCLE — loops infinitely
+═══════════════════════════════════════ */
+function startCycle() {
+  if (autoPlaying) return;
+  autoPlaying = true;
+  startTs     = null;
+  rafId       = requestAnimationFrame(tick);
+}
+
+function stopCycle() {
+  autoPlaying = false;
+  cancelAnimationFrame(rafId);
+  if (dotPositions.length) trackProg.style.width = '0';
+}
+
+function tick(ts) {
+  if (!autoPlaying) return;
+  if (startTs === null) startTs = ts;
+
+  const elapsed = ts - startTs;
+  liveProgress  = Math.min(elapsed / DWELL, 1);
+  renderFills(active, liveProgress);
+
+  if (elapsed >= DWELL) {
+    /* Loop back to 0 after the last step */
+    const next = (active + 1) % N;
+    goTo(next);
+    startTs = ts;
+  }
+
+  rafId = requestAnimationFrame(tick);
+}
+
+/* ═══════════════════════════════════════
+   USER PAUSE — stops cycle, schedules
+   automatic resume after RESUME_WAIT ms
+═══════════════════════════════════════ */
+function userPause() {
+  stopCycle();
+  clearTimeout(resumeTimer);
+  resumeTimer = setTimeout(() => {
+    startTs = null;
+    startCycle();
+  }, RESUME_WAIT);
+}
+
+/* ═══════════════════════════════════════
+   MANUAL NAV — also triggers userPause
+═══════════════════════════════════════ */
+btnPrev.addEventListener('click', () => {
+  goTo((active - 1 + N) % N);
+  userPause();
+});
+btnNext.addEventListener('click', () => {
+  goTo((active + 1) % N);
+  userPause();
+});
+
+/* ═══════════════════════════════════════
+   INTERSECTION OBSERVER
+   Only starts the cycle when the module
+   is at least 30 % visible in the viewport.
+   Uses a single-fire trigger — after the
+   first visible event the observer is
+   disconnected and the cycle runs itself.
+═══════════════════════════════════════ */
+function onVisible(entries, observer) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !cycleStarted) {
+      cycleStarted = true;
+      observer.unobserve(tlOuter);
+      startCycle();
+    }
+  });
+}
+
+const observer = new IntersectionObserver(onVisible, {
+  threshold: 0.3,   /* fire when 30 % of the module is visible */
+});
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+function init() {
+  applyLayout();
+  goTo(0);               /* show first step immediately, no animation yet */
+  observer.observe(tlOuter);  /* cycle starts only when scrolled into view */
+}
+
+window.addEventListener('load',   init);
+window.addEventListener('resize', applyLayout);
+init();
+</script>
+</body>
+</html>
