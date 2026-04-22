@@ -1,0 +1,2200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>The Winning Formula | Nasdaq</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Nasdaq's original series connecting the business of sport with the business of capital.">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="webclip.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Bitter:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  /* =========================================================
+     NASDAQ EXPERIENCE FRAMEWORK — DESIGN TOKENS
+     Source: Nasdaq brand color scale (blue-10 → blue-80)
+     ========================================================= */
+  :root {
+    /* Core brand blue scale */
+    --nasdaq-blue-10: #E4F2FF;   /* Core brand: Nasdaq Light Blue */
+    --nasdaq-blue-20: #C0E3F5;
+    --nasdaq-blue-30: #8BD1E9;
+    --nasdaq-blue-40: #50B9DA;
+    --nasdaq-blue-50: #0092BC;   /* Core brand: Nasdaq Blue · accessible on dark */
+    --nasdaq-blue-56: #0679A1;   /* Accessible on light */
+    --nasdaq-blue-60: #096D93;
+    --nasdaq-blue-70: #083F62;
+    --nasdaq-blue-80: #08062A;   /* Core brand: Nasdaq Dark Blue */
+
+    /* Semantic surface aliases */
+    --surface-page:        var(--nasdaq-blue-80);
+    --surface-elevated:    #100E3E;       /* slightly lifted card bg on dark */
+    --surface-elevated-2:  #1A174F;
+    --surface-light:       #ffffff;
+    --surface-offwhite:    #F5F7FA;
+    --line-on-dark:        rgba(255,255,255,0.10);
+    --line-on-dark-strong: rgba(255,255,255,0.22);
+    --line-on-light:       rgba(8,6,42,0.10);
+
+    /* Text */
+    --text-on-dark:        #ffffff;
+    --text-on-dark-muted:  rgba(255,255,255,0.72);
+    --text-on-dark-subtle: rgba(255,255,255,0.48);
+    --text-on-light:       var(--nasdaq-blue-80);
+    --text-on-light-muted: rgba(8,6,42,0.62);
+
+    /* Market signals */
+    --signal-up:   #00B74F;
+    --signal-down: #E5484D;
+
+    /* Typography */
+    --ff-sans:  'Inter', system-ui, -apple-system, sans-serif;
+    --ff-serif: 'Bitter', Georgia, serif;
+    --ff-mono:  'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+    /* Spacing scale */
+    --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
+    --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 64px;
+    --s-9: 96px; --s-10: 128px;
+
+    /* Radii */
+    --r-xs: 2px; --r-s: 4px; --r-m: 8px; --r-l: 14px;
+
+    /* Motion */
+    --ease-nsdq: cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Nav */
+    --nav-h: 48px;
+    --ticker-h: 32px;
+  }
+
+  /* =========================================================
+     BASE
+     ========================================================= */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--surface-page);
+    color: var(--text-on-dark);
+    font-family: var(--ff-sans);
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--surface-page); }
+  ::-webkit-scrollbar-thumb { background: var(--surface-elevated-2); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--nasdaq-blue-50); }
+
+  .wrap { width: 100%; max-width: 1440px; margin: 0 auto; padding: 0 var(--s-6); }
+  @media (max-width: 768px) { .wrap { padding: 0 var(--s-5); } }
+
+  /* =========================================================
+     NAV BAR — matches nasdaq.com navbar
+     white background · 48px · sticky · Nasdaq logo from CDN
+     ========================================================= */
+  .nasdaq-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 500;
+    height: var(--nav-h);
+    background: var(--surface-light);
+    box-shadow: 0 8px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--s-5);
+    font-family: var(--ff-sans);
+    font-weight: 300;
+  }
+
+  .nasdaq-navbar .primary-nav {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+  }
+
+  .nasdaq-navbar .brand-lockup {
+    display: inline-flex;
+    align-items: center;
+    height: var(--nav-h);
+  }
+
+  .nasdaq-navbar .brand-lockup svg {
+    height: 25px;
+    width: auto;
+    display: block;
+  }
+
+  /* =========================================================
+     HERO BACKGROUND VIDEO + LOTTIE MOTION LINES
+     ========================================================= */
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .hero-motion-lines {
+    position: absolute;
+    left: 0; right: 0;
+    width: 100%;
+    height: 180px;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.7;
+    overflow: hidden;
+  }
+  .hero-motion-lines svg { width: 100% !important; height: 100% !important; }
+  .hero-motion-lines.top    { top: 0; }
+  .hero-motion-lines.bottom { bottom: 0; transform: scaleY(-1); }
+
+  .hero-video-overlay {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 80%;
+    z-index: 2;
+    background-image: linear-gradient(90deg, #08062a 0%, rgba(8, 6, 42, 0.5) 100%);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    pointer-events: none;
+  }
+  @media (max-width: 980px) {
+    .hero-video-overlay { width: 100%; }
+  }
+
+  .nasdaq-navbar .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    font-family: var(--ff-sans);
+    font-size: 1rem;
+  }
+  .nasdaq-navbar .nav-links a {
+    padding: 0 2px;
+    height: var(--nav-h);
+    display: inline-flex;
+    align-items: center;
+    color: var(--nasdaq-blue-50);
+    font-weight: 500;
+    letter-spacing: 0;
+    transition: color 180ms;
+  }
+  .nasdaq-navbar .nav-links a:hover { color: var(--nasdaq-blue-56); }
+  @media (max-width: 900px) { .nasdaq-navbar .nav-links { display: none; } }
+
+  .nav-actions { display: flex; align-items: center; gap: var(--s-3); }
+
+  .nav-search {
+    display: flex; align-items: center; gap: var(--s-2);
+    height: 28px;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: var(--surface-offwhite);
+    color: var(--text-on-light-muted);
+    font-size: 12px;
+  }
+  .nav-search svg { width: 12px; height: 12px; }
+  @media (max-width: 640px) { .nav-search { display: none; } }
+
+  .nav-cta {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 28px;
+    padding: 0 14px;
+    background: var(--nasdaq-blue-50);
+    color: #fff;
+    border-radius: var(--r-s);
+    font-size: 12px;
+    font-weight: 500;
+    transition: background 180ms;
+  }
+  .nav-cta:hover { background: var(--nasdaq-blue-56); }
+
+  /* =========================================================
+     LIVE SPORTS TICKER — placed UNDERNEATH the nav
+     mimics the Nasdaq stock ticker pattern
+     ========================================================= */
+  .ticker {
+    position: sticky;
+    top: var(--nav-h);
+    z-index: 400;
+    display: flex;
+    align-items: stretch;
+    background: var(--nasdaq-blue-80);
+    border-bottom: 1px solid var(--line-on-dark);
+    height: var(--ticker-h);
+    overflow: hidden;
+    font-family: var(--ff-mono);
+    font-size: 12px;
+  }
+
+  .ticker-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 var(--s-4) 0 var(--s-3);
+    background: var(--nasdaq-blue-50);
+    color: #fff;
+    font-family: var(--ff-sans);
+    font-weight: 600;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+    padding-right: calc(var(--s-4) + 10px);
+  }
+  .ticker-label::before {
+    content: "";
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--signal-up);
+    box-shadow: 0 0 8px var(--signal-up);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .ticker-viewport {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    mask-image: linear-gradient(90deg, transparent 0, #000 30px, #000 calc(100% - 50px), transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 30px, #000 calc(100% - 50px), transparent 100%);
+  }
+  .ticker-track {
+    display: flex;
+    animation: tickerScroll 300s linear infinite;
+    will-change: transform;
+    padding-left: var(--s-4);
+  }
+  .ticker-viewport:hover .ticker-track { animation-play-state: paused; }
+  @keyframes tickerScroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  .t-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-3);
+    padding: 0 var(--s-5);
+    border-right: 1px solid var(--line-on-dark);
+    white-space: nowrap;
+    color: var(--text-on-dark-muted);
+    transition: background 180ms, color 180ms;
+  }
+  .t-item:hover {
+    background: rgba(0, 146, 188, 0.12);
+    color: var(--text-on-dark);
+  }
+  .t-sym {
+    font-family: var(--ff-sans);
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    padding: 3px 7px;
+    border-radius: var(--r-xs);
+    color: #fff;
+    flex-shrink: 0;
+    text-transform: uppercase;
+  }
+  .t-sym.nfl  { background: #013369; }
+  .t-sym.nba  { background: #C9082A; }
+  .t-sym.wnba { background: #FF6B00; }
+  .t-sym.nhl  { background: #111; border: 1px solid var(--line-on-dark); }
+  .t-sym.mlb  { background: #041E42; }
+  .t-sym.epl  { background: #3D195B; }
+  .t-sym.tnns { background: #005338; }
+  .t-sym.f1   { background: #E10600; }
+  .t-sym.mls  { background: #164194; }
+  .t-sym.ncf  { background: #D04B2E; }
+
+  .t-head { font-weight: 400; color: var(--text-on-dark); font-family: var(--ff-sans); font-size: 12px; }
+  .t-time { color: var(--text-on-dark-subtle); font-size: 11px; font-family: var(--ff-mono); }
+
+  /* =========================================================
+     HERO — TWF wordmark + intro copy + ambient pattern + video
+     ========================================================= */
+  .hero {
+    position: relative;
+    min-height: 70vh;
+    max-height: 720px;
+    background: var(--nasdaq-blue-80);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--line-on-dark);
+  }
+
+  /* Radial glow */
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: -20%; left: -15%;
+    width: 70vw; height: 110vh;
+    background: radial-gradient(circle at 40% 50%, rgba(0, 146, 188, 0.28), transparent 55%);
+    filter: blur(40px);
+    pointer-events: none;
+  }
+  /* Subtle grid overlay */
+  .hero::after {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(139, 209, 233, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139, 209, 233, 0.04) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 60% at 30% 50%, #000, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 30% 50%, #000, transparent 75%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 3;
+    max-width: 1152px; /* ~80% of 1440 to align with overlay */
+    margin: 0 auto 0 0;
+    width: 80%;
+    padding: var(--s-8) var(--s-6) var(--s-8) clamp(var(--s-6), 8vw, var(--s-10));
+    display: block;
+  }
+  @media (max-width: 980px) {
+    .hero-inner {
+      width: 100%;
+      max-width: 100%;
+      padding: var(--s-7) var(--s-5);
+    }
+  }
+
+  .hero-category {
+    display: block;
+    color: var(--nasdaq-blue-50);
+    font-family: var(--ff-sans);
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    letter-spacing: 0.75rem;   /* signature Nasdaq letterspaced eyebrow */
+    text-transform: uppercase;
+    margin-bottom: var(--s-5);
+  }
+
+  .hero-wordmark {
+    width: 100%;
+    max-width: 640px;
+    display: block;
+    margin-bottom: var(--s-6);
+  }
+  .hero-wordmark svg { width: 100%; height: auto; display: block; }
+
+  .hero-accent-rule {
+    height: 2px;
+    width: 60%;
+    max-width: 480px;
+    background: linear-gradient(90deg, var(--nasdaq-blue-50), rgba(0, 146, 188, 0));
+    margin-bottom: var(--s-6);
+  }
+
+  .hero-intro {
+    font-family: var(--ff-sans);
+    font-weight: 200;
+    font-size: 1.125rem;
+    line-height: 1.625rem;
+    color: var(--text-on-dark);
+    max-width: 56ch;
+  }
+
+  /* =========================================================
+     SECTION HEADING — shared pattern
+     ========================================================= */
+  .section {
+    padding: var(--s-9) 0;
+    position: relative;
+  }
+  @media (max-width: 768px) { .section { padding: var(--s-7) 0; } }
+
+  .section-eyebrow {
+    display: inline-block;
+    color: var(--nasdaq-blue-50);
+    font-family: var(--ff-sans);
+    font-weight: 500;
+    font-size: 0.8125rem;
+    letter-spacing: 0.5rem;
+    text-transform: uppercase;
+    margin-bottom: var(--s-4);
+  }
+
+  .section-title {
+    font-family: var(--ff-sans);
+    font-weight: 500;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin-bottom: var(--s-5);
+    color: var(--text-on-dark);
+    max-width: 22ch;
+  }
+  .section-title em {
+    font-family: var(--ff-serif);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--nasdaq-blue-40);
+  }
+
+  /* =========================================================
+     FEATURED EPISODE
+     ========================================================= */
+  .featured-band {
+    background: linear-gradient(180deg, var(--surface-page) 0%, var(--surface-elevated) 100%);
+    border-top: 1px solid var(--line-on-dark);
+    border-bottom: 1px solid var(--line-on-dark);
+  }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: var(--s-8);
+    align-items: center;
+  }
+  @media (max-width: 980px) {
+    .featured-grid { grid-template-columns: 1fr; gap: var(--s-6); }
+  }
+
+  .thumb {
+    position: relative;
+    aspect-ratio: 16/10;
+    border-radius: var(--r-l);
+    overflow: hidden;
+    background: var(--surface-elevated);
+    cursor: pointer;
+    transition: transform 400ms var(--ease-nsdq);
+    isolation: isolate;
+  }
+  .thumb:hover { transform: translateY(-4px); }
+
+  .thumb-media {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: var(--s-5);
+    color: #fff;
+    z-index: 2;
+  }
+
+  .thumb-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    transition: transform 600ms var(--ease-nsdq);
+  }
+  .thumb:hover .thumb-img { transform: scale(1.04); }
+
+  .thumb-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg,
+      rgba(8, 6, 42, 0.15) 0%,
+      rgba(8, 6, 42, 0.1) 45%,
+      rgba(8, 6, 42, 0.75) 85%,
+      rgba(8, 6, 42, 0.92) 100%);
+    pointer-events: none;
+  }
+  .thumb-name {
+    font-family: var(--ff-sans);
+    font-weight: 500;
+    font-size: clamp(1.75rem, 3vw, 3rem);
+    line-height: 1;
+    letter-spacing: -0.015em;
+  }
+  .thumb-sub {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin-top: var(--s-2);
+    font-weight: 400;
+  }
+
+  .thumb-badge {
+    position: absolute;
+    top: var(--s-4); left: var(--s-4);
+    z-index: 3;
+    background: rgba(8, 6, 42, 0.72);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.14);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: var(--r-xs);
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 6px;
+    font-weight: 500;
+  }
+  .thumb-badge .live-dot {
+    width: 6px; height: 6px;
+    background: var(--signal-up);
+    border-radius: 50%;
+  }
+
+  .thumb-duration {
+    position: absolute;
+    top: var(--s-4); right: var(--s-4);
+    z-index: 3;
+    background: rgba(8, 6, 42, 0.72);
+    backdrop-filter: blur(10px);
+    padding: 5px 8px;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    border-radius: var(--r-xs);
+    letter-spacing: 0.04em;
+  }
+
+  .thumb-play {
+    position: absolute; inset: 0;
+    z-index: 4;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    transition: opacity 220ms var(--ease-nsdq);
+    background: linear-gradient(to top, rgba(8, 6, 42, 0.45), rgba(8, 6, 42, 0.1));
+  }
+  .thumb:hover .thumb-play { opacity: 1; }
+  .thumb-play-btn {
+    width: 72px; height: 72px;
+    background: var(--nasdaq-blue-50);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 40px rgba(0, 146, 188, 0.5);
+    transform: scale(0.85);
+    transition: transform 300ms var(--ease-nsdq);
+  }
+  .thumb:hover .thumb-play-btn { transform: scale(1); }
+  .thumb-play-btn::after {
+    content: "";
+    width: 0; height: 0;
+    border-left: 16px solid white;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    margin-left: 4px;
+  }
+
+
+  .featured-quote {
+    font-family: var(--ff-serif);
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    line-height: 1.3;
+    color: var(--text-on-dark);
+    margin: var(--s-5) 0;
+    padding-left: var(--s-5);
+    border-left: 2px solid var(--nasdaq-blue-50);
+  }
+  .featured-quote em {
+    color: var(--nasdaq-blue-40);
+    font-style: italic;
+  }
+
+  .featured-body {
+    color: var(--text-on-dark-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .featured-byline {
+    display: flex; align-items: center; gap: var(--s-3);
+    font-size: 13px;
+    color: var(--text-on-dark-muted);
+    margin-top: var(--s-5);
+    font-weight: 300;
+  }
+  .featured-byline strong { color: var(--text-on-dark); font-weight: 500; }
+  .featured-byline .sep { color: var(--text-on-dark-subtle); }
+
+  /* =========================================================
+     PHOTO MARQUEE — large photo carousel
+     Showcases guest photography at full resolution, auto-advances
+     ========================================================= */
+  .photo-marquee-band {
+    background: var(--surface-elevated);
+    border-top: 1px solid var(--line-on-dark);
+    border-bottom: 1px solid var(--line-on-dark);
+    padding: var(--s-9) 0;
+  }
+  @media (max-width: 768px) { .photo-marquee-band { padding: var(--s-7) 0; } }
+
+  .photo-marquee {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 21 / 9;
+    border-radius: var(--r-l);
+    overflow: hidden;
+    background: var(--surface-page);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+    margin-top: var(--s-6);
+  }
+  @media (max-width: 768px) { .photo-marquee { aspect-ratio: 4 / 3; } }
+
+  .photo-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 900ms var(--ease-nsdq);
+    cursor: pointer;
+  }
+  .photo-slide.active { opacity: 1; }
+
+  .photo-slide img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.03);
+    transition: transform 6000ms var(--ease-nsdq);
+  }
+  .photo-slide.active img { transform: scale(1); }
+
+  .photo-slide::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(8, 6, 42, 0) 40%, rgba(8, 6, 42, 0.85) 100%),
+      linear-gradient(90deg, rgba(8, 6, 42, 0.45) 0%, transparent 45%);
+    pointer-events: none;
+  }
+
+  .photo-slide-caption {
+    position: absolute;
+    left: var(--s-7);
+    bottom: var(--s-7);
+    z-index: 2;
+    color: #fff;
+    max-width: 620px;
+    transform: translateY(16px);
+    opacity: 0;
+    transition: all 900ms var(--ease-nsdq) 150ms;
+  }
+  .photo-slide.active .photo-slide-caption {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  @media (max-width: 768px) {
+    .photo-slide-caption { left: var(--s-5); bottom: var(--s-5); right: var(--s-5); }
+  }
+
+  .photo-slide-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--nasdaq-blue-30);
+    margin-bottom: var(--s-3);
+  }
+  .photo-slide-eyebrow .dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--nasdaq-blue-50);
+  }
+  .photo-slide-title {
+    font-family: var(--ff-sans);
+    font-weight: 500;
+    font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    margin-bottom: var(--s-3);
+  }
+  .photo-slide-sub {
+    font-family: var(--ff-sans);
+    font-weight: 300;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.82);
+    line-height: 1.5;
+  }
+
+  .photo-marquee-dots {
+    position: absolute;
+    right: var(--s-6);
+    bottom: var(--s-6);
+    z-index: 3;
+    display: flex;
+    gap: 10px;
+  }
+  .photo-marquee-dots button {
+    width: 32px; height: 3px;
+    border: 0;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 0;
+    cursor: pointer;
+    transition: background 200ms, width 300ms var(--ease-nsdq);
+  }
+  .photo-marquee-dots button.active {
+    background: var(--nasdaq-blue-50);
+    width: 48px;
+  }
+
+  /* Progress bar — nasdaq-blue indicator of time-to-next-slide */
+  .photo-marquee-progress {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.08);
+    z-index: 4;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .photo-marquee-progress-bar {
+    position: absolute;
+    inset: 0;
+    background: var(--nasdaq-blue-50);
+    transform: scaleX(0);
+    transform-origin: left center;
+    box-shadow: 0 0 12px rgba(0, 146, 188, 0.6);
+  }
+  .photo-marquee-progress-bar.running {
+    animation: marqueeFill var(--marquee-duration, 4000ms) linear forwards;
+  }
+  @keyframes marqueeFill {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+  .photo-marquee.paused .photo-marquee-progress-bar.running {
+    animation-play-state: paused;
+  }
+
+  /* =========================================================
+     EPISODES GRID
+     ========================================================= */
+  .episodes-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-5);
+    margin-bottom: var(--s-6);
+    flex-wrap: wrap;
+  }
+  .episodes-head .section-title {
+    max-width: none;
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+  .episodes-head .section-eyebrow { margin-bottom: var(--s-2); }
+  @media (max-width: 1100px) {
+    .episodes-head .section-title { white-space: normal; }
+  }
+
+  .episodes-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    flex-wrap: wrap;
+  }
+  .filters {
+    display: flex;
+    gap: var(--s-2);
+    font-family: var(--ff-sans);
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .filters button {
+    padding: 7px 13px;
+    border-radius: 999px;
+    border: 1px solid var(--line-on-dark);
+    color: var(--text-on-dark-muted);
+    transition: all 180ms;
+    white-space: nowrap;
+  }
+  .filters button:hover { border-color: var(--nasdaq-blue-50); color: var(--text-on-dark); }
+  .filters button.active {
+    background: var(--nasdaq-blue-50);
+    color: #fff;
+    border-color: var(--nasdaq-blue-50);
+  }
+
+  .carousel-nav-group {
+    display: flex;
+    gap: var(--s-2);
+  }
+  .carousel-nav {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--line-on-dark);
+    color: var(--text-on-dark-muted);
+    background: transparent;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all 180ms var(--ease-nsdq);
+  }
+  .carousel-nav:hover {
+    border-color: var(--nasdaq-blue-50);
+    color: var(--text-on-dark);
+    background: rgba(0, 146, 188, 0.08);
+  }
+  .carousel-nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  .carousel-nav svg { width: 14px; height: 14px; }
+
+  .episodes-carousel {
+    display: flex;
+    gap: var(--s-5);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 4px 0 var(--s-5);
+    margin: 0 calc(var(--s-6) * -1);
+    padding-left: var(--s-6);
+    padding-right: var(--s-6);
+  }
+  .episodes-carousel::-webkit-scrollbar { display: none; }
+  .episodes-carousel .ep-card {
+    flex: 0 0 360px;
+    scroll-snap-align: start;
+  }
+  @media (max-width: 768px) {
+    .episodes-carousel .ep-card { flex: 0 0 82vw; }
+    .episodes-carousel { padding-left: var(--s-5); padding-right: var(--s-5); margin: 0 calc(var(--s-5) * -1); }
+  }
+
+  .ep-card.filter-hidden {
+    display: none;
+  }
+
+  /* =========================================================
+     JW PLAYER MODAL — plays videos inline instead of leaving the page
+     ========================================================= */
+  .jw-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: var(--s-5);
+    background: rgba(5, 4, 22, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    animation: jwFade 220ms var(--ease-nsdq);
+  }
+  .jw-modal.open { display: flex; }
+  @keyframes jwFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .jw-modal-dialog {
+    position: relative;
+    width: 100%;
+    max-width: 1100px;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: var(--r-l);
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+    animation: jwRise 360ms var(--ease-nsdq);
+  }
+  @keyframes jwRise {
+    from { opacity: 0; transform: translateY(24px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .jw-modal-iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #000;
+  }
+
+  .jw-modal-close {
+    position: absolute;
+    top: -52px;
+    right: 0;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    transition: background 180ms;
+  }
+  .jw-modal-close:hover { background: rgba(255,255,255,0.22); }
+  .jw-modal-close svg { width: 14px; height: 14px; }
+
+  .jw-modal-caption {
+    position: absolute;
+    top: -44px;
+    left: 0;
+    color: rgba(255,255,255,0.88);
+    font-family: var(--ff-sans);
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+  }
+  .jw-modal-caption::before {
+    content: "";
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--nasdaq-blue-50);
+  }
+  @media (max-width: 768px) {
+    .jw-modal-close { top: -48px; }
+    .jw-modal-caption { display: none; }
+  }
+
+  .no-scroll { overflow: hidden; }
+
+  .ep-card { display: flex; flex-direction: column; gap: var(--s-4); transition: transform 300ms var(--ease-nsdq); }
+  .ep-card:hover { transform: translateY(-4px); }
+  .ep-card .thumb { aspect-ratio: 4/3; border-radius: var(--r-m); }
+  .ep-card .thumb-name { font-size: clamp(1.5rem, 2.2vw, 2rem); }
+
+  .ep-meta-row {
+    display: flex; align-items: center; gap: var(--s-2);
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-on-dark-subtle);
+  }
+  .ep-league-chip {
+    font-family: var(--ff-sans);
+    font-weight: 600;
+    padding: 3px 7px;
+    border-radius: var(--r-xs);
+    color: #fff;
+  }
+  .ep-league-chip.nba  { background: #C9082A; }
+  .ep-league-chip.nfl  { background: #013369; }
+  .ep-league-chip.ten  { background: #005338; }
+  .ep-league-chip.f1   { background: #E10600; }
+  .ep-league-chip.tf   { background: #096D93; }
+  .ep-league-chip.soc  { background: #164194; }
+  .ep-league-chip.biz  { background: var(--nasdaq-blue-50); }
+  .ep-league-chip.gym  { background: var(--nasdaq-blue-56); }
+
+  .ep-title {
+    font-family: var(--ff-sans);
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+    color: var(--text-on-dark);
+  }
+  .ep-desc {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-on-dark-muted);
+    font-weight: 300;
+  }
+  .ep-watch {
+    display: inline-flex; align-items: center; gap: var(--s-2);
+    font-family: var(--ff-sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--nasdaq-blue-40);
+    transition: gap 200ms;
+  }
+  .ep-watch:hover { gap: var(--s-3); }
+
+  /* =========================================================
+     HOSTS
+     ========================================================= */
+  .hosts-band {
+    background:
+      radial-gradient(ellipse 60% 40% at 15% 30%, rgba(0, 146, 188, 0.12), transparent 55%),
+      var(--surface-elevated);
+    border-top: 1px solid var(--line-on-dark);
+    border-bottom: 1px solid var(--line-on-dark);
+  }
+  .hosts-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s-6);
+  }
+  @media (max-width: 768px) { .hosts-grid { grid-template-columns: 1fr; } }
+
+  .host-card {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: var(--s-5);
+    padding: var(--s-6);
+    border: 1px solid var(--line-on-dark);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--r-l);
+    transition: border-color 200ms, background 200ms;
+  }
+  .host-card:hover {
+    border-color: var(--nasdaq-blue-50);
+    background: rgba(0, 146, 188, 0.04);
+  }
+  .host-avatar {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    border: 2px solid var(--nasdaq-blue-50);
+    background: var(--surface-elevated-2);
+  }
+  .host-name {
+    font-family: var(--ff-sans);
+    font-weight: 500;
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--s-2);
+  }
+  .host-role {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nasdaq-blue-40);
+    margin-bottom: var(--s-3);
+    font-weight: 400;
+  }
+  .host-bio {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text-on-dark-muted);
+    font-weight: 300;
+  }
+
+  /* =========================================================
+     FOOTER — matches Nasdaq Webflow footer spec
+     ========================================================= */
+  .footer-wrapper {
+    background: #000;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .footer-container {
+    background: #000;
+    width: 100%;
+    max-width: 1175px;
+    min-height: 450px;
+    padding: 5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-flow: row;
+    gap: 3rem;
+  }
+  @media (max-width: 991px) { .footer-container { padding: 3.5rem; min-height: 300px; display: block; } }
+  @media (max-width: 767px) { .footer-container { padding: 2.5rem; } }
+  @media (max-width: 479px) { .footer-container { padding: 2rem; } }
+
+  .column-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    align-items: stretch;
+  }
+  @media (max-width: 991px) { .column-container { display: flex; flex-flow: column; margin-bottom: 3rem; } }
+  @media (max-width: 479px) { .column-container { display: block; margin-bottom: 0; } }
+
+  .columns {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+  }
+  @media (max-width: 767px) { .columns { gap: 2rem; } }
+  @media (max-width: 479px) { .columns { grid-template-columns: 1fr; gap: 1rem; } }
+
+  .link-column {
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    place-items: start;
+  }
+  @media (max-width: 479px) { .link-column { display: flex; flex-flow: column; } }
+
+  .footer-link {
+    color: #0092bc;
+    text-transform: uppercase;
+    font-family: var(--ff-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1rem;
+    text-decoration: none;
+    transition: text-decoration 120ms;
+  }
+  .footer-link:hover { text-decoration: underline; }
+  .footer-link.privacy-legal { color: #818181; }
+
+  /* Right-side Nasdaq logo — full (desktop only) */
+  .nasdaq-logo-container-full {
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    width: auto;
+    gap: 2rem;
+  }
+  @media (max-width: 991px) { .nasdaq-logo-container-full { display: none; } }
+
+  .nasdaq-logo-footer {
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+  .nasdaq-logo {
+    width: 75%;
+    max-width: 15rem;
+    height: auto;
+    display: block;
+  }
+
+  /* Bottom: logo + social + copyright */
+  .logo-copyright-container {
+    display: none;
+    width: 100%;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  @media (max-width: 991px) {
+    .logo-copyright-container { display: flex; }
+  }
+  @media (max-width: 479px) {
+    .logo-copyright-container { display: block; }
+  }
+
+  .nasdaq-logo-container {
+    display: none;
+    flex-flow: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    width: 50%;
+    gap: 2rem;
+  }
+  @media (max-width: 991px) { .nasdaq-logo-container { display: block; } }
+  @media (max-width: 991px) { .nasdaq-logo-container .nasdaq-logo { width: 15rem; } }
+  @media (max-width: 767px) { .nasdaq-logo-container .nasdaq-logo { width: 10rem; } }
+  @media (max-width: 479px) {
+    .nasdaq-logo-container { width: 100%; margin-top: 3rem; }
+  }
+
+  .social-copyright-container {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  @media (max-width: 991px) {
+    .social-copyright-container { flex-flow: column; align-items: flex-end; gap: 1rem; width: 50%; }
+  }
+  @media (max-width: 479px) {
+    .social-copyright-container { flex-flow: row; align-items: center; width: 100%; margin-top: 2rem; }
+  }
+
+  .social-icons {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 17rem;
+    gap: 0;
+  }
+  @media (max-width: 767px) { .social-icons { width: 13rem; } }
+  @media (max-width: 479px) { .social-icons { display: none; } }
+
+  .social-icons-mobile {
+    display: none;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 17rem;
+    height: 1rem;
+  }
+  @media (max-width: 479px) {
+    .social-icons-mobile { display: grid; grid-template-columns: repeat(5, 1fr); width: 13rem; margin-top: 3rem; }
+  }
+
+  .social-icons a img,
+  .social-icons-mobile a img { height: 1rem; width: auto; display: block; }
+
+  .copyright-inline {
+    color: #818181;
+    font-family: var(--ff-sans);
+    font-size: 0.75rem;
+    font-weight: 300;
+    line-height: 0.85;
+    text-align: right;
+  }
+  @media (max-width: 479px) { .copyright-inline { text-align: left; } }
+
+  /* =========================================================
+     REVEAL ANIMATIONS
+     ========================================================= */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 800ms var(--ease-nsdq), transform 800ms var(--ease-nsdq); }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  @keyframes heroRise {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-category, .hero-wordmark, .hero-accent-rule, .hero-intro {
+    animation: heroRise 1100ms var(--ease-nsdq) both;
+  }
+  .hero-category     { animation-delay: 100ms; }
+  .hero-wordmark     { animation-delay: 250ms; }
+  .hero-accent-rule  { animation-delay: 400ms; }
+  .hero-intro        { animation-delay: 450ms; }
+</style>
+</head>
+<body>
+
+<!-- =========================================================
+     NAV — matches nasdaq.com navbar (white, 48px, sticky)
+     ========================================================= -->
+<nav id="home" class="nasdaq-navbar" role="navigation" aria-label="Primary">
+  <div class="primary-nav">
+    <a href="https://www.nasdaq.com/" class="brand-lockup" aria-label="Nasdaq home">
+      <svg width="86" height="25" viewBox="0 0 86 25" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g clip-path="url(#clip0_298_5055)">
+          <g clip-path="url(#clip1_298_5055)">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M63.3281 18.6202C60.4345 18.6202 58.6367 16.9395 58.6367 14.2325C58.6367 11.4194 60.2955 9.6716 62.9663 9.6716L63.1921 9.67032C63.526 9.67032 63.9875 9.68088 64.6176 9.76112V6.36719H66.5072V18.315C66.5072 18.315 64.7127 18.6202 63.3281 18.6202ZM63.3117 11.1619C61.4831 11.1619 60.5941 12.1511 60.5941 14.1856C60.5941 16.0112 61.6658 17.1451 63.3904 17.1451C63.7214 17.1451 64.1009 17.1245 64.6176 17.0789V11.2827C64.1004 11.2004 63.6852 11.1619 63.3117 11.1619Z" fill="#404041"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M37.4751 18.3482L32.3757 9.42608L32.3744 18.3482H30.5977V7.05469H33.0845L38.1839 15.897L38.1817 7.05469H39.9813V18.3482H37.4751Z" fill="#404041"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M53.7147 18.5198C52.8565 18.5198 51.9607 18.4235 50.8944 18.2179L50.7811 18.1955V16.6179L50.95 16.655C51.8887 16.8551 52.7002 17.0282 53.5109 17.0282C54.1674 17.0282 55.6945 16.9235 55.6945 15.9567C55.6945 15.1448 54.6391 14.9418 53.7909 14.7792L53.7379 14.7687C53.5804 14.7375 53.4313 14.7079 53.3037 14.6758C52.0605 14.3519 50.7344 13.8664 50.7344 12.1959C50.7344 10.5671 52.0209 9.63281 54.2638 9.63281C55.3398 9.63281 56.1214 9.74929 56.7489 9.84305L57.056 9.88905V11.4182L56.8921 11.3899C56.1817 11.2586 55.3491 11.1239 54.5469 11.1239C53.6578 11.1239 52.5987 11.2907 52.5987 12.0857C52.5987 12.7443 53.4641 12.933 54.4664 13.1513C55.8667 13.4569 57.6047 13.8373 57.6047 15.7527C57.6047 17.5111 56.1867 18.5198 53.7147 18.5198Z" fill="#404041"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M71.8078 18.5198C69.8522 18.5198 68.043 18.1753 68.043 15.6743C68.043 12.9528 70.8414 12.9528 72.5137 12.9528C72.6809 12.9528 73.4667 12.9887 73.7089 12.9997C73.7067 11.4731 73.6861 11.1087 71.4777 11.1087C70.6022 11.1087 69.6294 11.2831 68.7711 11.4367L68.6073 11.4663V9.95825L68.7193 9.93545C69.7136 9.73201 70.6725 9.63281 71.6504 9.63281C73.791 9.63281 75.6048 9.84937 75.6048 12.5108V18.3167L75.4742 18.3302C73.9918 18.497 72.8139 18.5198 71.8078 18.5198ZM72.4661 14.2987C70.854 14.2987 69.8551 14.5365 69.8551 15.7207C69.8551 17.0907 71.1303 17.2051 72.3255 17.2051C72.7731 17.2051 73.5763 17.1481 73.8218 17.1295V14.3452C73.4751 14.3321 72.5752 14.2987 72.4661 14.2987Z" fill="#404041"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M45.3196 18.5198C43.3638 18.5198 41.5547 18.1753 41.5547 15.6743C41.5547 12.9528 44.3531 12.9528 46.0254 12.9528C46.1921 12.9528 46.9784 12.9887 47.2205 12.9997C47.2184 11.4731 47.1978 11.1087 44.9894 11.1087C44.1139 11.1087 43.1415 11.2831 42.2828 11.4367L42.119 11.4663V9.95825L42.231 9.93545C43.2257 9.73201 44.1842 9.63281 45.162 9.63281C47.3027 9.63281 49.1164 9.84937 49.1164 12.5108V18.3167L48.9859 18.3302C47.5036 18.497 46.3256 18.5198 45.3196 18.5198ZM45.9778 14.2987C44.3657 14.2987 43.3668 14.5365 43.3668 15.7207C43.3668 17.0907 44.642 17.2051 45.8372 17.2051C46.2848 17.2051 47.0879 17.1481 47.3334 17.1295V14.3452C46.9868 14.3321 46.0868 14.2987 45.9778 14.2987Z" fill="#404041"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M83.1199 22.1834V18.4795C82.3823 18.5834 81.9903 18.5834 81.6743 18.5834C80.9271 18.5834 80.097 18.4204 79.4531 18.1468C78.0149 17.5482 77.1562 16.0241 77.1562 14.0694C77.1562 13.092 77.3934 11.3083 78.9806 10.347C79.7752 9.86994 80.7169 9.66602 82.1295 9.66602C82.6367 9.66602 83.3199 9.7053 83.9799 9.7437L85.0519 9.79898V21.3259L83.1199 22.1834ZM81.9879 11.1567C80.0713 11.1567 79.0985 12.1367 79.0985 14.0694C79.0985 16.5552 80.5502 17.0771 81.7687 17.0771C82.0647 17.0771 82.3991 17.0771 83.1375 16.9837V11.2103C82.5591 11.1711 82.2935 11.1567 81.9879 11.1567Z" fill="#404041"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M22.1662 0.359375L15.9221 17.5563C15.7688 17.9806 15.3818 18.2904 14.9177 18.3373V18.3475H21.5176C22.0352 18.3475 22.4774 18.0177 22.6433 17.5563L28.8875 0.359375H22.1662ZM14.3808 18.0847C14.762 18.0847 15.098 17.8956 15.3036 17.6068C15.3251 17.5768 15.4 17.4713 15.4522 17.3273L17.7428 11.0174L16.4032 7.33252C16.2321 6.92342 15.8283 6.63591 15.3579 6.63591C14.9772 6.63591 14.6407 6.82463 14.4352 7.11382C14.4137 7.14338 14.3244 7.27806 14.2865 7.39331L11.9968 13.7007L13.342 17.4003C13.5163 17.8027 13.9151 18.0847 14.3808 18.0847ZM8.19789 6.37218H14.8699V6.37598C14.3742 6.39667 13.9543 6.71626 13.7934 7.16293L7.54977 24.3594H0.828125L7.07179 7.16293C7.23856 6.70149 7.6799 6.37218 8.19789 6.37218Z" fill="#0090BA"/>
+          </g>
+        </g>
+        <defs>
+          <clipPath id="clip0_298_5055"><rect width="85" height="24" fill="white" transform="translate(0.726562 0.359375)"/></clipPath>
+          <clipPath id="clip1_298_5055"><rect width="85" height="24" fill="white" transform="translate(0.726562 0.359375)"/></clipPath>
+        </defs>
+      </svg>
+    </a>
+    <div class="nav-links">
+      <a href="https://www.nasdaq.com/market-activity">Market Activity</a>
+      <a href="https://www.nasdaq.com/news-and-insights">Insights</a>
+      <a href="https://www.nasdaq.com/solutions">Solutions</a>
+      <a href="https://www.nasdaq.com/about">About</a>
+    </div>
+  </div>
+</nav>
+
+<!-- =========================================================
+     LIVE SPORTS TICKER — under the nav
+     ========================================================= -->
+<div class="ticker" role="complementary" aria-label="Live sports news">
+  <div class="ticker-label">Live · Sports</div>
+  <div class="ticker-viewport">
+    <div class="ticker-track" id="ticker-track">
+      <div class="t-item"><span class="t-sym nba">LOADING</span><span class="t-head">Fetching live sports feed from ESPN…</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+<section class="hero">
+  <!-- Background video (autoplay, muted, loop) -->
+  <video
+    class="hero-video"
+    autoplay muted loop playsinline
+    poster="winning-formula_1-poster-00001.jpg"
+    preload="auto"
+    aria-hidden="true">
+    <source src="winning-formula_1-transcode.webm" type="video/webm">
+    <source src="winning-formula_1-transcode.mp4" type="video/mp4">
+  </video>
+  <div class="hero-video-overlay" aria-hidden="true"></div>
+
+  <!-- Lottie motion lines (atmospheric) -->
+  <div class="hero-motion-lines top"    id="motion-lines-top"    aria-hidden="true"></div>
+  <div class="hero-motion-lines bottom" id="motion-lines-bottom" aria-hidden="true"></div>
+
+  <div class="hero-inner">
+    <div>
+      <div class="hero-category">Nasdaq Original Series</div>
+
+      <!-- TWF wordmark — lottie animation, with inline SVG fallback -->
+      <div class="hero-wordmark" id="wordmark-lottie" aria-label="The Winning Formula"></div>
+      <noscript>
+        <div class="hero-wordmark" aria-label="The Winning Formula">
+          <svg viewBox="0 0 430.5 129.8" xmlns="http://www.w3.org/2000/svg" fill="#fff"><path d="M186.9,12.3c-1.8,0-3.3-.6-4.5-1.8-1.2-1.2-1.7-2.7-1.6-4.3.1-1.7.9-3.2,2.3-4.3C184.5.6,186.1,0,187.9,0s3.3.6,4.5,1.8c1.2,1.2,1.7,2.7,1.6,4.4-.1,1.7-.9,3.1-2.3,4.3-1.4,1.2-3,1.8-4.8,1.8h0Z"/></svg>
+        </div>
+      </noscript>
+
+      <div class="hero-accent-rule"></div>
+
+      <p class="hero-intro">
+        We invite high profile guests from around the sporting world, from athlete entrepreneurs to league executives, to discuss the similarities and through-lines between the sports and business world.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     FEATURED EPISODE
+     ========================================================= -->
+<section class="featured-band section">
+  <div class="wrap">
+    <div class="featured-grid">
+      <a class="thumb reveal" href="https://www.nasdaq.com/videos/winning-formula-marques-colston" target="_blank" rel="noopener" data-tags="athlete-founder" data-jw="reDyhqnx" data-title="Marques Colston">
+        <img class="thumb-img" loading="lazy"
+             src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/05/reDyhqnx.jpg"
+             alt="Marques Colston">
+        <div class="thumb-scrim"></div>
+        <div class="thumb-badge"><span class="live-dot"></span>Featured</div>
+        <div class="thumb-duration">24:18</div>
+        <div class="thumb-media">
+          <div class="thumb-name">Marques<br>Colston</div>
+          <div class="thumb-sub">Super Bowl XLIV Champion · Champion Venture Partners</div>
+        </div>
+        <div class="thumb-play"><div class="thumb-play-btn"></div></div>
+      </a>
+
+      <div class="reveal">
+        <div class="section-eyebrow">Latest Episode</div>
+        <h2 class="section-title">From the end zone to the <em>endowment.</em></h2>
+        <blockquote class="featured-quote">
+          I started to realize that not only are we solving for the <em>athlete investor</em>, we're solving for the retail investor as well.
+        </blockquote>
+        <p class="featured-body">
+          Marques Colston joins The Winning Formula to break down the founding of Champion Venture Partners, the rise of the sports asset class, and how he's translating locker-room discipline into disciplined capital allocation.
+        </p>
+        <div class="featured-byline">
+          <strong>With Joel Kolani</strong>
+          <span class="sep">·</span>
+          <span>Recorded at Nasdaq MarketSite, Times Square</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =========================================================
+     EPISODES GRID
+     ========================================================= -->
+<section class="section" id="episodes">
+  <div class="wrap">
+    <div class="episodes-head">
+      <div>
+        <div class="section-eyebrow">The Series</div>
+        <h2 class="section-title">Operators, owners, and <em>originals.</em></h2>
+      </div>
+      <div class="episodes-controls">
+        <div class="filters">
+          <button class="active" data-filter="all">All</button>
+          <button data-filter="athlete-founder">Athlete Founders</button>
+          <button data-filter="womens-sports">Women's Sports</button>
+          <button data-filter="league-exec">League Exec</button>
+          <button data-filter="motorsport">Motorsport</button>
+        </div>
+        <div class="carousel-nav-group" role="group" aria-label="Carousel navigation">
+          <button class="carousel-nav" data-dir="-1" aria-label="Previous episodes">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M9 2 L3 7 L9 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="carousel-nav" data-dir="1" aria-label="Next episodes">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M5 2 L11 7 L5 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="episodes-carousel" id="episodes-carousel">
+
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-kelley-ohara" target="_blank" rel="noopener" data-tags="athlete-founder womens-sports" data-jw="5XEtJGIU" data-title="Kelley O'Hara">
+        <div class="thumb">
+          <img class="thumb-img" loading="lazy" alt="Kelley O'Hara"
+               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/07/5XEtJGIU.jpg">
+          <div class="thumb-scrim"></div>
+          <div class="thumb-duration">21:40</div>
+          <div class="thumb-media">
+            <div class="thumb-name">Kelley O'Hara</div>
+            <div class="thumb-sub">2x World Cup Champion · USWNT</div>
+          </div>
+          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
+        </div>
+        <div class="ep-meta-row">
+          <span class="ep-league-chip soc">USWNT</span>
+          <span>Episode · 22m</span>
+        </div>
+        <div class="ep-title">The business case for women's sports — and 'Sports Are Fun!'</div>
+        <div class="ep-desc">Kelley O'Hara on the explosive growth of women's sports and how her podcast is reshaping athlete-led media.</div>
+        <div class="ep-watch">Watch episode →</div>
+      </a>
+
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-jimmy-butler" target="_blank" rel="noopener" data-tags="athlete-founder" data-jw="BN841b7I" data-title="Jimmy Butler">
+        <div class="thumb">
+          <img class="thumb-img" loading="lazy" alt="Jimmy Butler"
+               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/04/BN841b7I.jpg">
+          <div class="thumb-scrim"></div>
+          <div class="thumb-duration">22:07</div>
+          <div class="thumb-media">
+            <div class="thumb-name">Jimmy Butler</div>
+            <div class="thumb-sub">NBA All-Star · Founder, BIGFACE Coffee</div>
+          </div>
+          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
+        </div>
+        <div class="ep-meta-row">
+          <span class="ep-league-chip nba">NBA</span>
+          <span>Episode · 22m</span>
+        </div>
+        <div class="ep-title">"It's not always going to go the way you think — you gotta be able to pivot."</div>
+        <div class="ep-desc">From NBA stardom to BIGFACE Coffee, on adaptability and the power of the pivot.</div>
+        <div class="ep-watch">Watch episode →</div>
+      </a>
+
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-allyson-felix" target="_blank" rel="noopener" data-tags="athlete-founder womens-sports" data-jw="zx7smJw6" data-title="Allyson Felix">
+        <div class="thumb">
+          <img class="thumb-img" loading="lazy" alt="Allyson Felix"
+               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/03/zx7smJw6.jpg">
+          <div class="thumb-scrim"></div>
+          <div class="thumb-duration">18:20</div>
+          <div class="thumb-media">
+            <div class="thumb-name">Allyson Felix</div>
+            <div class="thumb-sub">11x Olympic Medalist · Saysh Co-founder</div>
+          </div>
+          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
+        </div>
+        <div class="ep-meta-row">
+          <span class="ep-league-chip tf">T&amp;F</span>
+          <span>Episode · 18m</span>
+        </div>
+        <div class="ep-title">Legacy, entrepreneurship, and building a shoe brand for women.</div>
+        <div class="ep-desc">The most decorated track-and-field Olympian in American history on her next chapter.</div>
+        <div class="ep-watch">Watch episode →</div>
+      </a>
+
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-tristan-thompson" target="_blank" rel="noopener" data-tags="athlete-founder" data-jw="50k3giwJ" data-title="Tristan Thompson">
+        <div class="thumb">
+          <img class="thumb-img" loading="lazy" alt="Tristan Thompson"
+               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2026/02/50k3giwJ.jpg">
+          <div class="thumb-scrim"></div>
+          <div class="thumb-duration">19:14</div>
+          <div class="thumb-media">
+            <div class="thumb-name">Tristan Thompson</div>
+            <div class="thumb-sub">NBA Champion · Web3 Ambassador</div>
+          </div>
+          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
+        </div>
+        <div class="ep-meta-row">
+          <span class="ep-league-chip nba">NBA</span>
+          <span>Episode · 19m</span>
+        </div>
+        <div class="ep-title">Financial literacy, Web3, and how the NBA has evolved.</div>
+        <div class="ep-desc">The NBA champion on building beyond the court and what athletes need to know about money.</div>
+        <div class="ep-watch">Watch episode →</div>
+      </a>
+
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-cj-mccollum" target="_blank" rel="noopener" data-tags="athlete-founder" data-jw="ct9cUIRg" data-title="CJ McCollum">
+        <div class="thumb">
+          <img class="thumb-img" loading="lazy" alt="CJ McCollum"
+               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/09/ct9cUIRg.jpg">
+          <div class="thumb-scrim"></div>
+          <div class="thumb-duration">20:32</div>
+          <div class="thumb-media">
+            <div class="thumb-name">CJ McCollum</div>
+            <div class="thumb-sub">NBA Veteran · Entrepreneur</div>
+          </div>
+          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
+        </div>
+        <div class="ep-meta-row">
+          <span class="ep-league-chip nba">NBA</span>
+          <span>Episode · 20m</span>
+        </div>
+        <div class="ep-title">How the court prepared him for a career in business.</div>
+        <div class="ep-desc">CJ McCollum on discipline, investment, and the NBA's evolution since he entered the league.</div>
+        <div class="ep-watch">Watch episode →</div>
+      </a>
+
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-alex-honnold" target="_blank" rel="noopener" data-tags="athlete-founder" data-jw="BSvpXgrh" data-title="Alex Honnold">
+        <div class="thumb">
+          <img class="thumb-img" loading="lazy" alt="Alex Honnold"
+               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/08/BSvpXgrh.jpg">
+          <div class="thumb-scrim"></div>
+          <div class="thumb-duration">17:45</div>
+          <div class="thumb-media">
+            <div class="thumb-name">Alex Honnold</div>
+            <div class="thumb-sub">Free Solo Climber · Honnold Foundation</div>
+          </div>
+          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
+        </div>
+        <div class="ep-meta-row">
+          <span class="ep-league-chip biz">CLIMB</span>
+          <span>Episode · 18m</span>
+        </div>
+        <div class="ep-title">Risk, routine, and the economics of the impossible.</div>
+        <div class="ep-desc">The free-solo climbing icon on calculated risk, philanthropy, and long-term focus.</div>
+        <div class="ep-watch">Watch episode →</div>
+      </a>
+
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-bubba-watson" target="_blank" rel="noopener" data-tags="athlete-founder" data-jw="V05gpfW5" data-title="Bubba Watson">
+        <div class="thumb">
+          <img class="thumb-img" loading="lazy" alt="Bubba Watson"
+               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2026/02/V05gpfW5.jpg">
+          <div class="thumb-scrim"></div>
+          <div class="thumb-duration">16:08</div>
+          <div class="thumb-media">
+            <div class="thumb-name">Bubba Watson</div>
+            <div class="thumb-sub">2x Masters Champion · LIV Golf</div>
+          </div>
+          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
+        </div>
+        <div class="ep-meta-row">
+          <span class="ep-league-chip biz">GOLF</span>
+          <span>Episode · 16m</span>
+        </div>
+        <div class="ep-title">On legacy, LIV, and the long view of a career.</div>
+        <div class="ep-desc">The two-time Masters winner on the next chapter of professional golf and building a brand.</div>
+        <div class="ep-watch">Watch episode →</div>
+      </a>
+
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-toto-wolff-and-george-russell" target="_blank" rel="noopener" data-tags="league-exec motorsport" data-jw="XiIzGVmC" data-title="Wolff & Russell">
+        <div class="thumb">
+          <img class="thumb-img" loading="lazy" alt="Toto Wolff and George Russell"
+               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/06/XiIzGVmC.jpg">
+          <div class="thumb-scrim"></div>
+          <div class="thumb-duration">23:50</div>
+          <div class="thumb-media">
+            <div class="thumb-name">Wolff &amp; Russell</div>
+            <div class="thumb-sub">Mercedes-AMG Petronas F1 Team</div>
+          </div>
+          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
+        </div>
+        <div class="ep-meta-row">
+          <span class="ep-league-chip f1">F1</span>
+          <span>Episode · 24m</span>
+        </div>
+        <div class="ep-title">Accelerating Leadership — the Mercedes-AMG Petronas F1 story.</div>
+        <div class="ep-desc">Toto Wolff and George Russell on building a championship team and the business behind the grid.</div>
+        <div class="ep-watch">Watch episode →</div>
+      </a>
+
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-valtteri-bottas" target="_blank" rel="noopener" data-tags="motorsport" data-jw="Tb9ycGIl" data-title="Valtteri Bottas">
+        <div class="thumb">
+          <img class="thumb-img" loading="lazy" alt="Valtteri Bottas"
+               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/12/Tb9ycGIl.jpg">
+          <div class="thumb-scrim"></div>
+          <div class="thumb-duration">15:22</div>
+          <div class="thumb-media">
+            <div class="thumb-name">Valtteri Bottas</div>
+            <div class="thumb-sub">F1 Driver · 10x Grand Prix Winner</div>
+          </div>
+          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
+        </div>
+        <div class="ep-meta-row">
+          <span class="ep-league-chip f1">F1</span>
+          <span>Episode · 15m</span>
+        </div>
+        <div class="ep-title">Motivation, race prep, and reinvention mid-career.</div>
+        <div class="ep-desc">The F1 veteran on how his drive to win has evolved and what keeps him fast.</div>
+        <div class="ep-watch">Watch episode →</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     MOMENTS FROM THE SERIES — photo marquee below episodes
+     Uses gallery photos from the original page (3up gallery class)
+     ========================================================= -->
+<section class="photo-marquee-band">
+  <div class="wrap">
+    <div class="section-eyebrow">In Conversation</div>
+    <h2 class="section-title">Moments from the <em>series.</em></h2>
+
+    <div class="photo-marquee" id="photo-marquee" aria-roledescription="carousel">
+
+      <div class="photo-slide active" data-jw="reDyhqnx" data-title="Marques Colston">
+        <img src="https://www.nasdaq.com/sites/acquia.prod/files/2025/12/19/MarquesColston_TWF_0224255_0.jpg"
+             alt="Winning Formula Marques Colston" loading="eager">
+        <div class="photo-slide-caption">
+          <div class="photo-slide-eyebrow"><span class="dot"></span>Marques Colston · Athlete Founder</div>
+          <div class="photo-slide-title">From the end zone to the <em style="font-family: var(--ff-serif); font-style: italic; font-weight: 400;">endowment.</em></div>
+          <div class="photo-slide-sub">On founding Champion Venture Partners and translating locker-room discipline into disciplined capital allocation.</div>
+        </div>
+      </div>
+
+      <div class="photo-slide" data-jw="XiIzGVmC" data-title="Wolff &amp; Russell">
+        <img src="https://www.nasdaq.com/sites/acquia.prod/files/2025/12/19/MercedesF1_TWF_06162536%20%281%29.jpg"
+             alt="Mercedes-AMG Petronas F1 team at Nasdaq" loading="lazy">
+        <div class="photo-slide-caption">
+          <div class="photo-slide-eyebrow"><span class="dot"></span>Wolff &amp; Russell · Mercedes-AMG Petronas F1</div>
+          <div class="photo-slide-title">Accelerating <em style="font-family: var(--ff-serif); font-style: italic; font-weight: 400;">leadership</em> at 200 mph.</div>
+          <div class="photo-slide-sub">Toto Wolff and George Russell on building a championship team and the business behind the grid.</div>
+        </div>
+      </div>
+
+      <div class="photo-slide" data-jw="5XEtJGIU" data-title="Kelley O&rsquo;Hara">
+        <img src="https://www.nasdaq.com/sites/acquia.prod/files/2025/06/10/KelleyOHara_05082527.jpg"
+             alt="The Winning Formula with Kelley O&rsquo;Hara" loading="lazy">
+        <div class="photo-slide-caption">
+          <div class="photo-slide-eyebrow"><span class="dot"></span>Kelley O&rsquo;Hara · 2x World Cup Champion</div>
+          <div class="photo-slide-title">The business case for <em style="font-family: var(--ff-serif); font-style: italic; font-weight: 400;">women&rsquo;s sports.</em></div>
+          <div class="photo-slide-sub">On the explosive growth of women&rsquo;s athletics and how her podcast is reshaping athlete-led media.</div>
+        </div>
+      </div>
+
+      <div class="photo-slide" data-jw="BSvpXgrh" data-title="Alex Honnold">
+        <img src="https://www.nasdaq.com/sites/acquia.prod/files/2026/01/09/AlexHannold_TWF_06052532.jpg"
+             alt="Alex Honnold on The Winning Formula" loading="lazy">
+        <div class="photo-slide-caption">
+          <div class="photo-slide-eyebrow"><span class="dot"></span>Alex Honnold · Free-Solo Climber</div>
+          <div class="photo-slide-title">Risk, routine, and the economics of the <em style="font-family: var(--ff-serif); font-style: italic; font-weight: 400;">impossible.</em></div>
+          <div class="photo-slide-sub">The free-solo climbing icon on calculated risk, philanthropy, and long-term focus.</div>
+        </div>
+      </div>
+
+      <div class="photo-slide" data-jw="vwiq3RC5" data-title="Alejandro Bedoya">
+        <img src="https://www.nasdaq.com/sites/acquia.prod/files/2026/02/23/TWF%20-%20Alejandro%20Bedoya_Still-4_0.png"
+             alt="The Winning Formula with Alejandro Bedoya" loading="lazy">
+        <div class="photo-slide-caption">
+          <div class="photo-slide-eyebrow"><span class="dot"></span>Alejandro Bedoya · Major League Soccer</div>
+          <div class="photo-slide-title">On the growth of MLS and <em style="font-family: var(--ff-serif); font-style: italic; font-weight: 400;">building beyond the field.</em></div>
+          <div class="photo-slide-sub">The Philadelphia Union captain on his soccer journey and the career he&rsquo;s building off the pitch.</div>
+        </div>
+      </div>
+
+      <div class="photo-marquee-dots" id="photo-marquee-dots" role="tablist" aria-label="Select slide"></div>
+      <div class="photo-marquee-progress" aria-hidden="true">
+        <div class="photo-marquee-progress-bar" id="photo-marquee-progress"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =========================================================
+     HOSTS
+     ========================================================= -->
+<section class="hosts-band section">
+  <div class="wrap">
+    <div class="section-eyebrow">The Hosts</div>
+    <h2 class="section-title" style="margin-bottom: var(--s-7);">The voices <em>behind the bell.</em></h2>
+
+    <div class="hosts-grid">
+      <div class="host-card reveal">
+        <img
+          class="host-avatar a"
+          src="https://www.nasdaq.com/sites/acquia.prod/files/2024/11/08/Joel%20Kolani.png"
+          alt="Joel Kolani"
+          loading="lazy">
+        <div>
+          <div class="host-name">Joel Kolani</div>
+          <div class="host-role">Head of Brand Strategy &amp; Creative Content · Nasdaq</div>
+          <p class="host-bio">
+            A former sports radio host with expertise across the NFL, NBA, MLB, European soccer, and F1. Joel leads brand storytelling at Nasdaq and brings a journalist's instincts to every conversation.
+          </p>
+        </div>
+      </div>
+
+      <div class="host-card reveal">
+        <img
+          class="host-avatar b"
+          src="https://www.nasdaq.com/sites/acquia.prod/files/2024/09/10/PoppyShen.png"
+          alt="Poppy Shen"
+          loading="lazy">
+        <div>
+          <div class="host-name">Poppy Shen</div>
+          <div class="host-role">Journalist &amp; Video Producer · Nasdaq</div>
+          <p class="host-bio">
+            A journalist and video producer with experience at Yahoo, AOL, and CNN, Poppy has covered stories spanning sports, culture, and the AAPI community, and brings depth and empathy to every interview.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     FOOTER — Nasdaq Webflow footer
+     ========================================================= -->
+<footer id="footer" class="footer-wrapper">
+  <section class="footer-container">
+    <div class="column-container">
+      <div class="columns">
+        <div class="link-column">
+          <a href="http://ir.nasdaq.com/" target="_blank" rel="noopener" class="footer-link">Investor Relations</a>
+          <a href="https://www.nasdaq.com/about/careers" target="_blank" rel="noopener" class="footer-link">Careers</a>
+          <a href="https://www.nasdaq.com/app/nasdaq-markets" target="_blank" rel="noopener" class="footer-link">Mobile Apps</a>
+          <a href="https://www.nasdaq.com/trust-center" target="_blank" rel="noopener" class="footer-link">Trust Center</a>
+          <a href="https://www.nasdaq.com/nasdaq-accessibility-commitment" target="_blank" rel="noopener" class="footer-link">Accessibility</a>
+        </div>
+        <div class="link-column">
+          <a href="https://www.nasdaq.com/contact-us" target="_blank" rel="noopener" class="footer-link">Contact</a>
+          <a href="https://www.nasdaq.com/advertising" target="_blank" rel="noopener" class="footer-link">Advertise</a>
+          <a href="https://www.nasdaq.com/marketsite" target="_blank" rel="noopener" class="footer-link">Nasdaq Marketsite</a>
+          <a href="https://www.nasdaq.com/newsletters" target="_blank" rel="noopener" class="footer-link">Newsletters</a>
+        </div>
+        <div class="link-column">
+          <a href="https://www.nasdaq.com/privacy-statement" target="_blank" rel="noopener" class="footer-link privacy-legal">Privacy Policy</a>
+          <a href="https://www.nasdaq.com/cookie-statement" target="_blank" rel="noopener" class="footer-link privacy-legal">Cookies</a>
+          <a href="https://www.nasdaq.com/legal" target="_blank" rel="noopener" class="footer-link privacy-legal">Legal</a>
+          <a href="https://www.nasdaq.com/" target="_blank" rel="noopener" class="footer-link privacy-legal">Cookie Settings</a>
+        </div>
+      </div>
+      <!-- Mobile-only social row -->
+      <div class="social-icons-mobile">
+        <a href="https://www.facebook.com/Nasdaq/" target="_blank" rel="noopener" aria-label="Facebook"><img loading="lazy" alt="" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa63_facebook-social.svg"></a>
+        <a href="https://x.com/Nasdaq"          target="_blank" rel="noopener" aria-label="X"><img loading="lazy" alt="" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa64_x-social.svg"></a>
+        <a href="https://www.linkedin.com/company/nasdaq/" target="_blank" rel="noopener" aria-label="LinkedIn"><img loading="lazy" alt="" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa65_linkedin-social.svg"></a>
+        <a href="https://www.instagram.com/nasdaq"  target="_blank" rel="noopener" aria-label="Instagram"><img loading="lazy" alt="" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa58_instagram-social.svg"></a>
+        <a href="https://www.pinterest.com/nasdaq/" target="_blank" rel="noopener" aria-label="Pinterest"><img loading="lazy" alt="" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa59_pinterest-social.svg"></a>
+      </div>
+      <!-- Desktop right-aligned logo -->
+      <div class="nasdaq-logo-container-full">
+        <a href="https://www.nasdaq.com/" target="_blank" rel="noopener" class="nasdaq-logo-footer">
+          <img loading="lazy" alt="Nasdaq" class="nasdaq-logo"
+               src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa5b_nasdaq-logo.svg">
+        </a>
+      </div>
+    </div>
+
+    <div class="logo-copyright-container">
+      <div class="nasdaq-logo-container">
+        <img loading="lazy" alt="Nasdaq" class="nasdaq-logo"
+             src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa5b_nasdaq-logo.svg">
+      </div>
+      <div class="social-copyright-container">
+        <div class="social-icons">
+          <a href="https://www.facebook.com/Nasdaq/" target="_blank" rel="noopener" aria-label="Facebook"><img width="15" alt="Facebook" loading="lazy" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa63_facebook-social.svg"></a>
+          <a href="https://x.com/Nasdaq"          target="_blank" rel="noopener" aria-label="X"><img loading="lazy" alt="X" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa64_x-social.svg"></a>
+          <a href="https://www.linkedin.com/company/nasdaq/" target="_blank" rel="noopener" aria-label="LinkedIn"><img loading="lazy" alt="LinkedIn" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa65_linkedin-social.svg"></a>
+          <a href="https://www.instagram.com/nasdaq" target="_blank" rel="noopener" aria-label="Instagram"><img loading="lazy" alt="Instagram" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa58_instagram-social.svg"></a>
+          <a href="https://www.pinterest.com/nasdaq/" target="_blank" rel="noopener" aria-label="Pinterest"><img loading="lazy" alt="Pinterest" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa59_pinterest-social.svg"></a>
+        </div>
+        <div class="copyright-inline">© <span id="spanYear"></span>, Nasdaq, Inc. All Rights Reserved.</div>
+      </div>
+    </div>
+  </section>
+</footer>
+
+<!-- =========================================================
+     SCRIPTS
+     ========================================================= -->
+<script>/* Motion-lines lottie animation data (inline) */
+const MOTION_TOP_JSON = {"v":"5.12.1","fr":30,"ip":0,"op":121,"w":1920,"h":1080,"nm":"Comp 1","ddd":0,"assets":[],"layers":[{"ddd":0,"ind":3,"ty":3,"nm":"Layer 10","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[1290.307,965.579,0],"ix":2,"l":2},"a":{"a":0,"k":[0,0,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"ip":0,"op":121,"st":0,"ct":1,"bm":0},{"ddd":0,"ind":7,"ty":4,"nm":"Layer 8","parent":12,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[722.266,44.353,0],"ix":2,"l":2},"a":{"a":0,"k":[0,0,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[355.65,0],[-355.65,0]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0.572549045086,0.737254917622,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":22,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"tm","s":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":51.429,"s":[0]},{"t":85.7138671875,"s":[100]}],"ix":1},"e":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":0,"s":[0]},{"t":34.2861328125,"s":[100]}],"ix":2},"o":{"a":0,"k":0,"ix":3},"m":1,"ix":2,"nm":"Trim Paths 1","mn":"ADBE Vector Filter - Trim","hd":false}],"ip":0,"op":121,"st":0,"ct":1,"bm":0},{"ddd":0,"ind":8,"ty":4,"nm":"Layer 7","parent":12,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[-14.335,132.044,0],"ix":2,"l":2},"a":{"a":0,"k":[0,0,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[580.138,0],[-580.138,0]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0.572549045086,0.737254917622,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":22,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"tm","s":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":85.714,"s":[0]},{"t":120,"s":[100]}],"ix":1},"e":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":34.286,"s":[0]},{"t":68.5712890625,"s":[100]}],"ix":2},"o":{"a":0,"k":0,"ix":3},"m":1,"ix":2,"nm":"Trim Paths 1","mn":"ADBE Vector Filter - Trim","hd":false}],"ip":0,"op":121,"st":0,"ct":1,"bm":0},{"ddd":0,"ind":9,"ty":4,"nm":"Layer 6","parent":12,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[852.048,132.044,0],"ix":2,"l":2},"a":{"a":0,"k":[0,0,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[215.345,0],[-215.345,0]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.501960813999,0.313725501299,0.929411768913,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":22,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"tm","s":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":51.429,"s":[0]},{"t":85.7138671875,"s":[100]}],"ix":1},"e":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":0,"s":[0]},{"t":34.2861328125,"s":[100]}],"ix":2},"o":{"a":0,"k":0,"ix":3},"m":1,"ix":2,"nm":"Trim Paths 1","mn":"ADBE Vector Filter - Trim","hd":false}],"ip":0,"op":121,"st":0,"ct":1,"bm":0},{"ddd":0,"ind":10,"ty":4,"nm":"Layer 5","parent":12,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[1144.65,11.003,0],"ix":2,"l":2},"a":{"a":0,"k":[0,0,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[139.722,0],[-139.722,0]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.501960813999,0.313725501299,0.929411768913,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":22,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"tm","s":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":68.571,"s":[0]},{"t":120,"s":[100]}],"ix":1},"e":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":0,"s":[0]},{"t":51.4287109375,"s":[100]}],"ix":2},"o":{"a":0,"k":0,"ix":3},"m":1,"ix":2,"nm":"Trim Paths 1","mn":"ADBE Vector Filter - Trim","hd":false}],"ip":0,"op":121,"st":0,"ct":1,"bm":0},{"ddd":0,"ind":11,"ty":4,"nm":"Layer 2","parent":12,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[533.619,88.706,0],"ix":2,"l":2},"a":{"a":0,"k":[0,0,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[924.698,0],[-924.698,0]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[1,1,1,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":10,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"tm","s":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":68.571,"s":[0]},{"t":120,"s":[100]}],"ix":1},"e":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":0,"s":[0]},{"t":51.4287109375,"s":[100]}],"ix":2},"o":{"a":0,"k":0,"ix":3},"m":1,"ix":2,"nm":"Trim Paths 1","mn":"ADBE Vector Filter - Trim","hd":false}],"ip":0,"op":121,"st":0,"ct":1,"bm":0},{"ddd":0,"ind":12,"ty":4,"nm":"Layer 1","parent":3,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":1,"k":[{"i":{"x":0.24,"y":1},"o":{"x":0.76,"y":0},"t":0,"s":[94.758,-912.696,0],"to":[0,0,0],"ti":[0,0,0]},{"t":90,"s":[-1360.242,-912.696,0]}],"ix":2,"l":2},"a":{"a":0,"k":[0,0,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[924.698,0],[-924.698,0]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.501960813999,0.313725501299,0.929411768913,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":22,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"tm","s":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":68.571,"s":[0]},{"t":120,"s":[100]}],"ix":1},"e":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":0,"s":[0]},{"t":51.4287109375,"s":[100]}],"ix":2},"o":{"a":0,"k":0,"ix":3},"m":1,"ix":2,"nm":"Trim Paths 1","mn":"ADBE Vector Filter - Trim","hd":false}],"ip":0,"op":121,"st":0,"ct":1,"bm":0}],"markers":[],"props":{}};const MOTION_BOTTOM_JSON = {"v":"5.12.1","fr":30,"ip":0,"op":121,"w":1920,"h":1080,"nm":"Comp 1","ddd":0,"assets":[],"layers":[{"ddd":0,"ind":1,"ty":4,"nm":"Layer 12","parent":12,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[1186.666,997.987,0],"ix":2,"l":2},"a":{"a":0,"k":[0,0,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[643.12,0],[-643.12,0]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.501960813999,0.313725501299,0.929411768913,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":10,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"tm","s":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":76.363,"s":[0]},{"t":110.6494140625,"s":[100]}],"ix":1},"e":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":24.936,"s":[0]},{"t":59.220703125,"s":[100]}],"ix":2},"o":{"a":0,"k":0,"ix":3},"m":1,"ix":2,"nm":"Trim Paths 1","mn":"ADBE Vector Filter - Trim","hd":false}],"ip":0,"op":121,"st":0,"ct":1,"bm":0},{"ddd":0,"ind":2,"ty":4,"nm":"Layer 11","parent":12,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[1263.14,988.233,0],"ix":2,"l":2},"a":{"a":0,"k":[0,0,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[307.494,0],[-307.494,0]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0.572549045086,0.737254917622,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":22,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"tm","s":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":65.767,"s":[0]},{"t":102.2333984375,"s":[100]}],"ix":1},"e":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":17.143,"s":[0]},{"t":53.6103515625,"s":[100]}],"ix":2},"o":{"a":0,"k":0,"ix":3},"m":1,"ix":2,"nm":"Trim Paths 1","mn":"ADBE Vector Filter - Trim","hd":false}],"ip":0,"op":121,"st":0,"ct":1,"bm":0},{"ddd":0,"ind":3,"ty":4,"nm":"Layer 10","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[1290.307,965.579,0],"ix":2,"l":2},"a":{"a":0,"k":[0,0,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[161.825,0],[-161.825,0]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.501960813999,0.313725501299,0.929411768913,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":22,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"tm","s":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":54.402,"s":[0]},{"t":79.3369140625,"s":[100]}],"ix":1},"e":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":17,"s":[0]},{"t":41.9345703125,"s":[100]}],"ix":2},"o":{"a":0,"k":0,"ix":3},"m":1,"ix":2,"nm":"Trim Paths 1","mn":"ADBE Vector Filter - Trim","hd":false}],"ip":0,"op":121,"st":0,"ct":1,"bm":0},{"ddd":0,"ind":4,"ty":4,"nm":"Layer 9","parent":12,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[131.02,919.158,0],"ix":2,"l":2},"a":{"a":0,"k":[0,0,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[355.65,0],[-355.65,0]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0.572549045086,0.737254917622,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":22,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"tm","s":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":85.714,"s":[0]},{"t":120,"s":[100]}],"ix":1},"e":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":34.286,"s":[0]},{"t":68.5712890625,"s":[100]}],"ix":2},"o":{"a":0,"k":0,"ix":3},"m":1,"ix":2,"nm":"Trim Paths 1","mn":"ADBE Vector Filter - Trim","hd":false}],"ip":0,"op":121,"st":0,"ct":1,"bm":0},{"ddd":0,"ind":5,"ty":4,"nm":"Layer 4","parent":12,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[528.386,963.205,0],"ix":2,"l":2},"a":{"a":0,"k":[0,0,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[503.431,0],[-503.431,0]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[1,1,1,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":10,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"tm","s":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":68.571,"s":[0]},{"t":102.857421875,"s":[100]}],"ix":1},"e":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":17.143,"s":[0]},{"t":51.4287109375,"s":[100]}],"ix":2},"o":{"a":0,"k":0,"ix":3},"m":1,"ix":2,"nm":"Trim Paths 1","mn":"ADBE Vector Filter - Trim","hd":false}],"ip":0,"op":121,"st":0,"ct":1,"bm":0},{"ddd":0,"ind":6,"ty":4,"nm":"Layer 3","parent":12,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[347.696,835.312,0],"ix":2,"l":2},"a":{"a":0,"k":[0,0,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[719.698,0],[-719.698,0]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[1,1,1,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":10,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"tm","s":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":68.571,"s":[0]},{"t":102.857421875,"s":[100]}],"ix":1},"e":{"a":1,"k":[{"i":{"x":[0.24],"y":[1]},"o":{"x":[0.76],"y":[0]},"t":17.143,"s":[0]},{"t":51.4287109375,"s":[100]}],"ix":2},"o":{"a":0,"k":0,"ix":3},"m":1,"ix":2,"nm":"Trim Paths 1","mn":"ADBE Vector Filter - Trim","hd":false}],"ip":0,"op":121,"st":0,"ct":1,"bm":0},{"ddd":0,"ind":12,"ty":3,"nm":"Layer 1","parent":3,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":1,"k":[{"i":{"x":0.24,"y":1},"o":{"x":0.76,"y":0},"t":0,"s":[94.758,-912.696,0],"to":[0,0,0],"ti":[0,0,0]},{"t":90,"s":[-1360.242,-912.696,0]}],"ix":2,"l":2},"a":{"a":0,"k":[0,0,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"ip":0,"op":121,"st":0,"ct":1,"bm":0}],"markers":[],"props":{}};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+<script>
+  /* ===========================================================
+     LOTTIE — TWF wordmark + motion lines
+     Uses the Webflow CDN for the wordmark JSON (same asset used
+     by the production page), and local files for the motion
+     lines. Falls back silently to the inline SVG wordmark if
+     the CDN call fails or lottie-web is unavailable.
+     =========================================================== */
+  (function initLottie() {
+    if (typeof lottie === 'undefined') return;
+
+    /* TWF wordmark — plays once */
+    try {
+      const wordmark = lottie.loadAnimation({
+        container: document.getElementById('wordmark-lottie'),
+        renderer: 'svg',
+        loop: false,
+        autoplay: true,
+        path: 'https://cdn.prod.website-files.com/68753ccef93eccd8f1b9a2d5/68753ccef93eccd8f1b9a2ee_The-Winning-Formula.json',
+      });
+      wordmark.addEventListener('data_failed', () => {
+        /* Inject inline SVG fallback into the container on failure */
+        const el = document.getElementById('wordmark-lottie');
+        if (el) {
+          el.innerHTML = '<svg viewBox="0 0 430.5 129.8" xmlns="http://www.w3.org/2000/svg" fill="#fff" style="width:100%;height:auto;display:block;"><text x="0" y="80" font-family="Inter,sans-serif" font-weight="500" font-size="72" fill="#fff">The Winning Formula</text></svg>';
+        }
+      });
+    } catch (e) { /* noop */ }
+
+    /* Motion lines — atmospheric, looping. Animation data inlined
+       below so they render without depending on relative file paths. */
+    try {
+      if (typeof MOTION_TOP_JSON !== 'undefined') {
+        lottie.loadAnimation({
+          container: document.getElementById('motion-lines-top'),
+          renderer: 'svg', loop: true, autoplay: true,
+          rendererSettings: { preserveAspectRatio: 'xMidYMin slice' },
+          animationData: MOTION_TOP_JSON,
+        });
+      }
+      if (typeof MOTION_BOTTOM_JSON !== 'undefined') {
+        lottie.loadAnimation({
+          container: document.getElementById('motion-lines-bottom'),
+          renderer: 'svg', loop: true, autoplay: true,
+          rendererSettings: { preserveAspectRatio: 'xMidYMax slice' },
+          animationData: MOTION_BOTTOM_JSON,
+        });
+      }
+    } catch (e) { /* noop */ }
+  })();
+
+  /* Footer copyright year */
+  const spanYear = document.getElementById('spanYear');
+  if (spanYear) spanYear.textContent = new Date().getFullYear();
+
+  /* Scroll reveal */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ===========================================================
+     FILTERS — filter cards by data-tags
+     =========================================================== */
+  const filterBtns = document.querySelectorAll('.filters button');
+  const carousel = document.getElementById('episodes-carousel');
+
+  filterBtns.forEach(b => {
+    b.addEventListener('click', () => {
+      filterBtns.forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      const filter = b.getAttribute('data-filter');
+      carousel.querySelectorAll('.ep-card').forEach(card => {
+        const tags = (card.getAttribute('data-tags') || '').split(/\s+/);
+        const match = filter === 'all' || tags.includes(filter);
+        card.classList.toggle('filter-hidden', !match);
+      });
+      /* Reset scroll position so visible cards start from the left */
+      carousel.scrollTo({ left: 0, behavior: 'smooth' });
+      updateCarouselNav();
+    });
+  });
+
+  /* ===========================================================
+     CAROUSEL — prev/next nav buttons
+     =========================================================== */
+  const navBtns = document.querySelectorAll('.carousel-nav');
+  function cardWidth() {
+    const card = carousel.querySelector('.ep-card:not(.filter-hidden)');
+    if (!card) return 380;
+    const gap = parseFloat(getComputedStyle(carousel).gap) || 24;
+    return card.getBoundingClientRect().width + gap;
+  }
+  function updateCarouselNav() {
+    const max = carousel.scrollWidth - carousel.clientWidth - 2;
+    const x = carousel.scrollLeft;
+    navBtns.forEach(b => {
+      const dir = parseInt(b.getAttribute('data-dir'), 10);
+      b.disabled = (dir === -1 && x <= 0) || (dir === 1 && x >= max);
+    });
+  }
+  navBtns.forEach(b => {
+    b.addEventListener('click', () => {
+      const dir = parseInt(b.getAttribute('data-dir'), 10);
+      carousel.scrollBy({ left: dir * cardWidth() * 2, behavior: 'smooth' });
+    });
+  });
+  carousel.addEventListener('scroll', updateCarouselNav, { passive: true });
+  window.addEventListener('resize', updateCarouselNav);
+  updateCarouselNav();
+
+  /* ===========================================================
+     JW PLAYER MODAL — play videos inline via JW preview iframe
+     =========================================================== */
+  const modal        = document.getElementById('jw-modal');
+  const modalIframe  = document.getElementById('jw-modal-iframe');
+  const modalCaption = document.getElementById('jw-modal-caption');
+  const modalClose   = document.getElementById('jw-modal-close');
+
+  function openVideo(mediaId, title) {
+    if (!mediaId || !modal) return;
+    modalIframe.src = `https://cdn.jwplayer.com/previews/${mediaId}`;
+    if (title) modalCaption.textContent = title;
+    modal.classList.add('open');
+    document.body.classList.add('no-scroll');
+  }
+  function closeVideo() {
+    modal.classList.remove('open');
+    modalIframe.src = 'about:blank'; /* halt playback */
+    document.body.classList.remove('no-scroll');
+  }
+
+  /* Hook every element with data-jw — including the featured Colston card */
+  document.querySelectorAll('[data-jw]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      const mediaId = el.getAttribute('data-jw');
+      const title   = el.getAttribute('data-title') || '';
+      if (mediaId) {
+        e.preventDefault();
+        openVideo(mediaId, title);
+      }
+    });
+  });
+
+  if (modalClose) modalClose.addEventListener('click', closeVideo);
+  if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) closeVideo(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && modal.classList.contains('open')) closeVideo();
+  });
+
+  /* ===========================================================
+     PHOTO MARQUEE — auto-advances with a Nasdaq-blue progress bar
+     =========================================================== */
+  (function initMarquee() {
+    const marquee = document.getElementById('photo-marquee');
+    const dotsEl  = document.getElementById('photo-marquee-dots');
+    const bar     = document.getElementById('photo-marquee-progress');
+    if (!marquee || !dotsEl) return;
+
+    const slides = Array.from(marquee.querySelectorAll('.photo-slide'));
+    if (!slides.length) return;
+
+    const DURATION = 4000; /* ms per slide */
+    marquee.style.setProperty('--marquee-duration', DURATION + 'ms');
+
+    let idx = 0;
+    let timer = null;
+    let tickStartedAt = Date.now();
+    let remaining = DURATION;
+
+    /* Build dots */
+    slides.forEach((_, i) => {
+      const b = document.createElement('button');
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-label', `Show slide ${i + 1}`);
+      if (i === 0) b.classList.add('active');
+      b.addEventListener('click', (e) => {
+        e.stopPropagation();
+        jumpTo(i);
+      });
+      dotsEl.appendChild(b);
+    });
+    const dots = Array.from(dotsEl.children);
+
+    function restartBar() {
+      if (!bar) return;
+      bar.classList.remove('running');
+      void bar.offsetWidth;              /* force reflow so animation restarts cleanly */
+      bar.classList.add('running');
+    }
+
+    function go(next) {
+      next = ((next % slides.length) + slides.length) % slides.length;
+      if (next === idx) return;
+      slides[idx].classList.remove('active');
+      dots[idx].classList.remove('active');
+      idx = next;
+      slides[idx].classList.add('active');
+      dots[idx].classList.add('active');
+      restartBar();
+      tickStartedAt = Date.now();
+      remaining = DURATION;
+    }
+
+    function startLoop() {
+      stopLoop();
+      timer = setInterval(() => go(idx + 1), DURATION);
+      restartBar();
+      tickStartedAt = Date.now();
+      remaining = DURATION;
+    }
+    function stopLoop() { if (timer) { clearInterval(timer); clearTimeout(timer); timer = null; } }
+
+    function jumpTo(target) {
+      stopLoop();
+      go(target);
+      timer = setInterval(() => go(idx + 1), DURATION);
+    }
+
+    /* Pause only when the user INTENTIONALLY moves their mouse over the
+       marquee — not when the marquee happens to scroll past a stationary
+       cursor. mousemove requires actual cursor motion, so scrolling alone
+       won't trigger a pause. A `hoverPaused` flag keeps it one-shot. */
+    let hoverPaused = false;
+
+    marquee.addEventListener('mousemove', () => {
+      if (hoverPaused || !timer) return;
+      hoverPaused = true;
+      marquee.classList.add('paused');
+      remaining = Math.max(250, DURATION - (Date.now() - tickStartedAt));
+      stopLoop();
+    });
+    marquee.addEventListener('mouseleave', () => {
+      if (!hoverPaused) return;
+      hoverPaused = false;
+      marquee.classList.remove('paused');
+      /* Let the current slide finish its remaining time, then resume the loop */
+      timer = setTimeout(() => { go(idx + 1); startLoop(); }, remaining);
+    });
+
+    /* Click a slide → open video modal */
+    slides.forEach(slide => {
+      slide.addEventListener('click', () => {
+        const mediaId = slide.getAttribute('data-jw');
+        const title   = slide.getAttribute('data-title');
+        if (mediaId) openVideo(mediaId, title);
+      });
+    });
+
+    startLoop();
+  })();
+
+  /* ===========================================================
+     LIVE SPORTS TICKER — ESPN news feed
+     =========================================================== */
+  const LEAGUES = [
+    { url: 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/news',    sym: 'NBA',   cls: 'nba' },
+    { url: 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/news',      sym: 'NFL',   cls: 'nfl' },
+    { url: 'https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/news',   sym: 'WNBA',  cls: 'wnba' },
+    { url: 'https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/news',        sym: 'NHL',   cls: 'nhl' },
+    { url: 'https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/news',      sym: 'MLB',   cls: 'mlb' },
+    { url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/news',      sym: 'EPL',   cls: 'epl' },
+    { url: 'https://site.api.espn.com/apis/site/v2/sports/tennis/atp/news',        sym: 'TEN',   cls: 'tnns' },
+    { url: 'https://site.api.espn.com/apis/site/v2/sports/racing/f1/news',         sym: 'F1',    cls: 'f1' },
+    { url: 'https://site.api.espn.com/apis/site/v2/sports/football/college-football/news', sym: 'NCF', cls: 'ncf' },
+  ];
+
+  const FALLBACK = [
+    { sym: 'NBA',  cls: 'nba',  head: "Celtics extend win streak to eight behind Tatum's 38", time: '12m ago' },
+    { sym: 'NFL',  cls: 'nfl',  head: "Chiefs clinch AFC West with late-game defensive stand",  time: '28m ago' },
+    { sym: 'WNBA', cls: 'wnba', head: "Aces acquire All-Star guard in blockbuster off-season move", time: '42m ago' },
+    { sym: 'EPL',  cls: 'epl',  head: "Arsenal top table after 3-1 win at Anfield",             time: '1h ago'  },
+    { sym: 'F1',   cls: 'f1',   head: "McLaren extend constructors lead at Suzuka",             time: '2h ago'  },
+    { sym: 'TEN',  cls: 'tnns', head: "Gauff advances to Rome quarterfinal in straight sets",   time: '3h ago'  },
+    { sym: 'NHL',  cls: 'nhl',  head: "Rangers drop third straight, face must-win vs Lightning", time: '3h ago' },
+    { sym: 'MLB',  cls: 'mlb',  head: "Dodgers sign veteran closer to one-year, $12M deal",     time: '4h ago'  },
+    { sym: 'NBA',  cls: 'nba',  head: "Wembanyama drops 42, Spurs edge Thunder in OT",          time: '5h ago'  },
+    { sym: 'NFL',  cls: 'nfl',  head: "Eagles place All-Pro tackle on IR with knee injury",     time: '6h ago'  },
+    { sym: 'EPL',  cls: 'epl',  head: "Man City close gap to three points with derby win",     time: '7h ago'  },
+    { sym: 'TEN',  cls: 'tnns', head: "Alcaraz withdraws from Madrid Open citing minor injury", time: '8h ago'  },
+    { sym: 'F1',   cls: 'f1',   head: "Verstappen fastest in final practice ahead of qualifying", time: '9h ago' },
+    { sym: 'WNBA', cls: 'wnba', head: "Stewart named unanimous MVP for the second time",        time: '10h ago' },
+    { sym: 'NHL',  cls: 'nhl',  head: "McDavid records 100th assist of the season",             time: '12h ago' },
+    { sym: 'MLB',  cls: 'mlb',  head: "Judge homers twice as Yankees sweep Orioles",            time: '13h ago' },
+    { sym: 'NCF',  cls: 'ncf',  head: "Michigan climbs to No. 2 in AP Poll after road win",     time: '14h ago' },
+    { sym: 'NBA',  cls: 'nba',  head: "Warriors waive veteran guard, clear roster spot",        time: '15h ago' },
+  ];
+
+  function timeAgo(iso) {
+    try {
+      const then = new Date(iso).getTime();
+      const diff = Math.max(0, (Date.now() - then) / 1000);
+      if (diff < 60)     return `${Math.floor(diff)}s ago`;
+      if (diff < 3600)   return `${Math.floor(diff/60)}m ago`;
+      if (diff < 86400)  return `${Math.floor(diff/3600)}h ago`;
+      return `${Math.floor(diff/86400)}d ago`;
+    } catch { return ''; }
+  }
+
+  function tickerItemHTML({ sym, cls, head, time }) {
+    return `
+      <div class="t-item">
+        <span class="t-sym ${cls}">${sym}</span>
+        <span class="t-head">${head}</span>
+        ${time ? `<span class="t-time">${time}</span>` : ''}
+      </div>`;
+  }
+
+  function renderTicker(items) {
+    const track = document.getElementById('ticker-track');
+    if (!items.length) {
+      track.innerHTML = FALLBACK.map(tickerItemHTML).join('') + FALLBACK.map(tickerItemHTML).join('');
+      return;
+    }
+    const html = items.map(tickerItemHTML).join('');
+    track.innerHTML = html + html;
+  }
+
+  async function fetchLeagueNews(league) {
+    try {
+      const res = await fetch(league.url, { mode: 'cors' });
+      if (!res.ok) throw new Error('bad response');
+      const data = await res.json();
+      const articles = (data.articles || data.headlines || []).slice(0, 6);
+      return articles.map(a => ({
+        sym: league.sym,
+        cls: league.cls,
+        head: (a.headline || a.description || '').replace(/\s+/g, ' ').trim(),
+        time: a.published ? timeAgo(a.published) : '',
+      })).filter(x => x.head);
+    } catch (e) {
+      return [];
+    }
+  }
+
+  (async function bootTicker() {
+    const settled = await Promise.allSettled(LEAGUES.map(fetchLeagueNews));
+    let pools = settled.map(r => r.status === 'fulfilled' ? r.value : []);
+    const merged = [];
+    const maxLen = Math.max(...pools.map(p => p.length), 0);
+    for (let i = 0; i < maxLen; i++) {
+      for (const pool of pools) if (pool[i]) merged.push(pool[i]);
+    }
+    const seen = new Set();
+    const unique = merged.filter(m => {
+      if (seen.has(m.head)) return false;
+      seen.add(m.head);
+      return true;
+    });
+
+    if (unique.length >= 8) {
+      renderTicker(unique);
+    } else {
+      renderTicker(unique.length ? unique.concat(FALLBACK) : FALLBACK);
+    }
+  })();
+</script>
+
+<!-- =========================================================
+     JW PLAYER VIDEO MODAL
+     Opened when a card with data-jw is clicked. The iframe
+     loads JW's free preview player for that media id.
+     ========================================================= -->
+<div class="jw-modal" id="jw-modal" role="dialog" aria-modal="true" aria-labelledby="jw-modal-caption">
+  <div class="jw-modal-dialog">
+    <div class="jw-modal-caption" id="jw-modal-caption">The Winning Formula</div>
+    <button class="jw-modal-close" id="jw-modal-close" aria-label="Close video">
+      <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 2 L12 12 M12 2 L2 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <iframe
+      class="jw-modal-iframe"
+      id="jw-modal-iframe"
+      src="about:blank"
+      allow="autoplay; fullscreen; picture-in-picture"
+      allowfullscreen
+      title="The Winning Formula video player"></iframe>
+  </div>
+</div>
+
+</body>
+</html>
