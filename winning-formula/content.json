@@ -22,7 +22,7 @@
 
   "ticker": {
     "label": "NEWS & UPDATES",
-    "scrollDurationSeconds": 300,
+    "scrollDurationSeconds": 90,
     "items": [
       {
         "headline": "The Winning Formula Is Nominated for a Shorty Award for Best Branded Content Series",
