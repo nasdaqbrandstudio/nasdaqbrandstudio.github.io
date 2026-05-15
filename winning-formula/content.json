@@ -1,0 +1,346 @@
+{
+  "_meta": {
+    "version": 1,
+    "lastEditedNote": "Edit the values below. See README.md for the field guide. Save the file via GitHub's web UI to publish."
+  },
+
+  "site": {
+    "title": "The Winning Formula | Nasdaq",
+    "description": "Nasdaq's original series connecting the business of sport with the business of capital."
+  },
+
+  "nav": {
+    "logoHref": "https://www.nasdaq.com/",
+    "logoAlt": "Nasdaq",
+    "links": [
+      { "label": "Market Activity", "href": "https://www.nasdaq.com/market-activity" },
+      { "label": "Insights",        "href": "https://www.nasdaq.com/news-and-insights" },
+      { "label": "Solutions",       "href": "https://www.nasdaq.com/solutions" },
+      { "label": "About",           "href": "https://www.nasdaq.com/about" }
+    ]
+  },
+
+  "ticker": {
+    "label": "NEWS & UPDATES",
+    "scrollDurationSeconds": 300,
+    "items": [
+      {
+        "headline": "The Winning Formula Is Nominated for a Shorty Award for Best Branded Content Series",
+        "url": "https://shortyawards.com/18th/nasdaq-the-winning-formula-with-joel-kolani-and-poppy-shen"
+      },
+      {
+        "headline": "Reggie Bush Announces his New United Athlete Tour On The Winning Formula",
+        "url": "https://www.youtube.com/watch?v=rVNtyedrBAc"
+      },
+      {
+        "headline": "Mercedes AMG PETRONAS Formula 1 Team and Nasdaq Launch a New Winning Formula Offshoot Called \"Accelerating Leadership\"",
+        "url": "https://www.nasdaq.com/press-release/mercedes-amg-petronas-formula-one-team-nasdaq-join-forces-accelerate-innovation-2025"
+      },
+      {
+        "headline": "The Winning Formula is a 2026 Webby Honoree In the \"Best Branded Podcast\" Category",
+        "url": "https://winners.webbyawards.com/2026/podcasts/features/best-branded-podcast-or-segment/373326/nasdaqs-the-winning-formula"
+      },
+      {
+        "headline": "Terrence Murphy Announces The new Synergy Sports Capital Firm In Partnership with Reggie Bush",
+        "url": "https://frontofficesports.com/reggie-bush-terrence-murphy-launch-pe-firm-for-emerging-leagues/"
+      },
+      {
+        "headline": "Former NBA MVP Derrick Rose Announces his New Book \"The Pooh Print\" on The Winning Formula",
+        "url": "https://www.youtube.com/watch?v=wYkovolDU30"
+      }
+    ]
+  },
+
+  "hero": {
+    "eyebrow": "Nasdaq Original Series",
+    "wordmarkFallback": {
+      "title": "The Winning Formula",
+      "subtitle": "Presented by Mercedes-AMG Petronas Formula One Team"
+    },
+    "intro": "We invite high profile guests from around the sporting world, from athlete entrepreneurs to league executives, to discuss the similarities and through-lines between the sports and business world."
+  },
+
+  "featured": {
+    "eyebrow": "Latest Episode",
+    "headline": "From the end zone to the <em>endowment.</em>",
+    "guest": "Marques Colston",
+    "guestNameMarkup": "Marques<br>Colston",
+    "subtitle": "Super Bowl XLIV Champion · Champion Venture Partners",
+    "badge": "Featured",
+    "thumbnail": "https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/05/reDyhqnx.jpg",
+    "thumbnailAlt": "Marques Colston",
+    "videoUrl": "https://cdn.jwplayer.com/players/reDyhqnx-Mgmy6TMn.html",
+    "episodeUrl": "https://www.nasdaq.com/videos/winning-formula-marques-colston",
+    "duration": "24:18",
+    "pullQuote": "I started to realize that not only are we solving for the <em>athlete investor</em>, we're solving for the retail investor as well.",
+    "body": "Marques Colston joins The Winning Formula to break down the founding of Champion Venture Partners, the rise of the sports asset class, and how he's translating locker-room discipline into disciplined capital allocation.",
+    "bylineLead": "With Joel Kolani",
+    "bylineMeta": "Recorded at Nasdaq MarketSite, Times Square"
+  },
+
+  "series": {
+    "eyebrow": "The Series",
+    "headline": "Operators, owners, and <em>originals.</em>",
+    "filters": [
+      { "label": "All",              "value": "all" },
+      { "label": "Athlete Founders", "value": "athlete-founder" },
+      { "label": "Women's Sports",   "value": "womens-sports" },
+      { "label": "League Exec",      "value": "league-exec" },
+      { "label": "Motorsport",       "value": "motorsport" }
+    ],
+    "episodes": [
+      {
+        "guest": "Kelley O'Hara",
+        "guestNameMarkup": "Kelley O'Hara",
+        "subtitle": "2x World Cup Champion · USWNT",
+        "thumbnail": "https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/07/5XEtJGIU.jpg",
+        "thumbnailAlt": "Kelley O'Hara",
+        "videoUrl": "https://cdn.jwplayer.com/players/5XEtJGIU-Mgmy6TMn.html",
+        "episodeUrl": "https://www.nasdaq.com/videos/winning-formula-kelley-ohara",
+        "duration": "21:40",
+        "tag": "USWNT",
+        "tagClass": "soc",
+        "filters": ["athlete-founder", "womens-sports"],
+        "episodeMeta": "Episode · 22m",
+        "title": "The business case for women's sports — and 'Sports Are Fun!'",
+        "description": "Kelley O'Hara on the explosive growth of women's sports and how her podcast is reshaping athlete-led media."
+      },
+      {
+        "guest": "Jimmy Butler",
+        "guestNameMarkup": "Jimmy Butler",
+        "subtitle": "NBA All-Star · Founder, BIGFACE Coffee",
+        "thumbnail": "https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/04/BN841b7I.jpg",
+        "thumbnailAlt": "Jimmy Butler",
+        "videoUrl": "https://cdn.jwplayer.com/players/BN841b7I-Mgmy6TMn.html",
+        "episodeUrl": "https://www.nasdaq.com/videos/winning-formula-jimmy-butler",
+        "duration": "22:07",
+        "tag": "NBA",
+        "tagClass": "nba",
+        "filters": ["athlete-founder"],
+        "episodeMeta": "Episode · 22m",
+        "title": "\"It's not always going to go the way you think — you gotta be able to pivot.\"",
+        "description": "From NBA stardom to BIGFACE Coffee, on adaptability and the power of the pivot."
+      },
+      {
+        "guest": "Allyson Felix",
+        "guestNameMarkup": "Allyson Felix",
+        "subtitle": "11x Olympic Medalist · Saysh Co-founder",
+        "thumbnail": "https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/03/zx7smJw6.jpg",
+        "thumbnailAlt": "Allyson Felix",
+        "videoUrl": "https://cdn.jwplayer.com/players/zx7smJw6-Mgmy6TMn.html",
+        "episodeUrl": "https://www.nasdaq.com/videos/winning-formula-allyson-felix",
+        "duration": "18:20",
+        "tag": "T&F",
+        "tagClass": "tf",
+        "filters": ["athlete-founder", "womens-sports"],
+        "episodeMeta": "Episode · 18m",
+        "title": "Legacy, entrepreneurship, and building a shoe brand for women.",
+        "description": "The most decorated track-and-field Olympian in American history on her next chapter."
+      },
+      {
+        "guest": "Tristan Thompson",
+        "guestNameMarkup": "Tristan Thompson",
+        "subtitle": "NBA Champion · Web3 Ambassador",
+        "thumbnail": "https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2026/02/50k3giwJ.jpg",
+        "thumbnailAlt": "Tristan Thompson",
+        "videoUrl": "https://cdn.jwplayer.com/players/50k3giwJ-Mgmy6TMn.html",
+        "episodeUrl": "https://www.nasdaq.com/videos/winning-formula-tristan-thompson",
+        "duration": "19:14",
+        "tag": "NBA",
+        "tagClass": "nba",
+        "filters": ["athlete-founder"],
+        "episodeMeta": "Episode · 19m",
+        "title": "Financial literacy, Web3, and how the NBA has evolved.",
+        "description": "The NBA champion on building beyond the court and what athletes need to know about money."
+      },
+      {
+        "guest": "CJ McCollum",
+        "guestNameMarkup": "CJ McCollum",
+        "subtitle": "NBA Veteran · Entrepreneur",
+        "thumbnail": "https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/09/ct9cUIRg.jpg",
+        "thumbnailAlt": "CJ McCollum",
+        "videoUrl": "https://cdn.jwplayer.com/players/ct9cUIRg-Mgmy6TMn.html",
+        "episodeUrl": "https://www.nasdaq.com/videos/winning-formula-cj-mccollum",
+        "duration": "20:32",
+        "tag": "NBA",
+        "tagClass": "nba",
+        "filters": ["athlete-founder"],
+        "episodeMeta": "Episode · 20m",
+        "title": "How the court prepared him for a career in business.",
+        "description": "CJ McCollum on discipline, investment, and the NBA's evolution since he entered the league."
+      },
+      {
+        "guest": "Alex Honnold",
+        "guestNameMarkup": "Alex Honnold",
+        "subtitle": "Free Solo Climber · Honnold Foundation",
+        "thumbnail": "https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/08/BSvpXgrh.jpg",
+        "thumbnailAlt": "Alex Honnold",
+        "videoUrl": "https://cdn.jwplayer.com/players/BSvpXgrh-Mgmy6TMn.html",
+        "episodeUrl": "https://www.nasdaq.com/videos/winning-formula-alex-honnold",
+        "duration": "17:45",
+        "tag": "CLIMB",
+        "tagClass": "biz",
+        "filters": ["athlete-founder"],
+        "episodeMeta": "Episode · 18m",
+        "title": "Risk, routine, and the economics of the impossible.",
+        "description": "The free-solo climbing icon on calculated risk, philanthropy, and long-term focus."
+      },
+      {
+        "guest": "Bubba Watson",
+        "guestNameMarkup": "Bubba Watson",
+        "subtitle": "2x Masters Champion · LIV Golf",
+        "thumbnail": "https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2026/02/V05gpfW5.jpg",
+        "thumbnailAlt": "Bubba Watson",
+        "videoUrl": "https://cdn.jwplayer.com/players/V05gpfW5-Mgmy6TMn.html",
+        "episodeUrl": "https://www.nasdaq.com/videos/winning-formula-bubba-watson",
+        "duration": "16:08",
+        "tag": "GOLF",
+        "tagClass": "biz",
+        "filters": ["athlete-founder"],
+        "episodeMeta": "Episode · 16m",
+        "title": "On legacy, LIV, and the long view of a career.",
+        "description": "The two-time Masters winner on the next chapter of professional golf and building a brand."
+      },
+      {
+        "guest": "Wolff & Russell",
+        "guestNameMarkup": "Wolff &amp; Russell",
+        "subtitle": "Mercedes-AMG Petronas F1 Team",
+        "thumbnail": "https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/06/XiIzGVmC.jpg",
+        "thumbnailAlt": "Toto Wolff and George Russell",
+        "videoUrl": "https://cdn.jwplayer.com/players/XiIzGVmC-Mgmy6TMn.html",
+        "episodeUrl": "https://www.nasdaq.com/videos/winning-formula-toto-wolff-and-george-russell",
+        "duration": "23:50",
+        "tag": "F1",
+        "tagClass": "f1",
+        "filters": ["league-exec", "motorsport"],
+        "episodeMeta": "Episode · 24m",
+        "title": "Accelerating Leadership — the Mercedes-AMG Petronas F1 story.",
+        "description": "Toto Wolff and George Russell on building a championship team and the business behind the grid."
+      },
+      {
+        "guest": "Valtteri Bottas",
+        "guestNameMarkup": "Valtteri Bottas",
+        "subtitle": "F1 Driver · 10x Grand Prix Winner",
+        "thumbnail": "https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/12/Tb9ycGIl.jpg",
+        "thumbnailAlt": "Valtteri Bottas",
+        "videoUrl": "https://cdn.jwplayer.com/players/Tb9ycGIl-Mgmy6TMn.html",
+        "episodeUrl": "https://www.nasdaq.com/videos/winning-formula-valtteri-bottas",
+        "duration": "15:22",
+        "tag": "F1",
+        "tagClass": "f1",
+        "filters": ["motorsport"],
+        "episodeMeta": "Episode · 15m",
+        "title": "Motivation, race prep, and reinvention mid-career.",
+        "description": "The F1 veteran on how his drive to win has evolved and what keeps him fast."
+      }
+    ]
+  },
+
+  "moments": {
+    "eyebrow": "In Conversation",
+    "headline": "Moments from the <em>series.</em>",
+    "autoAdvanceMs": 4000,
+    "slides": [
+      {
+        "guest": "Marques Colston",
+        "guestLabel": "Athlete Founder",
+        "photo": "https://www.nasdaq.com/sites/acquia.prod/files/2025/12/19/MarquesColston_TWF_0224255_0.jpg",
+        "photoAlt": "Winning Formula Marques Colston",
+        "videoUrl": "https://cdn.jwplayer.com/players/reDyhqnx-Mgmy6TMn.html",
+        "headline": "From the end zone to the <em>endowment.</em>",
+        "subhead": "On founding Champion Venture Partners and translating locker-room discipline into disciplined capital allocation."
+      },
+      {
+        "guest": "Wolff & Russell",
+        "guestLabel": "Mercedes-AMG Petronas F1",
+        "photo": "https://www.nasdaq.com/sites/acquia.prod/files/2025/12/19/MercedesF1_TWF_06162536%20%281%29.jpg",
+        "photoAlt": "Mercedes-AMG Petronas F1 team at Nasdaq",
+        "videoUrl": "https://cdn.jwplayer.com/players/XiIzGVmC-Mgmy6TMn.html",
+        "headline": "Accelerating <em>leadership</em> at 200 mph.",
+        "subhead": "Toto Wolff and George Russell on building a championship team and the business behind the grid."
+      },
+      {
+        "guest": "Kelley O'Hara",
+        "guestLabel": "2x World Cup Champion",
+        "photo": "https://www.nasdaq.com/sites/acquia.prod/files/2025/06/10/KelleyOHara_05082527.jpg",
+        "photoAlt": "The Winning Formula with Kelley O'Hara",
+        "videoUrl": "https://cdn.jwplayer.com/players/5XEtJGIU-Mgmy6TMn.html",
+        "headline": "The business case for <em>women's sports.</em>",
+        "subhead": "On the explosive growth of women's athletics and how her podcast is reshaping athlete-led media."
+      },
+      {
+        "guest": "Alex Honnold",
+        "guestLabel": "Free-Solo Climber",
+        "photo": "https://www.nasdaq.com/sites/acquia.prod/files/2026/01/09/AlexHannold_TWF_06052532.jpg",
+        "photoAlt": "Alex Honnold on The Winning Formula",
+        "videoUrl": "https://cdn.jwplayer.com/players/BSvpXgrh-Mgmy6TMn.html",
+        "headline": "Risk, routine, and the economics of the <em>impossible.</em>",
+        "subhead": "The free-solo climbing icon on calculated risk, philanthropy, and long-term focus."
+      },
+      {
+        "guest": "Alejandro Bedoya",
+        "guestLabel": "Major League Soccer",
+        "photo": "https://www.nasdaq.com/sites/acquia.prod/files/2026/02/23/TWF%20-%20Alejandro%20Bedoya_Still-4_0.png",
+        "photoAlt": "The Winning Formula with Alejandro Bedoya",
+        "videoUrl": "https://cdn.jwplayer.com/players/vwiq3RC5-Mgmy6TMn.html",
+        "headline": "On the growth of MLS and <em>building beyond the field.</em>",
+        "subhead": "The Philadelphia Union captain on his soccer journey and the career he's building off the pitch."
+      }
+    ]
+  },
+
+  "hosts": {
+    "eyebrow": "The Hosts",
+    "headline": "The voices <em>behind the bell.</em>",
+    "people": [
+      {
+        "name": "Joel Kolani",
+        "title": "Head of Brand Strategy & Creative Content · Nasdaq",
+        "photo": "https://www.nasdaq.com/sites/acquia.prod/files/2024/11/08/Joel%20Kolani.png",
+        "photoAlt": "Joel Kolani",
+        "bio": "A former sports radio host with expertise across the NFL, NBA, MLB, European soccer, and F1. Joel leads brand storytelling at Nasdaq and brings a journalist's instincts to every conversation."
+      },
+      {
+        "name": "Poppy Shen",
+        "title": "Journalist & Video Producer · Nasdaq",
+        "photo": "https://www.nasdaq.com/sites/acquia.prod/files/2024/09/10/PoppyShen.png",
+        "photoAlt": "Poppy Shen",
+        "bio": "A journalist and video producer with experience at Yahoo, AOL, and CNN. Poppy has covered stories spanning sports, culture, and the AAPI community, and brings depth and empathy to every interview."
+      }
+    ]
+  },
+
+  "footer": {
+    "columns": [
+      [
+        { "label": "Investor Relations", "href": "http://ir.nasdaq.com/" },
+        { "label": "Careers",            "href": "https://www.nasdaq.com/about/careers" },
+        { "label": "Mobile Apps",        "href": "https://www.nasdaq.com/app/nasdaq-markets" },
+        { "label": "Trust Center",       "href": "https://www.nasdaq.com/trust-center" },
+        { "label": "Accessibility",      "href": "https://www.nasdaq.com/nasdaq-accessibility-commitment" }
+      ],
+      [
+        { "label": "Contact",           "href": "https://www.nasdaq.com/contact-us" },
+        { "label": "Advertise",         "href": "https://www.nasdaq.com/advertising" },
+        { "label": "Nasdaq Marketsite", "href": "https://www.nasdaq.com/marketsite" },
+        { "label": "Newsletters",       "href": "https://www.nasdaq.com/newsletters" }
+      ],
+      [
+        { "label": "Privacy Policy",  "href": "https://www.nasdaq.com/privacy-statement", "muted": true },
+        { "label": "Cookies",         "href": "https://www.nasdaq.com/cookie-statement",  "muted": true },
+        { "label": "Legal",           "href": "https://www.nasdaq.com/legal",             "muted": true },
+        { "label": "Cookie Settings", "href": "https://www.nasdaq.com/",                  "muted": true }
+      ]
+    ],
+    "social": [
+      { "platform": "facebook",  "href": "https://www.facebook.com/Nasdaq/" },
+      { "platform": "x",         "href": "https://x.com/Nasdaq" },
+      { "platform": "linkedin",  "href": "https://www.linkedin.com/company/nasdaq/" },
+      { "platform": "instagram", "href": "https://www.instagram.com/nasdaq" },
+      { "platform": "pinterest", "href": "https://www.pinterest.com/nasdaq/" }
+    ],
+    "logoHref": "https://www.nasdaq.com/",
+    "logoAlt": "Nasdaq",
+    "copyrightSuffix": ", Nasdaq, Inc. All Rights Reserved."
+  }
+}

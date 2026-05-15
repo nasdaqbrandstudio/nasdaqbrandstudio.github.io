@@ -507,6 +507,40 @@
     .hero-wordmark { max-width: 100%; }
   }
 
+  /* Wordmark text fallback — shown only when lottie fails to load.
+     Inter Medium 500, brand wordmark on top, Mercedes-AMG sub below. */
+  .hero-wordmark-fallback {
+    display: none;
+    width: 100%;
+    max-width: 880px;
+    margin-bottom: var(--s-6);
+    font-family: var(--ff-sans);
+    color: #fff;
+  }
+  .hero-wordmark-fallback.is-visible {
+    display: block;
+  }
+  .hero-wordmark-fallback-title {
+    font-family: var(--ff-sans);
+    font-weight: 500;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin-bottom: var(--s-3);
+  }
+  .hero-wordmark-fallback-sub {
+    font-family: var(--ff-sans);
+    font-weight: 500;
+    font-size: clamp(1rem, 1.6vw, 1.25rem);
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.78);
+    letter-spacing: 0;
+  }
+  /* When the fallback is visible, hide the empty lottie container */
+  .hero-wordmark-fallback.is-visible ~ .hero-accent-rule { /* keeps rhythm */ }
+  body.wordmark-failed .hero-wordmark { display: none; }
+
   .hero-accent-rule {
     height: 2px;
     width: 60%;
@@ -1556,7 +1590,7 @@
         </defs>
       </svg>
     </a>
-    <div class="nav-links">
+    <div class="nav-links" id="nav-links-desktop">
       <a href="https://www.nasdaq.com/market-activity">Market Activity</a>
       <a href="https://www.nasdaq.com/news-and-insights">Insights</a>
       <a href="https://www.nasdaq.com/solutions">Solutions</a>
@@ -1586,10 +1620,10 @@
      LIVE SPORTS TICKER — under the nav
      ========================================================= -->
 <div class="ticker" role="complementary" aria-label="Live sports headlines">
-  <div class="ticker-label">Sports Headlines</div>
+  <div class="ticker-label" id="ticker-label">NEWS &amp; UPDATES</div>
   <div class="ticker-viewport">
     <div class="ticker-track" id="ticker-track">
-      <div class="t-item"><span class="t-sym nba">LOADING</span><span class="t-head">Fetching live sports feed from ESPN…</span></div>
+      <div class="t-item"><span class="t-head">Loading the latest news &amp; updates…</span></div>
     </div>
   </div>
 </div>
@@ -1616,19 +1650,18 @@
 
   <div class="hero-inner">
     <div>
-      <div class="hero-category">Nasdaq Original Series</div>
+      <div class="hero-category" data-content="hero.eyebrow">Nasdaq Original Series</div>
 
       <!-- TWF wordmark — lottie animation, with inline SVG fallback -->
       <div class="hero-wordmark" id="wordmark-lottie" aria-label="The Winning Formula"></div>
-      <noscript>
-        <div class="hero-wordmark" aria-label="The Winning Formula">
-          <svg viewBox="0 0 430.5 129.8" xmlns="http://www.w3.org/2000/svg" fill="#fff"><path d="M186.9,12.3c-1.8,0-3.3-.6-4.5-1.8-1.2-1.2-1.7-2.7-1.6-4.3.1-1.7.9-3.2,2.3-4.3C184.5.6,186.1,0,187.9,0s3.3.6,4.5,1.8c1.2,1.2,1.7,2.7,1.6,4.4-.1,1.7-.9,3.1-2.3,4.3-1.4,1.2-3,1.8-4.8,1.8h0Z"/></svg>
-        </div>
-      </noscript>
+      <div class="hero-wordmark-fallback" id="wordmark-fallback" aria-hidden="true">
+        <div class="hero-wordmark-fallback-title">The Winning Formula</div>
+        <div class="hero-wordmark-fallback-sub">Presented by Mercedes-AMG Petronas Formula One Team</div>
+      </div>
 
       <div class="hero-accent-rule"></div>
 
-      <p class="hero-intro">
+      <p class="hero-intro" data-content="hero.intro">
         We invite high profile guests from around the sporting world, from athlete entrepreneurs to league executives, to discuss the similarities and through-lines between the sports and business world.
       </p>
     </div>
@@ -1640,13 +1673,14 @@
      ========================================================= -->
 <section class="featured-band section">
   <div class="wrap">
+    <div id="featured-module">
     <div class="reveal" style="margin-bottom: var(--s-7);">
       <div class="section-eyebrow">Latest Episode</div>
       <h2 class="section-title">From the end zone to the <em>endowment.</em></h2>
     </div>
 
     <div class="featured-grid">
-      <a class="thumb reveal" href="https://www.nasdaq.com/videos/winning-formula-marques-colston" target="_blank" rel="noopener" data-tags="athlete-founder" data-jw="reDyhqnx" data-title="Marques Colston">
+      <a class="thumb reveal" href="https://www.nasdaq.com/videos/winning-formula-marques-colston" target="_blank" rel="noopener" data-video-url="https://cdn.jwplayer.com/players/reDyhqnx-Mgmy6TMn.html" data-title="Marques Colston">
         <img class="thumb-img" loading="lazy"
              src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/05/reDyhqnx.jpg"
              alt="Marques Colston">
@@ -1674,6 +1708,7 @@
         </div>
       </div>
     </div>
+    </div>
   </div>
 </section>
 
@@ -1685,11 +1720,11 @@
   <div class="wrap">
     <div class="episodes-head">
       <div>
-        <div class="section-eyebrow">The Series</div>
-        <h2 class="section-title">Operators, owners, and <em>originals.</em></h2>
+        <div class="section-eyebrow" id="series-eyebrow">The Series</div>
+        <h2 class="section-title" id="series-title">Operators, owners, and <em>originals.</em></h2>
       </div>
       <div class="episodes-controls">
-        <div class="filters">
+        <div class="filters" id="series-filters">
           <button class="active" data-filter="all">All</button>
           <button data-filter="athlete-founder">Athlete Founders</button>
           <button data-filter="womens-sports">Women's Sports</button>
@@ -1709,7 +1744,7 @@
 
       <div class="episodes-carousel" id="episodes-carousel">
 
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-kelley-ohara" target="_blank" rel="noopener" data-tags="athlete-founder womens-sports" data-jw="5XEtJGIU" data-title="Kelley O'Hara">
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-kelley-ohara" target="_blank" rel="noopener" data-tags="athlete-founder womens-sports" data-video-url="https://cdn.jwplayer.com/players/5XEtJGIU-Mgmy6TMn.html" data-title="Kelley O'Hara">
         <div class="thumb">
           <img class="thumb-img" loading="lazy" alt="Kelley O'Hara"
                src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/07/5XEtJGIU.jpg">
@@ -1730,7 +1765,7 @@
         <div class="ep-watch">Watch episode →</div>
       </a>
 
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-jimmy-butler" target="_blank" rel="noopener" data-tags="athlete-founder" data-jw="BN841b7I" data-title="Jimmy Butler">
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-jimmy-butler" target="_blank" rel="noopener" data-tags="athlete-founder" data-video-url="https://cdn.jwplayer.com/players/BN841b7I-Mgmy6TMn.html" data-title="Jimmy Butler">
         <div class="thumb">
           <img class="thumb-img" loading="lazy" alt="Jimmy Butler"
                src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/04/BN841b7I.jpg">
@@ -1751,7 +1786,7 @@
         <div class="ep-watch">Watch episode →</div>
       </a>
 
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-allyson-felix" target="_blank" rel="noopener" data-tags="athlete-founder womens-sports" data-jw="zx7smJw6" data-title="Allyson Felix">
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-allyson-felix" target="_blank" rel="noopener" data-tags="athlete-founder womens-sports" data-video-url="https://cdn.jwplayer.com/players/zx7smJw6-Mgmy6TMn.html" data-title="Allyson Felix">
         <div class="thumb">
           <img class="thumb-img" loading="lazy" alt="Allyson Felix"
                src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/03/zx7smJw6.jpg">
@@ -1772,7 +1807,7 @@
         <div class="ep-watch">Watch episode →</div>
       </a>
 
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-tristan-thompson" target="_blank" rel="noopener" data-tags="athlete-founder" data-jw="50k3giwJ" data-title="Tristan Thompson">
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-tristan-thompson" target="_blank" rel="noopener" data-tags="athlete-founder" data-video-url="https://cdn.jwplayer.com/players/50k3giwJ-Mgmy6TMn.html" data-title="Tristan Thompson">
         <div class="thumb">
           <img class="thumb-img" loading="lazy" alt="Tristan Thompson"
                src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2026/02/50k3giwJ.jpg">
@@ -1793,7 +1828,7 @@
         <div class="ep-watch">Watch episode →</div>
       </a>
 
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-cj-mccollum" target="_blank" rel="noopener" data-tags="athlete-founder" data-jw="ct9cUIRg" data-title="CJ McCollum">
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-cj-mccollum" target="_blank" rel="noopener" data-tags="athlete-founder" data-video-url="https://cdn.jwplayer.com/players/ct9cUIRg-Mgmy6TMn.html" data-title="CJ McCollum">
         <div class="thumb">
           <img class="thumb-img" loading="lazy" alt="CJ McCollum"
                src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/09/ct9cUIRg.jpg">
@@ -1814,7 +1849,7 @@
         <div class="ep-watch">Watch episode →</div>
       </a>
 
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-alex-honnold" target="_blank" rel="noopener" data-tags="athlete-founder" data-jw="BSvpXgrh" data-title="Alex Honnold">
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-alex-honnold" target="_blank" rel="noopener" data-tags="athlete-founder" data-video-url="https://cdn.jwplayer.com/players/BSvpXgrh-Mgmy6TMn.html" data-title="Alex Honnold">
         <div class="thumb">
           <img class="thumb-img" loading="lazy" alt="Alex Honnold"
                src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/08/BSvpXgrh.jpg">
@@ -1835,7 +1870,7 @@
         <div class="ep-watch">Watch episode →</div>
       </a>
 
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-bubba-watson" target="_blank" rel="noopener" data-tags="athlete-founder" data-jw="V05gpfW5" data-title="Bubba Watson">
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-bubba-watson" target="_blank" rel="noopener" data-tags="athlete-founder" data-video-url="https://cdn.jwplayer.com/players/V05gpfW5-Mgmy6TMn.html" data-title="Bubba Watson">
         <div class="thumb">
           <img class="thumb-img" loading="lazy" alt="Bubba Watson"
                src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2026/02/V05gpfW5.jpg">
@@ -1856,7 +1891,7 @@
         <div class="ep-watch">Watch episode →</div>
       </a>
 
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-toto-wolff-and-george-russell" target="_blank" rel="noopener" data-tags="league-exec motorsport" data-jw="XiIzGVmC" data-title="Wolff & Russell">
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-toto-wolff-and-george-russell" target="_blank" rel="noopener" data-tags="league-exec motorsport" data-video-url="https://cdn.jwplayer.com/players/XiIzGVmC-Mgmy6TMn.html" data-title="Wolff & Russell">
         <div class="thumb">
           <img class="thumb-img" loading="lazy" alt="Toto Wolff and George Russell"
                src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/06/XiIzGVmC.jpg">
@@ -1877,7 +1912,7 @@
         <div class="ep-watch">Watch episode →</div>
       </a>
 
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-valtteri-bottas" target="_blank" rel="noopener" data-tags="motorsport" data-jw="Tb9ycGIl" data-title="Valtteri Bottas">
+      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-valtteri-bottas" target="_blank" rel="noopener" data-tags="motorsport" data-video-url="https://cdn.jwplayer.com/players/Tb9ycGIl-Mgmy6TMn.html" data-title="Valtteri Bottas">
         <div class="thumb">
           <img class="thumb-img" loading="lazy" alt="Valtteri Bottas"
                src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/12/Tb9ycGIl.jpg">
@@ -1909,12 +1944,12 @@
      ========================================================= -->
 <section class="photo-marquee-band">
   <div class="wrap">
-    <div class="section-eyebrow">In Conversation</div>
-    <h2 class="section-title">Moments from the <em>series.</em></h2>
+    <div class="section-eyebrow" id="moments-eyebrow">In Conversation</div>
+    <h2 class="section-title" id="moments-title">Moments from the <em>series.</em></h2>
 
     <div class="photo-marquee" id="photo-marquee" aria-roledescription="carousel">
 
-      <div class="photo-slide active" data-jw="reDyhqnx" data-title="Marques Colston">
+      <div class="photo-slide active" data-video-url="https://cdn.jwplayer.com/players/reDyhqnx-Mgmy6TMn.html" data-title="Marques Colston">
         <img src="https://www.nasdaq.com/sites/acquia.prod/files/2025/12/19/MarquesColston_TWF_0224255_0.jpg"
              alt="Winning Formula Marques Colston" loading="eager">
         <div class="photo-slide-caption">
@@ -1924,7 +1959,7 @@
         </div>
       </div>
 
-      <div class="photo-slide" data-jw="XiIzGVmC" data-title="Wolff &amp; Russell">
+      <div class="photo-slide" data-video-url="https://cdn.jwplayer.com/players/XiIzGVmC-Mgmy6TMn.html" data-title="Wolff &amp; Russell">
         <img src="https://www.nasdaq.com/sites/acquia.prod/files/2025/12/19/MercedesF1_TWF_06162536%20%281%29.jpg"
              alt="Mercedes-AMG Petronas F1 team at Nasdaq" loading="lazy">
         <div class="photo-slide-caption">
@@ -1934,7 +1969,7 @@
         </div>
       </div>
 
-      <div class="photo-slide" data-jw="5XEtJGIU" data-title="Kelley O&rsquo;Hara">
+      <div class="photo-slide" data-video-url="https://cdn.jwplayer.com/players/5XEtJGIU-Mgmy6TMn.html" data-title="Kelley O&rsquo;Hara">
         <img src="https://www.nasdaq.com/sites/acquia.prod/files/2025/06/10/KelleyOHara_05082527.jpg"
              alt="The Winning Formula with Kelley O&rsquo;Hara" loading="lazy">
         <div class="photo-slide-caption">
@@ -1944,7 +1979,7 @@
         </div>
       </div>
 
-      <div class="photo-slide" data-jw="BSvpXgrh" data-title="Alex Honnold">
+      <div class="photo-slide" data-video-url="https://cdn.jwplayer.com/players/BSvpXgrh-Mgmy6TMn.html" data-title="Alex Honnold">
         <img src="https://www.nasdaq.com/sites/acquia.prod/files/2026/01/09/AlexHannold_TWF_06052532.jpg"
              alt="Alex Honnold on The Winning Formula" loading="lazy">
         <div class="photo-slide-caption">
@@ -1954,7 +1989,7 @@
         </div>
       </div>
 
-      <div class="photo-slide" data-jw="vwiq3RC5" data-title="Alejandro Bedoya">
+      <div class="photo-slide" data-video-url="https://cdn.jwplayer.com/players/vwiq3RC5-Mgmy6TMn.html" data-title="Alejandro Bedoya">
         <img src="https://www.nasdaq.com/sites/acquia.prod/files/2026/02/23/TWF%20-%20Alejandro%20Bedoya_Still-4_0.png"
              alt="The Winning Formula with Alejandro Bedoya" loading="lazy">
         <div class="photo-slide-caption">
@@ -1978,10 +2013,10 @@
      ========================================================= -->
 <section class="hosts-band section">
   <div class="wrap">
-    <div class="section-eyebrow">The Hosts</div>
-    <h2 class="section-title" style="margin-bottom: var(--s-7);">The voices <em>behind the bell.</em></h2>
+    <div class="section-eyebrow" id="hosts-eyebrow">The Hosts</div>
+    <h2 class="section-title" id="hosts-title" style="margin-bottom: var(--s-7);">The voices <em>behind the bell.</em></h2>
 
-    <div class="hosts-grid">
+    <div class="hosts-grid" id="hosts-grid">
       <div class="host-card reveal">
         <img
           class="host-avatar a"
@@ -2021,7 +2056,7 @@
 <footer id="footer" class="footer-wrapper">
   <section class="footer-container">
     <div class="column-container">
-      <div class="columns">
+      <div class="columns" id="footer-columns">
         <div class="link-column">
           <a href="http://ir.nasdaq.com/" target="_blank" rel="noopener" class="footer-link">Investor Relations</a>
           <a href="https://www.nasdaq.com/about/careers" target="_blank" rel="noopener" class="footer-link">Careers</a>
@@ -2101,10 +2136,23 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
      the CDN call fails or lottie-web is unavailable.
      =========================================================== */
   (function initLottie() {
-    if (typeof lottie === 'undefined') return;
+    /* Helper: show the wordmark text fallback whenever the animation
+       fails to render — for ANY reason (lottie library missing,
+       JSON missing, render error, data_failed event). */
+    function showWordmarkFallback() {
+      const fallback = document.getElementById('wordmark-fallback');
+      if (fallback) fallback.classList.add('is-visible');
+      document.body.classList.add('wordmark-failed');
+    }
 
-    /* TWF wordmark — plays once */
+    if (typeof lottie === 'undefined') {
+      showWordmarkFallback();
+      return;
+    }
+
+    /* TWF wordmark — plays once. Fall back to text on any failure. */
     try {
+      if (typeof WORDMARK_JSON === 'undefined') throw new Error('no wordmark data');
       const wordmark = lottie.loadAnimation({
         container: document.getElementById('wordmark-lottie'),
         renderer: 'svg',
@@ -2112,7 +2160,11 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
         autoplay: true,
         animationData: WORDMARK_JSON,
       });
-      } catch (e) { /* noop */ }
+      wordmark.addEventListener('data_failed', showWordmarkFallback);
+      wordmark.addEventListener('error',       showWordmarkFallback);
+    } catch (e) {
+      showWordmarkFallback();
+    }
 
     /* Motion lines — atmospheric, looping. Animation data inlined
        below so they render without depending on relative file paths. */
@@ -2230,39 +2282,40 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
   /* ===========================================================
-     FILTERS — filter cards by data-tags
+     FILTERS — event-delegated so they survive content reloads
      =========================================================== */
-  const filterBtns = document.querySelectorAll('.filters button');
   const carousel = document.getElementById('episodes-carousel');
 
-  filterBtns.forEach(b => {
-    b.addEventListener('click', () => {
-      filterBtns.forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
-      const filter = b.getAttribute('data-filter');
-      carousel.querySelectorAll('.ep-card').forEach(card => {
-        const tags = (card.getAttribute('data-tags') || '').split(/\s+/);
-        const match = filter === 'all' || tags.includes(filter);
-        card.classList.toggle('filter-hidden', !match);
-      });
-      /* Reset scroll position so visible cards start from the left */
-      carousel.scrollTo({ left: 0, behavior: 'smooth' });
-      updateCarouselNav();
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('#series-filters button');
+    if (!btn) return;
+    const container = document.getElementById('series-filters');
+    if (container) container.querySelectorAll('button').forEach(x => x.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.getAttribute('data-filter');
+    if (!carousel) return;
+    carousel.querySelectorAll('.ep-card').forEach(card => {
+      const tags = (card.getAttribute('data-tags') || '').split(/\s+/);
+      const match = filter === 'all' || tags.includes(filter);
+      card.classList.toggle('filter-hidden', !match);
     });
+    carousel.scrollTo({ left: 0, behavior: 'smooth' });
+    updateCarouselNav();
   });
 
   /* ===========================================================
-     CAROUSEL — prev/next nav buttons
+     CAROUSEL — prev/next nav buttons (re-queryable)
      =========================================================== */
-  const navBtns = document.querySelectorAll('.carousel-nav');
   function cardWidth() {
+    if (!carousel) return 380;
     const card = carousel.querySelector('.ep-card:not(.filter-hidden)');
     if (!card) return 380;
     const gap = parseFloat(getComputedStyle(carousel).gap) || 24;
     return card.getBoundingClientRect().width + gap;
   }
   function updateCarouselNav() {
-    /* On mobile the carousel is a vertical stack — hide arrows entirely */
+    const navBtns = document.querySelectorAll('.carousel-nav');
+    if (!navBtns.length || !carousel) return;
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
     if (isMobile) {
       navBtns.forEach(b => b.classList.add('is-hidden'));
@@ -2276,14 +2329,14 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       b.classList.toggle('is-hidden', atEdge);
     });
   }
-  navBtns.forEach(b => {
-    b.addEventListener('click', () => {
-      const dir = parseInt(b.getAttribute('data-dir'), 10);
-      /* Scroll by exactly one "page" — 3 cards' worth */
-      carousel.scrollBy({ left: dir * cardWidth() * 3, behavior: 'smooth' });
-    });
+  /* Event-delegate carousel arrow clicks */
+  document.addEventListener('click', (e) => {
+    const arrow = e.target.closest('.carousel-nav');
+    if (!arrow || !carousel) return;
+    const dir = parseInt(arrow.getAttribute('data-dir'), 10);
+    carousel.scrollBy({ left: dir * cardWidth() * 3, behavior: 'smooth' });
   });
-  carousel.addEventListener('scroll', updateCarouselNav, { passive: true });
+  if (carousel) carousel.addEventListener('scroll', updateCarouselNav, { passive: true });
   window.addEventListener('resize', updateCarouselNav);
   updateCarouselNav();
 
@@ -2291,33 +2344,53 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
      JW PLAYER MODAL — play videos inline via JW preview iframe
      =========================================================== */
   const modal        = document.getElementById('jw-modal');
-  const modalIframe  = document.getElementById('jw-modal-iframe');
   const modalCaption = document.getElementById('jw-modal-caption');
   const modalClose   = document.getElementById('jw-modal-close');
+  const modalPlayer  = document.getElementById('jw-modal-player');
 
-  function openVideo(mediaId, title) {
-    if (!mediaId || !modal) return;
-    modalIframe.src = `https://cdn.jwplayer.com/previews/${mediaId}`;
-    if (title) modalCaption.textContent = title;
+  let modalIframe = null;
+
+  function openVideo(videoUrl, title) {
+    if (!videoUrl || !modal || !modalPlayer) return;
+
+    if (title && modalCaption) modalCaption.textContent = title;
     modal.classList.add('open');
     document.body.classList.add('no-scroll');
-  }
-  function closeVideo() {
-    modal.classList.remove('open');
-    modalIframe.src = 'about:blank'; /* halt playback */
-    document.body.classList.remove('no-scroll');
+
+    /* Build an iframe each time so closing fully halts playback */
+    modalPlayer.innerHTML = '';
+    modalIframe = document.createElement('iframe');
+    modalIframe.className = 'jw-modal-iframe-el';
+    modalIframe.src = videoUrl;
+    modalIframe.allow = 'autoplay; fullscreen; picture-in-picture';
+    modalIframe.allowFullscreen = true;
+    modalIframe.setAttribute('title', title || 'The Winning Formula');
+    modalIframe.style.width = '100%';
+    modalIframe.style.height = '100%';
+    modalIframe.style.border = '0';
+    modalIframe.style.background = '#000';
+    modalPlayer.appendChild(modalIframe);
   }
 
-  /* Hook every element with data-jw — including the featured Colston card */
-  document.querySelectorAll('[data-jw]').forEach(el => {
-    el.addEventListener('click', (e) => {
-      const mediaId = el.getAttribute('data-jw');
-      const title   = el.getAttribute('data-title') || '';
-      if (mediaId) {
-        e.preventDefault();
-        openVideo(mediaId, title);
-      }
-    });
+  function closeVideo() {
+    modal.classList.remove('open');
+    document.body.classList.remove('no-scroll');
+    if (modalPlayer) modalPlayer.innerHTML = '';
+    modalIframe = null;
+  }
+
+  /* Event-delegation: clicks on anything with data-video-url anywhere in
+     the document open the modal. This survives DOM replacement from
+     loadContent() — bindings stay attached to the document, not the cards. */
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('[data-video-url]');
+    if (!trigger) return;
+    const videoUrl = trigger.getAttribute('data-video-url');
+    const title    = trigger.getAttribute('data-title') || '';
+    if (videoUrl) {
+      e.preventDefault();
+      openVideo(videoUrl, title);
+    }
   });
 
   if (modalClose) modalClose.addEventListener('click', closeVideo);
@@ -2327,9 +2400,19 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
   });
 
   /* ===========================================================
-     PHOTO MARQUEE — auto-advances with a Nasdaq-blue progress bar
+     PHOTO MARQUEE — auto-advances with a Nasdaq-blue progress bar.
+     Exposed as a re-callable initializer so it can be re-bound
+     when content reloads and replaces the slide DOM.
      =========================================================== */
-  (function initMarquee() {
+  let marqueeTeardown = null;
+
+  function initMarquee() {
+    /* Tear down any previous instance */
+    if (typeof marqueeTeardown === 'function') {
+      try { marqueeTeardown(); } catch (e) { /* noop */ }
+      marqueeTeardown = null;
+    }
+
     const marquee = document.getElementById('photo-marquee');
     const dotsEl  = document.getElementById('photo-marquee-dots');
     const bar     = document.getElementById('photo-marquee-progress');
@@ -2338,15 +2421,21 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     const slides = Array.from(marquee.querySelectorAll('.photo-slide'));
     if (!slides.length) return;
 
-    const DURATION = 4000; /* ms per slide */
-    marquee.style.setProperty('--marquee-duration', DURATION + 'ms');
+    /* Pull DURATION from CSS var (set by JSON loader) or default to 4000ms */
+    let DURATION = 4000;
+    const cssDur = getComputedStyle(marquee).getPropertyValue('--marquee-duration').trim();
+    if (cssDur && cssDur.endsWith('ms')) DURATION = parseInt(cssDur, 10) || 4000;
+    if (!marquee.style.getPropertyValue('--marquee-duration')) {
+      marquee.style.setProperty('--marquee-duration', DURATION + 'ms');
+    }
 
     let idx = 0;
     let timer = null;
     let tickStartedAt = Date.now();
     let remaining = DURATION;
 
-    /* Build dots */
+    /* Build dots (clear first in case of re-init) */
+    dotsEl.innerHTML = '';
     slides.forEach((_, i) => {
       const b = document.createElement('button');
       b.setAttribute('role', 'tab');
@@ -2363,10 +2452,9 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     function restartBar() {
       if (!bar) return;
       bar.classList.remove('running');
-      void bar.offsetWidth;              /* force reflow so animation restarts cleanly */
+      void bar.offsetWidth;
       bar.classList.add('running');
     }
-
     function go(next) {
       next = ((next % slides.length) + slides.length) % slides.length;
       if (next === idx) return;
@@ -2379,7 +2467,6 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       tickStartedAt = Date.now();
       remaining = DURATION;
     }
-
     function startLoop() {
       stopLoop();
       timer = setInterval(() => go(idx + 1), DURATION);
@@ -2388,156 +2475,323 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       remaining = DURATION;
     }
     function stopLoop() { if (timer) { clearInterval(timer); clearTimeout(timer); timer = null; } }
-
     function jumpTo(target) {
       stopLoop();
       go(target);
       timer = setInterval(() => go(idx + 1), DURATION);
     }
 
-    /* Pause only when the user INTENTIONALLY moves their mouse over the
-       marquee — not when the marquee happens to scroll past a stationary
-       cursor. mousemove requires actual cursor motion, so scrolling alone
-       won't trigger a pause. A `hoverPaused` flag keeps it one-shot. */
     let hoverPaused = false;
-
-    marquee.addEventListener('mousemove', () => {
+    const onMove = () => {
       if (hoverPaused || !timer) return;
       hoverPaused = true;
       marquee.classList.add('paused');
       remaining = Math.max(250, DURATION - (Date.now() - tickStartedAt));
       stopLoop();
-    });
-    marquee.addEventListener('mouseleave', () => {
+    };
+    const onLeave = () => {
       if (!hoverPaused) return;
       hoverPaused = false;
       marquee.classList.remove('paused');
-      /* Let the current slide finish its remaining time, then resume the loop */
       timer = setTimeout(() => { go(idx + 1); startLoop(); }, remaining);
-    });
-
-    /* Click a slide → open video modal */
-    slides.forEach(slide => {
-      slide.addEventListener('click', () => {
-        const mediaId = slide.getAttribute('data-jw');
-        const title   = slide.getAttribute('data-title');
-        if (mediaId) openVideo(mediaId, title);
-      });
-    });
+    };
+    marquee.addEventListener('mousemove', onMove);
+    marquee.addEventListener('mouseleave', onLeave);
 
     startLoop();
-  })();
+
+    /* Expose teardown so we can clean up on re-init */
+    marqueeTeardown = function () {
+      stopLoop();
+      marquee.removeEventListener('mousemove', onMove);
+      marquee.removeEventListener('mouseleave', onLeave);
+    };
+  }
+  initMarquee();
+
+  /* Master rewire — called after loadContent() replaces module DOM.
+     Re-initializes whichever dynamic behaviors depend on the new nodes. */
+  window.__rewireDynamic = function () {
+    /* Filters use event delegation, no rewire needed.
+       Carousel arrows use event delegation, no rewire needed.
+       Carousel nav state needs an update since cards changed. */
+    updateCarouselNav();
+    /* Marquee owns its own DOM (slides) so we re-init. */
+    initMarquee();
+  };
 
   /* ===========================================================
-     LIVE SPORTS TICKER — ESPN news feed
+     CONTENT LOADER — fetches content.json and renders the page.
+     If the fetch fails, the existing static fallback markup that's
+     already in the HTML remains, so the page never breaks.
      =========================================================== */
-  const LEAGUES = [
-    { url: 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/news',    sym: 'NBA',   cls: 'nba' },
-    { url: 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/news',      sym: 'NFL',   cls: 'nfl' },
-    { url: 'https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/news',   sym: 'WNBA',  cls: 'wnba' },
-    { url: 'https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/news',        sym: 'NHL',   cls: 'nhl' },
-    { url: 'https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/news',      sym: 'MLB',   cls: 'mlb' },
-    { url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/news',      sym: 'EPL',   cls: 'epl' },
-    { url: 'https://site.api.espn.com/apis/site/v2/sports/tennis/atp/news',        sym: 'TEN',   cls: 'tnns' },
-    { url: 'https://site.api.espn.com/apis/site/v2/sports/racing/f1/news',         sym: 'F1',    cls: 'f1' },
-    { url: 'https://site.api.espn.com/apis/site/v2/sports/football/college-football/news', sym: 'NCF', cls: 'ncf' },
-  ];
+  const CONTENT_URL = 'https://nasdaqbrandstudio.github.io/winning-formula/content.json';
 
-  const FALLBACK = [
-    { sym: 'NBA',  cls: 'nba',  head: "Celtics extend win streak to eight behind Tatum's 38", time: '12m ago' },
-    { sym: 'NFL',  cls: 'nfl',  head: "Chiefs clinch AFC West with late-game defensive stand",  time: '28m ago' },
-    { sym: 'WNBA', cls: 'wnba', head: "Aces acquire All-Star guard in blockbuster off-season move", time: '42m ago' },
-    { sym: 'EPL',  cls: 'epl',  head: "Arsenal top table after 3-1 win at Anfield",             time: '1h ago'  },
-    { sym: 'F1',   cls: 'f1',   head: "McLaren extend constructors lead at Suzuka",             time: '2h ago'  },
-    { sym: 'TEN',  cls: 'tnns', head: "Gauff advances to Rome quarterfinal in straight sets",   time: '3h ago'  },
-    { sym: 'NHL',  cls: 'nhl',  head: "Rangers drop third straight, face must-win vs Lightning", time: '3h ago' },
-    { sym: 'MLB',  cls: 'mlb',  head: "Dodgers sign veteran closer to one-year, $12M deal",     time: '4h ago'  },
-    { sym: 'NBA',  cls: 'nba',  head: "Wembanyama drops 42, Spurs edge Thunder in OT",          time: '5h ago'  },
-    { sym: 'NFL',  cls: 'nfl',  head: "Eagles place All-Pro tackle on IR with knee injury",     time: '6h ago'  },
-    { sym: 'EPL',  cls: 'epl',  head: "Man City close gap to three points with derby win",     time: '7h ago'  },
-    { sym: 'TEN',  cls: 'tnns', head: "Alcaraz withdraws from Madrid Open citing minor injury", time: '8h ago'  },
-    { sym: 'F1',   cls: 'f1',   head: "Verstappen fastest in final practice ahead of qualifying", time: '9h ago' },
-    { sym: 'WNBA', cls: 'wnba', head: "Stewart named unanimous MVP for the second time",        time: '10h ago' },
-    { sym: 'NHL',  cls: 'nhl',  head: "McDavid records 100th assist of the season",             time: '12h ago' },
-    { sym: 'MLB',  cls: 'mlb',  head: "Judge homers twice as Yankees sweep Orioles",            time: '13h ago' },
-    { sym: 'NCF',  cls: 'ncf',  head: "Michigan climbs to No. 2 in AP Poll after road win",     time: '14h ago' },
-    { sym: 'NBA',  cls: 'nba',  head: "Warriors waive veteran guard, clear roster spot",        time: '15h ago' },
-  ];
-
-  function timeAgo(iso) {
-    try {
-      const then = new Date(iso).getTime();
-      const diff = Math.max(0, (Date.now() - then) / 1000);
-      if (diff < 60)     return `${Math.floor(diff)}s ago`;
-      if (diff < 3600)   return `${Math.floor(diff/60)}m ago`;
-      if (diff < 86400)  return `${Math.floor(diff/3600)}h ago`;
-      return `${Math.floor(diff/86400)}d ago`;
-    } catch { return ''; }
+  /* Tiny HTML-escaper for plain text fields (safe-by-default). */
+  function esc(s) {
+    if (s == null) return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+  /* Whitelist tiny set of safe inline tags for editorial fields
+     (headline, pullQuote, subhead). Allows <em>, <strong>, <br>. */
+  function richText(s) {
+    if (s == null) return '';
+    let out = esc(s);
+    out = out.replace(/&lt;(\/?)(em|strong|br)\s*\/?&gt;/gi, '<$1$2>');
+    return out;
   }
 
-  function tickerItemHTML({ sym, cls, head, time }) {
-    return `
-      <div class="t-item">
-        <span class="t-sym ${cls}">${sym}</span>
-        <span class="t-head">${head}</span>
-        ${time ? `<span class="t-time">${time}</span>` : ''}
+  function renderTicker(ticker) {
+    const track = document.getElementById('ticker-track');
+    const label = document.getElementById('ticker-label');
+    if (!ticker) return;
+    if (label && ticker.label) label.textContent = ticker.label;
+
+    const items = Array.isArray(ticker.items) ? ticker.items : [];
+    if (!items.length || !track) return;
+
+    const itemHTML = (it) => `
+      <a class="t-item" href="${esc(it.url || '#')}" target="_blank" rel="noopener">
+        <span class="t-head">${esc(it.headline || '')}</span>
+        ${it.time ? `<span class="t-time">${esc(it.time)}</span>` : ''}
+      </a>`;
+    /* Double the list so the marquee scrolls seamlessly */
+    track.innerHTML = items.map(itemHTML).join('') + items.map(itemHTML).join('');
+
+    /* Optional scroll duration override */
+    if (typeof ticker.scrollDurationSeconds === 'number' && ticker.scrollDurationSeconds > 0) {
+      track.style.animationDuration = ticker.scrollDurationSeconds + 's';
+    }
+  }
+
+  function renderNav(nav) {
+    if (!nav) return;
+    const desktopLinks = document.getElementById('nav-links-desktop');
+    const mobileLinks  = document.getElementById('mobile-menu');
+    if (!Array.isArray(nav.links)) return;
+    const html = nav.links.map(l => `<a href="${esc(l.href)}">${esc(l.label)}</a>`).join('');
+    if (desktopLinks) desktopLinks.innerHTML = html;
+    if (mobileLinks)  mobileLinks.innerHTML  = html;
+  }
+
+  function renderHero(hero) {
+    if (!hero) return;
+    const eyebrow = document.querySelector('[data-content="hero.eyebrow"]');
+    const intro   = document.querySelector('[data-content="hero.intro"]');
+    if (eyebrow && hero.eyebrow) eyebrow.textContent = hero.eyebrow;
+    if (intro && hero.intro)     intro.textContent   = hero.intro;
+
+    /* Wordmark fallback text — also editable via JSON */
+    if (hero.wordmarkFallback) {
+      const fbTitle = document.querySelector('.hero-wordmark-fallback-title');
+      const fbSub   = document.querySelector('.hero-wordmark-fallback-sub');
+      if (fbTitle && hero.wordmarkFallback.title)    fbTitle.textContent = hero.wordmarkFallback.title;
+      if (fbSub && hero.wordmarkFallback.subtitle)   fbSub.textContent   = hero.wordmarkFallback.subtitle;
+    }
+  }
+
+  function renderFeatured(f) {
+    if (!f) return;
+    const root = document.getElementById('featured-module');
+    if (!root) return;
+    root.innerHTML = `
+      <div class="reveal" style="margin-bottom: var(--s-7);">
+        <div class="section-eyebrow">${esc(f.eyebrow || 'Latest Episode')}</div>
+        <h2 class="section-title">${richText(f.headline || '')}</h2>
+      </div>
+      <div class="featured-grid">
+        <a class="thumb reveal" href="${esc(f.episodeUrl || '#')}" target="_blank" rel="noopener" data-video-url="${esc(f.videoUrl || '')}" data-title="${esc(f.guest || '')}">
+          <img class="thumb-img" loading="lazy" src="${esc(f.thumbnail || '')}" alt="${esc(f.thumbnailAlt || f.guest || '')}">
+          <div class="thumb-scrim"></div>
+          ${f.badge ? `<div class="thumb-badge"><span class="live-dot"></span>${esc(f.badge)}</div>` : ''}
+          ${f.duration ? `<div class="thumb-duration">${esc(f.duration)}</div>` : ''}
+          <div class="thumb-media">
+            <div class="thumb-name">${richText(f.guestNameMarkup || f.guest || '')}</div>
+            ${f.subtitle ? `<div class="thumb-sub">${esc(f.subtitle)}</div>` : ''}
+          </div>
+          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
+        </a>
+        <div class="reveal">
+          ${f.pullQuote ? `<blockquote class="featured-quote">${richText(f.pullQuote)}</blockquote>` : ''}
+          ${f.body ? `<p class="featured-body">${esc(f.body)}</p>` : ''}
+          ${(f.bylineLead || f.bylineMeta) ? `
+            <div class="featured-byline">
+              ${f.bylineLead ? `<strong>${esc(f.bylineLead)}</strong>` : ''}
+              ${(f.bylineLead && f.bylineMeta) ? `<span class="sep">·</span>` : ''}
+              ${f.bylineMeta ? `<span>${esc(f.bylineMeta)}</span>` : ''}
+            </div>` : ''}
+        </div>
       </div>`;
   }
 
-  function renderTicker(items) {
-    const track = document.getElementById('ticker-track');
-    if (!items.length) {
-      track.innerHTML = FALLBACK.map(tickerItemHTML).join('') + FALLBACK.map(tickerItemHTML).join('');
+  function renderSeries(s) {
+    if (!s) return;
+    const eyebrowEl = document.getElementById('series-eyebrow');
+    const titleEl   = document.getElementById('series-title');
+    const filtersEl = document.getElementById('series-filters');
+    const carousel  = document.getElementById('episodes-carousel');
+    if (eyebrowEl && s.eyebrow) eyebrowEl.textContent = s.eyebrow;
+    if (titleEl && s.headline)   titleEl.innerHTML    = richText(s.headline);
+
+    if (filtersEl && Array.isArray(s.filters)) {
+      filtersEl.innerHTML = s.filters.map((f, i) =>
+        `<button class="${i === 0 ? 'active' : ''}" data-filter="${esc(f.value)}">${esc(f.label)}</button>`
+      ).join('');
+    }
+
+    if (!carousel || !Array.isArray(s.episodes)) return;
+    carousel.innerHTML = s.episodes.map(ep => `
+      <a class="ep-card reveal"
+         href="${esc(ep.episodeUrl || '#')}"
+         target="_blank" rel="noopener"
+         data-tags="${esc((ep.filters || []).join(' '))}"
+         data-video-url="${esc(ep.videoUrl || '')}"
+         data-title="${esc(ep.guest || '')}">
+        <div class="thumb">
+          <img class="thumb-img" loading="lazy" alt="${esc(ep.thumbnailAlt || ep.guest || '')}" src="${esc(ep.thumbnail || '')}">
+          <div class="thumb-scrim"></div>
+          ${ep.duration ? `<div class="thumb-duration">${esc(ep.duration)}</div>` : ''}
+          <div class="thumb-media">
+            <div class="thumb-name">${richText(ep.guestNameMarkup || ep.guest || '')}</div>
+            ${ep.subtitle ? `<div class="thumb-sub">${esc(ep.subtitle)}</div>` : ''}
+          </div>
+          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
+        </div>
+        <div class="ep-meta-row">
+          ${ep.tag ? `<span class="ep-league-chip ${esc(ep.tagClass || 'biz')}">${esc(ep.tag)}</span>` : ''}
+          ${ep.episodeMeta ? `<span>${esc(ep.episodeMeta)}</span>` : ''}
+        </div>
+        ${ep.title ? `<div class="ep-title">${esc(ep.title)}</div>` : ''}
+        ${ep.description ? `<div class="ep-desc">${esc(ep.description)}</div>` : ''}
+        <div class="ep-watch">Watch episode →</div>
+      </a>`).join('');
+  }
+
+  function renderMoments(m) {
+    if (!m) return;
+    const eyebrowEl = document.getElementById('moments-eyebrow');
+    const titleEl   = document.getElementById('moments-title');
+    const stage     = document.getElementById('photo-marquee');
+    if (eyebrowEl && m.eyebrow) eyebrowEl.textContent = m.eyebrow;
+    if (titleEl && m.headline)  titleEl.innerHTML     = richText(m.headline);
+
+    if (!stage || !Array.isArray(m.slides)) return;
+    /* Build slides, then re-append the dots+progress nodes (preserving them) */
+    const dots = stage.querySelector('.photo-marquee-dots');
+    const prog = stage.querySelector('.photo-marquee-progress');
+
+    stage.innerHTML = m.slides.map((s, i) => `
+      <div class="photo-slide${i === 0 ? ' active' : ''}"
+           data-video-url="${esc(s.videoUrl || '')}"
+           data-title="${esc(s.guest || '')}">
+        <img src="${esc(s.photo || '')}" alt="${esc(s.photoAlt || s.guest || '')}" loading="${i === 0 ? 'eager' : 'lazy'}">
+        <div class="photo-slide-caption">
+          ${(s.guest || s.guestLabel) ? `
+            <div class="photo-slide-eyebrow">
+              <span class="dot"></span>
+              ${esc(s.guest || '')}${s.guestLabel ? ' · ' + esc(s.guestLabel) : ''}
+            </div>` : ''}
+          ${s.headline ? `<div class="photo-slide-title">${richText(s.headline)}</div>` : ''}
+          ${s.subhead ? `<div class="photo-slide-sub">${esc(s.subhead)}</div>` : ''}
+        </div>
+      </div>`).join('');
+
+    /* Re-attach progress bar + dots container (we cleared the stage) */
+    if (dots) stage.appendChild(dots);
+    if (prog) stage.appendChild(prog);
+
+    /* Apply auto-advance timing if specified */
+    if (typeof m.autoAdvanceMs === 'number' && m.autoAdvanceMs > 0) {
+      stage.style.setProperty('--marquee-duration', m.autoAdvanceMs + 'ms');
+      stage.dataset.duration = m.autoAdvanceMs;
+    }
+  }
+
+  function renderHosts(h) {
+    if (!h) return;
+    const eyebrowEl = document.getElementById('hosts-eyebrow');
+    const titleEl   = document.getElementById('hosts-title');
+    const gridEl    = document.getElementById('hosts-grid');
+    if (eyebrowEl && h.eyebrow) eyebrowEl.textContent = h.eyebrow;
+    if (titleEl && h.headline)   titleEl.innerHTML     = richText(h.headline);
+
+    if (!gridEl || !Array.isArray(h.people)) return;
+    gridEl.innerHTML = h.people.map((p, i) => `
+      <div class="host-card reveal">
+        <img class="host-avatar ${i === 0 ? 'a' : 'b'}" src="${esc(p.photo || '')}" alt="${esc(p.photoAlt || p.name || '')}" loading="lazy">
+        <div>
+          <div class="host-name">${esc(p.name || '')}</div>
+          ${p.title ? `<div class="host-role">${esc(p.title)}</div>` : ''}
+          ${p.bio ? `<p class="host-bio">${esc(p.bio)}</p>` : ''}
+        </div>
+      </div>`).join('');
+  }
+
+  function renderFooter(f) {
+    if (!f) return;
+    const columnsEl = document.getElementById('footer-columns');
+    const socialEls = document.querySelectorAll('.social-icons, .social-icons-mobile');
+
+    if (columnsEl && Array.isArray(f.columns)) {
+      columnsEl.innerHTML = f.columns.map(col => `
+        <div class="link-column">
+          ${col.map(l => `<a href="${esc(l.href)}" target="_blank" rel="noopener" class="footer-link${l.muted ? ' privacy-legal' : ''}">${esc(l.label)}</a>`).join('')}
+        </div>`).join('');
+    }
+
+    /* Preserve the existing social icon SVGs/images but update URLs.
+       Each social anchor has a class matching the platform name. */
+    if (Array.isArray(f.social)) {
+      socialEls.forEach(row => {
+        f.social.forEach(s => {
+          const anchor = row.querySelector('a.' + s.platform);
+          if (anchor && s.href) anchor.href = s.href;
+        });
+      });
+    }
+  }
+
+  /* Master loader. Renders only what's present in the JSON, leaves
+     the rest untouched so the baked-in fallback markup stays visible. */
+  async function loadContent() {
+    let data = null;
+    try {
+      const res = await fetch(CONTENT_URL + '?t=' + Math.floor(Date.now() / 60000), { cache: 'no-store' });
+      if (!res.ok) throw new Error('content fetch failed: ' + res.status);
+      data = await res.json();
+    } catch (err) {
+      console.warn('[content] Could not load content.json — using inline fallback. Reason:', err && err.message);
       return;
     }
-    const html = items.map(tickerItemHTML).join('');
-    track.innerHTML = html + html;
+
+    try { renderNav(data.nav);           } catch (e) { console.warn('[content] nav render error', e); }
+    try { renderTicker(data.ticker);     } catch (e) { console.warn('[content] ticker render error', e); }
+    try { renderHero(data.hero);         } catch (e) { console.warn('[content] hero render error', e); }
+    try { renderFeatured(data.featured); } catch (e) { console.warn('[content] featured render error', e); }
+    try { renderSeries(data.series);     } catch (e) { console.warn('[content] series render error', e); }
+    try { renderMoments(data.moments);   } catch (e) { console.warn('[content] moments render error', e); }
+    try { renderHosts(data.hosts);       } catch (e) { console.warn('[content] hosts render error', e); }
+    try { renderFooter(data.footer);     } catch (e) { console.warn('[content] footer render error', e); }
+
+    /* After we've replaced markup, re-wire the dynamic behaviors that
+       depend on the new DOM nodes (filters, carousel nav, modal hooks,
+       photo marquee, scroll-reveal). */
+    if (typeof window.__rewireDynamic === 'function') window.__rewireDynamic();
   }
 
-  async function fetchLeagueNews(league) {
-    try {
-      const res = await fetch(league.url, { mode: 'cors' });
-      if (!res.ok) throw new Error('bad response');
-      const data = await res.json();
-      const articles = (data.articles || data.headlines || []).slice(0, 6);
-      return articles.map(a => ({
-        sym: league.sym,
-        cls: league.cls,
-        head: (a.headline || a.description || '').replace(/\s+/g, ' ').trim(),
-        time: a.published ? timeAgo(a.published) : '',
-      })).filter(x => x.head);
-    } catch (e) {
-      return [];
-    }
-  }
-
-  (async function bootTicker() {
-    const settled = await Promise.allSettled(LEAGUES.map(fetchLeagueNews));
-    let pools = settled.map(r => r.status === 'fulfilled' ? r.value : []);
-    const merged = [];
-    const maxLen = Math.max(...pools.map(p => p.length), 0);
-    for (let i = 0; i < maxLen; i++) {
-      for (const pool of pools) if (pool[i]) merged.push(pool[i]);
-    }
-    const seen = new Set();
-    const unique = merged.filter(m => {
-      if (seen.has(m.head)) return false;
-      seen.add(m.head);
-      return true;
-    });
-
-    if (unique.length >= 8) {
-      renderTicker(unique);
-    } else {
-      renderTicker(unique.length ? unique.concat(FALLBACK) : FALLBACK);
-    }
-  })();
+  /* Kick it off */
+  loadContent();
 </script>
 
 <!-- =========================================================
      JW PLAYER VIDEO MODAL
-     Opened when a card with data-jw is clicked. The iframe
-     loads JW's free preview player for that media id.
+     Opened when an element with data-video-url is clicked.
+     The video URL comes from content.json (per-episode field).
      ========================================================= -->
 <div class="jw-modal" id="jw-modal" role="dialog" aria-modal="true" aria-labelledby="jw-modal-caption">
   <div class="jw-modal-dialog">
@@ -2547,15 +2801,12 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
         <path d="M2 2 L12 12 M12 2 L2 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
       </svg>
     </button>
-    <iframe
-      class="jw-modal-iframe"
-      id="jw-modal-iframe"
-      src="about:blank"
-      allow="autoplay; fullscreen; picture-in-picture"
-      allowfullscreen
-      title="The Winning Formula video player"></iframe>
+    <div class="jw-modal-iframe" id="jw-modal-player"></div>
   </div>
 </div>
+
+<!-- JW Player library (Nasdaq's configured library) -->
+<script src="https://cdn.jwplayer.com/libraries/WXJkqpdN.js"></script>
 
 </body>
 </html>
