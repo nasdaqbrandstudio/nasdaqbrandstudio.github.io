@@ -2279,7 +2279,11 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       }
     });
   }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  /* Make the observer accessible globally so re-rendered content can be observed */
+  window.__observeReveals = function () {
+    document.querySelectorAll('.reveal:not(.in)').forEach(el => io.observe(el));
+  };
+  window.__observeReveals();
 
   /* ===========================================================
      FILTERS — event-delegated so they survive content reloads
@@ -2518,6 +2522,22 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     updateCarouselNav();
     /* Marquee owns its own DOM (slides) so we re-init. */
     initMarquee();
+    /* Re-observe any newly rendered .reveal elements so they fade in.
+       Without this, content rendered by loadContent stays at opacity 0
+       because the IntersectionObserver only knows about original DOM. */
+    if (typeof window.__observeReveals === 'function') {
+      window.__observeReveals();
+      /* Immediately mark above-the-fold reveals as 'in' so they show
+         without waiting for a scroll event */
+      requestAnimationFrame(() => {
+        document.querySelectorAll('.reveal:not(.in)').forEach(el => {
+          const r = el.getBoundingClientRect();
+          if (r.top < window.innerHeight && r.bottom > 0) {
+            el.classList.add('in');
+          }
+        });
+      });
+    }
   };
 
   /* ===========================================================
