@@ -87,6 +87,23 @@
     ],
     "episodes": [
       {
+        "guest": "Reggie Bush",
+        "guestNameMarkup": "Reggie Bush",
+        "subtitle": "NBA MVP \u00b7 Entrepreneur",
+        "thumbnailAlt": "Reggie Bush on The Winning Formula",
+        "videoUrl": "https://cdn.jwplayer.com/players/8DFhw51n-jO5YHc4l.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/8DFhw51n-jO5YHc4l.html",
+        "duration": "",
+        "tag": "NFL",
+        "tagClass": "nfl",
+        "filters": [
+          "athlete-founder"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Derrick Rose",
+        "description": "NBA MVP Derrick Rose talks retirement, starting his own businesses, the impact Tom Thibodeau had on his career, and his relentless work ethic."
+      },
+      {
         "guest": "Derrick Rose",
         "guestNameMarkup": "Derrick Rose",
         "subtitle": "NBA MVP \u00b7 Entrepreneur",
