@@ -615,7 +615,15 @@
     box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
     margin-top: var(--s-6);
   }
-  @media (max-width: 768px) { .photo-marquee { aspect-ratio: 4 / 3; } }
+  /* On mobile: drop the fixed aspect ratio and let the slide grow tall
+     enough to fit its caption text. The image fills the top, captions
+     stack underneath via the gradient overlay. */
+  @media (max-width: 768px) {
+    .photo-marquee {
+      aspect-ratio: auto;
+      min-height: 480px;
+    }
+  }
 
   .photo-slide {
     position: absolute;
@@ -644,6 +652,14 @@
       linear-gradient(180deg, rgba(8, 6, 42, 0) 40%, rgba(8, 6, 42, 0.85) 100%),
       linear-gradient(90deg, rgba(8, 6, 42, 0.45) 0%, transparent 45%);
     pointer-events: none;
+  }
+  /* On mobile, strengthen the gradient so longer captions remain
+     readable against the photo */
+  @media (max-width: 768px) {
+    .photo-slide::after {
+      background:
+        linear-gradient(180deg, rgba(8, 6, 42, 0) 30%, rgba(8, 6, 42, 0.95) 75%);
+    }
   }
 
   .photo-slide-caption {
@@ -680,6 +696,10 @@
     width: 5px; height: 5px; border-radius: 50%;
     background: var(--nasdaq-blue-50);
   }
+  /* Hide eyebrow on mobile — caption text already identifies the slide */
+  @media (max-width: 768px) {
+    .photo-slide-eyebrow { display: none; }
+  }
   .photo-slide-title {
     font-family: var(--ff-sans);
     font-weight: 500;
@@ -688,12 +708,24 @@
     letter-spacing: -0.015em;
     margin-bottom: var(--s-3);
   }
+  /* Tighter title on mobile so longer headlines fit */
+  @media (max-width: 768px) {
+    .photo-slide-title {
+      font-size: clamp(1.4rem, 6vw, 1.85rem);
+    }
+  }
   .photo-slide-sub {
     font-family: var(--ff-sans);
     font-weight: 300;
     font-size: 1rem;
     color: rgba(255, 255, 255, 0.82);
     line-height: 1.5;
+  }
+  @media (max-width: 768px) {
+    .photo-slide-sub {
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
   }
 
   .photo-marquee-dots {
@@ -1972,6 +2004,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       const res = await fetch(CONTENT_URL + '?t=' + Math.floor(Date.now() / 60000), { cache: 'no-store' });
       if (!res.ok) throw new Error('content fetch failed: ' + res.status);
       data = await res.json();
+      console.log('[content] loaded — ' + (data.series?.episodes?.length || 0) + ' episodes, ' + (data.hosts?.people?.length || 0) + ' hosts');
     } catch (err) {
       console.warn('[content] Could not load content.json — using inline fallback. Reason:', err && err.message);
       return;
