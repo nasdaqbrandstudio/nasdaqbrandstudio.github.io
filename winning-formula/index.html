@@ -104,228 +104,11 @@
   .wrap { width: 100%; margin: 0 auto; padding: 0 var(--gutter); }
 
   /* =========================================================
-     NAV BAR — matches nasdaq.com navbar
-     white background · 48px · sticky · Nasdaq logo from CDN
-     ========================================================= */
-  .nasdaq-navbar {
-    position: sticky;
-    top: 0;
-    z-index: 500;
-    height: var(--nav-h);
-    background: var(--surface-light);
-    box-shadow: 0 8px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 0 2.5rem;
-    font-family: var(--ff-sans);
-    font-weight: 400;
-    transition: transform 320ms var(--ease-nsdq);
-    will-change: transform;
-  }
-  .nasdaq-navbar.is-hidden {
-    transform: translateY(-100%);
-  }
-  @media (max-width: 991px) {
-    .nasdaq-navbar { padding: 0; background: #f3f3f8; }
-  }
-
-  .nasdaq-navbar .primary-nav {
-    display: flex;
-    align-items: center;
-    gap: 3.5rem;  /* logo → first link */
-  }
-
-  .nasdaq-navbar .brand-lockup {
-    display: inline-flex;
-    align-items: center;
-    height: var(--nav-h);
-  }
-
-  .nasdaq-navbar .brand-lockup svg {
-    height: 25px;
-    width: auto;
-    display: block;
-  }
-
-  /* =========================================================
-     HERO BACKGROUND VIDEO + LOTTIE MOTION LINES
-     ========================================================= */
-  .hero-video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
-    pointer-events: none;
-  }
-  .hero-motion-lines {
-    position: absolute;
-    left: 0; right: 0;
-    width: 100%;
-    height: 180px;
-    z-index: 1;
-    pointer-events: none;
-    opacity: 0.7;
-    overflow: hidden;
-  }
-  .hero-motion-lines svg { width: 100% !important; height: 100% !important; }
-  .hero-motion-lines.top    { top: 0; }
-  .hero-motion-lines.bottom { bottom: 0; transform: scaleY(-1); }
-
-  .hero-video-overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    background-image: linear-gradient(90deg, #08062a 0%, #08062a 40%, rgba(8, 6, 42, 0.5) 80%, rgba(8, 6, 42, 0.2) 100%);
-    pointer-events: none;
-  }
-  @media (max-width: 980px) {
-    .hero-video-overlay {
-      background-image: linear-gradient(180deg, rgba(8, 6, 42, 0.4) 0%, rgba(8, 6, 42, 0.9) 100%);
-    }
-  }
-
-  .nasdaq-navbar .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 3rem;
-    font-family: var(--ff-sans);
-    font-size: 1rem;
-  }
-  .nasdaq-navbar .nav-links a {
-    padding: 0 2px;
-    height: var(--nav-h);
-    display: inline-flex;
-    align-items: center;
-    color: #0679a1;
-    font-weight: 600;
-    letter-spacing: 0;
-    transition: color 180ms;
-  }
-  .nasdaq-navbar .nav-links a:hover { color: #05587a; }
-
-  /* Mobile: swap the desktop layout for a burger + centered logo */
-  .nav-mobile-toggle {
-    display: none;
-    width: 40px; height: 40px;
-    align-items: center;
-    justify-content: center;
-    color: #1a1a1a;
-    background: transparent;
-    outline: none;
-    box-shadow: none;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-  .nav-mobile-toggle:focus,
-  .nav-mobile-toggle:focus-visible,
-  .nav-mobile-toggle:active {
-    outline: none;
-    box-shadow: none;
-  }
-  .nav-mobile-toggle svg {
-    width: 28px; height: 28px;
-  }
-
-  @media (max-width: 991px) {
-    .nasdaq-navbar {
-      justify-content: center;
-      position: relative;
-    }
-    .nasdaq-navbar .nav-links { display: none; }
-    .nasdaq-navbar .primary-nav {
-      gap: 0;
-    }
-    .nasdaq-navbar .primary-nav .brand-lockup {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
-    .nav-mobile-toggle {
-      display: inline-flex;
-      position: absolute;
-      left: 2rem;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-  }
-
-  /* Mobile menu panel — full-bleed white drawer that slides down from under the nav */
-  .mobile-menu {
-    position: fixed;
-    top: var(--nav-h);
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 490;
-    background: #fff;
-    overflow-y: auto;
-    transform: translateY(-100%);
-    opacity: 0;
-    visibility: hidden;
-    transition: transform 320ms var(--ease-nsdq), opacity 220ms, visibility 0s linear 220ms;
-  }
-  .mobile-menu.is-open {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-    transition: transform 320ms var(--ease-nsdq), opacity 220ms, visibility 0s;
-  }
-  .mobile-menu a {
-    display: flex;
-    align-items: center;
-    padding: 1.25rem 1.5rem;
-    color: #6a6a6a;
-    font-family: var(--ff-sans);
-    font-weight: 400;
-    font-size: 1.125rem;
-    line-height: 1;
-    border-bottom: 1px solid #e5e5e5;
-    transition: background 150ms, color 150ms;
-  }
-  .mobile-menu a:first-child { border-top: 1px solid #e5e5e5; }
-  .mobile-menu a:hover,
-  .mobile-menu a:focus { background: #fafafa; color: #2a2a2a; }
-  @media (min-width: 992px) {
-    .mobile-menu { display: none; }
-  }
-
-  .nav-search {
-    display: flex; align-items: center; gap: var(--s-2);
-    height: 28px;
-    padding: 0 10px;
-    border-radius: 999px;
-    background: var(--surface-offwhite);
-    color: var(--text-on-light-muted);
-    font-size: 12px;
-  }
-  .nav-search svg { width: 12px; height: 12px; }
-  @media (max-width: 640px) { .nav-search { display: none; } }
-
-  .nav-cta {
-    display: inline-flex; align-items: center; gap: 6px;
-    height: 28px;
-    padding: 0 14px;
-    background: var(--nasdaq-blue-50);
-    color: #fff;
-    border-radius: var(--r-s);
-    font-size: 12px;
-    font-weight: 500;
-    transition: background 180ms;
-  }
-  .nav-cta:hover { background: var(--nasdaq-blue-56); }
-
-  /* =========================================================
-     LIVE SPORTS TICKER — placed UNDERNEATH the nav
-     mimics the Nasdaq stock ticker pattern
+     LIVE NEWS & UPDATES TICKER — sticky at top of viewport
      ========================================================= */
   .ticker {
     position: sticky;
-    top: var(--nav-h);
+    top: 0;
     z-index: 400;
     display: flex;
     align-items: stretch;
@@ -335,12 +118,6 @@
     overflow: hidden;
     font-family: var(--ff-mono);
     font-size: 12px;
-    transition: transform 320ms var(--ease-nsdq), top 320ms var(--ease-nsdq);
-    will-change: transform;
-  }
-  /* When nav hides, ticker slides up by nav height so it stays flush on top */
-  body.nav-hidden .ticker {
-    top: 0;
   }
 
   .ticker-label {
@@ -444,6 +221,42 @@
     display: flex;
     align-items: center;
     border-bottom: 1px solid var(--line-on-dark);
+  }
+
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .hero-motion-lines {
+    position: absolute;
+    left: 0; right: 0;
+    width: 100%;
+    height: 180px;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.7;
+    overflow: hidden;
+  }
+  .hero-motion-lines svg { width: 100% !important; height: 100% !important; }
+  .hero-motion-lines.top    { top: 0; }
+  .hero-motion-lines.bottom { bottom: 0; transform: scaleY(-1); }
+
+  .hero-video-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background-image: linear-gradient(90deg, #08062a 0%, #08062a 40%, rgba(8, 6, 42, 0.5) 80%, rgba(8, 6, 42, 0.2) 100%);
+    pointer-events: none;
+  }
+  @media (max-width: 980px) {
+    .hero-video-overlay {
+      background-image: linear-gradient(180deg, rgba(8, 6, 42, 0.4) 0%, rgba(8, 6, 42, 0.9) 100%);
+    }
   }
 
   /* Radial glow */
@@ -616,7 +429,7 @@
 
   .thumb {
     position: relative;
-    aspect-ratio: 16/10;
+    aspect-ratio: 16/9;
     border-radius: var(--r-l);
     overflow: hidden;
     background: var(--surface-elevated);
@@ -800,7 +613,6 @@
     inset: 0;
     opacity: 0;
     transition: opacity 900ms var(--ease-nsdq);
-    cursor: pointer;
   }
   .photo-slide.active { opacity: 1; }
 
@@ -954,6 +766,7 @@
   }
   .filters {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--s-2);
     font-family: var(--ff-sans);
     font-size: 12px;
@@ -972,6 +785,19 @@
     background: var(--nasdaq-blue-50);
     color: #fff;
     border-color: var(--nasdaq-blue-50);
+  }
+  @media (max-width: 768px) {
+    .episodes-head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--s-4);
+    }
+    .episodes-controls {
+      width: 100%;
+    }
+    .filters {
+      width: 100%;
+    }
   }
 
   .carousel-stage {
@@ -1077,95 +903,93 @@
   }
 
   /* =========================================================
-     JW PLAYER MODAL — plays videos inline instead of leaving the page
+     INLINE VIDEO PLAYER — replaces the thumbnail in place when
+     a card is clicked. Only one plays at a time (see JS).
      ========================================================= */
-  .jw-modal {
-    position: fixed;
+  .inline-player {
+    position: absolute;
     inset: 0;
-    z-index: 1000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: var(--s-5);
-    background: rgba(5, 4, 22, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    animation: jwFade 220ms var(--ease-nsdq);
+    background: #000;
+    z-index: 4;
+    border-radius: inherit;
+    overflow: hidden;
+    animation: inlineFade 220ms var(--ease-nsdq);
   }
-  .jw-modal.open { display: flex; }
-  @keyframes jwFade {
+  @keyframes inlineFade {
     from { opacity: 0; }
     to   { opacity: 1; }
   }
-
-  .jw-modal-dialog {
-    position: relative;
-    width: 100%;
-    max-width: 1100px;
-    aspect-ratio: 16 / 9;
-    background: #000;
-    border-radius: var(--r-l);
-    overflow: hidden;
-    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
-    animation: jwRise 360ms var(--ease-nsdq);
-  }
-  @keyframes jwRise {
-    from { opacity: 0; transform: translateY(24px) scale(0.97); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-  }
-
-  .jw-modal-iframe {
+  .inline-player iframe {
     width: 100%;
     height: 100%;
     border: 0;
     background: #000;
+    display: block;
   }
+  /* When a card is playing, hide its hover lift so the player doesn't jiggle */
+  .is-playing.ep-card,
+  .ep-card.is-playing { transform: none !important; }
+  /* Also dim the play-button overlay while playing (it's behind the iframe
+     anyway, but in case z-index ordering changes) */
+  .is-playing .thumb-play { display: none; }
 
-  .jw-modal-close {
-    position: absolute;
-    top: -52px;
-    right: 0;
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.12);
-    color: #fff;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(10px);
-    transition: background 180ms;
+  /* =========================================================
+     SHOW MORE / SHOW LESS (mobile)
+     Episodes beyond index 6 are tagged .is-overflow.
+     On mobile we hide them by default; the Show More button
+     adds .is-expanded to the carousel to reveal them.
+     ========================================================= */
+  @media (max-width: 768px) {
+    .episodes-carousel:not(.is-expanded) .ep-card.is-overflow {
+      display: none;
+    }
   }
-  .jw-modal-close:hover { background: rgba(255,255,255,0.22); }
-  .jw-modal-close svg { width: 14px; height: 14px; }
-
-  .jw-modal-caption {
-    position: absolute;
-    top: -44px;
-    left: 0;
-    color: rgba(255,255,255,0.88);
+  .show-more-btn {
+    display: none;
+    margin: var(--s-6) auto 0;
+    padding: 12px 22px;
+    border-radius: 999px;
+    background: transparent;
+    border: 1px solid var(--nasdaq-blue-50);
+    color: var(--nasdaq-blue-50);
     font-family: var(--ff-sans);
     font-weight: 500;
-    font-size: 14px;
-    letter-spacing: 0.02em;
-    display: flex;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
     align-items: center;
-    gap: var(--s-3);
+    gap: 8px;
+    transition: background 180ms, color 180ms;
   }
-  .jw-modal-caption::before {
-    content: "";
-    width: 6px; height: 6px; border-radius: 50%;
+  .show-more-btn:hover {
     background: var(--nasdaq-blue-50);
+    color: #fff;
+  }
+  .show-more-btn .show-more-arrow {
+    width: 14px;
+    height: 14px;
+    transition: transform 200ms;
   }
   @media (max-width: 768px) {
-    .jw-modal-close { top: -48px; }
-    .jw-modal-caption { display: none; }
+    .show-more-btn { display: inline-flex; }
   }
 
-  .no-scroll { overflow: hidden; }
+  /* Make new <div role="button"> cards behave like clickable cards */
+  .ep-card[role="button"],
+  .thumb[role="button"] {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .ep-card[role="button"]:focus-visible,
+  .thumb[role="button"]:focus-visible {
+    outline: 2px solid var(--nasdaq-blue-50);
+    outline-offset: 4px;
+  }
 
   .ep-card { display: flex; flex-direction: column; gap: var(--s-4); transition: transform 300ms var(--ease-nsdq); }
   .ep-card:hover { transform: translateY(-4px); }
-  .ep-card .thumb { aspect-ratio: 4/3; border-radius: var(--r-m); }
+  .ep-card .thumb { aspect-ratio: 16/9; border-radius: var(--r-m); }
   .ep-card .thumb-name { font-size: clamp(1.5rem, 2.2vw, 2rem); }
 
   .ep-meta-row {
@@ -1243,6 +1067,19 @@
     border-radius: var(--r-l);
     transition: border-color 200ms, background 200ms;
   }
+  @media (max-width: 768px) {
+    .host-card {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+      gap: var(--s-4);
+    }
+    .host-card .host-name,
+    .host-card .host-role,
+    .host-card .host-bio {
+      text-align: center;
+    }
+  }
   .host-card:hover {
     border-color: var(--nasdaq-blue-50);
     background: rgba(0, 146, 188, 0.04);
@@ -1278,272 +1115,6 @@
     font-weight: 300;
   }
 
-  /* =========================================================
-     FOOTER — direct port of nasdaq-footer-9684ea.webflow.css
-     This module is intentionally styled independent of the rest
-     of the page per Webflow's published footer spec.
-     ========================================================= */
-  .footer-wrapper {
-    z-index: 100;
-    background-color: #000;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    display: flex;
-    position: static;
-    inset: auto 0% 0%;
-  }
-  .footer-container {
-    grid-column-gap: 3rem;
-    grid-row-gap: 3rem;
-    background-color: #000;
-    flex-flow: column;
-    grid-template-rows: auto;
-    grid-template-columns: 1fr;
-    grid-auto-columns: 1fr;
-    grid-auto-flow: row;
-    justify-content: space-between;
-    place-items: stretch stretch;
-    width: 100%;
-    max-width: 1175px;
-    height: 100%;
-    min-height: 450px;
-    padding: 5rem;
-    display: grid;
-  }
-  .column-container {
-    grid-column-gap: 0rem;
-    grid-row-gap: 0rem;
-    flex-flow: row;
-    grid-template-rows: auto;
-    grid-template-columns: 3fr 1fr;
-    grid-auto-columns: 1fr;
-    justify-content: space-between;
-    align-items: stretch;
-    width: 100%;
-    display: grid;
-  }
-  .columns {
-    grid-column-gap: 1rem;
-    grid-row-gap: 1rem;
-    flex-flow: row;
-    grid-template-rows: auto;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-auto-columns: 1fr;
-    justify-content: space-between;
-    align-items: stretch;
-    width: 100%;
-    display: grid;
-  }
-  .link-column {
-    grid-column-gap: 1rem;
-    grid-row-gap: 1rem;
-    flex-flow: column;
-    grid-template-rows: auto auto auto auto auto;
-    grid-template-columns: 1fr;
-    grid-auto-columns: 1fr;
-    grid-auto-flow: column;
-    place-items: start;
-    width: auto;
-    height: auto;
-    display: grid;
-  }
-  .footer-link {
-    color: #0092bc;
-    text-transform: uppercase;
-    font-family: var(--ff-sans);
-    font-size: 0.85rem;
-    font-weight: 500;
-    line-height: 1rem;
-    text-decoration: none;
-  }
-  .footer-link:hover {
-    color: #0092bc;
-    text-decoration: underline;
-  }
-  .footer-link.privacy-legal {
-    color: #818181;
-  }
-
-  .social-icons-container {
-    display: none;
-  }
-
-  .nasdaq-logo-container-full {
-    grid-column-gap: 2rem;
-    grid-row-gap: 2rem;
-    flex-flow: column;
-    justify-content: flex-end;
-    align-items: flex-end;
-    width: auto;
-    display: flex;
-  }
-  .nasdaq-logo-footer {
-    justify-content: flex-end;
-    align-items: flex-end;
-    display: flex;
-  }
-  .nasdaq-logo { width: 75%; }
-
-  .logo-copyright-container {
-    /* No display declaration at base — matches Webflow spec (default block on desktop).
-       Becomes flex at ≤991px for the side-by-side layout on tablet. */
-  }
-  .nasdaq-logo-container {
-    grid-column-gap: 2rem;
-    grid-row-gap: 2rem;
-    flex-flow: column;
-    justify-content: flex-end;
-    align-items: flex-start;
-    width: auto;
-    display: none;
-  }
-  .social-copyright-container {
-    flex-flow: row;
-    justify-content: space-between;
-    align-items: center;
-    display: flex;
-  }
-  .social-icons {
-    flex-flow: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 17rem;
-    height: auto;
-    display: flex;
-  }
-  .social-icons-mobile {
-    flex-flow: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 17rem;
-    height: 1rem;
-    display: flex;
-  }
-  .footer-wrapper img.facebook,
-  .footer-wrapper img.x,
-  .footer-wrapper img.linkedin,
-  .footer-wrapper img.instagram,
-  .footer-wrapper img.pinterest,
-  .footer-wrapper svg.facebook,
-  .footer-wrapper svg.x,
-  .footer-wrapper svg.linkedin,
-  .footer-wrapper svg.instagram,
-  .footer-wrapper svg.pinterest { height: 1rem; width: auto; display: block; }
-  .copyright-inline-2 {
-    color: #818181;
-    text-align: right;
-    font-family: var(--ff-sans);
-    font-size: 0.75rem;
-    font-weight: 300;
-    line-height: 0.85;
-  }
-
-  @media screen and (max-width: 991px) {
-    .social-icons-container { display: none; }
-    .logo-copyright-container {
-      justify-content: space-between;
-      align-items: flex-end;
-      width: 100%;
-      display: flex;
-    }
-    .social-copyright-container {
-      grid-column-gap: 1rem;
-      grid-row-gap: 1rem;
-      flex-flow: column;
-      justify-content: flex-end;
-      align-items: flex-end;
-      width: 50%;
-    }
-    .nasdaq-logo-container { width: 50%; display: block; }
-    .column-container {
-      flex-flow: column;
-      grid-auto-flow: column;
-      margin-bottom: 3rem;
-      display: flex;
-    }
-    .nasdaq-logo { width: 15rem; }
-    .social-icons { width: 17rem; }
-    .footer-container {
-      flex-flow: column;
-      place-items: end;
-      height: 100%;
-      min-height: 300px;
-      padding: 3.5rem;
-      display: block;
-    }
-    .social-icons-mobile { width: 17rem; }
-    .nasdaq-logo-container-full { width: 50%; display: none; }
-  }
-
-  @media screen and (max-width: 767px) {
-    .social-icons-container { display: none; }
-    .columns {
-      grid-column-gap: 2rem;
-      grid-row-gap: 2rem;
-    }
-    .footer-wrapper { max-width: none; display: flex; }
-    .nasdaq-logo { width: 10rem; }
-    .social-icons { width: 13rem; }
-    .copyright-inline-2 { text-align: right; }
-    .footer-container { max-width: none; height: 100%; padding: 2.5rem; }
-    .link-column {
-      grid-column-gap: 1rem;
-      grid-row-gap: 1rem;
-    }
-    .social-icons-mobile { width: 10rem; }
-  }
-
-  @media screen and (max-width: 479px) {
-    .social-icons-container {
-      grid-column-gap: 0px;
-      grid-row-gap: 0px;
-      text-align: center;
-      grid-template-rows: auto;
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-      grid-auto-columns: 1fr;
-      justify-content: space-between;
-      align-items: center;
-      width: auto;
-      margin-top: 3rem;
-      display: flex;
-    }
-    .logo-copyright-container {
-      flex-flow: column;
-      justify-content: space-between;
-      align-items: center;
-      display: block;
-    }
-    .social-copyright-container {
-      flex-flow: row;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      margin-top: 2rem;
-    }
-    .nasdaq-logo-container { width: 100%; margin-top: 3rem; }
-    .column-container { margin-bottom: 0; display: block; }
-    .columns {
-      grid-column-gap: 1rem;
-      grid-row-gap: 1rem;
-      grid-template-columns: 1fr;
-    }
-    .social-icons { display: none; }
-    .copyright-inline-2 { text-align: left; }
-    .footer-container { height: 100%; padding: 2rem; }
-    .link-column { display: flex; }
-    .social-icons-mobile {
-      grid-column-gap: 0rem;
-      grid-row-gap: 0rem;
-      grid-template-rows: auto;
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-      grid-auto-columns: 1fr;
-      grid-auto-flow: row;
-      width: 13rem;
-      height: 1rem;
-      display: flex;
-    }
-  }
 
   /* =========================================================
      REVEAL ANIMATIONS
@@ -1566,58 +1137,9 @@
 </head>
 <body>
 
-<!-- =========================================================
-     NAV — matches nasdaq.com navbar (white, 48px, sticky)
-     ========================================================= -->
-<nav id="home" class="nasdaq-navbar" role="navigation" aria-label="Primary">
-  <div class="primary-nav">
-    <a href="https://www.nasdaq.com/" class="brand-lockup" aria-label="Nasdaq home">
-      <svg width="86" height="25" viewBox="0 0 86 25" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <g clip-path="url(#clip0_298_5055)">
-          <g clip-path="url(#clip1_298_5055)">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M63.3281 18.6202C60.4345 18.6202 58.6367 16.9395 58.6367 14.2325C58.6367 11.4194 60.2955 9.6716 62.9663 9.6716L63.1921 9.67032C63.526 9.67032 63.9875 9.68088 64.6176 9.76112V6.36719H66.5072V18.315C66.5072 18.315 64.7127 18.6202 63.3281 18.6202ZM63.3117 11.1619C61.4831 11.1619 60.5941 12.1511 60.5941 14.1856C60.5941 16.0112 61.6658 17.1451 63.3904 17.1451C63.7214 17.1451 64.1009 17.1245 64.6176 17.0789V11.2827C64.1004 11.2004 63.6852 11.1619 63.3117 11.1619Z" fill="#404041"/>
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M37.4751 18.3482L32.3757 9.42608L32.3744 18.3482H30.5977V7.05469H33.0845L38.1839 15.897L38.1817 7.05469H39.9813V18.3482H37.4751Z" fill="#404041"/>
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M53.7147 18.5198C52.8565 18.5198 51.9607 18.4235 50.8944 18.2179L50.7811 18.1955V16.6179L50.95 16.655C51.8887 16.8551 52.7002 17.0282 53.5109 17.0282C54.1674 17.0282 55.6945 16.9235 55.6945 15.9567C55.6945 15.1448 54.6391 14.9418 53.7909 14.7792L53.7379 14.7687C53.5804 14.7375 53.4313 14.7079 53.3037 14.6758C52.0605 14.3519 50.7344 13.8664 50.7344 12.1959C50.7344 10.5671 52.0209 9.63281 54.2638 9.63281C55.3398 9.63281 56.1214 9.74929 56.7489 9.84305L57.056 9.88905V11.4182L56.8921 11.3899C56.1817 11.2586 55.3491 11.1239 54.5469 11.1239C53.6578 11.1239 52.5987 11.2907 52.5987 12.0857C52.5987 12.7443 53.4641 12.933 54.4664 13.1513C55.8667 13.4569 57.6047 13.8373 57.6047 15.7527C57.6047 17.5111 56.1867 18.5198 53.7147 18.5198Z" fill="#404041"/>
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M71.8078 18.5198C69.8522 18.5198 68.043 18.1753 68.043 15.6743C68.043 12.9528 70.8414 12.9528 72.5137 12.9528C72.6809 12.9528 73.4667 12.9887 73.7089 12.9997C73.7067 11.4731 73.6861 11.1087 71.4777 11.1087C70.6022 11.1087 69.6294 11.2831 68.7711 11.4367L68.6073 11.4663V9.95825L68.7193 9.93545C69.7136 9.73201 70.6725 9.63281 71.6504 9.63281C73.791 9.63281 75.6048 9.84937 75.6048 12.5108V18.3167L75.4742 18.3302C73.9918 18.497 72.8139 18.5198 71.8078 18.5198ZM72.4661 14.2987C70.854 14.2987 69.8551 14.5365 69.8551 15.7207C69.8551 17.0907 71.1303 17.2051 72.3255 17.2051C72.7731 17.2051 73.5763 17.1481 73.8218 17.1295V14.3452C73.4751 14.3321 72.5752 14.2987 72.4661 14.2987Z" fill="#404041"/>
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M45.3196 18.5198C43.3638 18.5198 41.5547 18.1753 41.5547 15.6743C41.5547 12.9528 44.3531 12.9528 46.0254 12.9528C46.1921 12.9528 46.9784 12.9887 47.2205 12.9997C47.2184 11.4731 47.1978 11.1087 44.9894 11.1087C44.1139 11.1087 43.1415 11.2831 42.2828 11.4367L42.119 11.4663V9.95825L42.231 9.93545C43.2257 9.73201 44.1842 9.63281 45.162 9.63281C47.3027 9.63281 49.1164 9.84937 49.1164 12.5108V18.3167L48.9859 18.3302C47.5036 18.497 46.3256 18.5198 45.3196 18.5198ZM45.9778 14.2987C44.3657 14.2987 43.3668 14.5365 43.3668 15.7207C43.3668 17.0907 44.642 17.2051 45.8372 17.2051C46.2848 17.2051 47.0879 17.1481 47.3334 17.1295V14.3452C46.9868 14.3321 46.0868 14.2987 45.9778 14.2987Z" fill="#404041"/>
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M83.1199 22.1834V18.4795C82.3823 18.5834 81.9903 18.5834 81.6743 18.5834C80.9271 18.5834 80.097 18.4204 79.4531 18.1468C78.0149 17.5482 77.1562 16.0241 77.1562 14.0694C77.1562 13.092 77.3934 11.3083 78.9806 10.347C79.7752 9.86994 80.7169 9.66602 82.1295 9.66602C82.6367 9.66602 83.3199 9.7053 83.9799 9.7437L85.0519 9.79898V21.3259L83.1199 22.1834ZM81.9879 11.1567C80.0713 11.1567 79.0985 12.1367 79.0985 14.0694C79.0985 16.5552 80.5502 17.0771 81.7687 17.0771C82.0647 17.0771 82.3991 17.0771 83.1375 16.9837V11.2103C82.5591 11.1711 82.2935 11.1567 81.9879 11.1567Z" fill="#404041"/>
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M22.1662 0.359375L15.9221 17.5563C15.7688 17.9806 15.3818 18.2904 14.9177 18.3373V18.3475H21.5176C22.0352 18.3475 22.4774 18.0177 22.6433 17.5563L28.8875 0.359375H22.1662ZM14.3808 18.0847C14.762 18.0847 15.098 17.8956 15.3036 17.6068C15.3251 17.5768 15.4 17.4713 15.4522 17.3273L17.7428 11.0174L16.4032 7.33252C16.2321 6.92342 15.8283 6.63591 15.3579 6.63591C14.9772 6.63591 14.6407 6.82463 14.4352 7.11382C14.4137 7.14338 14.3244 7.27806 14.2865 7.39331L11.9968 13.7007L13.342 17.4003C13.5163 17.8027 13.9151 18.0847 14.3808 18.0847ZM8.19789 6.37218H14.8699V6.37598C14.3742 6.39667 13.9543 6.71626 13.7934 7.16293L7.54977 24.3594H0.828125L7.07179 7.16293C7.23856 6.70149 7.6799 6.37218 8.19789 6.37218Z" fill="#0090BA"/>
-          </g>
-        </g>
-        <defs>
-          <clipPath id="clip0_298_5055"><rect width="85" height="24" fill="white" transform="translate(0.726562 0.359375)"/></clipPath>
-          <clipPath id="clip1_298_5055"><rect width="85" height="24" fill="white" transform="translate(0.726562 0.359375)"/></clipPath>
-        </defs>
-      </svg>
-    </a>
-    <div class="nav-links" id="nav-links-desktop">
-      <a href="https://www.nasdaq.com/market-activity">Market Activity</a>
-      <a href="https://www.nasdaq.com/news-and-insights">Insights</a>
-      <a href="https://www.nasdaq.com/solutions">Solutions</a>
-      <a href="https://www.nasdaq.com/about">About</a>
-    </div>
-  </div>
-
-  <!-- Mobile-only burger opens the menu panel below -->
-  <button class="nav-mobile-toggle" id="nav-mobile-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path class="burger-line top"    d="M3 6h18"  stroke="currentColor" stroke-width="2.5" stroke-linecap="butt"/>
-      <path class="burger-line middle" d="M3 12h18" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt"/>
-      <path class="burger-line bottom" d="M3 18h18" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt"/>
-    </svg>
-  </button>
-</nav>
-
-<!-- Mobile menu drawer — full-bleed, below nav, toggled by the burger -->
-<div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Mobile primary">
-  <a href="https://www.nasdaq.com/market-activity">Market Activity</a>
-  <a href="https://www.nasdaq.com/news-and-insights">Insights</a>
-  <a href="https://www.nasdaq.com/solutions">Solutions</a>
-  <a href="https://www.nasdaq.com/about">About</a>
-</div>
 
 <!-- =========================================================
-     LIVE SPORTS TICKER — under the nav
+     NEWS & UPDATES TICKER — sticky at top of page
      ========================================================= -->
 <div class="ticker" role="complementary" aria-label="Live sports headlines">
   <div class="ticker-label" id="ticker-label">NEWS &amp; UPDATES</div>
@@ -1674,40 +1196,7 @@
 <section class="featured-band section">
   <div class="wrap">
     <div id="featured-module">
-    <div class="reveal" style="margin-bottom: var(--s-7);">
-      <div class="section-eyebrow">Latest Episode</div>
-      <h2 class="section-title">From the end zone to the <em>endowment.</em></h2>
-    </div>
-
-    <div class="featured-grid">
-      <a class="thumb reveal" href="https://www.nasdaq.com/videos/winning-formula-marques-colston" target="_blank" rel="noopener" data-video-url="https://cdn.jwplayer.com/players/reDyhqnx-Mgmy6TMn.html" data-title="Marques Colston">
-        <img class="thumb-img" loading="lazy"
-             src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/05/reDyhqnx.jpg"
-             alt="Marques Colston">
-        <div class="thumb-scrim"></div>
-        <div class="thumb-badge"><span class="live-dot"></span>Featured</div>
-        <div class="thumb-duration">24:18</div>
-        <div class="thumb-media">
-          <div class="thumb-name">Marques<br>Colston</div>
-          <div class="thumb-sub">Super Bowl XLIV Champion · Champion Venture Partners</div>
-        </div>
-        <div class="thumb-play"><div class="thumb-play-btn"></div></div>
-      </a>
-
-      <div class="reveal">
-        <blockquote class="featured-quote">
-          I started to realize that not only are we solving for the <em>athlete investor</em>, we're solving for the retail investor as well.
-        </blockquote>
-        <p class="featured-body">
-          Marques Colston joins The Winning Formula to break down the founding of Champion Venture Partners, the rise of the sports asset class, and how he's translating locker-room discipline into disciplined capital allocation.
-        </p>
-        <div class="featured-byline">
-          <strong>With Joel Kolani</strong>
-          <span class="sep">·</span>
-          <span>Recorded at Nasdaq MarketSite, Times Square</span>
-        </div>
-      </div>
-    </div>
+      <!-- Featured episode renders here from content.json -->
     </div>
   </div>
 </section>
@@ -1743,196 +1232,7 @@
       </button>
 
       <div class="episodes-carousel" id="episodes-carousel">
-
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-kelley-ohara" target="_blank" rel="noopener" data-tags="athlete-founder womens-sports" data-video-url="https://cdn.jwplayer.com/players/5XEtJGIU-Mgmy6TMn.html" data-title="Kelley O'Hara">
-        <div class="thumb">
-          <img class="thumb-img" loading="lazy" alt="Kelley O'Hara"
-               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/07/5XEtJGIU.jpg">
-          <div class="thumb-scrim"></div>
-          <div class="thumb-duration">21:40</div>
-          <div class="thumb-media">
-            <div class="thumb-name">Kelley O'Hara</div>
-            <div class="thumb-sub">2x World Cup Champion · USWNT</div>
-          </div>
-          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
-        </div>
-        <div class="ep-meta-row">
-          <span class="ep-league-chip soc">USWNT</span>
-          <span>Episode · 22m</span>
-        </div>
-        <div class="ep-title">The business case for women's sports — and 'Sports Are Fun!'</div>
-        <div class="ep-desc">Kelley O'Hara on the explosive growth of women's sports and how her podcast is reshaping athlete-led media.</div>
-        <div class="ep-watch">Watch episode →</div>
-      </a>
-
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-jimmy-butler" target="_blank" rel="noopener" data-tags="athlete-founder" data-video-url="https://cdn.jwplayer.com/players/BN841b7I-Mgmy6TMn.html" data-title="Jimmy Butler">
-        <div class="thumb">
-          <img class="thumb-img" loading="lazy" alt="Jimmy Butler"
-               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/04/BN841b7I.jpg">
-          <div class="thumb-scrim"></div>
-          <div class="thumb-duration">22:07</div>
-          <div class="thumb-media">
-            <div class="thumb-name">Jimmy Butler</div>
-            <div class="thumb-sub">NBA All-Star · Founder, BIGFACE Coffee</div>
-          </div>
-          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
-        </div>
-        <div class="ep-meta-row">
-          <span class="ep-league-chip nba">NBA</span>
-          <span>Episode · 22m</span>
-        </div>
-        <div class="ep-title">"It's not always going to go the way you think — you gotta be able to pivot."</div>
-        <div class="ep-desc">From NBA stardom to BIGFACE Coffee, on adaptability and the power of the pivot.</div>
-        <div class="ep-watch">Watch episode →</div>
-      </a>
-
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-allyson-felix" target="_blank" rel="noopener" data-tags="athlete-founder womens-sports" data-video-url="https://cdn.jwplayer.com/players/zx7smJw6-Mgmy6TMn.html" data-title="Allyson Felix">
-        <div class="thumb">
-          <img class="thumb-img" loading="lazy" alt="Allyson Felix"
-               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/03/zx7smJw6.jpg">
-          <div class="thumb-scrim"></div>
-          <div class="thumb-duration">18:20</div>
-          <div class="thumb-media">
-            <div class="thumb-name">Allyson Felix</div>
-            <div class="thumb-sub">11x Olympic Medalist · Saysh Co-founder</div>
-          </div>
-          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
-        </div>
-        <div class="ep-meta-row">
-          <span class="ep-league-chip tf">T&amp;F</span>
-          <span>Episode · 18m</span>
-        </div>
-        <div class="ep-title">Legacy, entrepreneurship, and building a shoe brand for women.</div>
-        <div class="ep-desc">The most decorated track-and-field Olympian in American history on her next chapter.</div>
-        <div class="ep-watch">Watch episode →</div>
-      </a>
-
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-tristan-thompson" target="_blank" rel="noopener" data-tags="athlete-founder" data-video-url="https://cdn.jwplayer.com/players/50k3giwJ-Mgmy6TMn.html" data-title="Tristan Thompson">
-        <div class="thumb">
-          <img class="thumb-img" loading="lazy" alt="Tristan Thompson"
-               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2026/02/50k3giwJ.jpg">
-          <div class="thumb-scrim"></div>
-          <div class="thumb-duration">19:14</div>
-          <div class="thumb-media">
-            <div class="thumb-name">Tristan Thompson</div>
-            <div class="thumb-sub">NBA Champion · Web3 Ambassador</div>
-          </div>
-          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
-        </div>
-        <div class="ep-meta-row">
-          <span class="ep-league-chip nba">NBA</span>
-          <span>Episode · 19m</span>
-        </div>
-        <div class="ep-title">Financial literacy, Web3, and how the NBA has evolved.</div>
-        <div class="ep-desc">The NBA champion on building beyond the court and what athletes need to know about money.</div>
-        <div class="ep-watch">Watch episode →</div>
-      </a>
-
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-cj-mccollum" target="_blank" rel="noopener" data-tags="athlete-founder" data-video-url="https://cdn.jwplayer.com/players/ct9cUIRg-Mgmy6TMn.html" data-title="CJ McCollum">
-        <div class="thumb">
-          <img class="thumb-img" loading="lazy" alt="CJ McCollum"
-               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/09/ct9cUIRg.jpg">
-          <div class="thumb-scrim"></div>
-          <div class="thumb-duration">20:32</div>
-          <div class="thumb-media">
-            <div class="thumb-name">CJ McCollum</div>
-            <div class="thumb-sub">NBA Veteran · Entrepreneur</div>
-          </div>
-          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
-        </div>
-        <div class="ep-meta-row">
-          <span class="ep-league-chip nba">NBA</span>
-          <span>Episode · 20m</span>
-        </div>
-        <div class="ep-title">How the court prepared him for a career in business.</div>
-        <div class="ep-desc">CJ McCollum on discipline, investment, and the NBA's evolution since he entered the league.</div>
-        <div class="ep-watch">Watch episode →</div>
-      </a>
-
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-alex-honnold" target="_blank" rel="noopener" data-tags="athlete-founder" data-video-url="https://cdn.jwplayer.com/players/BSvpXgrh-Mgmy6TMn.html" data-title="Alex Honnold">
-        <div class="thumb">
-          <img class="thumb-img" loading="lazy" alt="Alex Honnold"
-               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/08/BSvpXgrh.jpg">
-          <div class="thumb-scrim"></div>
-          <div class="thumb-duration">17:45</div>
-          <div class="thumb-media">
-            <div class="thumb-name">Alex Honnold</div>
-            <div class="thumb-sub">Free Solo Climber · Honnold Foundation</div>
-          </div>
-          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
-        </div>
-        <div class="ep-meta-row">
-          <span class="ep-league-chip biz">CLIMB</span>
-          <span>Episode · 18m</span>
-        </div>
-        <div class="ep-title">Risk, routine, and the economics of the impossible.</div>
-        <div class="ep-desc">The free-solo climbing icon on calculated risk, philanthropy, and long-term focus.</div>
-        <div class="ep-watch">Watch episode →</div>
-      </a>
-
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-bubba-watson" target="_blank" rel="noopener" data-tags="athlete-founder" data-video-url="https://cdn.jwplayer.com/players/V05gpfW5-Mgmy6TMn.html" data-title="Bubba Watson">
-        <div class="thumb">
-          <img class="thumb-img" loading="lazy" alt="Bubba Watson"
-               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2026/02/V05gpfW5.jpg">
-          <div class="thumb-scrim"></div>
-          <div class="thumb-duration">16:08</div>
-          <div class="thumb-media">
-            <div class="thumb-name">Bubba Watson</div>
-            <div class="thumb-sub">2x Masters Champion · LIV Golf</div>
-          </div>
-          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
-        </div>
-        <div class="ep-meta-row">
-          <span class="ep-league-chip biz">GOLF</span>
-          <span>Episode · 16m</span>
-        </div>
-        <div class="ep-title">On legacy, LIV, and the long view of a career.</div>
-        <div class="ep-desc">The two-time Masters winner on the next chapter of professional golf and building a brand.</div>
-        <div class="ep-watch">Watch episode →</div>
-      </a>
-
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-toto-wolff-and-george-russell" target="_blank" rel="noopener" data-tags="league-exec motorsport" data-video-url="https://cdn.jwplayer.com/players/XiIzGVmC-Mgmy6TMn.html" data-title="Wolff & Russell">
-        <div class="thumb">
-          <img class="thumb-img" loading="lazy" alt="Toto Wolff and George Russell"
-               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/06/XiIzGVmC.jpg">
-          <div class="thumb-scrim"></div>
-          <div class="thumb-duration">23:50</div>
-          <div class="thumb-media">
-            <div class="thumb-name">Wolff &amp; Russell</div>
-            <div class="thumb-sub">Mercedes-AMG Petronas F1 Team</div>
-          </div>
-          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
-        </div>
-        <div class="ep-meta-row">
-          <span class="ep-league-chip f1">F1</span>
-          <span>Episode · 24m</span>
-        </div>
-        <div class="ep-title">Accelerating Leadership — the Mercedes-AMG Petronas F1 story.</div>
-        <div class="ep-desc">Toto Wolff and George Russell on building a championship team and the business behind the grid.</div>
-        <div class="ep-watch">Watch episode →</div>
-      </a>
-
-      <a class="ep-card reveal" href="https://www.nasdaq.com/videos/winning-formula-valtteri-bottas" target="_blank" rel="noopener" data-tags="motorsport" data-video-url="https://cdn.jwplayer.com/players/Tb9ycGIl-Mgmy6TMn.html" data-title="Valtteri Bottas">
-        <div class="thumb">
-          <img class="thumb-img" loading="lazy" alt="Valtteri Bottas"
-               src="https://www.nasdaq.com/sites/acquia.prod/files/jw-player/2025/12/Tb9ycGIl.jpg">
-          <div class="thumb-scrim"></div>
-          <div class="thumb-duration">15:22</div>
-          <div class="thumb-media">
-            <div class="thumb-name">Valtteri Bottas</div>
-            <div class="thumb-sub">F1 Driver · 10x Grand Prix Winner</div>
-          </div>
-          <div class="thumb-play"><div class="thumb-play-btn"></div></div>
-        </div>
-        <div class="ep-meta-row">
-          <span class="ep-league-chip f1">F1</span>
-          <span>Episode · 15m</span>
-        </div>
-        <div class="ep-title">Motivation, race prep, and reinvention mid-career.</div>
-        <div class="ep-desc">The F1 veteran on how his drive to win has evolved and what keeps him fast.</div>
-        <div class="ep-watch">Watch episode →</div>
-      </a>
-
+        <!-- Episode cards render here from content.json -->
       </div>
     </div>
   </div>
@@ -1948,57 +1248,7 @@
     <h2 class="section-title" id="moments-title">Moments from the <em>series.</em></h2>
 
     <div class="photo-marquee" id="photo-marquee" aria-roledescription="carousel">
-
-      <div class="photo-slide active" data-video-url="https://cdn.jwplayer.com/players/reDyhqnx-Mgmy6TMn.html" data-title="Marques Colston">
-        <img src="https://www.nasdaq.com/sites/acquia.prod/files/2025/12/19/MarquesColston_TWF_0224255_0.jpg"
-             alt="Winning Formula Marques Colston" loading="eager">
-        <div class="photo-slide-caption">
-          <div class="photo-slide-eyebrow"><span class="dot"></span>Marques Colston · Athlete Founder</div>
-          <div class="photo-slide-title">From the end zone to the <em style="font-family: var(--ff-serif); font-style: italic; font-weight: 400;">endowment.</em></div>
-          <div class="photo-slide-sub">On founding Champion Venture Partners and translating locker-room discipline into disciplined capital allocation.</div>
-        </div>
-      </div>
-
-      <div class="photo-slide" data-video-url="https://cdn.jwplayer.com/players/XiIzGVmC-Mgmy6TMn.html" data-title="Wolff &amp; Russell">
-        <img src="https://www.nasdaq.com/sites/acquia.prod/files/2025/12/19/MercedesF1_TWF_06162536%20%281%29.jpg"
-             alt="Mercedes-AMG Petronas F1 team at Nasdaq" loading="lazy">
-        <div class="photo-slide-caption">
-          <div class="photo-slide-eyebrow"><span class="dot"></span>Wolff &amp; Russell · Mercedes-AMG Petronas F1</div>
-          <div class="photo-slide-title">Accelerating <em style="font-family: var(--ff-serif); font-style: italic; font-weight: 400;">leadership</em> at 200 mph.</div>
-          <div class="photo-slide-sub">Toto Wolff and George Russell on building a championship team and the business behind the grid.</div>
-        </div>
-      </div>
-
-      <div class="photo-slide" data-video-url="https://cdn.jwplayer.com/players/5XEtJGIU-Mgmy6TMn.html" data-title="Kelley O&rsquo;Hara">
-        <img src="https://www.nasdaq.com/sites/acquia.prod/files/2025/06/10/KelleyOHara_05082527.jpg"
-             alt="The Winning Formula with Kelley O&rsquo;Hara" loading="lazy">
-        <div class="photo-slide-caption">
-          <div class="photo-slide-eyebrow"><span class="dot"></span>Kelley O&rsquo;Hara · 2x World Cup Champion</div>
-          <div class="photo-slide-title">The business case for <em style="font-family: var(--ff-serif); font-style: italic; font-weight: 400;">women&rsquo;s sports.</em></div>
-          <div class="photo-slide-sub">On the explosive growth of women&rsquo;s athletics and how her podcast is reshaping athlete-led media.</div>
-        </div>
-      </div>
-
-      <div class="photo-slide" data-video-url="https://cdn.jwplayer.com/players/BSvpXgrh-Mgmy6TMn.html" data-title="Alex Honnold">
-        <img src="https://www.nasdaq.com/sites/acquia.prod/files/2026/01/09/AlexHannold_TWF_06052532.jpg"
-             alt="Alex Honnold on The Winning Formula" loading="lazy">
-        <div class="photo-slide-caption">
-          <div class="photo-slide-eyebrow"><span class="dot"></span>Alex Honnold · Free-Solo Climber</div>
-          <div class="photo-slide-title">Risk, routine, and the economics of the <em style="font-family: var(--ff-serif); font-style: italic; font-weight: 400;">impossible.</em></div>
-          <div class="photo-slide-sub">The free-solo climbing icon on calculated risk, philanthropy, and long-term focus.</div>
-        </div>
-      </div>
-
-      <div class="photo-slide" data-video-url="https://cdn.jwplayer.com/players/vwiq3RC5-Mgmy6TMn.html" data-title="Alejandro Bedoya">
-        <img src="https://www.nasdaq.com/sites/acquia.prod/files/2026/02/23/TWF%20-%20Alejandro%20Bedoya_Still-4_0.png"
-             alt="The Winning Formula with Alejandro Bedoya" loading="lazy">
-        <div class="photo-slide-caption">
-          <div class="photo-slide-eyebrow"><span class="dot"></span>Alejandro Bedoya · Major League Soccer</div>
-          <div class="photo-slide-title">On the growth of MLS and <em style="font-family: var(--ff-serif); font-style: italic; font-weight: 400;">building beyond the field.</em></div>
-          <div class="photo-slide-sub">The Philadelphia Union captain on his soccer journey and the career he&rsquo;s building off the pitch.</div>
-        </div>
-      </div>
-
+      <!-- Photo slides render here from content.json -->
       <div class="photo-marquee-dots" id="photo-marquee-dots" role="tablist" aria-label="Select slide"></div>
       <div class="photo-marquee-progress" aria-hidden="true">
         <div class="photo-marquee-progress-bar" id="photo-marquee-progress"></div>
@@ -2017,107 +1267,11 @@
     <h2 class="section-title" id="hosts-title" style="margin-bottom: var(--s-7);">The voices <em>behind the bell.</em></h2>
 
     <div class="hosts-grid" id="hosts-grid">
-      <div class="host-card reveal">
-        <img
-          class="host-avatar a"
-          src="https://www.nasdaq.com/sites/acquia.prod/files/2024/11/08/Joel%20Kolani.png"
-          alt="Joel Kolani"
-          loading="lazy">
-        <div>
-          <div class="host-name">Joel Kolani</div>
-          <div class="host-role">Head of Brand Strategy &amp; Creative Content · Nasdaq</div>
-          <p class="host-bio">
-            A former sports radio host with expertise across the NFL, NBA, MLB, European soccer, and F1. Joel leads brand storytelling at Nasdaq and brings a journalist's instincts to every conversation.
-          </p>
-        </div>
-      </div>
-
-      <div class="host-card reveal">
-        <img
-          class="host-avatar b"
-          src="https://www.nasdaq.com/sites/acquia.prod/files/2024/09/10/PoppyShen.png"
-          alt="Poppy Shen"
-          loading="lazy">
-        <div>
-          <div class="host-name">Poppy Shen</div>
-          <div class="host-role">Journalist &amp; Video Producer · Nasdaq</div>
-          <p class="host-bio">
-            A journalist and video producer with experience at Yahoo, AOL, and CNN, Poppy has covered stories spanning sports, culture, and the AAPI community, and brings depth and empathy to every interview.
-          </p>
-        </div>
-      </div>
+      <!-- Host cards render here from content.json -->
     </div>
   </div>
 </section>
 
-<!-- =========================================================
-     FOOTER — Nasdaq Webflow footer
-     ========================================================= -->
-<footer id="footer" class="footer-wrapper">
-  <section class="footer-container">
-    <div class="column-container">
-      <div class="columns" id="footer-columns">
-        <div class="link-column">
-          <a href="http://ir.nasdaq.com/" target="_blank" rel="noopener" class="footer-link">Investor Relations</a>
-          <a href="https://www.nasdaq.com/about/careers" target="_blank" rel="noopener" class="footer-link">Careers</a>
-          <a href="https://www.nasdaq.com/app/nasdaq-markets" target="_blank" rel="noopener" class="footer-link">Mobile Apps</a>
-          <a href="https://www.nasdaq.com/trust-center" target="_blank" rel="noopener" class="footer-link">Trust Center</a>
-          <a href="https://www.nasdaq.com/nasdaq-accessibility-commitment" target="_blank" rel="noopener" class="footer-link">Accessibility</a>
-        </div>
-        <div class="link-column">
-          <a href="https://www.nasdaq.com/contact-us" target="_blank" rel="noopener" class="footer-link">Contact</a>
-          <a href="https://www.nasdaq.com/advertising" target="_blank" rel="noopener" class="footer-link">Advertise</a>
-          <a href="https://www.nasdaq.com/marketsite" target="_blank" rel="noopener" class="footer-link">Nasdaq Marketsite</a>
-          <a href="https://www.nasdaq.com/newsletters" target="_blank" rel="noopener" class="footer-link">Newsletters</a>
-        </div>
-        <div class="link-column">
-          <a href="https://www.nasdaq.com/privacy-statement" target="_blank" rel="noopener" class="footer-link privacy-legal">Privacy Policy</a>
-          <a href="https://www.nasdaq.com/cookie-statement" target="_blank" rel="noopener" class="footer-link privacy-legal">Cookies</a>
-          <a href="https://www.nasdaq.com/legal" target="_blank" rel="noopener" class="footer-link privacy-legal">Legal</a>
-          <a href="https://www.nasdaq.com/" target="_blank" rel="noopener" class="footer-link privacy-legal">Cookie Settings</a>
-        </div>
-      </div>
-
-      <div class="social-icons-container">
-        <div class="social-icons-mobile">
-          <a id="Facebook" href="https://www.facebook.com/Nasdaq/" target="_blank" rel="noopener" class="facebook" aria-label="Facebook"><svg class="facebook" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" aria-hidden="true"><path fill="#fff" d="M282.6,1H17.4C8.4,1,1,8.4,1,17.4v265.1c0,9.1,7.4,16.4,16.4,16.4h142.8v-115.3h-38.8v-45h38.8v-33.2c0-38.4,23.5-59.4,57.8-59.4s30.6,1.3,34.7,1.8v40.2h-23.8c-18.7,0-22.3,8.9-22.3,21.9v28.7h44.5l-5.8,45h-38.7v115.3h76c9.1.1,16.4-7.3,16.4-16.3V17.4c0-9.1-7.4-16.4-16.4-16.4Z"/></svg></a>
-          <a id="X" href="https://x.com/Nasdaq" target="_blank" rel="noopener" class="x"><img loading="lazy" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa64_x-social.svg" alt="" class="x"></a>
-          <a id="LinkedIn" href="https://www.linkedin.com/company/nasdaq/" target="_blank" rel="noopener" class="linkedin"><img loading="lazy" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa65_linkedin-social.svg" alt="" class="linkedin"></a>
-          <a id="Instagram" href="https://www.instagram.com/nasdaq" target="_blank" rel="noopener" class="instagram"><img loading="lazy" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa58_instagram-social.svg" alt="" class="instagram"></a>
-          <a id="Pinterest" href="https://www.pinterest.com/nasdaq/" target="_blank" rel="noopener" class="pinterest"><img loading="lazy" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa59_pinterest-social.svg" alt="" class="pinterest"></a>
-        </div>
-      </div>
-
-      <div class="nasdaq-logo-container-full">
-        <a href="https://www.nasdaq.com/" target="_blank" rel="noopener" class="nasdaq-logo-footer"><img loading="lazy" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa5b_nasdaq-logo.svg" alt="" class="nasdaq-logo"></a>
-      </div>
-    </div>
-
-    <div class="logo-copyright-container">
-      <div class="nasdaq-logo-container">
-        <img loading="lazy" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa5b_nasdaq-logo.svg" alt="" class="nasdaq-logo">
-      </div>
-      <div class="social-copyright-container">
-        <div class="social-icons">
-          <a href="https://www.facebook.com/Nasdaq/" target="_blank" rel="noopener" class="facebook" aria-label="Facebook"><svg id="facebook" class="facebook" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" aria-hidden="true"><path fill="#fff" d="M282.6,1H17.4C8.4,1,1,8.4,1,17.4v265.1c0,9.1,7.4,16.4,16.4,16.4h142.8v-115.3h-38.8v-45h38.8v-33.2c0-38.4,23.5-59.4,57.8-59.4s30.6,1.3,34.7,1.8v40.2h-23.8c-18.7,0-22.3,8.9-22.3,21.9v28.7h44.5l-5.8,45h-38.7v115.3h76c9.1.1,16.4-7.3,16.4-16.3V17.4c0-9.1-7.4-16.4-16.4-16.4Z"/></svg></a>
-          <a href="https://x.com/Nasdaq" target="_blank" rel="noopener" class="x"><img id="x" loading="lazy" alt="" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa64_x-social.svg" class="x"></a>
-          <a href="https://www.linkedin.com/company/nasdaq/" target="_blank" rel="noopener" class="linkedin"><img id="linkedin" loading="lazy" alt="" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa65_linkedin-social.svg" class="linkedin"></a>
-          <a href="https://www.instagram.com/nasdaq" target="_blank" rel="noopener" class="instagram"><img id="instagram" loading="lazy" alt="" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa58_instagram-social.svg" class="instagram"></a>
-          <a href="https://www.pinterest.com/nasdaq/" target="_blank" rel="noopener" class="pinterest"><img id="pinterest" loading="lazy" alt="" src="https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa59_pinterest-social.svg" class="pinterest"></a>
-        </div>
-        <div class="copyright-inline-2">© <span id="spanYear"></span>, Nasdaq, Inc. All Rights Reserved.</div>
-      </div>
-    </div>
-  </section>
-  <script>
-    /* Inline — fires immediately on parse. Keeps the footer year
-       current regardless of whether the main script block runs. */
-    (function () {
-      var el = document.getElementById('spanYear');
-      if (el) el.textContent = new Date().getFullYear();
-    })();
-  </script>
-</footer>
 
 <!-- =========================================================
      SCRIPTS
@@ -2188,88 +1342,6 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     } catch (e) { /* noop */ }
   })();
 
-  /* Footer copyright year */
-  const spanYear = document.getElementById('spanYear');
-  if (spanYear) spanYear.textContent = new Date().getFullYear();
-
-  /* Hide nav on scroll down, reveal on scroll up */
-  (function () {
-    const nav = document.querySelector('.nasdaq-navbar');
-    if (!nav) return;
-
-    const SHOW_ABOVE = 80;      /* always show when near the top */
-    const DELTA = 6;            /* min px change before reacting */
-    let lastY = window.scrollY;
-    let ticking = false;
-
-    function update() {
-      const y = window.scrollY;
-      const dy = y - lastY;
-
-      if (Math.abs(dy) < DELTA) {
-        ticking = false;
-        return;
-      }
-
-      if (y < SHOW_ABOVE) {
-        /* Always show near the top */
-        nav.classList.remove('is-hidden');
-        document.body.classList.remove('nav-hidden');
-      } else if (dy > 0) {
-        /* Scrolling down → hide */
-        nav.classList.add('is-hidden');
-        document.body.classList.add('nav-hidden');
-      } else {
-        /* Scrolling up → show */
-        nav.classList.remove('is-hidden');
-        document.body.classList.remove('nav-hidden');
-      }
-
-      lastY = y;
-      ticking = false;
-    }
-
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        window.requestAnimationFrame(update);
-        ticking = true;
-      }
-    }, { passive: true });
-  })();
-
-  /* Mobile menu toggle */
-  (function () {
-    const toggle = document.getElementById('nav-mobile-toggle');
-    const menu   = document.getElementById('mobile-menu');
-    if (!toggle || !menu) return;
-
-    function setOpen(open) {
-      menu.classList.toggle('is-open', open);
-      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-      document.body.classList.toggle('no-scroll', open);
-    }
-
-    toggle.addEventListener('click', () => {
-      const isOpen = menu.classList.contains('is-open');
-      setOpen(!isOpen);
-    });
-
-    /* Close the menu on Escape */
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && menu.classList.contains('is-open')) setOpen(false);
-    });
-
-    /* Close the menu when a link inside it is tapped */
-    menu.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => setOpen(false));
-    });
-
-    /* Reset when the viewport grows past the mobile breakpoint */
-    const mql = window.matchMedia('(min-width: 992px)');
-    mql.addEventListener('change', (e) => { if (e.matches) setOpen(false); });
-  })();
-
   /* Scroll reveal */
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => {
@@ -2305,6 +1377,8 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     });
     carousel.scrollTo({ left: 0, behavior: 'smooth' });
     updateCarouselNav();
+    /* Recompute show-more for the new visible set */
+    if (typeof refreshShowMoreState === 'function') refreshShowMoreState();
   });
 
   /* ===========================================================
@@ -2345,62 +1419,103 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
   updateCarouselNav();
 
   /* ===========================================================
-     JW PLAYER MODAL — play videos inline via JW preview iframe
+     INLINE VIDEO PLAYBACK — clicking a thumb plays the video
+     in place (no modal). Only one video plays at any time —
+     starting a new one collapses any other that's playing.
      =========================================================== */
-  const modal        = document.getElementById('jw-modal');
-  const modalCaption = document.getElementById('jw-modal-caption');
-  const modalClose   = document.getElementById('jw-modal-close');
-  const modalPlayer  = document.getElementById('jw-modal-player');
 
-  let modalIframe = null;
+  /* Track the currently playing card so we can collapse it when
+     a new video is requested. */
+  let activeVideoCard = null;
 
-  function openVideo(videoUrl, title) {
-    if (!videoUrl || !modal || !modalPlayer) return;
-
-    if (title && modalCaption) modalCaption.textContent = title;
-    modal.classList.add('open');
-    document.body.classList.add('no-scroll');
-
-    /* Build an iframe each time so closing fully halts playback */
-    modalPlayer.innerHTML = '';
-    modalIframe = document.createElement('iframe');
-    modalIframe.className = 'jw-modal-iframe-el';
-    modalIframe.src = videoUrl;
-    modalIframe.allow = 'autoplay; fullscreen; picture-in-picture';
-    modalIframe.allowFullscreen = true;
-    modalIframe.setAttribute('title', title || 'The Winning Formula');
-    modalIframe.style.width = '100%';
-    modalIframe.style.height = '100%';
-    modalIframe.style.border = '0';
-    modalIframe.style.background = '#000';
-    modalPlayer.appendChild(modalIframe);
+  function collapseActiveVideo() {
+    if (!activeVideoCard) return;
+    /* Remove the iframe by clearing the marker class — the markup
+       returns to its pre-click thumbnail-only state. */
+    const player = activeVideoCard.querySelector('.inline-player');
+    if (player) {
+      player.innerHTML = '';
+      player.remove();
+    }
+    activeVideoCard.classList.remove('is-playing');
+    activeVideoCard = null;
   }
 
-  function closeVideo() {
-    modal.classList.remove('open');
-    document.body.classList.remove('no-scroll');
-    if (modalPlayer) modalPlayer.innerHTML = '';
-    modalIframe = null;
+  function playInline(trigger, videoUrl, title) {
+    if (!trigger || !videoUrl) return;
+
+    /* If THIS card is already playing, do nothing (let JW Player
+       controls handle pause/resume internally). */
+    if (trigger === activeVideoCard) return;
+
+    /* Collapse whatever's playing elsewhere */
+    collapseActiveVideo();
+
+    /* Decide where the iframe goes: a .thumb inside the trigger,
+       or the trigger itself if it IS the thumb. */
+    const host = trigger.classList.contains('thumb')
+      ? trigger
+      : (trigger.querySelector('.thumb') || trigger);
+
+    /* The series episodes' videoUrl uses player ID `qeq4Z2nO` which is
+       the no-autoplay player. That's correct for page-load behavior, but
+       once a user has CLICKED a card they're asking the video to play.
+       Swap to the autoplay-enabled player (`jO5YHc4l`) just for the
+       inline iframe so the click actually triggers playback. */
+    const playUrl = videoUrl.replace(
+      /\/players\/([A-Za-z0-9]+)-qeq4Z2nO\.html/,
+      '/players/$1-jO5YHc4l.html'
+    );
+
+    const iframe = document.createElement('iframe');
+    iframe.src = playUrl;
+    iframe.allow = 'autoplay; fullscreen; picture-in-picture; encrypted-media';
+    iframe.allowFullscreen = true;
+    iframe.setAttribute('title', title || 'The Winning Formula');
+    iframe.setAttribute('frameborder', '0');
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.border = '0';
+    iframe.style.background = '#000';
+    iframe.style.display = 'block';
+
+    /* Build the inline player layer */
+    const player = document.createElement('div');
+    player.className = 'inline-player';
+    player.appendChild(iframe);
+
+    host.appendChild(player);
+    trigger.classList.add('is-playing');
+    activeVideoCard = trigger;
   }
 
-  /* Event-delegation: clicks on anything with data-video-url anywhere in
-     the document open the modal. This survives DOM replacement from
-     loadContent() — bindings stay attached to the document, not the cards. */
+  /* Event-delegation: clicks on anything with data-video-url
+     anywhere in the document trigger inline playback. */
   document.addEventListener('click', (e) => {
     const trigger = e.target.closest('[data-video-url]');
     if (!trigger) return;
+    /* If the click came from inside an already-playing iframe area,
+       let it bubble normally (don't re-trigger). */
+    if (e.target.closest('.inline-player')) return;
+
     const videoUrl = trigger.getAttribute('data-video-url');
     const title    = trigger.getAttribute('data-title') || '';
     if (videoUrl) {
       e.preventDefault();
-      openVideo(videoUrl, title);
+      e.stopPropagation();
+      playInline(trigger, videoUrl, title);
     }
   });
 
-  if (modalClose) modalClose.addEventListener('click', closeVideo);
-  if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) closeVideo(); });
+  /* Keyboard support: Enter or Space on a role=button card plays the video */
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal && modal.classList.contains('open')) closeVideo();
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const trigger = e.target.closest('[data-video-url][role="button"]');
+    if (!trigger) return;
+    e.preventDefault();
+    const videoUrl = trigger.getAttribute('data-video-url');
+    const title    = trigger.getAttribute('data-title') || '';
+    if (videoUrl) playInline(trigger, videoUrl, title);
   });
 
   /* ===========================================================
@@ -2589,16 +1704,6 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     }
   }
 
-  function renderNav(nav) {
-    if (!nav) return;
-    const desktopLinks = document.getElementById('nav-links-desktop');
-    const mobileLinks  = document.getElementById('mobile-menu');
-    if (!Array.isArray(nav.links)) return;
-    const html = nav.links.map(l => `<a href="${esc(l.href)}">${esc(l.label)}</a>`).join('');
-    if (desktopLinks) desktopLinks.innerHTML = html;
-    if (mobileLinks)  mobileLinks.innerHTML  = html;
-  }
-
   function renderHero(hero) {
     if (!hero) return;
     const eyebrow = document.querySelector('[data-content="hero.eyebrow"]');
@@ -2615,6 +1720,52 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     }
   }
 
+  /* JWP thumbnail loader with cascading fallbacks.
+     If the primary `/v2/media/{ID}/poster.jpg` 404s or fails to load,
+     we walk through alternate JWP URL patterns until one works.
+     Most videos succeed on the first URL; this helps for new videos
+     where some images haven't been generated yet. */
+  function thumbImgHTML(src, alt) {
+    /* Extract the media ID so we can construct fallbacks */
+    let mid = '';
+    const m = src && src.match(/\/v2\/media\/([A-Za-z0-9]+)\//);
+    if (m) mid = m[1];
+
+    /* Cascade order — try the cleanest URL first, then sized variants
+       (JWP pre-generates 720/640/480/320), then the strip preview */
+    const candidates = [];
+    if (src) candidates.push(src);
+    if (mid) {
+      candidates.push(`https://cdn.jwplayer.com/v2/media/${mid}/poster.jpg?width=720`);
+      candidates.push(`https://cdn.jwplayer.com/v2/media/${mid}/poster.jpg?width=640`);
+      candidates.push(`https://cdn.jwplayer.com/v2/media/${mid}/poster.jpg?width=480`);
+      candidates.push(`https://cdn.jwplayer.com/v2/media/${mid}/poster.jpg?width=320`);
+      candidates.push(`https://cdn.jwplayer.com/thumbs/${mid}-720.jpg`);
+      candidates.push(`https://cdn.jwplayer.com/strips/${mid}-720.jpg`);
+    }
+
+    /* Encode the cascade into a data attribute that an inline onerror
+       handler can step through. JSON-encoded then escaped for HTML attr. */
+    const cascade = esc(JSON.stringify(candidates));
+    const first = esc(candidates[0] || '');
+
+    return `<img class="thumb-img" loading="lazy" src="${first}" alt="${esc(alt || '')}"
+            data-cascade='${cascade}' data-cascade-idx="0"
+            onerror="(function(img){
+              try{
+                var list=JSON.parse(img.dataset.cascade);
+                var i=(parseInt(img.dataset.cascadeIdx,10)||0)+1;
+                if(i<list.length){
+                  img.dataset.cascadeIdx=i;
+                  img.src=list[i];
+                } else {
+                  img.style.background='#0a0e2a';
+                  img.removeAttribute('onerror');
+                }
+              }catch(e){}
+            })(this)">`;
+  }
+
   function renderFeatured(f) {
     if (!f) return;
     const root = document.getElementById('featured-module');
@@ -2625,26 +1776,13 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
         <h2 class="section-title">${richText(f.headline || '')}</h2>
       </div>
       <div class="featured-grid">
-        <a class="thumb reveal" href="${esc(f.episodeUrl || '#')}" target="_blank" rel="noopener" data-video-url="${esc(f.videoUrl || '')}" data-title="${esc(f.guest || '')}">
-          <img class="thumb-img" loading="lazy" src="${esc(f.thumbnail || '')}" alt="${esc(f.thumbnailAlt || f.guest || '')}">
-          <div class="thumb-scrim"></div>
-          ${f.badge ? `<div class="thumb-badge"><span class="live-dot"></span>${esc(f.badge)}</div>` : ''}
-          ${f.duration ? `<div class="thumb-duration">${esc(f.duration)}</div>` : ''}
-          <div class="thumb-media">
-            <div class="thumb-name">${richText(f.guestNameMarkup || f.guest || '')}</div>
-            ${f.subtitle ? `<div class="thumb-sub">${esc(f.subtitle)}</div>` : ''}
-          </div>
+        <div class="thumb" role="button" tabindex="0" data-video-url="${esc(f.videoUrl || '')}" data-title="${esc(f.guest || '')}">
+          ${thumbImgHTML(f.thumbnail, f.thumbnailAlt || f.guest)}
           <div class="thumb-play"><div class="thumb-play-btn"></div></div>
-        </a>
+        </div>
         <div class="reveal">
           ${f.pullQuote ? `<blockquote class="featured-quote">${richText(f.pullQuote)}</blockquote>` : ''}
           ${f.body ? `<p class="featured-body">${esc(f.body)}</p>` : ''}
-          ${(f.bylineLead || f.bylineMeta) ? `
-            <div class="featured-byline">
-              ${f.bylineLead ? `<strong>${esc(f.bylineLead)}</strong>` : ''}
-              ${(f.bylineLead && f.bylineMeta) ? `<span class="sep">·</span>` : ''}
-              ${f.bylineMeta ? `<span>${esc(f.bylineMeta)}</span>` : ''}
-            </div>` : ''}
         </div>
       </div>`;
   }
@@ -2665,21 +1803,14 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     }
 
     if (!carousel || !Array.isArray(s.episodes)) return;
-    carousel.innerHTML = s.episodes.map(ep => `
-      <a class="ep-card reveal"
-         href="${esc(ep.episodeUrl || '#')}"
-         target="_blank" rel="noopener"
-         data-tags="${esc((ep.filters || []).join(' '))}"
-         data-video-url="${esc(ep.videoUrl || '')}"
-         data-title="${esc(ep.guest || '')}">
+    carousel.innerHTML = s.episodes.map((ep, idx) => `
+      <div class="ep-card reveal${idx >= 6 ? ' is-overflow' : ''}"
+           role="button" tabindex="0"
+           data-tags="${esc((ep.filters || []).join(' '))}"
+           data-video-url="${esc(ep.videoUrl || '')}"
+           data-title="${esc(ep.guest || '')}">
         <div class="thumb">
-          <img class="thumb-img" loading="lazy" alt="${esc(ep.thumbnailAlt || ep.guest || '')}" src="${esc(ep.thumbnail || '')}">
-          <div class="thumb-scrim"></div>
-          ${ep.duration ? `<div class="thumb-duration">${esc(ep.duration)}</div>` : ''}
-          <div class="thumb-media">
-            <div class="thumb-name">${richText(ep.guestNameMarkup || ep.guest || '')}</div>
-            ${ep.subtitle ? `<div class="thumb-sub">${esc(ep.subtitle)}</div>` : ''}
-          </div>
+          ${thumbImgHTML(ep.thumbnail, ep.thumbnailAlt || ep.guest)}
           <div class="thumb-play"><div class="thumb-play-btn"></div></div>
         </div>
         <div class="ep-meta-row">
@@ -2688,9 +1819,66 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
         </div>
         ${ep.title ? `<div class="ep-title">${esc(ep.title)}</div>` : ''}
         ${ep.description ? `<div class="ep-desc">${esc(ep.description)}</div>` : ''}
-        <div class="ep-watch">Watch episode →</div>
-      </a>`).join('');
+      </div>`).join('');
+
+    /* "Show more" button is rendered by a separate function so it can be
+       refreshed independently when filters change. */
+    refreshShowMoreState();
   }
+
+  /* ===========================================================
+     SHOW MORE / SHOW LESS — mobile-only collapse of the series
+     carousel to 6 episodes by default.
+
+     Cards beyond index 6 have the `is-overflow` class.
+     On mobile, those cards are hidden via CSS by default.
+     This function injects/removes the toggle button and wires
+     its click handler.
+     =========================================================== */
+  function refreshShowMoreState() {
+    const carousel = document.getElementById('episodes-carousel');
+    if (!carousel) return;
+
+    /* Remove any existing button — we'll re-add if needed */
+    const existing = document.getElementById('show-more-btn');
+    if (existing) existing.remove();
+
+    /* Reset to collapsed whenever cards re-render or filter changes */
+    carousel.classList.remove('is-expanded');
+
+    /* Only on mobile, and only if there are overflow cards visible
+       under the current filter. */
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (!isMobile) return;
+
+    /* Count overflow cards that are NOT hidden by a filter */
+    const overflowVisible = carousel.querySelectorAll(
+      '.ep-card.is-overflow:not(.filter-hidden)'
+    );
+    if (overflowVisible.length === 0) return;
+
+    /* Inject the button right after the carousel-stage */
+    const stage = carousel.closest('.carousel-stage');
+    if (!stage) return;
+
+    const btn = document.createElement('button');
+    btn.id = 'show-more-btn';
+    btn.className = 'show-more-btn';
+    btn.type = 'button';
+    btn.innerHTML = `
+      <span class="show-more-label">Show More</span>
+      <svg class="show-more-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>`;
+    btn.addEventListener('click', () => {
+      carousel.classList.add('is-expanded');
+      btn.remove();
+    });
+    stage.after(btn);
+  }
+
+  /* When the viewport crosses the mobile breakpoint, recompute */
+  window.addEventListener('resize', refreshShowMoreState);
 
   function renderMoments(m) {
     if (!m) return;
@@ -2706,9 +1894,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     const prog = stage.querySelector('.photo-marquee-progress');
 
     stage.innerHTML = m.slides.map((s, i) => `
-      <div class="photo-slide${i === 0 ? ' active' : ''}"
-           data-video-url="${esc(s.videoUrl || '')}"
-           data-title="${esc(s.guest || '')}">
+      <div class="photo-slide${i === 0 ? ' active' : ''}">
         <img src="${esc(s.photo || '')}" alt="${esc(s.photoAlt || s.guest || '')}" loading="${i === 0 ? 'eager' : 'lazy'}">
         <div class="photo-slide-caption">
           ${(s.guest || s.guestLabel) ? `
@@ -2752,32 +1938,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       </div>`).join('');
   }
 
-  function renderFooter(f) {
-    if (!f) return;
-    const columnsEl = document.getElementById('footer-columns');
-    const socialEls = document.querySelectorAll('.social-icons, .social-icons-mobile');
-
-    if (columnsEl && Array.isArray(f.columns)) {
-      columnsEl.innerHTML = f.columns.map(col => `
-        <div class="link-column">
-          ${col.map(l => `<a href="${esc(l.href)}" target="_blank" rel="noopener" class="footer-link${l.muted ? ' privacy-legal' : ''}">${esc(l.label)}</a>`).join('')}
-        </div>`).join('');
-    }
-
-    /* Preserve the existing social icon SVGs/images but update URLs.
-       Each social anchor has a class matching the platform name. */
-    if (Array.isArray(f.social)) {
-      socialEls.forEach(row => {
-        f.social.forEach(s => {
-          const anchor = row.querySelector('a.' + s.platform);
-          if (anchor && s.href) anchor.href = s.href;
-        });
-      });
-    }
-  }
-
-  /* Master loader. Renders only what's present in the JSON, leaves
-     the rest untouched so the baked-in fallback markup stays visible. */
+  /* Master loader. Renders only what's present in the JSON. */
   async function loadContent() {
     let data = null;
     try {
@@ -2789,14 +1950,12 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       return;
     }
 
-    try { renderNav(data.nav);           } catch (e) { console.warn('[content] nav render error', e); }
     try { renderTicker(data.ticker);     } catch (e) { console.warn('[content] ticker render error', e); }
     try { renderHero(data.hero);         } catch (e) { console.warn('[content] hero render error', e); }
     try { renderFeatured(data.featured); } catch (e) { console.warn('[content] featured render error', e); }
     try { renderSeries(data.series);     } catch (e) { console.warn('[content] series render error', e); }
     try { renderMoments(data.moments);   } catch (e) { console.warn('[content] moments render error', e); }
     try { renderHosts(data.hosts);       } catch (e) { console.warn('[content] hosts render error', e); }
-    try { renderFooter(data.footer);     } catch (e) { console.warn('[content] footer render error', e); }
 
     /* After we've replaced markup, re-wire the dynamic behaviors that
        depend on the new DOM nodes (filters, carousel nav, modal hooks,
@@ -2806,26 +1965,56 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
 
   /* Kick it off */
   loadContent();
+
+  /* ===========================================================
+     IFRAME HEIGHT BROADCASTER
+     This page is designed to be embedded inside Nasdaq's CMS via
+     <iframe>. iframes don't auto-size to their content, so we
+     broadcast our document height to the parent frame whenever
+     it changes. The parent can listen for these messages and
+     resize the iframe accordingly:
+
+       window.addEventListener('message', (e) => {
+         if (e.data && e.data.type === 'TWF_HEIGHT') {
+           document.getElementById('twf-iframe').style.height = e.data.height + 'px';
+         }
+       });
+
+     The page sends a height update on load, when the window resizes,
+     and whenever the DOM mutates (content render, video play/collapse).
+     =========================================================== */
+  (function () {
+    function sendHeight() {
+      try {
+        const h = document.documentElement.scrollHeight;
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'TWF_HEIGHT', height: h }, '*');
+        }
+      } catch (e) { /* noop — cross-origin parent may reject */ }
+    }
+
+    /* Initial + on load (after fonts / images render) */
+    sendHeight();
+    window.addEventListener('load', sendHeight);
+    window.addEventListener('resize', sendHeight);
+
+    /* Re-send whenever anything mutates the body — covers
+       content render, video play/collapse, marquee transitions, etc.
+       Throttled so we don't spam the parent. */
+    let pending = false;
+    const mo = new MutationObserver(() => {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(() => {
+        pending = false;
+        sendHeight();
+      });
+    });
+    mo.observe(document.body, { childList: true, subtree: true, attributes: true });
+  })();
 </script>
 
-<!-- =========================================================
-     JW PLAYER VIDEO MODAL
-     Opened when an element with data-video-url is clicked.
-     The video URL comes from content.json (per-episode field).
-     ========================================================= -->
-<div class="jw-modal" id="jw-modal" role="dialog" aria-modal="true" aria-labelledby="jw-modal-caption">
-  <div class="jw-modal-dialog">
-    <div class="jw-modal-caption" id="jw-modal-caption">The Winning Formula</div>
-    <button class="jw-modal-close" id="jw-modal-close" aria-label="Close video">
-      <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M2 2 L12 12 M12 2 L2 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-      </svg>
-    </button>
-    <div class="jw-modal-iframe" id="jw-modal-player"></div>
-  </div>
-</div>
-
-<!-- JW Player library (Nasdaq's configured library) -->
+<!-- JW Player library — preloads for faster iframe instantiation on first click -->
 <script src="https://cdn.jwplayer.com/libraries/WXJkqpdN.js"></script>
 
 </body>
