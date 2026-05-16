@@ -223,7 +223,7 @@
     border-bottom: 1px solid var(--line-on-dark);
   }
 
-  .hero-video {
+  .hero-poster {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -232,12 +232,21 @@
     z-index: 0;
     pointer-events: none;
   }
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    pointer-events: none;
+  }
   .hero-motion-lines {
     position: absolute;
     left: 0; right: 0;
     width: 100%;
     height: 180px;
-    z-index: 1;
+    z-index: 2;
     pointer-events: none;
     opacity: 0.7;
     overflow: hidden;
@@ -249,7 +258,7 @@
   .hero-video-overlay {
     position: absolute;
     inset: 0;
-    z-index: 2;
+    z-index: 3;
     background-image: linear-gradient(90deg, #08062a 0%, #08062a 40%, rgba(8, 6, 42, 0.5) 80%, rgba(8, 6, 42, 0.2) 100%);
     pointer-events: none;
   }
@@ -284,7 +293,7 @@
 
   .hero-inner {
     position: relative;
-    z-index: 3;
+    z-index: 4;
     width: 100%;
     padding: var(--s-8) var(--gutter);
     display: block;
@@ -944,9 +953,15 @@
       display: none;
     }
   }
+  .show-more-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--s-6);
+  }
   .show-more-btn {
-    display: none;
-    margin: var(--s-6) auto 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     padding: 12px 22px;
     border-radius: 999px;
     background: transparent;
@@ -958,8 +973,6 @@
     letter-spacing: 0.04em;
     text-transform: uppercase;
     cursor: pointer;
-    align-items: center;
-    gap: 8px;
     transition: background 180ms, color 180ms;
   }
   .show-more-btn:hover {
@@ -970,9 +983,6 @@
     width: 14px;
     height: 14px;
     transition: transform 200ms;
-  }
-  @media (max-width: 768px) {
-    .show-more-btn { display: inline-flex; }
   }
 
   /* Make new <div role="button"> cards behave like clickable cards */
@@ -1154,15 +1164,21 @@
      HERO
      ========================================================= -->
 <section class="hero">
-  <!-- Background video (autoplay, muted, loop) -->
+  <!-- Hero background: fallback poster image (loads instantly), with
+       video layered on top once it's ready. If the video fails to load
+       (network, CORS, etc.), the poster image stays visible. -->
+  <img
+    class="hero-poster"
+    src="https://cdn.jwplayer.com/thumbs/mtDTICbx-1920.jpg"
+    alt=""
+    aria-hidden="true"
+    fetchpriority="high">
   <video
     class="hero-video"
     autoplay muted loop playsinline
-    poster="winning-formula_1-poster-00001.jpg"
     preload="auto"
     aria-hidden="true">
-    <source src="winning-formula_1-transcode.webm" type="video/webm">
-    <source src="winning-formula_1-transcode.mp4" type="video/mp4">
+    <source src="https://cdn.jwplayer.com/videos/mtDTICbx-qgCdanU1.mp4" type="video/mp4">
   </video>
   <div class="hero-video-overlay" aria-hidden="true"></div>
 
@@ -1720,22 +1736,26 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     }
   }
 
-  /* JWP thumbnail loader with cascading fallbacks.
-     If the primary `/v2/media/{ID}/poster.jpg` 404s or fails to load,
-     we walk through alternate JWP URL patterns until one works.
-     Most videos succeed on the first URL; this helps for new videos
-     where some images haven't been generated yet. */
-  function thumbImgHTML(src, alt) {
-    /* Extract the media ID so we can construct fallbacks */
-    let mid = '';
-    const m = src && src.match(/\/v2\/media\/([A-Za-z0-9]+)\//);
-    if (m) mid = m[1];
+  /* Extract the JWP media ID from a player iframe URL.
+     videoUrl format: https://cdn.jwplayer.com/players/{MEDIA_ID}-{PLAYER_ID}.html
+     Returns the media ID, or empty string if not parseable. */
+  function extractMediaId(videoUrl) {
+    if (!videoUrl) return '';
+    const m = videoUrl.match(/\/players\/([A-Za-z0-9]+)-[A-Za-z0-9]+\.html/);
+    return m ? m[1] : '';
+  }
 
-    /* Cascade order — try the cleanest URL first, then sized variants
-       (JWP pre-generates 720/640/480/320), then the strip preview */
+  /* JWP thumbnail loader. The HTML derives every thumbnail URL from the
+     videoUrl in content.json — no thumbnail field needed in content.json.
+
+     Cascade: try the cleanest URL first (no size param so JWP picks its
+     default), then explicit pre-generated sizes (720/640/480/320),
+     then the strip preview. Stops at the first URL that loads. */
+  function thumbImgHTML(videoUrl, alt) {
+    const mid = extractMediaId(videoUrl);
     const candidates = [];
-    if (src) candidates.push(src);
     if (mid) {
+      candidates.push(`https://cdn.jwplayer.com/v2/media/${mid}/poster.jpg`);
       candidates.push(`https://cdn.jwplayer.com/v2/media/${mid}/poster.jpg?width=720`);
       candidates.push(`https://cdn.jwplayer.com/v2/media/${mid}/poster.jpg?width=640`);
       candidates.push(`https://cdn.jwplayer.com/v2/media/${mid}/poster.jpg?width=480`);
@@ -1745,7 +1765,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     }
 
     /* Encode the cascade into a data attribute that an inline onerror
-       handler can step through. JSON-encoded then escaped for HTML attr. */
+       handler can step through. */
     const cascade = esc(JSON.stringify(candidates));
     const first = esc(candidates[0] || '');
 
@@ -1777,7 +1797,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       </div>
       <div class="featured-grid">
         <div class="thumb" role="button" tabindex="0" data-video-url="${esc(f.videoUrl || '')}" data-title="${esc(f.guest || '')}">
-          ${thumbImgHTML(f.thumbnail, f.thumbnailAlt || f.guest)}
+          ${thumbImgHTML(f.videoUrl, f.thumbnailAlt || f.guest)}
           <div class="thumb-play"><div class="thumb-play-btn"></div></div>
         </div>
         <div class="reveal">
@@ -1810,7 +1830,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
            data-video-url="${esc(ep.videoUrl || '')}"
            data-title="${esc(ep.guest || '')}">
         <div class="thumb">
-          ${thumbImgHTML(ep.thumbnail, ep.thumbnailAlt || ep.guest)}
+          ${thumbImgHTML(ep.videoUrl, ep.thumbnailAlt || ep.guest)}
           <div class="thumb-play"><div class="thumb-play-btn"></div></div>
         </div>
         <div class="ep-meta-row">
@@ -1840,7 +1860,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     if (!carousel) return;
 
     /* Remove any existing button — we'll re-add if needed */
-    const existing = document.getElementById('show-more-btn');
+    const existing = document.getElementById('show-more-wrap');
     if (existing) existing.remove();
 
     /* Reset to collapsed whenever cards re-render or filter changes */
@@ -1857,9 +1877,15 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     );
     if (overflowVisible.length === 0) return;
 
-    /* Inject the button right after the carousel-stage */
+    /* Inject the button (wrapped in a centering container) right after
+       the carousel-stage. The wrapper uses flex to center the inline
+       button reliably on mobile. */
     const stage = carousel.closest('.carousel-stage');
     if (!stage) return;
+
+    const wrap = document.createElement('div');
+    wrap.id = 'show-more-wrap';
+    wrap.className = 'show-more-wrap';
 
     const btn = document.createElement('button');
     btn.id = 'show-more-btn';
@@ -1872,9 +1898,10 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       </svg>`;
     btn.addEventListener('click', () => {
       carousel.classList.add('is-expanded');
-      btn.remove();
+      wrap.remove();
     });
-    stage.after(btn);
+    wrap.appendChild(btn);
+    stage.after(wrap);
   }
 
   /* When the viewport crosses the mobile breakpoint, recompute */
