@@ -621,7 +621,7 @@
   @media (max-width: 768px) {
     .photo-marquee {
       aspect-ratio: auto;
-      min-height: 480px;
+      min-height: 520px;
     }
   }
 
@@ -678,7 +678,13 @@
     opacity: 1;
   }
   @media (max-width: 768px) {
-    .photo-slide-caption { left: var(--s-5); bottom: var(--s-5); right: var(--s-5); }
+    .photo-slide-caption {
+      left: var(--s-5);
+      right: var(--s-5);
+      /* Sit above the dots + progress bar — dots are at bottom: var(--s-6)
+         and are ~3px tall, so we need ~32px + breathing room */
+      bottom: calc(var(--s-6) + var(--s-5));
+    }
   }
 
   .photo-slide-eyebrow {
