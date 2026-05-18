@@ -77,12 +77,12 @@
         "value": "womens-sports"
       },
       {
-        "label": "League Exec",
-        "value": "league-exec"
+        "label": "Sports Executives",
+        "value": "sports-executives"
       },
       {
-        "label": "Motorsport",
-        "value": "motorsport"
+        "label": "Accelerating Leadership",
+        "value": "accelerating-leadership"
       }
     ],
     "episodes": [
@@ -114,8 +114,8 @@
         "tag": "BIZ",
         "tagClass": "biz",
         "filters": [
-          "league-exec",
-          "motorsport"
+          "sports-executives",
+          "accelerating-leadership"
         ],
         "episodeMeta": "Episode",
         "title": "George Kurtz",
@@ -133,7 +133,7 @@
         "tagClass": "wnba",
         "filters": [
           "womens-sports",
-          "league-exec"
+          "sports-executives"
         ],
         "episodeMeta": "Special",
         "title": "Women's Sports, Built to Scale",
@@ -219,8 +219,8 @@
         "tag": "F1",
         "tagClass": "f1",
         "filters": [
-          "motorsport",
-          "league-exec"
+          "accelerating-leadership",
+          "sports-executives"
         ],
         "episodeMeta": "Episode",
         "title": "Bradley Lord",
@@ -237,7 +237,7 @@
         "tag": "F1",
         "tagClass": "f1",
         "filters": [
-          "motorsport"
+          "accelerating-leadership"
         ],
         "episodeMeta": "Episode",
         "title": "Valtteri Bottas",
@@ -254,7 +254,7 @@
         "tag": "BIZ",
         "tagClass": "biz",
         "filters": [
-          "league-exec"
+          "sports-executives"
         ],
         "episodeMeta": "Episode",
         "title": "Ted Leonsis",
@@ -271,8 +271,8 @@
         "tag": "BIZ",
         "tagClass": "biz",
         "filters": [
-          "league-exec",
-          "motorsport"
+          "sports-executives",
+          "accelerating-leadership"
         ],
         "episodeMeta": "Episode",
         "title": "Christoph Grainger-Herr",
@@ -341,8 +341,8 @@
         "tag": "F1",
         "tagClass": "f1",
         "filters": [
-          "motorsport",
-          "league-exec"
+          "accelerating-leadership",
+          "sports-executives"
         ],
         "episodeMeta": "Special Series",
         "title": "Toto Wolff and George Russell",
@@ -462,8 +462,8 @@
         "tag": "BIZ",
         "tagClass": "biz",
         "filters": [
-          "league-exec",
-          "motorsport"
+          "sports-executives",
+          "accelerating-leadership"
         ],
         "episodeMeta": "Episode",
         "title": "Don McGuire",
@@ -497,7 +497,7 @@
         "tag": "NSCR",
         "tagClass": "biz",
         "filters": [
-          "motorsport",
+          "accelerating-leadership",
           "athlete-founder"
         ],
         "episodeMeta": "Episode",
@@ -515,8 +515,8 @@
         "tag": "F1",
         "tagClass": "f1",
         "filters": [
-          "motorsport",
-          "league-exec"
+          "accelerating-leadership",
+          "sports-executives"
         ],
         "episodeMeta": "Episode",
         "title": "Toto Wolff",
@@ -606,18 +606,18 @@
         "subhead": "The Philadelphia Union captain on his soccer journey and the career he's building off the pitch."
       },
       {
-        "guest": "Marques Colston",
-        "guestLabel": "Athlete Founder",
+        "guest": "Jordan Chiles",
+        "guestLabel": "Olympic Gold Medalist",
         "photo": "https://nasdaqbrandstudio.github.io/winning-formula/images/mc_080814162.jpg",
-        "photoAlt": "Marques Colston at Nasdaq MarketSite",
-        "headline": "Building the <em>athlete investor</em> mindset.",
-        "subhead": "Translating discipline from the field into long-term capital allocation."
+        "photoAlt": "Jordan Chiles on The Winning Formula",
+        "headline": "Building the <em>winning</em> mindset.",
+        "subhead": "Translating discipline into success."
       }
     ]
   },
   "hosts": {
     "eyebrow": "The Hosts",
-    "headline": "The voices <em>behind the bell.</em>",
+    "headline": "The voices <em>behind the series.</em>",
     "people": [
       {
         "name": "Joel Kolani",
