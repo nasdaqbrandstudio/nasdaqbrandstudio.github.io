@@ -1,0 +1,298 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "lastEdited": "2026-05-19",
+    "notes": "Content for the Building Beyond the Edge landing page. See README.md for the editor's guide. Fields marked TODO are placeholders that need editor follow-up before publication."
+  },
+
+  "site": {
+    "title": "Building Beyond the Edge | Nasdaq",
+    "description": "As AI powers a new era of economy where infrastructure, intelligence and capital converge, Nasdaq exists to help builders push beyond the edge and enable progress to scale."
+  },
+
+  "sections": ["hero", "intelligence", "builders", "convergence"],
+
+  "hero": {
+    "eyebrow": "Nasdaq — The AI Economy",
+    "headline": "Building beyond <em>the Edge.</em>",
+    "subhead": "The edge isn't the end &mdash; it's where building begins.",
+    "intro": "As AI powers a new era of economy where infrastructure, intelligence and capital converge, Nasdaq exists to help builders push beyond the edge and enable progress to scale."
+  },
+
+  "intelligence": {
+    "eyebrow": "Section I — The Current State",
+    "headline": "Intelligence as the new <em>operating layer.</em>",
+    "lede": "Artificial intelligence is no longer experimental &mdash; it's operational. From machine learning to generative and agentic systems, intelligence is becoming embedded across the real world &mdash; powering decisions, automating processes, and shaping how systems behave.",
+    "style": {
+      "theme": "dark"
+    },
+    "blocks": [
+      {
+        "type": "quote",
+        "text": "Robotics, and artificial intelligence generally, are truly at the epicenter of the <span class=\"rt-accent\">Fourth Industrial Revolution.</span>",
+        "attribution": "Sofia Saravia",
+        "title": "Nasdaq Information Services",
+        "sourceUrl": "#",
+        "sourceLabel": "Source — Artificial Intelligence: Industry Report & Investment Case"
+      },
+
+      {
+        "type": "stats",
+        "cards": [
+          {
+            "variant": "number",
+            "eyebrow": "2026 Outlook Survey",
+            "number": "20",
+            "unit": "%",
+            "body": "of tech investments are being directed toward AI tools and capabilities on average, based on survey responses from financial institution leaders."
+          },
+          {
+            "variant": "insight",
+            "eyebrow": "Maturity Gap",
+            "label": "Insight",
+            "headline": "71% of leaders say their organizations are still in early AI adoption.",
+            "subLabel": "Why This Matters",
+            "body": "Despite growing investment, most institutions lack the infrastructure, data, talent, and processes to scale AI effectively. Bridging this gap is critical to realizing returns.",
+            "source": "Source — Nasdaq 2026 AI Survey"
+          }
+        ]
+      },
+
+      {
+        "type": "image",
+        "image": "images/nqintelt-vs-spxt.png",
+        "imageAlt": "Total Return Performance: Nasdaq CTA Artificial Intelligence Index (NQINTELT) versus S&P 500 Total Return Index (SPXT), March 2008 through 2018, showing NQINTELT outperforming.",
+        "caption": "The Nasdaq CTA Artificial Intelligence Index from a total return standpoint <span class=\"rt-mono\">(NQINTELT)</span> significantly outperformed the S&P 500 TR Index &mdash; <em>a strong signal of investor appetite for AI-related innovation.</em>",
+        "source": "Source — Nasdaq Index Research"
+      },
+
+      {
+        "type": "copy",
+        "headline": "Innovation capacity hinges on <em>infrastructure.</em>",
+        "body": [
+          "From cloud computing and data quality to business alignment and change management, success with AI is tied to first establishing a resilient, robust foundation."
+        ],
+        "attribution": "Doug Hamilton — Head of AI Research and Engineering, Nasdaq"
+      },
+
+      {
+        "type": "resources",
+        "title": "Further reading",
+        "items": [
+          {
+            "kind": "Research",
+            "title": "How AI is transforming the boardroom",
+            "url": "#"
+          },
+          {
+            "kind": "Verafin",
+            "title": "How Agentic AI is transforming financial crime investigations",
+            "url": "#"
+          },
+          {
+            "kind": "Verafin",
+            "title": "AI in fighting financial crime",
+            "url": "#"
+          },
+          {
+            "kind": "Blogpost",
+            "title": "Data Never Sleeps, AI Edition",
+            "url": "#"
+          },
+          {
+            "kind": "Research",
+            "title": "Artificial Intelligence: Industry Report & Investment Case",
+            "url": "#"
+          },
+          {
+            "kind": "Research",
+            "title": "Preparing a Data Foundation for AI Success",
+            "url": "#"
+          },
+          {
+            "kind": "Research",
+            "title": "How Midsized Banks can Modernize and Scale Amid Complexity",
+            "url": "#"
+          }
+        ]
+      }
+    ]
+  },
+
+  "builders": {
+    "eyebrow": "Section II",
+    "headline": "Builders at <em>the edge.</em>",
+    "lede": "The innovators reshaping human possibility didn't start as giants &mdash; they started with a vision. Nasdaq is home to the founders, leaders, and dreamers powering the AI economy &mdash; connecting them to the capital, markets, and systems that turn ambition into reality.",
+    "style": {
+      "theme": "dark"
+    },
+    "blocks": [
+      {
+        "type": "quote-cards",
+        "cards": [
+          {
+            "text": "The production and application of artificial and digital intelligence will revolutionize every industry and business, accelerating progress for all of us and helping us become more productive so we can build incredible things.",
+            "attribution": "Jensen Huang",
+            "title": "Founder & CEO, NVIDIA",
+            "portrait": "images/portraits/jensen-huang.jpg",
+            "sourceUrl": "#",
+            "sourceLabel": "Source"
+          },
+          {
+            "text": "TODO — Replace with quote from Adena Friedman, Chair & CEO, Nasdaq.",
+            "attribution": "Adena Friedman",
+            "title": "Chair & CEO, Nasdaq",
+            "portrait": "images/portraits/adena-friedman.jpg"
+          },
+          {
+            "text": "TODO — Replace with quote from Nelson Griggs, President, Nasdaq Stock Exchange.",
+            "attribution": "Nelson Griggs",
+            "title": "President, Nasdaq Stock Exchange",
+            "portrait": "images/portraits/nelson-griggs.jpg"
+          },
+          {
+            "text": "TODO — Replace with quote from Tal Cohen, President, Nasdaq.",
+            "attribution": "Tal Cohen",
+            "title": "President, Nasdaq",
+            "portrait": "images/portraits/tal-cohen.jpg"
+          },
+          {
+            "text": "TODO — Replace with quote from Lisa Su, Chair & CEO, AMD.",
+            "attribution": "Lisa Su",
+            "title": "Chair & CEO, AMD",
+            "portrait": "images/portraits/lisa-su.jpg"
+          }
+        ]
+      },
+
+      {
+        "type": "videos",
+        "title": "Builder spotlights",
+        "layout": "row-3",
+        "tiles": [
+          {
+            "title": "Cerebras Bell Sizzle",
+            "subtitle": "AI accelerator company rings the Nasdaq opening bell",
+            "videoUrl": "https://cdn.jwplayer.com/players/PLACEHOLDER-qeq4Z2nO.html"
+          },
+          {
+            "title": "Arm on the AI revolution",
+            "subtitle": "Live from MarketSite",
+            "videoUrl": "https://www.youtube.com/watch?v=PLACEHOLDER"
+          },
+          {
+            "title": "CoreWeave",
+            "subtitle": "Cloud infrastructure built for AI",
+            "videoUrl": "https://cdn.jwplayer.com/players/PLACEHOLDER-qeq4Z2nO.html"
+          },
+          {
+            "title": "AWS",
+            "subtitle": "Powering the next generation of intelligent applications",
+            "videoUrl": "https://cdn.jwplayer.com/players/PLACEHOLDER-qeq4Z2nO.html"
+          },
+          {
+            "title": "Verafin clients",
+            "subtitle": "Agentic AI in financial crime investigations",
+            "videoUrl": "https://cdn.jwplayer.com/players/PLACEHOLDER-qeq4Z2nO.html"
+          },
+          {
+            "title": "Live from MarketSite",
+            "subtitle": "Interview clips from the Intel / BoT campaign",
+            "videoUrl": "https://cdn.jwplayer.com/players/PLACEHOLDER-qeq4Z2nO.html"
+          }
+        ]
+      },
+
+      {
+        "type": "image",
+        "image": "images/ai-powerhouses-on-nasdaq.png",
+        "imageAlt": "AI Powerhouses on Nasdaq: bar chart of top AI companies listed on the Nasdaq Exchange by market capitalization, May 2026. NVIDIA leads at $4.83T.",
+        "caption": "<span class=\"rt-accent\">AI Powerhouses on Nasdaq</span> &mdash; the top AI-investing companies listed on the Nasdaq Exchange, ranked by market capitalization.",
+        "source": "Source — Public market data, May 2026"
+      },
+
+      {
+        "type": "mosaic",
+        "title": "Powering the new <em>Space Economy.</em>",
+        "cells": [
+          {
+            "image": "images/space/moon-rocket.jpg",
+            "imageAlt": "Lunar surface with rocket against a starfield"
+          },
+          {
+            "icon": "orbit",
+            "headline": "Driving the future beyond Earth's orbit.",
+            "body": "Together with NASA and the private sector, we are creating markets that travel beyond Earth's orbit."
+          },
+          {
+            "image": "images/space/bell-ringing.jpg",
+            "imageAlt": "Space industry team at the Nasdaq opening bell"
+          },
+          {
+            "icon": "globe",
+            "headline": "Bold beginnings. Boundless frontiers.",
+            "body": "As America marks 250 years of bold ambition, Nasdaq is powering the next chapter of technological innovation &mdash; deep space exploration."
+          },
+          {
+            "image": "images/space/marketsite-tower.jpg",
+            "imageAlt": "Nasdaq MarketSite tower in Times Square"
+          },
+          {
+            "icon": "rocket",
+            "headline": "Where capital fuels space exploration.",
+            "body": "Through the capital markets, Nasdaq connects the innovators, engineers, and entrepreneurs building the space economy &mdash; from satellite infrastructure to commercial launch vehicles."
+          }
+        ]
+      }
+    ]
+  },
+
+  "convergence": {
+    "eyebrow": "Section III",
+    "headline": "Scaling the <em>convergence economy.</em>",
+    "lede": "Through market technology, IPO pipelines, and data platforms, Nasdaq connects builders to the capital markets that power AI and emerging technologies at scale.",
+    "style": {
+      "theme": "dark"
+    },
+    "blocks": [
+      {
+        "type": "pillars",
+        "layout": "row-4",
+        "pillars": [
+          {
+            "icon": "capital",
+            "label": "Connecting Capital",
+            "body": "Connecting AI innovators to public markets to fuel growth."
+          },
+          {
+            "icon": "liquidity",
+            "label": "Liquidity & Access",
+            "body": "Providing deep, efficient markets that allow ideas to scale."
+          },
+          {
+            "icon": "shield",
+            "label": "Governance & Trust",
+            "body": "Delivering market transparency and oversight to sustain long-term confidence."
+          },
+          {
+            "icon": "infrastructure",
+            "label": "Market Infrastructure",
+            "body": "Powering the technology, data, and platforms that connect markets and enable global growth."
+          }
+        ]
+      },
+
+      {
+        "type": "product",
+        "layout": "image-right",
+        "tabs": ["Sustainability Solutions", "Governance Solutions", "Investor Relations Intelligence"],
+        "headline": "Nasdaq Metrio<sup>™</sup>",
+        "body": "Collect, measure, communicate and disclose audit-grade ESG data to your stakeholders and one-to-many frameworks &mdash; all in one platform.",
+        "ctaLabel": "Learn more",
+        "ctaUrl": "#",
+        "image": "images/nasdaq-metrio.png",
+        "imageAlt": "Nasdaq Metrio product interface"
+      }
+    ]
+  }
+}
