@@ -1297,10 +1297,14 @@
 
   /* =========================================================
      CONTENT URL
-     Change this if the JSON is moved to a different host/repo.
+     Relative by default — works in local testing (alongside
+     index.html on disk or via a local web server) AND in
+     production (GitHub Pages serves both files from the same
+     origin/path). Change to an absolute URL only if you want
+     to host index.html separately from content.json.
      Cache-busted at minute granularity (see loadContent).
      ========================================================= */
-  var CONTENT_URL = 'https://nasdaqbrandstudio.github.io/building-beyond-the-edge/content.json';
+  var CONTENT_URL = 'content.json';
 
   /* =========================================================
      STRING HELPERS
@@ -1988,7 +1992,7 @@
         if (window.parent && window.parent !== window) {
           window.parent.postMessage({
             type: 'NASDAQ_IFRAME_HEIGHT',
-            page: 'building-beyond-the-edge',
+            page: 'edge',
             height: h
           }, '*');
         }

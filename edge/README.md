@@ -2,7 +2,7 @@
 
 A JSON-driven landing page for Nasdaq Brand Studio's *Convergence Economy* campaign. Designed as a sibling to [The Winning Formula](https://nasdaqbrandstudio.github.io/winning-formula/) — same color palette, same typography, same iframe pattern. Different structure: this page is an editorial pillar page composed of typed content blocks rather than a video carousel.
 
-**Live URL:** `https://nasdaqbrandstudio.github.io/building-beyond-the-edge/`
+**Live URL:** `https://nasdaqbrandstudio.github.io/edge/`
 
 ## Repository structure
 
@@ -362,7 +362,7 @@ If a single block errors, every other block on the page still renders. The scrip
 
 ## Deployment
 
-Push to the default branch of `nasdaqbrandstudio/building-beyond-the-edge`. GitHub Pages serves from the root. Live URL: `https://nasdaqbrandstudio.github.io/building-beyond-the-edge/`.
+Push to the default branch of `nasdaqbrandstudio/edge`. GitHub Pages serves from the root. Live URL: `https://nasdaqbrandstudio.github.io/edge/`.
 
 For staging, fork the repo or rename it. Update `CONTENT_URL` in `index.html` to point at the new content.json URL.
 
@@ -376,15 +376,15 @@ window.addEventListener('message', (e) => {
   if (e.data && e.data.type === 'NASDAQ_IFRAME_HEIGHT') {
     // e.data.page identifies which sibling page is sending —
     // useful when multiple Nasdaq Brand Studio iframes are on one parent page
-    if (e.data.page === 'building-beyond-the-edge') {
-      const iframe = document.querySelector('iframe[data-bbte]');
+    if (e.data.page === 'edge') {
+      const iframe = document.querySelector('iframe[data-edge]');
       if (iframe) iframe.style.height = e.data.height + 'px';
     }
   }
 });
 ```
 
-The message shape is `{ type: 'NASDAQ_IFRAME_HEIGHT', page: 'building-beyond-the-edge', height: number }`. Note that this differs from the Winning Formula's `TWF_HEIGHT` — the generic name plus the `page` field is intended to let a single listener route messages from multiple sibling pages.
+The message shape is `{ type: 'NASDAQ_IFRAME_HEIGHT', page: 'edge', height: number }`. Note that this differs from the Winning Formula's `TWF_HEIGHT` — the generic name plus the `page` field is intended to let a single listener route messages from multiple sibling pages.
 
 The broadcaster sends on: initial load, `load` event, `resize` event, and any DOM mutation (debounced to one send per animation frame).
 
@@ -418,10 +418,21 @@ If editors are pushing rapid changes and need finer granularity, change `Math.fl
 The constant is at the top of the `<script>` block:
 
 ```js
-var CONTENT_URL = 'https://nasdaqbrandstudio.github.io/building-beyond-the-edge/content.json';
+var CONTENT_URL = 'content.json';
 ```
 
-If you move the JSON to a different host (e.g. a CMS endpoint), change this and that host's CORS headers must allow the iframe origin to fetch. GitHub Pages allows cross-origin fetches by default.
+It's a relative URL by default. In production, GitHub Pages serves both `index.html` and `content.json` from the same origin and path, so the relative URL resolves identically to the absolute equivalent. In local development, it resolves to the file sitting alongside `index.html`. Only change this if you want to host the JSON on a different domain entirely (a CMS endpoint, an S3 bucket, etc.) — in which case set it to the absolute URL and make sure that host's CORS headers allow the iframe origin to fetch.
+
+## Local testing
+
+`fetch()` on a `file://` origin is **blocked in Chrome** for security reasons — opening `index.html` directly will show a blank page. To test locally, run a quick web server from the repo directory:
+
+```sh
+python3 -m http.server 8000
+# then open http://localhost:8000/
+```
+
+Firefox is more permissive with `file://` fetches but the local server approach is more reliable. If the page is blank, the first thing to check is the browser console — the script logs `[content] loaded` on success and `[content] Could not load content.json` with the reason on failure.
 
 ## The script architecture in one breath
 
