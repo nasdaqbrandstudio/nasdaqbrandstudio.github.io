@@ -1,0 +1,654 @@
+{
+  "_meta": {
+    "version": 2,
+    "lastEditedNote": "Edit values below. See README.md for the field guide. Save via GitHub's web UI to publish.",
+    "thumbnailFields": "Each episode has a `guest` (name shown on the thumbnail) and `subtitle` (credential under the name on the thumbnail). Both are editable."
+  },
+  "site": {
+    "title": "The Winning Formula | Nasdaq",
+    "description": "Nasdaq's original series connecting the business of sport with the business of capital."
+  },
+  "ticker": {
+    "label": "NEWS & UPDATES",
+    "scrollDurationSeconds": 90,
+    "items": [
+      {
+        "headline": "The Winning Formula Is Nominated for a Shorty Award for Best Branded Content Series",
+        "url": "https://shortyawards.com/18th/nasdaq-the-winning-formula-with-joel-kolani-and-poppy-shen"
+      },
+      {
+        "headline": "Reggie Bush Announces his New United Athlete Tour On The Winning Formula",
+        "url": "https://www.youtube.com/watch?v=rVNtyedrBAc"
+      },
+      {
+        "headline": "Mercedes AMG PETRONAS Formula 1 Team and Nasdaq Launch a New Winning Formula Offshoot Called \"Accelerating Leadership\"",
+        "url": "https://www.nasdaq.com/press-release/mercedes-amg-petronas-formula-one-team-nasdaq-join-forces-accelerate-innovation-2025"
+      },
+      {
+        "headline": "The Winning Formula is a 2026 Webby Honoree In the \"Best Branded Podcast\" Category",
+        "url": "https://winners.webbyawards.com/2026/podcasts/features/best-branded-podcast-or-segment/373326/nasdaqs-the-winning-formula"
+      },
+      {
+        "headline": "Terrence Murphy Announces The new Synergy Sports Capital Firm In Partnership with Reggie Bush",
+        "url": "https://frontofficesports.com/reggie-bush-terrence-murphy-launch-pe-firm-for-emerging-leagues/"
+      },
+      {
+        "headline": "Former NBA MVP Derrick Rose Announces his New Book \"The Pooh Print\" on The Winning Formula",
+        "url": "https://www.youtube.com/watch?v=wYkovolDU30"
+      }
+    ]
+  },
+  "hero": {
+    "eyebrow": "Nasdaq Original Series",
+    "wordmarkFallback": {
+      "title": "The Winning Formula",
+      "subtitle": "Presented by Mercedes-AMG Petronas Formula One Team"
+    },
+    "intro": "The Winning Formula is the preeminent destination for breaking news and insightful conversations around the business of sports. Through in-depth conversations with high-profile athlete-entrepreneurs, league executives and team owners, we cover major announcements and explore the intersection of sports, business and technology."
+  },
+  "featured": {
+    "eyebrow": "Latest Episode",
+    "headline": "Resilience, Unapologetic Ambition, and the <em>Pretty Tough</em> Podcast",
+    "guest": "Maria Sharapova",
+    "guestNameMarkup": "Maria<br>Sharapova",
+    "subtitle": "Five‑Time Grand Slam Champion \u00b7 Entrepreneur, Investor, and Mom",
+    "badge": "Featured",
+    "thumbnailAlt": "Maria Sharapova on The Winning Formula",
+    "videoUrl": "https://cdn.jwplayer.com/players/vwlW1UPi-jO5YHc4l.html",
+    "episodeUrl": "https://cdn.jwplayer.com/players/vwlW1UPi-jO5YHc4l.html",
+    "duration": "",
+    "pullQuote": "Tennis Champion Maria Sharapova on Winning, Reinvention and Power of Her <em>Pretty Tough</em> Mentality",
+    "body": "Maria Sharapova joins The Winning Formula to discuss her new podcast, "Pretty Tough"—a mentality rooted in the  unapologetic ambition and resilience that has defined her journey as a five‑time Grand Slam champion, entrepreneur, investor, and mom."
+  },
+  "series": {
+    "eyebrow": "The Series",
+    "headline": "Operators, owners, and <em>originals.</em>",
+    "filters": [
+      {
+        "label": "All",
+        "value": "all"
+      },
+      {
+        "label": "Athlete Founders",
+        "value": "athlete-founder"
+      },
+      {
+        "label": "Women's Sports",
+        "value": "womens-sports"
+      },
+      {
+        "label": "Sports Executives",
+        "value": "sports-executives"
+      },
+      {
+        "label": "Accelerating Leadership",
+        "value": "accelerating-leadership"
+      }
+    ],
+    "episodes": [
+            {
+        "guest": "Reggie Bush",
+        "guestNameMarkup": "Reggie Bush",
+        "subtitle": "NBA MVP \u00b7 Entrepreneur",
+        "thumbnailAlt": "Reggie Bush on The Winning Formula",
+        "videoUrl": "https://cdn.jwplayer.com/players/8DFhw51n-jO5YHc4l.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/8DFhw51n-jO5YHc4l.html",
+        "duration": "",
+        "tag": "NFL",
+        "tagClass": "nfl",
+        "filters": [
+          "athlete-founder"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Reggie Bush",
+        "description": "Reggie Bush joins The Winning Formula to break down the launch of the United Athletes Tour, why athlete ownership is the next frontier, and how he ranks the all-time greats at running back."
+      },
+      {
+        "guest": "Derrick Rose",
+        "guestNameMarkup": "Derrick Rose",
+        "subtitle": "NBA MVP \u00b7 Entrepreneur",
+        "thumbnailAlt": "Derrick Rose",
+        "videoUrl": "https://cdn.jwplayer.com/players/aKWlVgRw-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/aKWlVgRw-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "NBA",
+        "tagClass": "nba",
+        "filters": [
+          "athlete-founder"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Derrick Rose",
+        "description": "NBA MVP Derrick Rose talks retirement, starting his own businesses, the impact Tom Thibodeau had on his career, and his relentless work ethic."
+      },
+      {
+        "guest": "George Kurtz",
+        "guestNameMarkup": "George Kurtz",
+        "subtitle": "CEO & Co-founder \u00b7 CrowdStrike",
+        "thumbnailAlt": "George Kurtz",
+        "videoUrl": "https://cdn.jwplayer.com/players/iwACLS7X-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/iwACLS7X-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "BIZ",
+        "tagClass": "biz",
+        "filters": [
+          "sports-executives",
+          "accelerating-leadership"
+        ],
+        "episodeMeta": "Episode",
+        "title": "George Kurtz",
+        "description": "George Kurtz breaks down the parallels between racing and business, the power of CrowdStrike's partnership with Mercedes-AMG PETRONAS F1 team, and what motivated him to invest in the team's future."
+      },
+      {
+        "guest": "Women's Sports Special",
+        "guestNameMarkup": "Built to Scale",
+        "subtitle": "Special Edition \u00b7 The Winning Formula",
+        "thumbnailAlt": "Women's Sports, Built to Scale",
+        "videoUrl": "https://cdn.jwplayer.com/players/BsjTXbRb-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/BsjTXbRb-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "WMNS",
+        "tagClass": "wnba",
+        "filters": [
+          "womens-sports",
+          "sports-executives"
+        ],
+        "episodeMeta": "Special",
+        "title": "Women's Sports, Built to Scale",
+        "description": "A deep dive into the explosive growth of women's sports \u2014 from rising valuations to revenue growth to the infrastructure needed to sustain it. The data tells a different story than the old 'potential' narrative."
+      },
+      {
+        "guest": "Stefanie Strack",
+        "guestNameMarkup": "Stefanie Strack",
+        "subtitle": "Founder & CEO \u00b7 Voice in Sport",
+        "thumbnailAlt": "Stefanie Strack",
+        "videoUrl": "https://cdn.jwplayer.com/players/Ti7TUHEU-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/Ti7TUHEU-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "WMNS",
+        "tagClass": "wnba",
+        "filters": [
+          "womens-sports",
+          "athlete-founder"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Stefanie Strack",
+        "description": "Stefanie Strack joins The Winning Formula to talk about why keeping girls in sports matters \u2014 and how we can break down the barriers holding them back."
+      },
+      {
+        "guest": "Tristan Thompson",
+        "guestNameMarkup": "Tristan Thompson",
+        "subtitle": "NBA Champion \u00b7 Web3 Ambassador",
+        "thumbnailAlt": "Tristan Thompson",
+        "videoUrl": "https://cdn.jwplayer.com/players/50k3giwJ-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/50k3giwJ-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "NBA",
+        "tagClass": "nba",
+        "filters": [
+          "athlete-founder"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Tristan Thompson",
+        "description": "NBA Champion Tristan Thompson talks about the importance of financial literacy, being a Web3 Ambassador, and how the NBA has evolved over the past decade."
+      },
+      {
+        "guest": "Bubba Watson",
+        "guestNameMarkup": "Bubba Watson",
+        "subtitle": "2x Masters Champion \u00b7 LIV Golf",
+        "thumbnailAlt": "Bubba Watson",
+        "videoUrl": "https://cdn.jwplayer.com/players/V05gpfW5-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/V05gpfW5-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "GOLF",
+        "tagClass": "biz",
+        "filters": [
+          "athlete-founder"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Bubba Watson",
+        "description": "From the famous Augusta shot that earned him the green jacket to the future of LIV Golf, Bubba shares honest insights on leadership, innovation, staying true to his style, and expanding his impact beyond the course."
+      },
+      {
+        "guest": "Ndamukong Suh",
+        "guestNameMarkup": "Ndamukong Suh",
+        "subtitle": "Super Bowl Champion \u00b7 Entrepreneur",
+        "thumbnailAlt": "Ndamukong Suh",
+        "videoUrl": "https://cdn.jwplayer.com/players/9C33L01U-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/9C33L01U-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "NFL",
+        "tagClass": "nfl",
+        "filters": [
+          "athlete-founder"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Ndamukong Suh",
+        "description": "Super Bowl Champion Ndamukong Suh joins The Winning Formula to talk retirement, entrepreneurship, the importance of financial literacy, and his toughest NFL opponents."
+      },
+      {
+        "guest": "Bradley Lord",
+        "guestNameMarkup": "Bradley Lord",
+        "subtitle": "Chief Communications Officer \u00b7 Mercedes-AMG F1",
+        "thumbnailAlt": "Bradley Lord",
+        "videoUrl": "https://cdn.jwplayer.com/players/4e9USnl7-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/4e9USnl7-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "F1",
+        "tagClass": "f1",
+        "filters": [
+          "accelerating-leadership",
+          "sports-executives"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Bradley Lord",
+        "description": "Bradley Lord reveals how communications, leadership, and culture come together to build a high-performing team in F1."
+      },
+      {
+        "guest": "Valtteri Bottas",
+        "guestNameMarkup": "Valtteri Bottas",
+        "subtitle": "Third Driver \u00b7 Mercedes-AMG PETRONAS F1",
+        "thumbnailAlt": "Valtteri Bottas",
+        "videoUrl": "https://cdn.jwplayer.com/players/Tb9ycGIl-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/Tb9ycGIl-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "F1",
+        "tagClass": "f1",
+        "filters": [
+          "accelerating-leadership"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Valtteri Bottas",
+        "description": "Valtteri Bottas discusses his winning formula for success, lessons learned from the track, and how he channels his competitive spirit into business ventures beyond motorsports."
+      },
+      {
+        "guest": "Ted Leonsis",
+        "guestNameMarkup": "Ted Leonsis",
+        "subtitle": "CEO \u00b7 Monumental Sports & Entertainment",
+        "thumbnailAlt": "Ted Leonsis",
+        "videoUrl": "https://cdn.jwplayer.com/players/HPT1axrG-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/HPT1axrG-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "BIZ",
+        "tagClass": "biz",
+        "filters": [
+          "sports-executives"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Ted Leonsis",
+        "description": "Ted Leonsis shares his vision for the future of Monumental Sports & Entertainment, the rise of sports as an exploding asset class, and what it takes to serve the modern fan."
+      },
+      {
+        "guest": "Christoph Grainger-Herr",
+        "guestNameMarkup": "Christoph<br>Grainger-Herr",
+        "subtitle": "CEO \u00b7 IWC Schaffhausen",
+        "thumbnailAlt": "Christoph Grainger-Herr",
+        "videoUrl": "https://cdn.jwplayer.com/players/e1kZLoPd-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/e1kZLoPd-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "BIZ",
+        "tagClass": "biz",
+        "filters": [
+          "sports-executives",
+          "accelerating-leadership"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Christoph Grainger-Herr",
+        "description": "Christoph Grainger-Herr, CEO of IWC Schaffhausen, joins us to discuss what makes the partnership with the Mercedes-AMG Petronas Formula One Team successful, the business lessons he has learned from Toto Wolff, and how IWC came to be involved with the F1 movie."
+      },
+      {
+        "guest": "CJ McCollum",
+        "guestNameMarkup": "CJ McCollum",
+        "subtitle": "NBA Veteran \u00b7 Entrepreneur",
+        "thumbnailAlt": "CJ McCollum",
+        "videoUrl": "https://cdn.jwplayer.com/players/ct9cUIRg-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/ct9cUIRg-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "NBA",
+        "tagClass": "nba",
+        "filters": [
+          "athlete-founder"
+        ],
+        "episodeMeta": "Episode",
+        "title": "CJ McCollum",
+        "description": "NBA veteran CJ McCollum discusses how his career on the court prepared him for a successful business career and how the NBA has evolved since he was drafted."
+      },
+      {
+        "guest": "Alex Honnold",
+        "guestNameMarkup": "Alex Honnold",
+        "subtitle": "Professional Rock Climber \u00b7 Honnold Foundation",
+        "thumbnailAlt": "Alex Honnold",
+        "videoUrl": "https://cdn.jwplayer.com/players/BSvpXgrh-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/BSvpXgrh-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "CLIMB",
+        "tagClass": "biz",
+        "filters": [
+          "athlete-founder"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Alex Honnold",
+        "description": "No ropes. No room for error. Alex Honnold reflects on his El Capitan climb and breaks down fear, risk, and the mindset behind the impossible feat."
+      },
+      {
+        "guest": "Kelley O'Hara",
+        "guestNameMarkup": "Kelley O'Hara",
+        "subtitle": "2x World Cup Champion \u00b7 USWNT",
+        "thumbnailAlt": "Kelley O'Hara",
+        "videoUrl": "https://cdn.jwplayer.com/players/5XEtJGIU-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/5XEtJGIU-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "USWNT",
+        "tagClass": "soc",
+        "filters": [
+          "athlete-founder",
+          "womens-sports"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Kelley O'Hara",
+        "description": "Kelley O'Hara joins The Winning Formula to discuss the explosive growth of women's sports, the business case for investing in it, and how her podcast 'Sports Are Fun!' is helping reshape the narrative around athletes and media."
+      },
+      {
+        "guest": "Wolff & Russell",
+        "guestNameMarkup": "Wolff &amp; Russell",
+        "subtitle": "Mercedes-AMG PETRONAS F1 Team",
+        "thumbnailAlt": "Toto Wolff and George Russell",
+        "videoUrl": "https://cdn.jwplayer.com/players/XiIzGVmC-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/XiIzGVmC-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "F1",
+        "tagClass": "f1",
+        "filters": [
+          "accelerating-leadership",
+          "sports-executives"
+        ],
+        "episodeMeta": "Special Series",
+        "title": "Toto Wolff and George Russell",
+        "description": "Mercedes AMG PETRONAS F1 Team Principal Toto Wolff and Team Driver George Russell join Nasdaq to discuss team mentality, resilience during a long season, and how they continue to be positive influences for Kimi Antonelli. The first episode of co-produced series 'Accelerating Leadership.'"
+      },
+      {
+        "guest": "Alejandro Bedoya",
+        "guestNameMarkup": "Alejandro Bedoya",
+        "subtitle": "Captain \u00b7 Philadelphia Union",
+        "thumbnailAlt": "Alejandro Bedoya",
+        "videoUrl": "https://cdn.jwplayer.com/players/vwiq3RC5-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/vwiq3RC5-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "MLS",
+        "tagClass": "soc",
+        "filters": [
+          "athlete-founder"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Alejandro Bedoya",
+        "description": "Alejandro Bedoya, Captain of Philadelphia Union, joins The Winning Formula to discuss his soccer journey, the growth of MLS, and building a career beyond the field."
+      },
+      {
+        "guest": "Brandon Marshall",
+        "guestNameMarkup": "Brandon Marshall",
+        "subtitle": "6x NFL Pro Bowler \u00b7 Mental Health Advocate",
+        "thumbnailAlt": "Brandon Marshall",
+        "videoUrl": "https://cdn.jwplayer.com/players/wFOWBhDa-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/wFOWBhDa-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "NFL",
+        "tagClass": "nfl",
+        "filters": [
+          "athlete-founder"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Brandon Marshall",
+        "description": "Brandon Marshall sits down with Nasdaq to discuss the importance of raising mental health awareness, the emerging creator economy, and finding his voice."
+      },
+      {
+        "guest": "Marques Colston",
+        "guestNameMarkup": "Marques Colston",
+        "subtitle": "Super Bowl XLIV Champion \u00b7 Champion Venture Partners",
+        "thumbnailAlt": "Marques Colston",
+        "videoUrl": "https://cdn.jwplayer.com/players/reDyhqnx-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/reDyhqnx-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "NFL",
+        "tagClass": "nfl",
+        "filters": [
+          "athlete-founder"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Marques Colston",
+        "description": "Marques Colston joins The Winning Formula to share the details into the founding of his firm Champion Venture Partners and the growth of the sports asset class today."
+      },
+      {
+        "guest": "Jimmy Butler",
+        "guestNameMarkup": "Jimmy Butler",
+        "subtitle": "NBA All-Star \u00b7 Founder, BIGFACE Coffee",
+        "thumbnailAlt": "Jimmy Butler",
+        "videoUrl": "https://cdn.jwplayer.com/players/BN841b7I-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/BN841b7I-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "NBA",
+        "tagClass": "nba",
+        "filters": [
+          "athlete-founder"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Jimmy Butler",
+        "description": "From his NBA stardom to his entrepreneurial coffee endeavor 'BIGFACE,' Jimmy Butler joins Nasdaq to share insights on adaptability and the power of pivoting."
+      },
+      {
+        "guest": "Allyson Felix",
+        "guestNameMarkup": "Allyson Felix",
+        "subtitle": "11x Olympic Medalist \u00b7 Founder, Always Alpha",
+        "thumbnailAlt": "Allyson Felix",
+        "videoUrl": "https://cdn.jwplayer.com/players/zx7smJw6-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/zx7smJw6-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "T&F",
+        "tagClass": "tf",
+        "filters": [
+          "athlete-founder",
+          "womens-sports"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Allyson Felix",
+        "description": "Allyson Felix, the most decorated track and field athlete, discusses the growth of women's sports and how her talent management firm, Always Alpha, aims to support and strengthen the success of female athletes."
+      },
+      {
+        "guest": "Isiah Thomas",
+        "guestNameMarkup": "Isiah Thomas",
+        "subtitle": "NBA Hall of Famer \u00b7 Business Leader",
+        "thumbnailAlt": "Isiah Thomas",
+        "videoUrl": "https://cdn.jwplayer.com/players/UfBwsa2Q-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/UfBwsa2Q-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "NBA",
+        "tagClass": "nba",
+        "filters": [
+          "athlete-founder"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Isiah Thomas",
+        "description": "Isiah Thomas joins The Winning Formula to discuss his successful business career after retiring from the NBA, his top point guards, and the impact LeBron James has had on the GOAT debate."
+      },
+      {
+        "guest": "Don McGuire",
+        "guestNameMarkup": "Don McGuire",
+        "subtitle": "CMO \u00b7 Qualcomm",
+        "thumbnailAlt": "Don McGuire",
+        "videoUrl": "https://cdn.jwplayer.com/players/ezxWjwWZ-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/ezxWjwWZ-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "BIZ",
+        "tagClass": "biz",
+        "filters": [
+          "sports-executives",
+          "accelerating-leadership"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Don McGuire",
+        "description": "Qualcomm CMO Don McGuire joins The Winning Formula from the Las Vegas F1 Grand Prix to discuss Qualcomm's success in partnering with some of the world's top sports franchises to help connect their brands to fans' passions."
+      },
+      {
+        "guest": "Steve Young",
+        "guestNameMarkup": "Steve Young",
+        "subtitle": "Pro Football Hall of Famer \u00b7 Former 49ers QB",
+        "thumbnailAlt": "Steve Young",
+        "videoUrl": "https://cdn.jwplayer.com/players/MJjFfDam-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/MJjFfDam-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "NFL",
+        "tagClass": "nfl",
+        "filters": [
+          "athlete-founder"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Steve Young",
+        "description": "Hall of Fame quarterback Steve Young discusses his top three quarterbacks today, his career after football, and what it takes to succeed in the NFL in the modern era."
+      },
+      {
+        "guest": "Joey Logano",
+        "guestNameMarkup": "Joey Logano",
+        "subtitle": "3x NASCAR Cup Series Champion",
+        "thumbnailAlt": "Joey Logano",
+        "videoUrl": "https://cdn.jwplayer.com/players/SWrHcx9f-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/SWrHcx9f-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "NSCR",
+        "tagClass": "biz",
+        "filters": [
+          "athlete-founder"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Joey Logano",
+        "description": "After winning his third NASCAR championship, Joey Logano joined us at Nasdaq to reflect on the big win. Hear how his motivation to win has evolved throughout his career, how he prepares for races, and more."
+      },
+      {
+        "guest": "Toto Wolff",
+        "guestNameMarkup": "Toto Wolff",
+        "subtitle": "CEO & Team Principal \u00b7 Mercedes-AMG PETRONAS F1",
+        "thumbnailAlt": "Toto Wolff",
+        "videoUrl": "https://cdn.jwplayer.com/players/GFVVb6LI-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/GFVVb6LI-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "F1",
+        "tagClass": "f1",
+        "filters": [
+          "accelerating-leadership",
+          "sports-executives"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Toto Wolff",
+        "description": "Mercedes AMG F1 CEO Toto Wolff discusses the growth of F1, 'Drive to Survive,' and the importance of resilient leadership."
+      },
+      {
+        "guest": "Sloane Stephens",
+        "guestNameMarkup": "Sloane Stephens",
+        "subtitle": "2017 US Open Champion \u00b7 Pro Tennis Player",
+        "thumbnailAlt": "Sloane Stephens",
+        "videoUrl": "https://cdn.jwplayer.com/players/PIEUfJwG-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/PIEUfJwG-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "TEN",
+        "tagClass": "ten",
+        "filters": [
+          "athlete-founder",
+          "womens-sports"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Sloane Stephens",
+        "description": "Professional Tennis Player Sloane Stephens joins Nasdaq on The Winning Formula to discuss her incredible career journey and living life on her own terms. From winning the 2017 US Open to founding the Sloane Stephens podcast and more \u2014 she shares how she continues to bring fun and hard work into everything she does."
+      },
+      {
+        "guest": "Jordan Chiles",
+        "guestNameMarkup": "Jordan Chiles",
+        "subtitle": "2x Olympic Medalist \u00b7 UCLA Gymnast",
+        "thumbnailAlt": "Jordan Chiles",
+        "videoUrl": "https://cdn.jwplayer.com/players/pfiDUg5H-qeq4Z2nO.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/pfiDUg5H-qeq4Z2nO.html",
+        "duration": "",
+        "tag": "GYM",
+        "tagClass": "gym",
+        "filters": [
+          "athlete-founder",
+          "womens-sports"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Jordan Chiles",
+        "description": "Two-time Olympic medalist Jordan Chiles shares her gymnast journey and how the 'being that girl' motto has propelled her to overcome challenges and rise to the top."
+      }
+    ]
+  },
+  "moments": {
+    "eyebrow": "In Conversation",
+    "headline": "Moments from the <em>series.</em>",
+    "autoAdvanceMs": 4000,
+    "slides": [
+      {
+        "guest": "Marques Colston",
+        "guestLabel": "Athlete Founder",
+        "photo": "https://nasdaqbrandstudio.github.io/winning-formula/images/MarquesColston_TWF_0224255_0.jpg",
+        "photoAlt": "Marques Colston on The Winning Formula at Nasdaq MarketSite",
+        "headline": "From the end zone to the <em>endowment.</em>",
+        "subhead": "On founding Champion Venture Partners and translating locker-room discipline into disciplined capital allocation."
+      },
+      {
+        "guest": "Wolff & Russell",
+        "guestLabel": "Mercedes-AMG Petronas F1",
+        "photo": "https://nasdaqbrandstudio.github.io/winning-formula/images/MercedesF1_TWF_06162536.jpg",
+        "photoAlt": "Toto Wolff and George Russell of Mercedes-AMG Petronas F1 at Nasdaq",
+        "headline": "Accelerating <em>leadership</em> at 200 mph.",
+        "subhead": "Toto Wolff and George Russell on building a championship team and the business behind the grid."
+      },
+      {
+        "guest": "Kelley O'Hara",
+        "guestLabel": "2x World Cup Champion",
+        "photo": "https://nasdaqbrandstudio.github.io/winning-formula/images/KelleyOHara_05082527.jpg",
+        "photoAlt": "Kelley O'Hara on The Winning Formula",
+        "headline": "The business case for <em>women's sports.</em>",
+        "subhead": "On the explosive growth of women's athletics and how her podcast is reshaping athlete-led media."
+      },
+      {
+        "guest": "Alex Honnold",
+        "guestLabel": "Free-Solo Climber",
+        "photo": "https://nasdaqbrandstudio.github.io/winning-formula/images/AlexHannold_TWF_06052532.jpg",
+        "photoAlt": "Alex Honnold on The Winning Formula",
+        "headline": "Risk, routine, and the economics of the <em>impossible.</em>",
+        "subhead": "The free-solo climbing icon on calculated risk, philanthropy, and long-term focus."
+      },
+      {
+        "guest": "Alejandro Bedoya",
+        "guestLabel": "Major League Soccer",
+        "photo": "https://nasdaqbrandstudio.github.io/winning-formula/images/TWF - Alejandro Bedoya_Still-4_0.png",
+        "photoAlt": "Alejandro Bedoya on The Winning Formula",
+        "headline": "On the growth of MLS and <em>building beyond the field.</em>",
+        "subhead": "The Philadelphia Union captain on his soccer journey and the career he's building off the pitch."
+      },
+      {
+        "guest": "Jordan Chiles",
+        "guestLabel": "Olympic Gold Medalist",
+        "photo": "https://nasdaqbrandstudio.github.io/winning-formula/images/mc_080814162.jpg",
+        "photoAlt": "Jordan Chiles on The Winning Formula",
+        "headline": "Building the <em>winning</em> mindset.",
+        "subhead": "Translating discipline into success."
+      }
+    ]
+  },
+  "hosts": {
+    "eyebrow": "The Hosts",
+    "headline": "The voices <em>behind the series.</em>",
+    "people": [
+      {
+        "name": "Joel Kolani",
+        "title": "Head of Brand Strategy & Creative Content \u00b7 Nasdaq",
+        "photo": "https://nasdaqbrandstudio.github.io/winning-formula/images/JoelKolani.png",
+        "photoAlt": "Joel Kolani",
+        "bio": "A former sports radio host with expertise across the NFL, NBA, MLB, European soccer, and F1. Joel leads brand storytelling at Nasdaq and brings a journalist's instincts to every conversation."
+      },
+      {
+        "name": "Poppy Shen",
+        "title": "Journalist & Video Producer \u00b7 Nasdaq",
+        "photo": "https://nasdaqbrandstudio.github.io/winning-formula/images/PoppyShen.png",
+        "photoAlt": "Poppy Shen",
+        "bio": "A journalist and video producer with experience at Yahoo, AOL, and CNN. Poppy has covered stories spanning sports, culture, and the AAPI community, and brings depth and empathy to every interview."
+      }
+    ]
+  }
+}
