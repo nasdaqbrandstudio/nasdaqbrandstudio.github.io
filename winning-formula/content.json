@@ -13,6 +13,10 @@
     "scrollDurationSeconds": 90,
     "items": [
       {
+        "headline": "Maria Sharapova announces the launch of her Pretty Tough podcast on The Winning Formula",
+        "url": "https://www.youtube.com/watch?v=PMB6MCcJtGA"
+      },
+      {
         "headline": "The Winning Formula Is Nominated for a Shorty Award for Best Branded Content Series",
         "url": "https://shortyawards.com/18th/nasdaq-the-winning-formula-with-joel-kolani-and-poppy-shen"
       },
@@ -57,7 +61,7 @@
     "videoUrl": "https://cdn.jwplayer.com/players/vwlW1UPi-jO5YHc4l.html",
     "episodeUrl": "https://cdn.jwplayer.com/players/vwlW1UPi-jO5YHc4l.html",
     "duration": "",
-    "pullQuote": "Tennis Champion Maria Sharapova on Winning, Reinvention and Power of Her <em>Pretty Tough</em> Mentality",
+    "pullQuote": "Tennis Champion Maria Sharapova on Winning, Reinvention and the Power of Her <em>Pretty Tough</em> Mentality",
     "body": "Maria Sharapova joins The Winning Formula to discuss her new podcast, \"Pretty Tough\"—a mentality rooted in the  unapologetic ambition and resilience that has defined her journey as a five‑time Grand Slam champion, entrepreneur, investor, and mom."
   },
   "series": {
