@@ -41,7 +41,9 @@
     display:flex; flex-direction:column; align-items:flex-start; justify-content:center;
     text-align:left;
     padding-left:clamp(28px,7vw,120px); padding-right:clamp(24px,5vw,80px);
-    max-width:min(900px,92%);
+    /* keep all text within the distorted (left) region so "the Edge" never
+       crosses the seam between the glass effect and the clean video (~66.67%). */
+    max-width:62%;
   }
   .headline {
     margin:0 0 18px 0; font-weight:600;
@@ -52,7 +54,10 @@
      A subtle glass shimmer (moving gradient of cyan/white bands over the base
      blue) sweeps across the letters continuously, mimicking the background
      glass effect. */
-  .edge-canvas { display:inline-block; vertical-align:baseline; }
+  /* reserve approximate space so the headline doesn't reflow when the WebGL
+     "the Edge" canvas finishes initialising (prevents "Building Beyond"
+     showing alone first). ~3.4em wide matches "the Edge" at the headline size. */
+  .edge-canvas { display:inline-block; vertical-align:baseline; min-width:3.4em; min-height:0.9em; }
   .headline .nowrap { white-space:nowrap; }   /* keep "the Edge" together; wraps as a unit */
   .content .sub { margin:0 0 16px 0; font-weight:500; font-size:clamp(16px,1.9vw,23px); line-height:1.35; letter-spacing:-0.005em; color:#ffffff; }
   .content .body { margin:0; font-weight:400; font-size:clamp(13px,1.25vw,16px); line-height:1.6; color:#ffffff; max-width:560px; }
@@ -64,12 +69,14 @@
   @media (max-width:760px) {
     #c { width:100%; -webkit-mask-image:none; mask-image:none; }
     .headline { font-size:clamp(32px,10vw,54px); }
+    .content { max-width:92%; }
   }
 </style>
 </head>
 <body>
 <div id="hero-root">
-  <video id="bg-video" crossorigin="anonymous" muted loop playsinline autoplay preload="auto"></video>
+  <video id="bg-video" crossorigin="anonymous" muted loop playsinline autoplay preload="auto"
+         poster="https://cdn.jwplayer.com/v2/media/JZHkQjZc/poster.jpg?width=1920"></video>
   <canvas id="c"></canvas>
   <div class="scrim"></div>
   <div class="content">
@@ -537,8 +544,12 @@ async function initEdgeGlass(){
 }
 
 (async function(){
-  await initBackground();
-  await initEdgeGlass();
+  // run both in parallel so "the Edge" doesn't wait for the background to
+  // finish initialising — they appear together.
+  await Promise.all([
+    initEdgeGlass().catch((e)=>fail('edge: '+(e.message||e))),
+    initBackground().catch((e)=>fail('bg: '+(e.message||e))),
+  ]);
   setStatus('READY');
 })().catch((e)=>fail(e.message||String(e)));
 </script>
