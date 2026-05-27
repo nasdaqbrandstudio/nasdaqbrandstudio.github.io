@@ -16,8 +16,19 @@
   html, body { margin:0; padding:0; width:100%; height:100%; background:#000; overflow:hidden; font-family:'Inter',system-ui,sans-serif; }
   #hero-root { position:relative; width:100%; height:100%; min-height:100%; }
 
-  /* clean video fills the WHOLE frame underneath everything */
-  #bg-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+  /* poster still: a plain background-image that paints on the FIRST frame,
+     before the <video> element does anything — no black flash. */
+  #bg-poster {
+    position:absolute; inset:0; z-index:0;
+    background-image:url('https://cdn.jwplayer.com/thumbs/JZHkQjZc-1920.jpg');
+    background-size:cover; background-position:center;
+  }
+  /* clean video fills the WHOLE frame, fading in over the poster once playing */
+  #bg-video {
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0;
+    opacity:0; transition:opacity 0.5s ease;
+  }
+  #bg-video.ready { opacity:1; }
 
   /* the fluted-ripple effect canvas overlays only the RIGHT 66.67%.
      a soft feather on its left edge blends it into the clean video. */
@@ -27,7 +38,10 @@
     /* perfectly hard right edge — a clean, crisp glass boundary, no feather */
     -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 100%);
             mask-image: linear-gradient(90deg, #000 0%, #000 100%);
+    /* fade in together with the video; until then the poster shows cleanly */
+    opacity:0; transition:opacity 0.5s ease;
   }
+  #c.ready { opacity:1; }
 
   .scrim {
     position:absolute; inset:0; z-index:2; pointer-events:none;
@@ -75,8 +89,8 @@
 </head>
 <body>
 <div id="hero-root">
-  <video id="bg-video" crossorigin="anonymous" muted loop playsinline autoplay preload="auto"
-         poster="https://cdn.jwplayer.com/v2/media/JZHkQjZc/poster.jpg?width=1920"></video>
+  <div id="bg-poster"></div>
+  <video id="bg-video" crossorigin="anonymous" muted loop playsinline autoplay preload="auto"></video>
   <canvas id="c"></canvas>
   <div class="scrim"></div>
   <div class="content">
@@ -120,6 +134,10 @@ async function initBackground() {
     video.crossOrigin = 'anonymous';   // REQUIRED before src so the fetch is CORS-mode
     video.src = VIDEO_URL;
     video.addEventListener('error', () => console.warn('video element error event'));
+    // reveal the video (fading in over the poster still) once it actually plays
+    const reveal = () => { video.classList.add('ready'); const c=document.getElementById('c'); if(c) c.classList.add('ready'); };
+    video.addEventListener('playing', reveal, { once:true });
+    video.addEventListener('canplay', reveal, { once:true });
     const ensurePlay = () => { try { const p=video.play(); if(p&&p.catch)p.catch(()=>{}); } catch(e){} };
     ensurePlay();
     root.addEventListener('pointerdown', ensurePlay, { once:true });
