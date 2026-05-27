@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Building Beyond the Edge | Nasdaq</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="As AI powers a new era of economy where infrastructure, intelligence and capital converge, Nasdaq exists to help builders push beyond the edge and enable progress to scale.">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="webclip.png">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Bitter:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  /* =========================================================
+     NASDAQ BRAND STUDIO — DESIGN TOKENS
+     Mirrors the Winning Formula token set so this page reads
+     as a sibling, not a stranger. Additions below are scoped
+     to block-level needs that didn't exist in that build.
+     ========================================================= */
+  :root {
+    /* Core Nasdaq blue scale */
+    --nasdaq-blue-10: #E4F2FF;
+    --nasdaq-blue-20: #C0E3F5;
+    --nasdaq-blue-30: #8BD1E9;
+    --nasdaq-blue-40: #50B9DA;
+    --nasdaq-blue-50: #0092BC;   /* primary accent, accessible on dark */
+    --nasdaq-blue-56: #0679A1;   /* accessible on light */
+    --nasdaq-blue-60: #096D93;
+    --nasdaq-blue-70: #083F62;
+    --nasdaq-blue-80: #08062A;   /* core dark navy — page bg */
+
+    /* Surfaces */
+    --surface-page:        var(--nasdaq-blue-80);
+    --surface-elevated:    #100E3E;
+    --surface-elevated-2:  #1A174F;
+    --surface-elevated-3:  #221F5C;
+    --surface-light:       #ffffff;
+    --surface-offwhite:    #F5F7FA;
+    --surface-offwhite-2:  #ECEFF4;
+
+    /* Lines */
+    --line-on-dark:        rgba(255,255,255,0.10);
+    --line-on-dark-strong: rgba(255,255,255,0.22);
+    --line-on-light:       rgba(8,6,42,0.10);
+    --line-on-light-strong:rgba(8,6,42,0.22);
+
+    /* Text */
+    --text-on-dark:        #ffffff;
+    --text-on-dark-muted:  rgba(255,255,255,0.72);
+    --text-on-dark-subtle: rgba(255,255,255,0.48);
+    --text-on-light:       var(--nasdaq-blue-80);
+    --text-on-light-muted: rgba(8,6,42,0.62);
+    --text-on-light-subtle:rgba(8,6,42,0.42);
+
+    /* Signal accents (data viz, deltas) */
+    --signal-up:   #00B74F;
+    --signal-down: #E5484D;
+    --signal-warm: #F2A23B;
+
+    /* Typography */
+    --ff-sans:  'Inter', system-ui, -apple-system, sans-serif;
+    --ff-serif: 'Bitter', Georgia, serif;
+    --ff-mono:  'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+    /* Spacing */
+    --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
+    --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 64px;
+    --s-9: 96px; --s-10: 128px; --s-11: 160px;
+
+    /* Radii */
+    --r-xs: 2px; --r-s: 4px; --r-m: 8px; --r-l: 14px; --r-xl: 24px;
+
+    /* Motion */
+    --ease-nsdq: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out:  cubic-bezier(0.22, 1, 0.36, 1);
+
+    /* Layout */
+    --gutter:    7.5%;
+    --max-w:    1280px;
+    --ticker-h:  32px;
+  }
+
+  @media (max-width: 768px) {
+    :root { --gutter: var(--s-5); }
+  }
+
+  /* =========================================================
+     BASE
+     ========================================================= */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; scrollbar-gutter: stable; }
+
+  body {
+    background: var(--surface-page);
+    color: var(--text-on-dark);
+    font-family: var(--ff-sans);
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  img, video { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+
+  ::selection { background: var(--nasdaq-blue-50); color: #fff; }
+
+  /* =========================================================
+     LAYOUT — page wrap + section primitive
+     ========================================================= */
+  main#page { display: block; }
+
+  .section {
+    padding: var(--s-9) 0;
+    position: relative;
+    transition: background-color 600ms var(--ease-out);
+  }
+  .section .wrap {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+  @media (max-width: 768px) {
+    .section { padding: var(--s-8) 0; }
+  }
+
+  /* Section style sidecar — driven by JSON `style` object.
+     Each option becomes a class on the <section> element. */
+
+  /* Themes (bg + text color combos) */
+  .section.theme-dark    { background: var(--surface-page);     color: var(--text-on-dark); }
+  .section.theme-light   { background: var(--surface-offwhite); color: var(--text-on-light); }
+  .section.theme-accent  { background: var(--nasdaq-blue-70);   color: var(--text-on-dark); }
+  .section.theme-elevated{ background: var(--surface-elevated); color: var(--text-on-dark); }
+
+  /* Background token overrides — single var swap */
+  .section.bg-blue-80    { background: var(--nasdaq-blue-80); }
+  .section.bg-blue-70    { background: var(--nasdaq-blue-70); }
+  .section.bg-blue-50    { background: var(--nasdaq-blue-50); }
+  .section.bg-elevated   { background: var(--surface-elevated); }
+  .section.bg-elevated-2 { background: var(--surface-elevated-2); }
+  .section.bg-offwhite   { background: var(--surface-offwhite); }
+  .section.bg-light      { background: var(--surface-light); }
+
+  /* Alignment */
+  .section.align-center .wrap { text-align: center; }
+  .section.align-center .section-title,
+  .section.align-center .section-lede { margin-left: auto; margin-right: auto; }
+
+  /* Spacing */
+  .section.spacing-tight { padding: var(--s-7) 0; }
+  .section.spacing-loose { padding: var(--s-10) 0; }
+  @media (max-width: 768px) {
+    .section.spacing-tight { padding: var(--s-6) 0; }
+    .section.spacing-loose { padding: var(--s-9) 0; }
+  }
+
+  /* Section heading rhythm */
+  .section-eyebrow {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--nasdaq-blue-30);
+    margin-bottom: var(--s-4);
+  }
+  .theme-light .section-eyebrow { color: var(--nasdaq-blue-56); }
+
+  .section-title {
+    font-family: var(--ff-sans);
+    font-weight: 200;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    max-width: 22ch;
+    margin-bottom: var(--s-6);
+  }
+  .section-title em {
+    font-family: var(--ff-serif);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--nasdaq-blue-30);
+  }
+  .theme-light .section-title em { color: var(--nasdaq-blue-56); }
+
+  .section-lede {
+    font-size: clamp(1rem, 1.4vw, 1.2rem);
+    line-height: 1.55;
+    color: var(--text-on-dark-muted);
+    max-width: 64ch;
+    margin-bottom: var(--s-8);
+  }
+  .theme-light .section-lede { color: var(--text-on-light-muted); }
+
+  .section-head {
+    margin-bottom: var(--s-8);
+  }
+  @media (max-width: 768px) {
+    .section-head { margin-bottom: var(--s-7); }
+    .section-title { font-size: clamp(1.75rem, 8vw, 2.5rem); }
+  }
+
+  /* =========================================================
+     RICH TEXT — whitelist classes for span styling
+     Editors write <span class="rt-accent">word</span> in JSON.
+     ========================================================= */
+  .rt-accent       { color: var(--nasdaq-blue-30); }
+  .theme-light .rt-accent { color: var(--nasdaq-blue-56); }
+  .rt-muted        { color: var(--text-on-dark-muted); }
+  .theme-light .rt-muted { color: var(--text-on-light-muted); }
+  .rt-mono         { font-family: var(--ff-mono); font-size: 0.92em; letter-spacing: 0.02em; }
+  .rt-serif-italic { font-family: var(--ff-serif); font-style: italic; font-weight: 400; }
+  .rt-highlight    { background: rgba(0,146,188,0.18); padding: 0 0.25em; border-radius: var(--r-xs); }
+  .theme-light .rt-highlight { background: rgba(0,146,188,0.14); }
+  .rt-up           { color: var(--signal-up); font-weight: 500; }
+  .rt-down         { color: var(--signal-down); font-weight: 500; }
+
+  /* Inline anchors inside rich text */
+  .rt a, .rich-text a {
+    color: var(--nasdaq-blue-30);
+    border-bottom: 1px solid var(--line-on-dark-strong);
+    transition: color 200ms var(--ease-out), border-color 200ms var(--ease-out);
+  }
+  .rt a:hover, .rich-text a:hover {
+    color: #fff;
+    border-bottom-color: #fff;
+  }
+  .theme-light .rt a, .theme-light .rich-text a {
+    color: var(--nasdaq-blue-56);
+    border-bottom-color: var(--line-on-light-strong);
+  }
+  .theme-light .rt a:hover, .theme-light .rich-text a:hover {
+    color: var(--nasdaq-blue-80);
+    border-bottom-color: var(--nasdaq-blue-80);
+  }
+
+  /* =========================================================
+     REVEAL ANIMATION — IntersectionObserver-driven fade-up
+     ========================================================= */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-stagger > * { transition-delay: 0ms; }
+  .reveal-stagger.in > *:nth-child(1) { transition-delay: 0ms; }
+  .reveal-stagger.in > *:nth-child(2) { transition-delay: 80ms; }
+  .reveal-stagger.in > *:nth-child(3) { transition-delay: 160ms; }
+  .reveal-stagger.in > *:nth-child(4) { transition-delay: 240ms; }
+  .reveal-stagger.in > *:nth-child(5) { transition-delay: 320ms; }
+  .reveal-stagger.in > *:nth-child(6) { transition-delay: 400ms; }
+
+  /* =========================================================
+     HERO
+     ========================================================= */
+  .hero {
+    position: relative;
+    min-height: 78vh;
+    padding: var(--s-10) 0 var(--s-9);
+    overflow: hidden;
+    background: var(--surface-page);
+    color: var(--text-on-dark);
+  }
+  .hero-bg-image,
+  .hero-bg-video {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+  .hero-bg-video { z-index: 1; }
+  .hero-bg-scrim {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg,
+      rgba(8,6,42,0.55) 0%,
+      rgba(8,6,42,0.78) 60%,
+      rgba(8,6,42,0.95) 100%);
+    z-index: 2;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(139,209,233,0.12), transparent 45%),
+      radial-gradient(circle at 80% 60%, rgba(0,146,188,0.10), transparent 55%);
+    z-index: 2;
+    pointer-events: none;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 3;
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(78vh - var(--s-10) - var(--s-9));
+  }
+  .hero-eyebrow {
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--nasdaq-blue-30);
+    margin-bottom: var(--s-5);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-3);
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--nasdaq-blue-30);
+    display: inline-block;
+  }
+  .hero-headline {
+    font-family: var(--ff-sans);
+    font-weight: 200;
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    line-height: 0.96;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--s-5);
+    max-width: 14ch;
+  }
+  .hero-headline em {
+    font-family: var(--ff-serif);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--nasdaq-blue-30);
+  }
+  .hero-subhead {
+    font-family: var(--ff-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+    line-height: 1.35;
+    color: var(--text-on-dark);
+    margin-bottom: var(--s-6);
+    max-width: 36ch;
+  }
+  .hero-intro {
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    line-height: 1.6;
+    color: var(--text-on-dark-muted);
+    max-width: 56ch;
+  }
+  .hero-rule {
+    width: 64px; height: 2px;
+    background: var(--nasdaq-blue-30);
+    margin: var(--s-6) 0;
+  }
+  @media (max-width: 768px) {
+    .hero { min-height: auto; padding: var(--s-9) 0 var(--s-8); }
+    .hero-inner { min-height: auto; }
+  }
+
+  /* =========================================================
+     BLOCKS — common
+     ========================================================= */
+  .block { margin-bottom: var(--s-9); }
+  .block:last-child { margin-bottom: 0; }
+  @media (max-width: 768px) { .block { margin-bottom: var(--s-8); } }
+
+  /* =========================================================
+     BLOCK: copy
+     A paragraph (or several) of body copy, optionally with a
+     small headline above and an attribution below.
+     ========================================================= */
+  .block-copy {
+    max-width: 64ch;
+  }
+  .block-copy.layout-centered { margin-left: auto; margin-right: auto; text-align: center; }
+  .block-copy.layout-wide     { max-width: 80ch; }
+  .block-copy-headline {
+    font-family: var(--ff-sans);
+    font-weight: 300;
+    font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--s-4);
+  }
+  .block-copy-headline em {
+    font-family: var(--ff-serif);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--nasdaq-blue-30);
+  }
+  .theme-light .block-copy-headline em { color: var(--nasdaq-blue-56); }
+  .block-copy-body {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--text-on-dark-muted);
+  }
+  .theme-light .block-copy-body { color: var(--text-on-light-muted); }
+  .block-copy-body + .block-copy-body { margin-top: var(--s-4); }
+  .block-copy-attribution {
+    margin-top: var(--s-4);
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nasdaq-blue-30);
+  }
+  .theme-light .block-copy-attribution { color: var(--nasdaq-blue-56); }
+
+  /* =========================================================
+     BLOCK: quote
+     A pullquote with serif italic display, with attribution
+     and optional source link below.
+     ========================================================= */
+  .block-quote {
+    padding: var(--s-7) 0;
+    border-top: 1px solid var(--line-on-dark);
+    border-bottom: 1px solid var(--line-on-dark);
+    position: relative;
+  }
+  .theme-light .block-quote {
+    border-top-color: var(--line-on-light);
+    border-bottom-color: var(--line-on-light);
+  }
+  .block-quote.layout-bare {
+    border: 0;
+    padding: var(--s-5) 0;
+  }
+  .block-quote-mark {
+    font-family: var(--ff-serif);
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--nasdaq-blue-30);
+    height: 0.5em;
+    overflow: visible;
+    margin-bottom: var(--s-3);
+    user-select: none;
+  }
+  .theme-light .block-quote-mark { color: var(--nasdaq-blue-56); }
+  .block-quote-text {
+    font-family: var(--ff-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.4rem, 3vw, 2.25rem);
+    line-height: 1.25;
+    letter-spacing: -0.005em;
+    color: var(--text-on-dark);
+    max-width: 32ch;
+    margin-bottom: var(--s-5);
+  }
+  .theme-light .block-quote-text { color: var(--text-on-light); }
+  .block-quote-attribution {
+    font-family: var(--ff-sans);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-on-dark);
+  }
+  .theme-light .block-quote-attribution { color: var(--text-on-light); }
+  .block-quote-title {
+    font-family: var(--ff-sans);
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--text-on-dark-muted);
+    margin-top: 2px;
+  }
+  .theme-light .block-quote-title { color: var(--text-on-light-muted); }
+  .block-quote-source {
+    display: inline-block;
+    margin-top: var(--s-3);
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--nasdaq-blue-30);
+    border-bottom: 1px solid var(--line-on-dark-strong);
+    padding-bottom: 2px;
+    transition: color 200ms, border-color 200ms;
+  }
+  .theme-light .block-quote-source { color: var(--nasdaq-blue-56); border-bottom-color: var(--line-on-light-strong); }
+  .block-quote-source:hover { color: #fff; border-bottom-color: #fff; }
+  .theme-light .block-quote-source:hover { color: var(--nasdaq-blue-80); border-bottom-color: var(--nasdaq-blue-80); }
+
+  /* =========================================================
+     BLOCK: stats
+     A grid of stat cards. Each card has a variant — "number"
+     (huge figure + supporting copy) or "insight" (eyebrow +
+     insight text + supporting copy).
+     ========================================================= */
+  .block-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--s-5);
+  }
+  .stat-card {
+    background: var(--surface-elevated);
+    border: 1px solid var(--line-on-dark);
+    border-radius: var(--r-l);
+    padding: var(--s-7);
+    color: var(--text-on-dark);
+    overflow: hidden;
+    position: relative;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 600ms var(--ease-out), border-color 600ms var(--ease-out);
+  }
+  .theme-light .stat-card {
+    background: var(--surface-light);
+    border-color: var(--line-on-light);
+    color: var(--text-on-light);
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 90% 10%, rgba(139,209,233,0.10), transparent 50%),
+      radial-gradient(circle at 10% 90%, rgba(0,146,188,0.08), transparent 50%);
+    pointer-events: none;
+  }
+  .theme-light .stat-card::before {
+    background:
+      radial-gradient(circle at 90% 10%, rgba(0,146,188,0.06), transparent 50%);
+  }
+  .stat-card > * { position: relative; z-index: 1; }
+  .stat-card-eyebrow {
+    display: inline-block;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--nasdaq-blue-30);
+    background: rgba(0,146,188,0.15);
+    border: 1px solid rgba(139,209,233,0.25);
+    padding: 6px 12px;
+    border-radius: 999px;
+    margin-bottom: var(--s-5);
+  }
+  .theme-light .stat-card-eyebrow {
+    color: var(--nasdaq-blue-56);
+    background: rgba(0,146,188,0.10);
+    border-color: rgba(0,146,188,0.25);
+  }
+
+  /* Variant: "number" — big figure */
+  .stat-card-number {
+    font-family: var(--ff-sans);
+    font-weight: 200;
+    font-size: clamp(4rem, 12vw, 7rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: var(--s-4);
+  }
+  .stat-card-number .unit {
+    font-size: 0.45em;
+    font-weight: 300;
+    color: var(--nasdaq-blue-30);
+    margin-left: 0.05em;
+    vertical-align: top;
+    line-height: 1;
+  }
+  .theme-light .stat-card-number .unit { color: var(--nasdaq-blue-56); }
+
+  /* Variant: "insight" — labeled rows */
+  .stat-card-insight-label {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-on-dark-subtle);
+    margin-bottom: var(--s-2);
+  }
+  .theme-light .stat-card-insight-label { color: var(--text-on-light-subtle); }
+  .stat-card-insight-headline {
+    font-family: var(--ff-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+    line-height: 1.3;
+    margin-bottom: var(--s-5);
+  }
+  .stat-card-insight-body {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--text-on-dark-muted);
+  }
+  .theme-light .stat-card-insight-body { color: var(--text-on-light-muted); }
+  .stat-card-source {
+    margin-top: var(--s-5);
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-on-dark-subtle);
+  }
+  .theme-light .stat-card-source { color: var(--text-on-light-subtle); }
+  .stat-card-body {
+    font-family: var(--ff-serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text-on-dark-muted);
+  }
+  .theme-light .stat-card-body { color: var(--text-on-light-muted); }
+
+  /* =========================================================
+     BLOCK: image
+     A standalone image (chart, infographic, illustration) with
+     optional caption and source line.
+     ========================================================= */
+  .block-image {
+    margin: 0;
+  }
+  .block-image-frame {
+    background: var(--surface-elevated);
+    border: 1px solid var(--line-on-dark);
+    border-radius: var(--r-l);
+    padding: var(--s-5);
+    overflow: hidden;
+  }
+  .theme-light .block-image-frame {
+    background: var(--surface-light);
+    border-color: var(--line-on-light);
+  }
+  .block-image.layout-bare .block-image-frame {
+    background: transparent;
+    border: 0;
+    padding: 0;
+  }
+  .block-image-frame img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--r-m);
+    display: block;
+  }
+  .block-image-caption {
+    margin-top: var(--s-4);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--text-on-dark-muted);
+  }
+  .theme-light .block-image-caption { color: var(--text-on-light-muted); }
+  .block-image-source {
+    margin-top: var(--s-2);
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-on-dark-subtle);
+  }
+  .theme-light .block-image-source { color: var(--text-on-light-subtle); }
+
+  /* =========================================================
+     BLOCK: resources
+     A categorized list of links. Each item has a "kind" tag
+     (Research, Verafin, Blogpost, etc.) and a title.
+     ========================================================= */
+  .block-resources-title {
+    font-family: var(--ff-sans);
+    font-weight: 300;
+    font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+    margin-bottom: var(--s-5);
+    letter-spacing: -0.01em;
+  }
+  .block-resources-list {
+    border-top: 1px solid var(--line-on-dark);
+  }
+  .theme-light .block-resources-list { border-top-color: var(--line-on-light); }
+  .resource-item {
+    display: grid;
+    grid-template-columns: 140px 1fr auto;
+    gap: var(--s-5);
+    align-items: center;
+    padding: var(--s-4) 0;
+    border-bottom: 1px solid var(--line-on-dark);
+    transition: background-color 200ms var(--ease-out), padding-left 200ms var(--ease-out);
+    color: var(--text-on-dark);
+  }
+  .theme-light .resource-item {
+    border-bottom-color: var(--line-on-light);
+    color: var(--text-on-light);
+  }
+  .resource-item:hover {
+    background: rgba(255,255,255,0.03);
+    padding-left: var(--s-3);
+  }
+  .theme-light .resource-item:hover { background: rgba(8,6,42,0.03); }
+  .resource-kind {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--nasdaq-blue-30);
+  }
+  .theme-light .resource-kind { color: var(--nasdaq-blue-56); }
+  .resource-title {
+    font-family: var(--ff-sans);
+    font-size: 1.05rem;
+    font-weight: 400;
+    line-height: 1.4;
+  }
+  .resource-arrow {
+    width: 32px; height: 32px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--line-on-dark-strong);
+    border-radius: 999px;
+    transition: transform 200ms var(--ease-out), background-color 200ms var(--ease-out);
+    color: var(--text-on-dark);
+  }
+  .theme-light .resource-arrow {
+    border-color: var(--line-on-light-strong);
+    color: var(--text-on-light);
+  }
+  .resource-item:hover .resource-arrow {
+    transform: translate(2px, -2px);
+    background: var(--nasdaq-blue-50);
+    border-color: var(--nasdaq-blue-50);
+    color: #fff;
+  }
+  @media (max-width: 768px) {
+    .resource-item {
+      grid-template-columns: 1fr auto;
+      gap: var(--s-3);
+    }
+    .resource-kind { grid-column: 1 / -1; }
+  }
+
+  /* =========================================================
+     BLOCK: quote-cards
+     A grid of quote cards. Each card supports a portrait (for
+     people) or a logo (for brands).
+     ========================================================= */
+  .block-quote-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--s-5);
+  }
+  .block-quote-cards.layout-row-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  @media (max-width: 980px) {
+    .block-quote-cards.layout-row-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .block-quote-cards.layout-row-3 { grid-template-columns: 1fr; }
+  }
+  .qcard {
+    background: var(--surface-elevated);
+    border: 1px solid var(--line-on-dark);
+    border-radius: var(--r-l);
+    padding: var(--s-6);
+    color: var(--text-on-dark);
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-5);
+    min-height: 320px;
+    transition: transform 500ms var(--ease-out), border-color 500ms var(--ease-out);
+  }
+  .theme-light .qcard {
+    background: var(--surface-light);
+    border-color: var(--line-on-light);
+    color: var(--text-on-light);
+  }
+  .qcard:hover { border-color: var(--nasdaq-blue-50); }
+  .qcard-mark {
+    font-family: var(--ff-serif);
+    font-size: 3rem;
+    line-height: 0.5;
+    color: var(--nasdaq-blue-30);
+    height: 1rem;
+  }
+  .theme-light .qcard-mark { color: var(--nasdaq-blue-56); }
+  .qcard-text {
+    font-family: var(--ff-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.15rem;
+    line-height: 1.4;
+    flex-grow: 1;
+  }
+  .qcard-foot {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--line-on-dark);
+  }
+  .theme-light .qcard-foot { border-top-color: var(--line-on-light); }
+  .qcard-portrait {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--surface-elevated-2);
+    flex-shrink: 0;
+  }
+  .qcard-logo {
+    height: 40px;
+    width: auto;
+    max-width: 120px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+  .qcard-attr {
+    display: flex; flex-direction: column; min-width: 0;
+  }
+  .qcard-name {
+    font-family: var(--ff-sans);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  .qcard-title {
+    font-family: var(--ff-sans);
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--text-on-dark-muted);
+    margin-top: 2px;
+  }
+  .theme-light .qcard-title { color: var(--text-on-light-muted); }
+  .qcard-source {
+    align-self: flex-start;
+    margin-top: var(--s-3);
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--nasdaq-blue-30);
+    border-bottom: 1px solid var(--line-on-dark-strong);
+    padding-bottom: 2px;
+  }
+  .theme-light .qcard-source { color: var(--nasdaq-blue-56); border-bottom-color: var(--line-on-light-strong); }
+
+  /* =========================================================
+     BLOCK: videos
+     A grid of inline-playable video tiles. Click to play in
+     place. Lighter weight than the Winning Formula carousel —
+     no filters, no overflow logic.
+     ========================================================= */
+  .block-videos-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-5);
+    margin-bottom: var(--s-6);
+    flex-wrap: wrap;
+  }
+  .block-videos-title {
+    font-family: var(--ff-sans);
+    font-weight: 300;
+    font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+    letter-spacing: -0.01em;
+  }
+  .block-videos-title em {
+    font-family: var(--ff-serif);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--nasdaq-blue-30);
+  }
+  .theme-light .block-videos-title em { color: var(--nasdaq-blue-56); }
+  .block-videos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--s-5);
+  }
+  .block-videos.layout-row-3 .block-videos-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .block-videos.layout-row-4 .block-videos-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  @media (max-width: 980px) {
+    .block-videos.layout-row-3 .block-videos-grid,
+    .block-videos.layout-row-4 .block-videos-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 640px) {
+    .block-videos.layout-row-3 .block-videos-grid,
+    .block-videos.layout-row-4 .block-videos-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .vtile {
+    cursor: pointer;
+    transition: transform 300ms var(--ease-out);
+  }
+  .vtile:hover { transform: translateY(-3px); }
+  .vtile-thumb {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--surface-elevated-2);
+    border-radius: var(--r-m);
+    overflow: hidden;
+  }
+  .vtile-thumb img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 600ms var(--ease-out);
+  }
+  .vtile:hover .vtile-thumb img { transform: scale(1.04); }
+  .vtile-play {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(180deg, transparent 50%, rgba(8,6,42,0.4) 100%);
+    transition: background 300ms;
+  }
+  .vtile-play-btn {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.95);
+    color: var(--nasdaq-blue-80);
+    display: flex; align-items: center; justify-content: center;
+    transform: scale(0.9);
+    transition: transform 300ms var(--ease-out), background 300ms;
+  }
+  .vtile-play-btn::after {
+    content: '';
+    width: 0; height: 0;
+    border-left: 13px solid currentColor;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    margin-left: 3px;
+  }
+  .vtile:hover .vtile-play-btn { transform: scale(1); background: var(--nasdaq-blue-50); color: #fff; }
+  .vtile-meta {
+    padding-top: var(--s-3);
+  }
+  .vtile-title {
+    font-family: var(--ff-sans);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--text-on-dark);
+  }
+  .theme-light .vtile-title { color: var(--text-on-light); }
+  .vtile-sub {
+    font-family: var(--ff-sans);
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--text-on-dark-muted);
+    margin-top: 2px;
+  }
+  .theme-light .vtile-sub { color: var(--text-on-light-muted); }
+
+  /* Inline player (the iframe replaces the thumb in-place) */
+  .inline-player {
+    position: absolute;
+    inset: 0;
+    background: #000;
+    z-index: 2;
+  }
+  .inline-player iframe {
+    width: 100%; height: 100%;
+    border: 0;
+    background: #000;
+  }
+  .vtile.is-playing .vtile-play { display: none; }
+
+  /* =========================================================
+     BLOCK: mosaic
+     A flexible multi-cell mosaic. Cells are either "image"
+     (full-bleed image), "text" (heading + body card), or
+     "icon-text" (icon glyph + heading + body card).
+     Cells specify span (col/row) for variety in composition.
+     ========================================================= */
+  .block-mosaic-head {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    margin-bottom: var(--s-6);
+  }
+  .block-mosaic-mark {
+    width: 16px; height: 16px;
+    background: var(--nasdaq-blue-50);
+    border-radius: var(--r-xs);
+    flex-shrink: 0;
+  }
+  .block-mosaic-title {
+    font-family: var(--ff-sans);
+    font-weight: 400;
+    font-size: clamp(1.4rem, 2.4vw, 2rem);
+    letter-spacing: -0.01em;
+  }
+  .block-mosaic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: minmax(180px, auto);
+    gap: var(--s-4);
+  }
+  @media (max-width: 768px) {
+    .block-mosaic-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: minmax(160px, auto);
+    }
+  }
+  @media (max-width: 480px) {
+    .block-mosaic-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .mosaic-cell {
+    border-radius: var(--r-m);
+    overflow: hidden;
+    position: relative;
+    min-height: 180px;
+  }
+  .mosaic-cell.span-2 { grid-column: span 2; }
+  .mosaic-cell.span-tall { grid-row: span 2; }
+  @media (max-width: 480px) {
+    .mosaic-cell.span-2,
+    .mosaic-cell.span-tall { grid-column: auto; grid-row: auto; }
+  }
+  .mosaic-cell.cell-image img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    min-height: 180px;
+  }
+  .mosaic-cell.cell-text,
+  .mosaic-cell.cell-icon-text {
+    background: var(--surface-light);
+    color: var(--text-on-light);
+    padding: var(--s-5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--s-4);
+  }
+  .mosaic-cell-icon {
+    width: 36px; height: 36px;
+    color: var(--nasdaq-blue-56);
+    flex-shrink: 0;
+  }
+  .mosaic-cell-icon svg { width: 100%; height: 100%; }
+  .mosaic-cell-headline {
+    font-family: var(--ff-sans);
+    font-weight: 500;
+    font-size: 1.05rem;
+    line-height: 1.3;
+    color: var(--text-on-light);
+  }
+  .mosaic-cell-body {
+    font-family: var(--ff-sans);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--text-on-light-muted);
+  }
+
+  /* =========================================================
+     BLOCK: pillars
+     A 2- to 4-column grid of capability pillars, each with
+     a label, short description, and an optional icon.
+     ========================================================= */
+  .block-pillars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--s-4);
+  }
+  .block-pillars.layout-row-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .block-pillars.layout-row-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .block-pillars.layout-row-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (max-width: 980px) {
+    .block-pillars.layout-row-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .block-pillars.layout-row-4,
+    .block-pillars.layout-row-3,
+    .block-pillars.layout-row-2 { grid-template-columns: 1fr; }
+  }
+  .pillar {
+    background: var(--surface-elevated);
+    border: 1px solid var(--line-on-dark);
+    border-radius: var(--r-l);
+    padding: var(--s-6);
+    color: var(--text-on-dark);
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-4);
+    transition: transform 400ms var(--ease-out), border-color 400ms var(--ease-out), background-color 400ms var(--ease-out);
+    position: relative;
+    overflow: hidden;
+  }
+  .theme-light .pillar {
+    background: var(--surface-light);
+    border-color: var(--line-on-light);
+    color: var(--text-on-light);
+  }
+  .pillar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 36px;
+    height: 3px;
+    background: var(--nasdaq-blue-50);
+    border-radius: 0 0 var(--r-s) 0;
+    transition: width 400ms var(--ease-out);
+  }
+  .pillar:hover { border-color: var(--nasdaq-blue-50); }
+  .pillar:hover::before { width: 100%; }
+  .pillar-icon {
+    width: 32px; height: 32px;
+    color: var(--nasdaq-blue-30);
+  }
+  .theme-light .pillar-icon { color: var(--nasdaq-blue-56); }
+  .pillar-icon svg { width: 100%; height: 100%; }
+  .pillar-label {
+    font-family: var(--ff-sans);
+    font-weight: 500;
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+  .pillar-body {
+    font-family: var(--ff-sans);
+    font-size: 0.92rem;
+    font-weight: 300;
+    line-height: 1.55;
+    color: var(--text-on-dark-muted);
+  }
+  .theme-light .pillar-body { color: var(--text-on-light-muted); }
+
+  /* =========================================================
+     BLOCK: product
+     A product/feature showcase card with image and copy side
+     by side. Light treatment by default.
+     ========================================================= */
+  .block-product {
+    background: var(--surface-light);
+    color: var(--text-on-light);
+    border-radius: var(--r-l);
+    padding: var(--s-7);
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: var(--s-7);
+    align-items: center;
+    overflow: hidden;
+  }
+  .theme-light .block-product {
+    background: var(--surface-offwhite);
+  }
+  .block-product.layout-image-right { grid-template-columns: 1.1fr 1fr; }
+  .block-product.layout-image-right .product-media { order: 2; }
+  .block-product.layout-image-right .product-copy  { order: 1; }
+  @media (max-width: 768px) {
+    .block-product,
+    .block-product.layout-image-right {
+      grid-template-columns: 1fr;
+      gap: var(--s-5);
+      padding: var(--s-5);
+    }
+    .block-product.layout-image-right .product-media { order: 1; }
+    .block-product.layout-image-right .product-copy  { order: 2; }
+  }
+  .product-tabs {
+    display: flex;
+    gap: var(--s-4);
+    flex-wrap: wrap;
+    padding-bottom: var(--s-4);
+    margin-bottom: var(--s-5);
+    border-bottom: 1px solid var(--line-on-light);
+  }
+  .product-tab {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-on-light-subtle);
+    position: relative;
+    padding-bottom: var(--s-2);
+  }
+  .product-tab.active {
+    color: var(--text-on-light);
+  }
+  .product-tab.active::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--nasdaq-blue-56);
+  }
+  .product-headline {
+    font-family: var(--ff-sans);
+    font-weight: 300;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--s-4);
+    color: var(--text-on-light);
+  }
+  .product-headline em {
+    font-family: var(--ff-serif);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--nasdaq-blue-56);
+  }
+  .product-copy { min-width: 0; }
+  .product-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-on-light-muted);
+    margin-bottom: var(--s-5);
+    max-width: 48ch;
+  }
+  .product-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-3);
+    background: var(--nasdaq-blue-80);
+    color: #fff;
+    padding: var(--s-3) var(--s-5);
+    border-radius: var(--r-s);
+    font-family: var(--ff-sans);
+    font-size: 0.92rem;
+    font-weight: 500;
+    transition: background 200ms var(--ease-out), transform 200ms var(--ease-out);
+  }
+  .product-cta:hover {
+    background: var(--nasdaq-blue-50);
+    transform: translateY(-1px);
+  }
+  .product-media {
+    border-radius: var(--r-m);
+    overflow: hidden;
+    background: var(--surface-offwhite-2);
+  }
+  .product-media img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* =========================================================
+     UTILITY — image lazy load placeholder
+     ========================================================= */
+  img[loading="lazy"] {
+    background-color: rgba(255,255,255,0.04);
+  }
+
+  /* =========================================================
+     A11Y helper
+     ========================================================= */
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+
+</head>
+<body>
+
+<!-- =========================================================
+     PAGE ROOT
+     The renderer creates sections dynamically into this element
+     in the order specified by content.json's top-level
+     `sections` array. Nothing is hardcoded here — if the fetch
+     fails, the page stays empty rather than showing stale
+     fallback content. See README for the failure-mode contract.
+     ========================================================= -->
+<main id="page"></main>
+
+<!-- =========================================================
+     APPLICATION SCRIPT
+     Section ordering, all renderers, inline video, scroll reveal,
+     and the iframe height broadcaster.
+     ========================================================= -->
+<script>
+(function () {
+  'use strict';
+
+  /* =========================================================
+     CONTENT URL
+     Relative by default — works in local testing (alongside
+     index.html on disk or via a local web server) AND in
+     production (GitHub Pages serves both files from the same
+     origin/path). Change to an absolute URL only if you want
+     to host index.html separately from content.json.
+     Cache-busted at minute granularity (see loadContent).
+     ========================================================= */
+  var CONTENT_URL = 'content.json';
+
+  /* =========================================================
+     STRING HELPERS
+     - esc(): HTML-escape a plain-text field
+     - richText(): escape, then re-allow a small whitelist of
+       safe inline tags. The whitelist is the editorial contract.
+     ========================================================= */
+  function esc(s) {
+    if (s == null) return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  /* Whitelisted span classes — anything else is dropped silently.
+     Keep this in sync with the .rt-* CSS rules above. */
+  var RT_SPAN_CLASSES = {
+    'rt-accent': 1, 'rt-muted': 1, 'rt-mono': 1, 'rt-serif-italic': 1,
+    'rt-highlight': 1, 'rt-up': 1, 'rt-down': 1
+  };
+
+  function richText(s) {
+    if (s == null) return '';
+    var out = esc(s);
+
+    /* Bare inline tags */
+    out = out.replace(/&lt;(\/?)(em|strong|u|small|mark|sup|sub|br)\s*\/?&gt;/gi, '<$1$2>');
+
+    /* Anchors: <a href="..."> ... </a>
+       href must start with http(s):// | mailto: | tel: | # | /
+       to avoid javascript: and data: URIs. */
+    out = out.replace(
+      /&lt;a\s+href=(&quot;|&#39;)([^]+?)\1\s*&gt;/gi,
+      function (_m, _q, href) {
+        if (/^(https?:\/\/|mailto:|tel:|#|\/)/i.test(href)) {
+          return '<a href="' + href + '" target="_blank" rel="noopener noreferrer">';
+        }
+        return '';
+      }
+    );
+    out = out.replace(/&lt;\/a&gt;/gi, '</a>');
+
+    /* Spans with whitelisted class names */
+    out = out.replace(
+      /&lt;span\s+class=(&quot;|&#39;)([^]+?)\1\s*&gt;/gi,
+      function (_m, _q, cls) {
+        var keep = String(cls).split(/\s+/).filter(function (c) { return RT_SPAN_CLASSES[c]; }).join(' ');
+        return keep ? '<span class="' + keep + '">' : '<span>';
+      }
+    );
+    out = out.replace(/&lt;\/span&gt;/gi, '</span>');
+
+    return out;
+  }
+
+  /* =========================================================
+     VIDEO HELPERS — JWP + YouTube
+     extractMediaId returns {kind, id} or {kind:'', id:''}.
+     thumbImgHTML derives a poster URL with a cascade fallback,
+     so editors don't have to store thumbnails in content.json.
+     ========================================================= */
+  function extractMediaId(videoUrl) {
+    if (!videoUrl) return { kind: '', id: '' };
+    var m = videoUrl.match(/cdn\.jwplayer\.com\/players\/([A-Za-z0-9]+)-[A-Za-z0-9]+\.html/);
+    if (m) return { kind: 'jwp', id: m[1] };
+    m = videoUrl.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+    if (m) return { kind: 'yt', id: m[1] };
+    return { kind: '', id: '' };
+  }
+
+  function thumbImgHTML(videoUrl, alt, explicitThumbnail) {
+    /* If an editor pasted an explicit thumbnail URL, prefer it.
+       Otherwise derive from the videoUrl with a cascade fallback. */
+    if (explicitThumbnail) {
+      return '<img loading="lazy" src="' + esc(explicitThumbnail) +
+             '" alt="' + esc(alt || '') + '">';
+    }
+
+    var meta = extractMediaId(videoUrl);
+    var candidates = [];
+    if (meta.kind === 'jwp') {
+      candidates.push('https://cdn.jwplayer.com/v2/media/' + meta.id + '/poster.jpg');
+      candidates.push('https://cdn.jwplayer.com/v2/media/' + meta.id + '/poster.jpg?width=720');
+      candidates.push('https://cdn.jwplayer.com/v2/media/' + meta.id + '/poster.jpg?width=480');
+      candidates.push('https://cdn.jwplayer.com/thumbs/' + meta.id + '-720.jpg');
+      candidates.push('https://cdn.jwplayer.com/strips/' + meta.id + '-720.jpg');
+    } else if (meta.kind === 'yt') {
+      candidates.push('https://i.ytimg.com/vi/' + meta.id + '/maxresdefault.jpg');
+      candidates.push('https://i.ytimg.com/vi/' + meta.id + '/hqdefault.jpg');
+      candidates.push('https://i.ytimg.com/vi/' + meta.id + '/0.jpg');
+    }
+    if (!candidates.length) {
+      return '<img loading="lazy" alt="' + esc(alt || '') +
+             '" style="background:var(--surface-elevated-2)">';
+    }
+    var cascade = esc(JSON.stringify(candidates));
+    var first = esc(candidates[0]);
+    return '<img loading="lazy" src="' + first + '" alt="' + esc(alt || '') +
+           '" data-cascade=\'' + cascade + '\' data-cascade-idx="0" ' +
+           'onerror="(function(img){try{var l=JSON.parse(img.dataset.cascade);var i=(parseInt(img.dataset.cascadeIdx,10)||0)+1;if(i<l.length){img.dataset.cascadeIdx=i;img.src=l[i];}else{img.style.background=\'var(--surface-elevated-2)\';img.removeAttribute(\'onerror\');}}catch(e){}})(this)">';
+  }
+
+  /* =========================================================
+     ICONS — a small library of inline SVGs for pillars + mosaic
+     cells. Editors reference these by name in content.json
+     (e.g. "icon": "capital"). Unknown names render nothing.
+     ========================================================= */
+  var ICONS = {
+    'capital':       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-7h6v7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    'liquidity':     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 3c-3 4-6 7-6 11a6 6 0 0012 0c0-4-3-7-6-11z" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    'shield':        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6l8-3z" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    'infrastructure':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><path d="M10 6.5h4M10 17.5h4M6.5 10v4M17.5 10v4"/></svg>',
+    'orbit':         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-25 12 12)"/></svg>',
+    'globe':         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg>',
+    'spark':         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 3v6M12 15v6M3 12h6M15 12h6M5.5 5.5l4 4M14.5 14.5l4 4M5.5 18.5l4-4M14.5 9.5l4-4" stroke-linecap="round"/></svg>',
+    'rocket':        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M14 5l5 5-9 9-5-1-1-5 10-8z" stroke-linejoin="round"/><path d="M14 10a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/></svg>',
+    'chart':         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 20V8M10 20v-6M16 20v-9M22 20H2" stroke-linecap="round"/></svg>'
+  };
+  function getIcon(name) { return ICONS[name] || ''; }
+
+  /* External-link arrow SVG used in resource items + CTAs */
+  function arrowOutSVG(size) {
+    var s = size || 14;
+    return '<svg viewBox="0 0 16 16" fill="none" width="' + s + '" height="' + s +
+           '" aria-hidden="true"><path d="M4 12 L12 4 M12 4 L7 4 M12 4 L12 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+  }
+
+  /* =========================================================
+     BLOCK RENDERERS
+     Each takes a block object and returns an HTML string.
+     The dispatcher calls these based on block.type.
+     ========================================================= */
+
+  function renderCopyBlock(b) {
+    var layout = b.layout ? ' layout-' + esc(b.layout) : '';
+    var body = b.body;
+    var bodyArr = Array.isArray(body) ? body : (body ? [body] : []);
+    return [
+      '<div class="block block-copy reveal' + layout + '">',
+        b.headline ? '<h3 class="block-copy-headline">' + richText(b.headline) + '</h3>' : '',
+        bodyArr.map(function (p) {
+          return '<p class="block-copy-body">' + richText(p) + '</p>';
+        }).join(''),
+        b.attribution ? '<div class="block-copy-attribution">' + esc(b.attribution) + '</div>' : '',
+      '</div>'
+    ].join('');
+  }
+
+  function renderQuoteBlock(b) {
+    var layout = b.layout ? ' layout-' + esc(b.layout) : '';
+    var hasFoot = b.attribution || b.title || b.sourceUrl;
+    return [
+      '<figure class="block block-quote reveal' + layout + '">',
+        '<div class="block-quote-mark" aria-hidden="true">&ldquo;</div>',
+        '<blockquote class="block-quote-text">' + richText(b.text || '') + '</blockquote>',
+        hasFoot ? [
+          '<figcaption>',
+            b.attribution ? '<div class="block-quote-attribution">' + esc(b.attribution) + '</div>' : '',
+            b.title ? '<div class="block-quote-title">' + esc(b.title) + '</div>' : '',
+            b.sourceUrl ? '<a class="block-quote-source" href="' + esc(b.sourceUrl) + '" target="_blank" rel="noopener noreferrer">' + esc(b.sourceLabel || 'Source') + '</a>' : '',
+          '</figcaption>'
+        ].join('') : '',
+      '</figure>'
+    ].join('');
+  }
+
+  function renderStatCard(c) {
+    if (c.variant === 'insight') {
+      return [
+        '<div class="stat-card stat-card--insight">',
+          c.eyebrow ? '<div class="stat-card-eyebrow">' + esc(c.eyebrow) + '</div>' : '',
+          '<div>',
+            c.label ? '<div class="stat-card-insight-label">' + esc(c.label) + '</div>' : '',
+            c.headline ? '<div class="stat-card-insight-headline">' + richText(c.headline) + '</div>' : '',
+            c.subLabel ? '<div class="stat-card-insight-label" style="margin-top:var(--s-5)">' + esc(c.subLabel) + '</div>' : '',
+            c.body ? '<div class="stat-card-insight-body">' + richText(c.body) + '</div>' : '',
+          '</div>',
+          c.source ? '<div class="stat-card-source">' + esc(c.source) + '</div>' : '',
+        '</div>'
+      ].join('');
+    }
+    /* default: "number" variant */
+    return [
+      '<div class="stat-card stat-card--number">',
+        c.eyebrow ? '<div class="stat-card-eyebrow">' + esc(c.eyebrow) + '</div>' : '',
+        '<div>',
+          c.number ? '<div class="stat-card-number">' + esc(c.number) + (c.unit ? '<span class="unit">' + esc(c.unit) + '</span>' : '') + '</div>' : '',
+          c.body ? '<div class="stat-card-body">' + richText(c.body) + '</div>' : '',
+        '</div>',
+        c.source ? '<div class="stat-card-source">' + esc(c.source) + '</div>' : '',
+      '</div>'
+    ].join('');
+  }
+
+  function renderStatsBlock(b) {
+    var cards = Array.isArray(b.cards) ? b.cards : [];
+    return [
+      '<div class="block block-stats reveal-stagger reveal">',
+        cards.map(renderStatCard).join(''),
+      '</div>'
+    ].join('');
+  }
+
+  function renderImageBlock(b) {
+    var layout = b.layout ? ' layout-' + esc(b.layout) : '';
+    return [
+      '<figure class="block block-image reveal' + layout + '">',
+        '<div class="block-image-frame">',
+          b.image ? '<img src="' + esc(b.image) + '" alt="' + esc(b.imageAlt || '') + '" loading="lazy">' : '',
+        '</div>',
+        b.caption ? '<figcaption class="block-image-caption">' + richText(b.caption) + '</figcaption>' : '',
+        b.source ? '<div class="block-image-source">' + esc(b.source) + '</div>' : '',
+      '</figure>'
+    ].join('');
+  }
+
+  function renderResourceItem(it) {
+    var href = it.url || '#';
+    return [
+      '<a class="resource-item" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">',
+        '<span class="resource-kind">' + esc(it.kind || '') + '</span>',
+        '<span class="resource-title">' + richText(it.title || '') + '</span>',
+        '<span class="resource-arrow">' + arrowOutSVG(14) + '</span>',
+      '</a>'
+    ].join('');
+  }
+
+  function renderResourcesBlock(b) {
+    var items = Array.isArray(b.items) ? b.items : [];
+    return [
+      '<div class="block block-resources reveal">',
+        b.title ? '<h3 class="block-resources-title">' + richText(b.title) + '</h3>' : '',
+        '<div class="block-resources-list">' + items.map(renderResourceItem).join('') + '</div>',
+      '</div>'
+    ].join('');
+  }
+
+  function renderQCard(c) {
+    var quoteText = c.text || c.quote || '';
+    var foot = '';
+    if (c.logo) {
+      foot = [
+        '<div class="qcard-foot">',
+          '<img class="qcard-logo" src="' + esc(c.logo) + '" alt="' + esc(c.logoAlt || c.attribution || '') + '" loading="lazy">',
+          (c.attribution || c.title) ? [
+            '<div class="qcard-attr">',
+              c.attribution ? '<div class="qcard-name">' + esc(c.attribution) + '</div>' : '',
+              c.title ? '<div class="qcard-title">' + esc(c.title) + '</div>' : '',
+            '</div>'
+          ].join('') : '',
+        '</div>'
+      ].join('');
+    } else if (c.portrait) {
+      foot = [
+        '<div class="qcard-foot">',
+          '<img class="qcard-portrait" src="' + esc(c.portrait) + '" alt="' + esc(c.portraitAlt || c.attribution || '') + '" loading="lazy">',
+          '<div class="qcard-attr">',
+            c.attribution ? '<div class="qcard-name">' + esc(c.attribution) + '</div>' : '',
+            c.title ? '<div class="qcard-title">' + esc(c.title) + '</div>' : '',
+          '</div>',
+        '</div>'
+      ].join('');
+    } else if (c.attribution || c.title) {
+      foot = [
+        '<div class="qcard-foot">',
+          '<div class="qcard-attr">',
+            c.attribution ? '<div class="qcard-name">' + esc(c.attribution) + '</div>' : '',
+            c.title ? '<div class="qcard-title">' + esc(c.title) + '</div>' : '',
+          '</div>',
+        '</div>'
+      ].join('');
+    }
+
+    return [
+      '<figure class="qcard">',
+        '<div class="qcard-mark" aria-hidden="true">&ldquo;</div>',
+        '<blockquote class="qcard-text">' + richText(quoteText) + '</blockquote>',
+        foot,
+        c.sourceUrl ? '<a class="qcard-source" href="' + esc(c.sourceUrl) + '" target="_blank" rel="noopener noreferrer">' + esc(c.sourceLabel || 'Source') + '</a>' : '',
+      '</figure>'
+    ].join('');
+  }
+
+  function renderQuoteCardsBlock(b) {
+    var cards = Array.isArray(b.cards) ? b.cards : [];
+    var layout = b.layout ? ' layout-' + esc(b.layout) : '';
+    return [
+      '<div class="block block-quote-cards reveal-stagger reveal' + layout + '">',
+        cards.map(renderQCard).join(''),
+      '</div>'
+    ].join('');
+  }
+
+  function renderVTile(t) {
+    return [
+      '<div class="vtile" role="button" tabindex="0" ',
+           'data-video-url="' + esc(t.videoUrl || '') + '" ',
+           'data-title="' + esc(t.title || '') + '">',
+        '<div class="vtile-thumb">',
+          thumbImgHTML(t.videoUrl, t.thumbnailAlt || t.title, t.thumbnail),
+          '<div class="vtile-play"><div class="vtile-play-btn" aria-hidden="true"></div></div>',
+        '</div>',
+        (t.title || t.subtitle) ? [
+          '<div class="vtile-meta">',
+            t.title ? '<div class="vtile-title">' + esc(t.title) + '</div>' : '',
+            t.subtitle ? '<div class="vtile-sub">' + esc(t.subtitle) + '</div>' : '',
+          '</div>'
+        ].join('') : '',
+      '</div>'
+    ].join('');
+  }
+
+  function renderVideosBlock(b) {
+    var tiles = Array.isArray(b.tiles) ? b.tiles : [];
+    var layout = b.layout ? ' layout-' + esc(b.layout) : '';
+    return [
+      '<div class="block block-videos reveal' + layout + '">',
+        b.title ? [
+          '<div class="block-videos-head">',
+            '<h3 class="block-videos-title">' + richText(b.title) + '</h3>',
+          '</div>'
+        ].join('') : '',
+        '<div class="block-videos-grid">' + tiles.map(renderVTile).join('') + '</div>',
+      '</div>'
+    ].join('');
+  }
+
+  function renderMosaicCell(c) {
+    var span = c.span ? ' span-' + esc(c.span) : '';
+    if (c.image) {
+      return [
+        '<div class="mosaic-cell cell-image' + span + '">',
+          '<img src="' + esc(c.image) + '" alt="' + esc(c.imageAlt || '') + '" loading="lazy">',
+        '</div>'
+      ].join('');
+    }
+    return [
+      '<div class="mosaic-cell cell-text' + span + '">',
+        c.icon ? '<div class="mosaic-cell-icon">' + getIcon(c.icon) + '</div>' : '',
+        '<div>',
+          c.headline ? '<div class="mosaic-cell-headline">' + richText(c.headline) + '</div>' : '',
+          c.body ? '<div class="mosaic-cell-body">' + richText(c.body) + '</div>' : '',
+        '</div>',
+      '</div>'
+    ].join('');
+  }
+
+  function renderMosaicBlock(b) {
+    var cells = Array.isArray(b.cells) ? b.cells : [];
+    return [
+      '<div class="block block-mosaic reveal-stagger reveal">',
+        b.title ? [
+          '<div class="block-mosaic-head">',
+            '<div class="block-mosaic-mark" aria-hidden="true"></div>',
+            '<h3 class="block-mosaic-title">' + richText(b.title) + '</h3>',
+          '</div>'
+        ].join('') : '',
+        '<div class="block-mosaic-grid">' + cells.map(renderMosaicCell).join('') + '</div>',
+      '</div>'
+    ].join('');
+  }
+
+  function renderPillar(p) {
+    return [
+      '<div class="pillar">',
+        p.icon ? '<div class="pillar-icon">' + getIcon(p.icon) + '</div>' : '',
+        '<div>',
+          p.label ? '<div class="pillar-label">' + richText(p.label) + '</div>' : '',
+          p.body ? '<div class="pillar-body">' + richText(p.body) + '</div>' : '',
+        '</div>',
+      '</div>'
+    ].join('');
+  }
+
+  function renderPillarsBlock(b) {
+    var pillars = Array.isArray(b.pillars) ? b.pillars : [];
+    var layout = b.layout ? ' layout-' + esc(b.layout) : '';
+    return [
+      '<div class="block block-pillars reveal-stagger reveal' + layout + '">',
+        pillars.map(renderPillar).join(''),
+      '</div>'
+    ].join('');
+  }
+
+  function renderProductBlock(b) {
+    var layout = b.layout ? ' layout-' + esc(b.layout) : '';
+    return [
+      '<div class="block block-product reveal' + layout + '">',
+        '<div class="product-copy">',
+          (Array.isArray(b.tabs) && b.tabs.length) ? [
+            '<div class="product-tabs">',
+              b.tabs.map(function (t, i) {
+                return '<span class="product-tab' + (i === 0 ? ' active' : '') + '">' + esc(t) + '</span>';
+              }).join(''),
+            '</div>'
+          ].join('') : '',
+          b.headline ? '<h3 class="product-headline">' + richText(b.headline) + '</h3>' : '',
+          b.body ? '<p class="product-text">' + richText(b.body) + '</p>' : '',
+          (b.ctaUrl && b.ctaLabel) ? [
+            '<a class="product-cta" href="' + esc(b.ctaUrl) + '" target="_blank" rel="noopener noreferrer">',
+              esc(b.ctaLabel),
+              arrowOutSVG(14),
+            '</a>'
+          ].join('') : '',
+        '</div>',
+        '<div class="product-media">',
+          b.image ? '<img src="' + esc(b.image) + '" alt="' + esc(b.imageAlt || '') + '" loading="lazy">' : '',
+        '</div>',
+      '</div>'
+    ].join('');
+  }
+
+  /* Dispatcher */
+  var BLOCK_RENDERERS = {
+    'copy':         renderCopyBlock,
+    'quote':        renderQuoteBlock,
+    'stats':        renderStatsBlock,
+    'image':        renderImageBlock,
+    'resources':    renderResourcesBlock,
+    'quote-cards':  renderQuoteCardsBlock,
+    'videos':       renderVideosBlock,
+    'mosaic':       renderMosaicBlock,
+    'pillars':      renderPillarsBlock,
+    'product':      renderProductBlock
+  };
+
+  function renderBlock(block) {
+    if (!block || !block.type) return '';
+    var fn = BLOCK_RENDERERS[block.type];
+    if (!fn) {
+      console.warn('[content] unknown block type:', block.type);
+      return '';
+    }
+    try {
+      return fn(block);
+    } catch (e) {
+      console.warn('[content] block render error:', block.type, e);
+      return '';
+    }
+  }
+
+  /* =========================================================
+     SECTION RENDERERS
+     ========================================================= */
+
+  function renderHero(data) {
+    return [
+      data.backgroundImage ? '<img class="hero-bg-image" src="' + esc(data.backgroundImage) + '" alt="" aria-hidden="true">' : '',
+      data.backgroundVideo ? [
+        '<video class="hero-bg-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">',
+          '<source src="' + esc(data.backgroundVideo) + '" type="video/mp4">',
+        '</video>'
+      ].join('') : '',
+      '<div class="hero-grid" aria-hidden="true"></div>',
+      '<div class="hero-bg-scrim" aria-hidden="true"></div>',
+      '<div class="hero-inner">',
+        data.eyebrow ? '<div class="hero-eyebrow">' + esc(data.eyebrow) + '</div>' : '',
+        data.headline ? '<h1 class="hero-headline">' + richText(data.headline) + '</h1>' : '',
+        data.subhead ? '<div class="hero-subhead">' + richText(data.subhead) + '</div>' : '',
+        (data.intro || data.headline) ? '<div class="hero-rule" aria-hidden="true"></div>' : '',
+        data.intro ? '<p class="hero-intro">' + richText(data.intro) + '</p>' : '',
+      '</div>'
+    ].join('');
+  }
+
+  function renderSectionHead(data) {
+    if (!data.eyebrow && !data.headline && !data.lede) return '';
+    return [
+      '<header class="section-head reveal">',
+        data.eyebrow ? '<div class="section-eyebrow">' + esc(data.eyebrow) + '</div>' : '',
+        data.headline ? '<h2 class="section-title">' + richText(data.headline) + '</h2>' : '',
+        data.lede ? '<p class="section-lede">' + richText(data.lede) + '</p>' : '',
+      '</header>'
+    ].join('');
+  }
+
+  function renderSection(name, data) {
+    if (!data) return null;
+    var sec = document.createElement('section');
+    sec.id = name;
+
+    /* Hero is special — no wrap, no section-head */
+    if (name === 'hero') {
+      sec.className = 'hero';
+      sec.innerHTML = renderHero(data);
+      return sec;
+    }
+
+    sec.className = 'section';
+
+    /* Apply style sidecar */
+    var s = data.style || {};
+    sec.classList.add('theme-' + (s.theme || 'dark'));
+    if (s.align)   sec.classList.add('align-' + s.align);
+    if (s.spacing) sec.classList.add('spacing-' + s.spacing);
+    if (s.bg)      sec.classList.add('bg-' + s.bg);
+
+    var blocks = Array.isArray(data.blocks) ? data.blocks : [];
+    var blocksHTML = blocks.map(renderBlock).filter(Boolean).join('');
+
+    sec.innerHTML = '<div class="wrap">' + renderSectionHead(data) + blocksHTML + '</div>';
+    return sec;
+  }
+
+  /* =========================================================
+     MASTER LOADER
+     Fetches content.json with a minute-granularity cache buster,
+     then walks the `sections` array and renders each.
+     ========================================================= */
+  async function loadContent() {
+    var data = null;
+    try {
+      var res = await fetch(CONTENT_URL + '?t=' + Math.floor(Date.now() / 60000), { cache: 'no-store' });
+      if (!res.ok) throw new Error('content fetch failed: ' + res.status);
+      data = await res.json();
+      console.log('[content] loaded — ' + ((data.sections && data.sections.length) || 0) + ' sections');
+    } catch (err) {
+      console.warn('[content] Could not load content.json — page will remain empty. Reason:', err && err.message);
+      return;
+    }
+
+    var page = document.getElementById('page');
+    if (!page) return;
+
+    /* Optional <title> + meta description overrides from JSON */
+    if (data.site) {
+      if (data.site.title) document.title = data.site.title;
+      if (data.site.description) {
+        var meta = document.querySelector('meta[name="description"]');
+        if (meta) meta.setAttribute('content', data.site.description);
+      }
+    }
+
+    /* Walk the sections array in order. Any section name not in
+       the array is skipped — that's the visibility / order control. */
+    var sectionNames = Array.isArray(data.sections) ? data.sections : [];
+    page.innerHTML = '';
+    sectionNames.forEach(function (name) {
+      try {
+        var sec = renderSection(name, data[name]);
+        if (sec) page.appendChild(sec);
+      } catch (e) {
+        console.warn('[content] section render error:', name, e);
+      }
+    });
+
+    if (typeof window.__rewireDynamic === 'function') window.__rewireDynamic();
+  }
+
+  /* =========================================================
+     SCROLL REVEAL
+     IntersectionObserver fades elements in as they enter view.
+     Above-the-fold elements are marked .in immediately so first
+     paint isn't blank.
+     ========================================================= */
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  window.__observeReveals = function () {
+    document.querySelectorAll('.reveal:not(.in)').forEach(function (el) {
+      io.observe(el);
+    });
+  };
+
+  window.__rewireDynamic = function () {
+    if (typeof window.__observeReveals === 'function') {
+      window.__observeReveals();
+    }
+    /* Above-the-fold immediate-mark so first paint shows content */
+    requestAnimationFrame(function () {
+      document.querySelectorAll('.reveal:not(.in)').forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) {
+          el.classList.add('in');
+        }
+      });
+    });
+  };
+
+  /* =========================================================
+     INLINE VIDEO PLAYBACK
+     One video plays at a time. Click a tile -> iframe swaps in.
+     JWP no-autoplay player IDs (qeq4Z2nO) get swapped to the
+     autoplay-enabled ID (jO5YHc4l) at click-time. YouTube watch
+     URLs get rewritten to embed URLs with autoplay=1.
+     ========================================================= */
+  var activeVideoCard = null;
+
+  function collapseActiveVideo() {
+    if (!activeVideoCard) return;
+    var player = activeVideoCard.querySelector('.inline-player');
+    if (player) {
+      player.innerHTML = '';
+      player.remove();
+    }
+    activeVideoCard.classList.remove('is-playing');
+    activeVideoCard = null;
+  }
+
+  function playInline(trigger, videoUrl, title) {
+    if (!trigger || !videoUrl) return;
+    if (trigger === activeVideoCard) return;
+    collapseActiveVideo();
+
+    var host = trigger.classList.contains('vtile-thumb')
+      ? trigger
+      : (trigger.querySelector('.vtile-thumb') || trigger);
+
+    var playUrl = videoUrl;
+
+    /* JWP: swap no-autoplay player ID to autoplay-enabled */
+    playUrl = playUrl.replace(
+      /\/players\/([A-Za-z0-9]+)-qeq4Z2nO\.html/,
+      '/players/$1-jO5YHc4l.html'
+    );
+
+    /* YouTube: rewrite watch / short URLs to embed with autoplay */
+    var yt = playUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+    if (yt) {
+      playUrl = 'https://www.youtube.com/embed/' + yt[1] + '?autoplay=1&rel=0&modestbranding=1';
+    }
+
+    var iframe = document.createElement('iframe');
+    iframe.src = playUrl;
+    iframe.allow = 'autoplay; fullscreen; picture-in-picture; encrypted-media';
+    iframe.allowFullscreen = true;
+    iframe.setAttribute('title', title || 'Video');
+    iframe.setAttribute('frameborder', '0');
+
+    var player = document.createElement('div');
+    player.className = 'inline-player';
+    player.appendChild(iframe);
+
+    host.style.position = 'relative';
+    host.appendChild(player);
+    trigger.classList.add('is-playing');
+    activeVideoCard = trigger;
+  }
+
+  /* Event delegation — click anywhere with data-video-url */
+  document.addEventListener('click', function (e) {
+    var trigger = e.target.closest('[data-video-url]');
+    if (!trigger) return;
+    if (e.target.closest('.inline-player')) return;
+    var videoUrl = trigger.getAttribute('data-video-url');
+    var title = trigger.getAttribute('data-title') || '';
+    if (videoUrl) {
+      e.preventDefault();
+      playInline(trigger, videoUrl, title);
+    }
+  });
+
+  /* Keyboard support — Enter / Space on role="button" triggers */
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var trigger = e.target.closest('[data-video-url][role="button"]');
+    if (!trigger) return;
+    e.preventDefault();
+    var videoUrl = trigger.getAttribute('data-video-url');
+    var title = trigger.getAttribute('data-title') || '';
+    if (videoUrl) playInline(trigger, videoUrl, title);
+  });
+
+  /* =========================================================
+     IFRAME HEIGHT BROADCASTER
+     Designed for embedding inside Nasdaq's CMS via <iframe>.
+     The parent listens for {type: 'NASDAQ_IFRAME_HEIGHT'} and
+     resizes the iframe to match document.documentElement
+     .scrollHeight. The `page` field lets a single listener
+     route messages from multiple sibling pages.
+     ========================================================= */
+  (function () {
+    function sendHeight() {
+      try {
+        var h = document.documentElement.scrollHeight;
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({
+            type: 'NASDAQ_IFRAME_HEIGHT',
+            page: 'edge',
+            height: h
+          }, '*');
+        }
+      } catch (e) { /* cross-origin parent may reject — noop */ }
+    }
+    sendHeight();
+    window.addEventListener('load', sendHeight);
+    window.addEventListener('resize', sendHeight);
+
+    var pending = false;
+    var mo = new MutationObserver(function () {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(function () {
+        pending = false;
+        sendHeight();
+      });
+    });
+    mo.observe(document.body, { childList: true, subtree: true, attributes: true });
+  })();
+
+  /* Kick everything off */
+  loadContent();
+
+})();
+</script>
+
+</body>
+</html>
