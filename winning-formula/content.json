@@ -98,10 +98,10 @@
         "videoUrl": "https://cdn.jwplayer.com/players/vwlW1UPi-jO5YHc4l.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/vwlW1UPi-jO5YHc4l.html",
         "duration": "",
-        "tag": "Women's Sports",
-        "tagClass": "womens-sports",
+        "tag": "WMNS",
+        "tagClass": "tennis",
         "filters": [
-          "athlete-founder"
+          "womens-sports"
         ],
         "episodeMeta": "Episode",
         "title": "Maria Sharapova",
