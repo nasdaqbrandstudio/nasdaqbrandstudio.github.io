@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Featured Video</title>
+<link rel="preconnect" href="https://cdn.jwplayer.com" crossorigin>
+<link rel="preconnect" href="https://content.jwplatform.com" crossorigin>
+<link rel="preload" as="script" href="https://cdn.jwplayer.com/libraries/hVkrU1kZ.js">
+<style>
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('fonts/inter-latin-300-normal.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('fonts/inter-latin-400-normal.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('fonts/inter-latin-600-normal.woff2') format('woff2');
+  }
+
+  :root {
+    --edge: #FFFFFF;
+    --maxh: calc(100vh - 48px - 64px);
+    --poster: url('assets/spacex-background.jpg');
+  }
+  .video[data-theme="dark"] { --edge: #08062A; }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  .video {
+    width: 100%;
+    background: #000;
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .video__stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: var(--maxh);
+    background: #000;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  @supports not (aspect-ratio: 16 / 9) {
+    .video__stage { height: 56.25vw; }
+  }
+
+  .video__mirror {
+    display: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity .4s ease;
+    will-change: opacity;
+  }
+  .video__mirror > div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 130%;
+    height: 130%;
+    transform: translate3d(-50%, -50%, 0);
+    filter: blur(40px) saturate(1.2);
+  }
+  .video__mirror .jwplayer,
+  .video__mirror .jw-wrapper,
+  .video__mirror video { width: 100% !important; height: 100% !important; object-fit: cover; }
+
+  .video__wash {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 50%, var(--edge) 100%);
+    opacity: 0;
+    transition: opacity .4s ease;
+  }
+
+  @media (min-aspect-ratio: 16/9) {
+    .video__mirror { display: block; }
+    .video__wash { display: block; }
+    .video.playing .video__mirror { opacity: 1; }
+    .video.playing .video__wash { opacity: .6; }
+  }
+
+  .video__frame {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    overflow: hidden;
+  }
+  .video__player { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .video__player .jwplayer,
+  .video__player .jw-wrapper { width: 100% !important; height: 100% !important; }
+
+  .video__poster {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    background-image: var(--poster);
+    background-size: cover;
+    background-position: center;
+    transition: opacity .4s ease;
+  }
+  .video.playing .video__poster { opacity: 0; z-index: 1; }
+
+  .video__badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 5;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 9px;
+    border-radius: 3px;
+    background: #CC1C27;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .video__badge.on { display: inline-flex; }
+  .video__badge::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #fff;
+    animation: blink 1.4s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .video__notice {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: #000;
+    color: #fff;
+    font-size: 13px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="video" id="video" role="region" aria-label="Featured video">
+  <div class="video__stage" id="stage">
+    <div class="video__mirror" id="mirror" aria-hidden="true"><div id="mirrorInner"></div></div>
+    <div class="video__wash" aria-hidden="true"></div>
+    <div class="video__frame" id="frame">
+      <span class="video__badge" id="badge">Live</span>
+      <div class="video__poster" id="poster" aria-hidden="true"></div>
+      <div class="video__player" id="player"></div>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var config = {
+    theme: "auto",
+    playerId: "hVkrU1kZ",
+    mediaId: "rgE7wtxY",
+    streamUrl: "",
+    autoplay: true,
+    muted: true,
+    loop: true,
+    controls: true,
+    isLive: false,
+    mirror: true
+  };
+
+  var video = document.getElementById("video");
+  var frame = document.getElementById("frame");
+  var player = document.getElementById("player");
+  var mirrorInner = document.getElementById("mirrorInner");
+  var badge = document.getElementById("badge");
+  var darkScheme = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+  var wideScreen = window.matchMedia ? window.matchMedia("(min-aspect-ratio: 16/9)") : null;
+  var mirrorReady = false;
+
+  function theme() {
+    if (config.theme === "dark" || config.theme === "light") return config.theme;
+    return darkScheme && darkScheme.matches ? "dark" : "light";
+  }
+  function applyTheme() {
+    video.setAttribute("data-theme", theme());
+  }
+
+  function notice(message) {
+    var el = frame.querySelector(".video__notice");
+    if (!el) {
+      el = document.createElement("div");
+      el.className = "video__notice";
+      frame.appendChild(el);
+    }
+    el.textContent = message;
+  }
+  function clearNotice() {
+    var el = frame.querySelector(".video__notice");
+    if (el) el.parentNode.removeChild(el);
+  }
+  function showPoster() {
+    clearNotice();
+    video.classList.remove("playing");
+  }
+
+  function isWide() {
+    return wideScreen ? wideScreen.matches : false;
+  }
+
+  function jwOptions(forMirror) {
+    var autoplay = !!config.autoplay;
+    var options = {
+      width: "100%",
+      height: "100%",
+      autostart: forMirror ? true : (autoplay ? "viewable" : false),
+      mute: forMirror ? true : (autoplay ? true : !!config.muted),
+      repeat: !!config.loop,
+      controls: forMirror ? false : (config.controls !== false)
+    };
+    if (config.streamUrl) options.file = config.streamUrl;
+    else options.playlist = "https://cdn.jwplayer.com/v2/media/" + config.mediaId;
+    return options;
+  }
+
+  function startMirror() {
+    if (!config.mirror || mirrorReady || !window.jwplayer) return;
+    if (!isWide()) return;
+    if (!video.classList.contains("playing")) return;
+    mirrorReady = true;
+    try { window.jwplayer(mirrorInner).setup(jwOptions(true)); } catch (err) { mirrorReady = false; }
+  }
+
+  function stopMirror() {
+    if (!mirrorReady) return;
+    mirrorReady = false;
+    try { if (window.jwplayer) window.jwplayer(mirrorInner).remove(); } catch (err) {}
+    mirrorInner.innerHTML = "";
+  }
+
+  function onPlaying() {
+    video.classList.add("playing");
+    startMirror();
+  }
+
+  function mount() {
+    clearNotice();
+    if (!config.playerId) {
+      notice("Player not configured.");
+      return;
+    }
+    if (!window.jwplayer) {
+      showPoster();
+      return;
+    }
+    try {
+      var instance = window.jwplayer(player);
+      instance.setup(jwOptions(false));
+      instance.on("firstFrame", onPlaying);
+      instance.on("play", onPlaying);
+      instance.on("setupError", showPoster);
+      instance.on("error", showPoster);
+    } catch (err) {
+      showPoster();
+    }
+  }
+
+  function start() {
+    applyTheme();
+    badge.classList.toggle("on", !!config.isLive);
+    mount();
+  }
+
+  function load() {
+    if (window.jwplayer || !config.playerId) {
+      start();
+      return;
+    }
+    var script = document.createElement("script");
+    script.src = "https://cdn.jwplayer.com/libraries/" + config.playerId + ".js";
+    script.async = true;
+    script.onload = start;
+    script.onerror = start;
+    document.head.appendChild(script);
+  }
+
+  if (darkScheme) {
+    var onScheme = function () { if (config.theme === "auto") applyTheme(); };
+    if (darkScheme.addEventListener) darkScheme.addEventListener("change", onScheme);
+    else if (darkScheme.addListener) darkScheme.addListener(onScheme);
+  }
+
+  if (wideScreen) {
+    var onWide = function () {
+      if (isWide()) startMirror();
+      else stopMirror();
+    };
+    if (wideScreen.addEventListener) wideScreen.addEventListener("change", onWide);
+    else if (wideScreen.addListener) wideScreen.addListener(onWide);
+  }
+
+  window.FeaturedVideo = {
+    swap: function (options) {
+      options = options || {};
+      Object.keys(options).forEach(function (key) {
+        if (options[key] != null) config[key] = options[key];
+      });
+      video.classList.remove("playing");
+      stopMirror();
+      try { if (window.jwplayer) window.jwplayer(player).remove(); } catch (err) {}
+      start();
+    }
+  };
+
+  load();
+})();
+</script>
+</body>
+</html>
