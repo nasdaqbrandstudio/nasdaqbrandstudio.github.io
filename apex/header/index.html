@@ -58,47 +58,63 @@
     justify-content: center;
   }
 
-  .video__mirror {
+  .video__strip {
     display: none;
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
     z-index: 0;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
     opacity: 0;
     transition: opacity .4s ease;
     will-change: opacity;
   }
-  .video__mirror > div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 130%;
-    height: 130%;
-    transform: translate3d(-50%, -50%, 0);
-    filter: blur(40px) saturate(1.2);
+  .video__strip > * {
+    position: relative;
+    height: 100%;
+    aspect-ratio: 16 / 9;
+    flex: 0 0 auto;
+    overflow: hidden;
   }
+  .video__slot { background: transparent; }
   .video__mirror .jwplayer,
   .video__mirror .jw-wrapper,
   .video__mirror video { width: 100% !important; height: 100% !important; object-fit: cover; }
+  .video__mirror .jwplayer { transform: scaleX(-1); }
 
-  .video__wash {
+  .video__blur {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+  .video__tint {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: var(--edge);
+    opacity: .8;
+  }
+
+  .video__bg {
     display: none;
     position: absolute;
     inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    background: radial-gradient(ellipse at center, transparent 40%, var(--edge) 92%);
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
     opacity: 0;
     transition: opacity .4s ease;
   }
+  .video.has-bg .video__strip { display: none !important; }
 
   @media (min-aspect-ratio: 16/9) {
-    .video__mirror { display: block; }
-    .video__wash { display: block; }
-    .video.playing .video__mirror { opacity: 1; }
-    .video.playing .video__wash { opacity: .8; }
+    .video__strip { display: flex; }
+    .video__bg { display: block; }
+    .video.playing .video__strip { opacity: 1; }
+    .video.has-bg .video__bg { opacity: 1; }
   }
 
   .video__frame {
@@ -171,8 +187,20 @@
 <body>
 <div class="video" id="video" role="region" aria-label="Featured video">
   <div class="video__stage" id="stage">
-    <div class="video__mirror" id="mirror" aria-hidden="true"><div id="mirrorInner"></div></div>
-    <div class="video__wash" aria-hidden="true"></div>
+    <div class="video__bg" id="bg" aria-hidden="true"></div>
+    <div class="video__strip" id="strip" aria-hidden="true">
+      <div class="video__mirror video__mirror--left">
+        <div id="mirrorLeft"></div>
+        <div class="video__blur"></div>
+        <div class="video__tint"></div>
+      </div>
+      <div class="video__slot"></div>
+      <div class="video__mirror video__mirror--right">
+        <div id="mirrorRight"></div>
+        <div class="video__blur"></div>
+        <div class="video__tint"></div>
+      </div>
+    </div>
     <div class="video__frame" id="frame">
       <span class="video__badge" id="badge">Live</span>
       <div class="video__poster" id="poster" aria-hidden="true"></div>
@@ -195,16 +223,25 @@
     controls: false,
     revealSeconds: 4,
     isLive: false,
-    mirror: true
+    mirror: true,
+    backgroundLight: "assets/header-background-light.jpg",
+    backgroundDark: "assets/header-background-dark.jpg"
   };
 
   var video = document.getElementById("video");
   var frame = document.getElementById("frame");
   var player = document.getElementById("player");
-  var mirrorInner = document.getElementById("mirrorInner");
+  var mirrorLeft = document.getElementById("mirrorLeft");
+  var mirrorRight = document.getElementById("mirrorRight");
+  var bg = document.getElementById("bg");
   var badge = document.getElementById("badge");
   var mainInstance = null;
+  var leftInstance = null;
+  var rightInstance = null;
   var revealTimer = null;
+  var bgLightUrl = null;
+  var bgDarkUrl = null;
+  var bgResolved = false;
   var darkScheme = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
   var wideScreen = window.matchMedia ? window.matchMedia("(min-aspect-ratio: 16/9)") : null;
   var mirrorReady = false;
@@ -215,6 +252,44 @@
   }
   function applyTheme() {
     video.setAttribute("data-theme", theme());
+    applyBackground();
+  }
+
+  function probeImage(url, done) {
+    if (!url) { done(null); return; }
+    var img = new Image();
+    img.onload = function () { done(url); };
+    img.onerror = function () { done(null); };
+    img.src = url;
+  }
+
+  function resolveBackgrounds(done) {
+    if (bgResolved) { done(); return; }
+    var pending = 2;
+    var finish = function () { if (--pending === 0) { bgResolved = true; done(); } };
+    probeImage(config.backgroundLight, function (url) { bgLightUrl = url; finish(); });
+    probeImage(config.backgroundDark, function (url) { bgDarkUrl = url; finish(); });
+  }
+
+  function chosenBackground() {
+    var light = bgLightUrl;
+    var dark = bgDarkUrl;
+    if (!light && !dark) return null;
+    var fallback = light || dark;
+    if (theme() === "dark") return dark || fallback;
+    return light || fallback;
+  }
+
+  function applyBackground() {
+    if (!bgResolved) return;
+    var url = chosenBackground();
+    if (url) {
+      bg.style.backgroundImage = "url('" + url + "')";
+      video.classList.add("has-bg");
+    } else {
+      bg.style.backgroundImage = "";
+      video.classList.remove("has-bg");
+    }
   }
 
   function notice(message) {
@@ -256,17 +331,39 @@
 
   function startMirror() {
     if (!config.mirror || mirrorReady || !window.jwplayer) return;
+    if (video.classList.contains("has-bg")) return;
     if (!isWide()) return;
     if (!video.classList.contains("playing")) return;
     mirrorReady = true;
-    try { window.jwplayer(mirrorInner).setup(jwOptions(true)); } catch (err) { mirrorReady = false; }
+    try {
+      leftInstance = window.jwplayer(mirrorLeft);
+      rightInstance = window.jwplayer(mirrorRight);
+      leftInstance.setup(jwOptions(true));
+      rightInstance.setup(jwOptions(true));
+      leftInstance.on("ready", syncMirrors);
+      rightInstance.on("ready", syncMirrors);
+      leftInstance.on("firstFrame", syncMirrors);
+      rightInstance.on("firstFrame", syncMirrors);
+    } catch (err) { mirrorReady = false; }
+  }
+
+  function syncMirrors() {
+    if (!mirrorReady || !mainInstance) return;
+    var pos = 0;
+    try { pos = mainInstance.getPosition() || 0; } catch (err) { return; }
+    try { if (leftInstance && leftInstance.seek) leftInstance.seek(pos); } catch (err) {}
+    try { if (rightInstance && rightInstance.seek) rightInstance.seek(pos); } catch (err) {}
   }
 
   function stopMirror() {
     if (!mirrorReady) return;
     mirrorReady = false;
-    try { if (window.jwplayer) window.jwplayer(mirrorInner).remove(); } catch (err) {}
-    mirrorInner.innerHTML = "";
+    try { if (window.jwplayer) window.jwplayer(mirrorLeft).remove(); } catch (err) {}
+    try { if (window.jwplayer) window.jwplayer(mirrorRight).remove(); } catch (err) {}
+    leftInstance = null;
+    rightInstance = null;
+    mirrorLeft.innerHTML = "";
+    mirrorRight.innerHTML = "";
   }
 
   function onPlaying() {
@@ -290,6 +387,7 @@
       instance.setup(jwOptions(false));
       instance.on("firstFrame", onPlaying);
       instance.on("play", onPlaying);
+      instance.on("complete", syncMirrors);
       instance.on("setupError", showPoster);
       instance.on("error", showPoster);
       instance.on("ready", bindReveal);
@@ -370,7 +468,10 @@
     }
   };
 
-  load();
+  resolveBackgrounds(function () {
+    applyBackground();
+    load();
+  });
 })();
 </script>
 </body>
