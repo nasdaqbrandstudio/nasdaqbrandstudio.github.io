@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Featured Video</title>
+<link rel="preconnect" href="https://cdn.jwplayer.com" crossorigin>
+<link rel="preconnect" href="https://content.jwplatform.com" crossorigin>
+<link rel="preload" as="script" href="https://cdn.jwplayer.com/libraries/hVkrU1kZ.js">
+<style>
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('fonts/inter-latin-300-normal.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('fonts/inter-latin-400-normal.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('fonts/inter-latin-600-normal.woff2') format('woff2');
+  }
+
+  :root {
+    --edge: #FFFFFF;
+    --poster: url('assets/spacex-background.jpg');
+  }
+  .video[data-theme="dark"] { --edge: #08062A; }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+
+  .video {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .video__stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .video__strip {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity .4s ease;
+    will-change: opacity;
+  }
+  .video__strip > * {
+    position: relative;
+    height: 100%;
+    aspect-ratio: 16 / 9;
+    flex: 0 0 auto;
+    overflow: hidden;
+  }
+  .video__slot { background: transparent; }
+  .video__mirror .jwplayer,
+  .video__mirror .jw-wrapper,
+  .video__mirror video { width: 100% !important; height: 100% !important; object-fit: cover; }
+  .video__mirror .jwplayer { transform: scaleX(-1); }
+
+  .video__blur {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+  .video__tint {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: var(--edge);
+    opacity: .8;
+  }
+
+  .video__bg {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity .4s ease;
+  }
+  .video.has-bg .video__strip { display: none !important; }
+
+  @media (min-aspect-ratio: 16/9) {
+    .video__strip { display: flex; }
+    .video__bg { display: block; }
+    .video.playing .video__strip { opacity: 1; }
+    .video.has-bg .video__bg { opacity: 1; }
+  }
+
+  .video__frame {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    overflow: hidden;
+  }
+  .video__player { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .video__player .jwplayer,
+  .video__player .jw-wrapper { width: 100% !important; height: 100% !important; }
+
+  .video__poster {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    background-image: var(--poster);
+    background-size: cover;
+    background-position: center;
+    transition: opacity .4s ease;
+  }
+  .video.playing .video__poster { opacity: 0; z-index: 1; }
+
+  .video__badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 5;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 9px;
+    border-radius: 3px;
+    background: #CC1C27;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .video__badge.on { display: inline-flex; }
+  .video__badge::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #fff;
+    animation: blink 1.4s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .video__notice {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: #000;
+    color: #fff;
+    font-size: 13px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="video" id="video" role="region" aria-label="Featured video">
+  <div class="video__stage" id="stage">
+    <div class="video__bg" id="bg" aria-hidden="true"></div>
+    <div class="video__strip" id="strip" aria-hidden="true">
+      <div class="video__mirror video__mirror--left">
+        <div id="mirrorLeft"></div>
+        <div class="video__blur"></div>
+        <div class="video__tint"></div>
+      </div>
+      <div class="video__slot"></div>
+      <div class="video__mirror video__mirror--right">
+        <div id="mirrorRight"></div>
+        <div class="video__blur"></div>
+        <div class="video__tint"></div>
+      </div>
+    </div>
+    <div class="video__frame" id="frame">
+      <span class="video__badge" id="badge">Live</span>
+      <div class="video__poster" id="poster" aria-hidden="true"></div>
+      <div class="video__player" id="player"></div>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var config = {
+    theme: "auto",
+    playerId: "hVkrU1kZ",
+    mediaId: "rgE7wtxY",
+    streamUrl: "",
+    autoplay: true,
+    muted: true,
+    loop: true,
+    controls: false,
+    revealSeconds: 4,
+    isLive: false,
+    mirror: true,
+    backgroundLight: "assets/header-background-light.jpg",
+    backgroundDark: "assets/header-background-dark.jpg"
+  };
+
+  var video = document.getElementById("video");
+  var frame = document.getElementById("frame");
+  var player = document.getElementById("player");
+  var mirrorLeft = document.getElementById("mirrorLeft");
+  var mirrorRight = document.getElementById("mirrorRight");
+  var bg = document.getElementById("bg");
+  var badge = document.getElementById("badge");
+  var mainInstance = null;
+  var leftInstance = null;
+  var rightInstance = null;
+  var revealTimer = null;
+  var bgLightUrl = null;
+  var bgDarkUrl = null;
+  var bgResolved = false;
+  var darkScheme = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+  var wideScreen = window.matchMedia ? window.matchMedia("(min-aspect-ratio: 16/9)") : null;
+  var mirrorReady = false;
+
+  function theme() {
+    if (config.theme === "dark" || config.theme === "light") return config.theme;
+    return darkScheme && darkScheme.matches ? "dark" : "light";
+  }
+  function applyTheme() {
+    video.setAttribute("data-theme", theme());
+    applyBackground();
+  }
+
+  function probeImage(url, done) {
+    if (!url) { done(null); return; }
+    var img = new Image();
+    img.onload = function () { done(url); };
+    img.onerror = function () { done(null); };
+    img.src = url;
+  }
+
+  function resolveBackgrounds(done) {
+    if (bgResolved) { done(); return; }
+    var pending = 2;
+    var finish = function () { if (--pending === 0) { bgResolved = true; done(); } };
+    probeImage(config.backgroundLight, function (url) { bgLightUrl = url; finish(); });
+    probeImage(config.backgroundDark, function (url) { bgDarkUrl = url; finish(); });
+  }
+
+  function chosenBackground() {
+    var light = bgLightUrl;
+    var dark = bgDarkUrl;
+    if (!light && !dark) return null;
+    var fallback = light || dark;
+    if (theme() === "dark") return dark || fallback;
+    return light || fallback;
+  }
+
+  function applyBackground() {
+    if (!bgResolved) return;
+    var url = chosenBackground();
+    if (url) {
+      bg.style.backgroundImage = "url('" + url + "')";
+      video.classList.add("has-bg");
+    } else {
+      bg.style.backgroundImage = "";
+      video.classList.remove("has-bg");
+    }
+  }
+
+  function notice(message) {
+    var el = frame.querySelector(".video__notice");
+    if (!el) {
+      el = document.createElement("div");
+      el.className = "video__notice";
+      frame.appendChild(el);
+    }
+    el.textContent = message;
+  }
+  function clearNotice() {
+    var el = frame.querySelector(".video__notice");
+    if (el) el.parentNode.removeChild(el);
+  }
+  function showPoster() {
+    clearNotice();
+    video.classList.remove("playing");
+  }
+
+  function isWide() {
+    return wideScreen ? wideScreen.matches : false;
+  }
+
+  function jwOptions(forMirror) {
+    var autoplay = !!config.autoplay;
+    var options = {
+      width: "100%",
+      height: "100%",
+      autostart: forMirror ? true : (autoplay ? "viewable" : false),
+      mute: forMirror ? true : (autoplay ? true : !!config.muted),
+      repeat: !!config.loop,
+      controls: forMirror ? false : (config.controls !== false)
+    };
+    if (config.streamUrl) options.file = config.streamUrl;
+    else options.playlist = "https://cdn.jwplayer.com/v2/media/" + config.mediaId;
+    return options;
+  }
+
+  function startMirror() {
+    if (!config.mirror || mirrorReady || !window.jwplayer) return;
+    if (video.classList.contains("has-bg")) return;
+    if (!isWide()) return;
+    if (!video.classList.contains("playing")) return;
+    mirrorReady = true;
+    try {
+      leftInstance = window.jwplayer(mirrorLeft);
+      rightInstance = window.jwplayer(mirrorRight);
+      leftInstance.setup(jwOptions(true));
+      rightInstance.setup(jwOptions(true));
+      leftInstance.on("ready", syncMirrors);
+      rightInstance.on("ready", syncMirrors);
+      leftInstance.on("firstFrame", syncMirrors);
+      rightInstance.on("firstFrame", syncMirrors);
+    } catch (err) { mirrorReady = false; }
+  }
+
+  function syncMirrors() {
+    if (!mirrorReady || !mainInstance) return;
+    var pos = 0;
+    try { pos = mainInstance.getPosition() || 0; } catch (err) { return; }
+    try { if (leftInstance && leftInstance.seek) leftInstance.seek(pos); } catch (err) {}
+    try { if (rightInstance && rightInstance.seek) rightInstance.seek(pos); } catch (err) {}
+  }
+
+  function stopMirror() {
+    if (!mirrorReady) return;
+    mirrorReady = false;
+    try { if (window.jwplayer) window.jwplayer(mirrorLeft).remove(); } catch (err) {}
+    try { if (window.jwplayer) window.jwplayer(mirrorRight).remove(); } catch (err) {}
+    leftInstance = null;
+    rightInstance = null;
+    mirrorLeft.innerHTML = "";
+    mirrorRight.innerHTML = "";
+  }
+
+  function onPlaying() {
+    video.classList.add("playing");
+    startMirror();
+  }
+
+  function mount() {
+    clearNotice();
+    if (!config.playerId) {
+      notice("Player not configured.");
+      return;
+    }
+    if (!window.jwplayer) {
+      showPoster();
+      return;
+    }
+    try {
+      var instance = window.jwplayer(player);
+      mainInstance = instance;
+      instance.setup(jwOptions(false));
+      instance.on("firstFrame", onPlaying);
+      instance.on("play", onPlaying);
+      instance.on("complete", syncMirrors);
+      instance.on("setupError", showPoster);
+      instance.on("error", showPoster);
+      instance.on("ready", bindReveal);
+    } catch (err) {
+      showPoster();
+    }
+  }
+
+  function hideControls() {
+    if (revealTimer) { clearTimeout(revealTimer); revealTimer = null; }
+    try { if (mainInstance && mainInstance.setControls) mainInstance.setControls(false); } catch (err) {}
+  }
+
+  function revealControls() {
+    try { if (mainInstance && mainInstance.setControls) mainInstance.setControls(true); } catch (err) {}
+    if (revealTimer) clearTimeout(revealTimer);
+    var ms = (config.revealSeconds > 0 ? config.revealSeconds : 4) * 1000;
+    revealTimer = setTimeout(hideControls, ms);
+  }
+
+  function bindReveal() {
+    var surface = player;
+    surface.addEventListener("contextmenu", function (e) {
+      e.preventDefault();
+      revealControls();
+    });
+    surface.addEventListener("touchend", function () {
+      revealControls();
+    }, { passive: true });
+  }
+
+  function start() {
+    applyTheme();
+    badge.classList.toggle("on", !!config.isLive);
+    mount();
+  }
+
+  function load() {
+    if (window.jwplayer || !config.playerId) {
+      start();
+      return;
+    }
+    var script = document.createElement("script");
+    script.src = "https://cdn.jwplayer.com/libraries/" + config.playerId + ".js";
+    script.async = true;
+    script.onload = start;
+    script.onerror = start;
+    document.head.appendChild(script);
+  }
+
+  if (darkScheme) {
+    var onScheme = function () { if (config.theme === "auto") applyTheme(); };
+    if (darkScheme.addEventListener) darkScheme.addEventListener("change", onScheme);
+    else if (darkScheme.addListener) darkScheme.addListener(onScheme);
+  }
+
+  if (wideScreen) {
+    var onWide = function () {
+      if (isWide()) startMirror();
+      else stopMirror();
+    };
+    if (wideScreen.addEventListener) wideScreen.addEventListener("change", onWide);
+    else if (wideScreen.addListener) wideScreen.addListener(onWide);
+  }
+
+  window.FeaturedVideo = {
+    swap: function (options) {
+      options = options || {};
+      Object.keys(options).forEach(function (key) {
+        if (options[key] != null) config[key] = options[key];
+      });
+      video.classList.remove("playing");
+      if (revealTimer) { clearTimeout(revealTimer); revealTimer = null; }
+      mainInstance = null;
+      stopMirror();
+      try { if (window.jwplayer) window.jwplayer(player).remove(); } catch (err) {}
+      start();
+    }
+  };
+
+  resolveBackgrounds(function () {
+    applyBackground();
+    load();
+  });
+})();
+</script>
+</body>
+</html>
