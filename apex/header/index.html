@@ -32,16 +32,16 @@
 
   :root {
     --edge: #FFFFFF;
-    --maxh: calc(100vh - 48px - 64px);
     --poster: url('assets/spacex-background.jpg');
   }
   .video[data-theme="dark"] { --edge: #08062A; }
 
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; }
+  html, body { margin: 0; padding: 0; height: 100%; }
 
   .video {
     width: 100%;
+    height: 100%;
     background: #000;
     font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -50,16 +50,12 @@
   .video__stage {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 9;
-    max-height: var(--maxh);
+    height: 100%;
     background: #000;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  @supports not (aspect-ratio: 16 / 9) {
-    .video__stage { height: 56.25vw; }
   }
 
   .video__mirror {
@@ -196,7 +192,8 @@
     autoplay: true,
     muted: true,
     loop: true,
-    controls: true,
+    controls: false,
+    revealSeconds: 4,
     isLive: false,
     mirror: true
   };
@@ -206,6 +203,8 @@
   var player = document.getElementById("player");
   var mirrorInner = document.getElementById("mirrorInner");
   var badge = document.getElementById("badge");
+  var mainInstance = null;
+  var revealTimer = null;
   var darkScheme = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
   var wideScreen = window.matchMedia ? window.matchMedia("(min-aspect-ratio: 16/9)") : null;
   var mirrorReady = false;
@@ -287,14 +286,39 @@
     }
     try {
       var instance = window.jwplayer(player);
+      mainInstance = instance;
       instance.setup(jwOptions(false));
       instance.on("firstFrame", onPlaying);
       instance.on("play", onPlaying);
       instance.on("setupError", showPoster);
       instance.on("error", showPoster);
+      instance.on("ready", bindReveal);
     } catch (err) {
       showPoster();
     }
+  }
+
+  function hideControls() {
+    if (revealTimer) { clearTimeout(revealTimer); revealTimer = null; }
+    try { if (mainInstance && mainInstance.setControls) mainInstance.setControls(false); } catch (err) {}
+  }
+
+  function revealControls() {
+    try { if (mainInstance && mainInstance.setControls) mainInstance.setControls(true); } catch (err) {}
+    if (revealTimer) clearTimeout(revealTimer);
+    var ms = (config.revealSeconds > 0 ? config.revealSeconds : 4) * 1000;
+    revealTimer = setTimeout(hideControls, ms);
+  }
+
+  function bindReveal() {
+    var surface = player;
+    surface.addEventListener("contextmenu", function (e) {
+      e.preventDefault();
+      revealControls();
+    });
+    surface.addEventListener("touchend", function () {
+      revealControls();
+    }, { passive: true });
   }
 
   function start() {
@@ -338,6 +362,8 @@
         if (options[key] != null) config[key] = options[key];
       });
       video.classList.remove("playing");
+      if (revealTimer) { clearTimeout(revealTimer); revealTimer = null; }
+      mainInstance = null;
       stopMirror();
       try { if (window.jwplayer) window.jwplayer(player).remove(); } catch (err) {}
       start();
