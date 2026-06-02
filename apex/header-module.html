@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nasdaq APEX</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #fff; }
+
+  .nasdaq-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    background: #fff;
+  }
+  .navigation---primary-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nasdaq-navbar a { display: flex; }
+  .vectors-wrapper-4 {
+    display: block;
+    height: 24px;
+    width: auto;
+  }
+
+  iframe.apex-frame {
+    display: block;
+    width: 100%;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .apex-frame--ticker { height: 64px; }
+
+  img.apex-homepage {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+</style>
+</head>
+<body>
+<nav id="home" class="nasdaq-navbar">
+  <div class="navigation---primary-navigation">
+    <a href="https://www.nasdaq.com/" class="w-inline-block">
+      <img width="85" height="24" alt="Nasdaq Logo" src="https://cdn.prod.website-files.com/6941b8df653484a551b7b3d9/6941b8df653484a551b7b40b_Vectors-Wrapper.svg" loading="lazy" class="vectors-wrapper-4">
+    </a>
+  </div>
+</nav>
+
+<iframe class="apex-frame apex-frame--ticker" src="https://nasdaqbrandstudio.github.io/apex/ticker/" title="Market news ticker" scrolling="no"></iframe>
+
+<iframe id="apexHeader" class="apex-frame" src="https://nasdaqbrandstudio.github.io/apex/header-stills/" title="Featured video" allow="autoplay; fullscreen" scrolling="no"></iframe>
+
+<img class="apex-homepage" src="https://nasdaqbrandstudio.github.io/apex/nasdaq-homepage.jpg" alt="Nasdaq homepage">
+
+<script>
+(function () {
+  "use strict";
+  var header = document.getElementById("apexHeader");
+  var nav = 48;
+  var ticker = 64;
+
+  function size() {
+    var width = document.documentElement.clientWidth;
+    var sixteenNine = width * 9 / 16;
+    var fit = window.innerHeight - nav - ticker;
+    header.style.height = Math.min(sixteenNine, fit) + "px";
+  }
+
+  size();
+  var timer;
+  window.addEventListener("resize", function () {
+    clearTimeout(timer);
+    timer = setTimeout(size, 120);
+  });
+})();
+</script>
+</body>
+</html>
