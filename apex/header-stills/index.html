@@ -58,34 +58,34 @@
     justify-content: center;
   }
 
-  .video__strip {
+  .video__backdrop {
     display: none;
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
     z-index: 0;
-    align-items: center;
-    justify-content: center;
     overflow: hidden;
     opacity: 0;
     transition: opacity .4s ease;
     will-change: opacity;
   }
-  .video__strip > * {
-    position: relative;
+  .video__backdrop > div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
     height: 100%;
-    aspect-ratio: 16 / 9;
-    flex: 0 0 auto;
-    overflow: hidden;
+    transform: translate3d(-50%, -50%, 0);
   }
-  .video__slot { background: transparent; }
-  .video__mirror .jwplayer,
-  .video__mirror .jw-wrapper,
-  .video__mirror video { width: 100% !important; height: 100% !important; object-fit: cover; }
-  .video__mirror .jwplayer { transform: scaleX(-1); }
+  .video__backdrop .jwplayer,
+  .video__backdrop .jw-wrapper,
+  .video__backdrop video { width: 100% !important; height: 100% !important; object-fit: cover; }
 
   .video__blur {
     position: absolute;
     inset: 0;
+    z-index: 0;
     pointer-events: none;
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
@@ -93,6 +93,7 @@
   .video__tint {
     position: absolute;
     inset: 0;
+    z-index: 0;
     pointer-events: none;
     background: var(--edge);
     opacity: .8;
@@ -108,12 +109,14 @@
     opacity: 0;
     transition: opacity .4s ease;
   }
-  .video.has-bg .video__strip { display: none !important; }
+  .video.has-bg .video__backdrop { display: none !important; }
 
   @media (min-aspect-ratio: 16/9) {
-    .video__strip { display: flex; }
+    .video__backdrop { display: block; }
+    .video__blur { display: block; }
+    .video__tint { display: block; }
     .video__bg { display: block; }
-    .video.playing .video__strip { opacity: 1; }
+    .video.playing .video__backdrop { opacity: 1; }
     .video.has-bg .video__bg { opacity: 1; }
   }
 
@@ -188,19 +191,9 @@
 <div class="video" id="video" role="region" aria-label="Featured video">
   <div class="video__stage" id="stage">
     <div class="video__bg" id="bg" aria-hidden="true"></div>
-    <div class="video__strip" id="strip" aria-hidden="true">
-      <div class="video__mirror video__mirror--left">
-        <div id="mirrorLeft"></div>
-        <div class="video__blur"></div>
-        <div class="video__tint"></div>
-      </div>
-      <div class="video__slot"></div>
-      <div class="video__mirror video__mirror--right">
-        <div id="mirrorRight"></div>
-        <div class="video__blur"></div>
-        <div class="video__tint"></div>
-      </div>
-    </div>
+    <div class="video__backdrop" id="backdrop" aria-hidden="true"><div id="backdropInner"></div></div>
+    <div class="video__blur" aria-hidden="true"></div>
+    <div class="video__tint" aria-hidden="true"></div>
     <div class="video__frame" id="frame">
       <span class="video__badge" id="badge">Live</span>
       <div class="video__poster" id="poster" aria-hidden="true"></div>
@@ -223,7 +216,7 @@
     controls: false,
     revealSeconds: 4,
     isLive: false,
-    mirror: true,
+    backdrop: true,
     backgroundLight: "assets/header-background-light.jpg",
     backgroundDark: "assets/header-background-dark.jpg"
   };
@@ -231,20 +224,18 @@
   var video = document.getElementById("video");
   var frame = document.getElementById("frame");
   var player = document.getElementById("player");
-  var mirrorLeft = document.getElementById("mirrorLeft");
-  var mirrorRight = document.getElementById("mirrorRight");
+  var backdropInner = document.getElementById("backdropInner");
   var bg = document.getElementById("bg");
   var badge = document.getElementById("badge");
   var mainInstance = null;
-  var leftInstance = null;
-  var rightInstance = null;
+  var backdropInstance = null;
   var revealTimer = null;
   var bgLightUrl = null;
   var bgDarkUrl = null;
   var bgResolved = false;
   var darkScheme = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
   var wideScreen = window.matchMedia ? window.matchMedia("(min-aspect-ratio: 16/9)") : null;
-  var mirrorReady = false;
+  var backdropReady = false;
 
   function theme() {
     if (config.theme === "dark" || config.theme === "light") return config.theme;
@@ -329,46 +320,35 @@
     return options;
   }
 
-  function startMirror() {
-    if (!config.mirror || mirrorReady || !window.jwplayer) return;
+  function startBackdrop() {
+    if (!config.backdrop || backdropReady || !window.jwplayer) return;
     if (video.classList.contains("has-bg")) return;
     if (!isWide()) return;
-    if (!video.classList.contains("playing")) return;
-    mirrorReady = true;
+    backdropReady = true;
     try {
-      leftInstance = window.jwplayer(mirrorLeft);
-      rightInstance = window.jwplayer(mirrorRight);
-      leftInstance.setup(jwOptions(true));
-      rightInstance.setup(jwOptions(true));
-      leftInstance.on("ready", syncMirrors);
-      rightInstance.on("ready", syncMirrors);
-      leftInstance.on("firstFrame", syncMirrors);
-      rightInstance.on("firstFrame", syncMirrors);
-    } catch (err) { mirrorReady = false; }
+      backdropInstance = window.jwplayer(backdropInner);
+      backdropInstance.setup(jwOptions(true));
+      backdropInstance.on("firstFrame", syncBackdrop);
+    } catch (err) { backdropReady = false; }
   }
 
-  function syncMirrors() {
-    if (!mirrorReady || !mainInstance) return;
+  function syncBackdrop() {
+    if (!backdropReady || !mainInstance || !backdropInstance) return;
     var pos = 0;
     try { pos = mainInstance.getPosition() || 0; } catch (err) { return; }
-    try { if (leftInstance && leftInstance.seek) leftInstance.seek(pos); } catch (err) {}
-    try { if (rightInstance && rightInstance.seek) rightInstance.seek(pos); } catch (err) {}
+    try { if (backdropInstance.seek) backdropInstance.seek(pos); } catch (err) {}
   }
 
-  function stopMirror() {
-    if (!mirrorReady) return;
-    mirrorReady = false;
-    try { if (window.jwplayer) window.jwplayer(mirrorLeft).remove(); } catch (err) {}
-    try { if (window.jwplayer) window.jwplayer(mirrorRight).remove(); } catch (err) {}
-    leftInstance = null;
-    rightInstance = null;
-    mirrorLeft.innerHTML = "";
-    mirrorRight.innerHTML = "";
+  function stopBackdrop() {
+    if (!backdropReady) return;
+    backdropReady = false;
+    try { if (window.jwplayer) window.jwplayer(backdropInner).remove(); } catch (err) {}
+    backdropInstance = null;
+    backdropInner.innerHTML = "";
   }
 
   function onPlaying() {
     video.classList.add("playing");
-    startMirror();
   }
 
   function mount() {
@@ -387,10 +367,11 @@
       instance.setup(jwOptions(false));
       instance.on("firstFrame", onPlaying);
       instance.on("play", onPlaying);
-      instance.on("complete", syncMirrors);
+      instance.on("complete", syncBackdrop);
       instance.on("setupError", showPoster);
       instance.on("error", showPoster);
       instance.on("ready", bindReveal);
+      startBackdrop();
     } catch (err) {
       showPoster();
     }
@@ -446,8 +427,8 @@
 
   if (wideScreen) {
     var onWide = function () {
-      if (isWide()) startMirror();
-      else stopMirror();
+      if (isWide()) startBackdrop();
+      else stopBackdrop();
     };
     if (wideScreen.addEventListener) wideScreen.addEventListener("change", onWide);
     else if (wideScreen.addListener) wideScreen.addListener(onWide);
@@ -462,7 +443,7 @@
       video.classList.remove("playing");
       if (revealTimer) { clearTimeout(revealTimer); revealTimer = null; }
       mainInstance = null;
-      stopMirror();
+      stopBackdrop();
       try { if (window.jwplayer) window.jwplayer(player).remove(); } catch (err) {}
       start();
     }
