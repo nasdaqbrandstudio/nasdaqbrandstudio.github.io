@@ -3,249 +3,231 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Featured Video</title>
-<link rel="preconnect" href="https://cdn.jwplayer.com" crossorigin>
-<link rel="preconnect" href="https://content.jwplatform.com" crossorigin>
-<link rel="preload" as="script" href="https://cdn.jwplayer.com/libraries/hVkrU1kZ.js">
-<style>
-  @font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 300;
-    font-display: swap;
-    src: url('fonts/inter-latin-300-normal.woff2') format('woff2');
-  }
-  @font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    src: url('fonts/inter-latin-400-normal.woff2') format('woff2');
-  }
-  @font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 600;
-    font-display: swap;
-    src: url('fonts/inter-latin-600-normal.woff2') format('woff2');
-  }
+<title>Nasdaq Video Module</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================================================
+     APEX VIDEO - video only (no caption). 16:9 player, centered,
+     height-capped so a wide window never forces extra scroll.
+     Live blurred mirror of the video fills the side gutters;
+     container edge is white (light) / #08062A (dark).
+     theme: "auto" follows OS, or force "dark" / "light".
+     ============================================================ */
   :root {
-    --edge: #FFFFFF;
-    --poster: url('assets/spacex-background.jpg');
+    --apex-bg:     #08062A;        /* DARK gutter edge */
+    --apex-font: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --apex-radius: 0px;
+    --apex-poster: url('assets/spacex-background.jpg');
+    /* Height cap = 100vh - 48px - ticker height. Ticker is 64px,
+       so cap = 100vh - 112px. Adjust --apex-ticker-h if the ticker height changes. */
+    --apex-ticker-h: 64px;
+    --apex-gap: 48px;
+    --apex-maxh: calc(100vh - var(--apex-gap) - var(--apex-ticker-h));
   }
-  .video[data-theme="dark"] { --edge: #08062A; }
+  .apex-video[data-theme="light"] { --apex-bg: #FFFFFF; }  /* LIGHT gutter edge */
 
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; height: 100%; }
 
-  .video {
+  .apex-video {
+    font-family: var(--apex-font);
+    background: #000;
     width: 100%;
     height: 100%;
-    background: #000;
-    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 
-  .video__stage {
+  /* Stage: full width, height capped. Centers the 16:9 player.
+     Default gutters are BLACK; the blurred mirror + brand tint only appear
+     once the video is playing (mirror-on). */
+  .apex-video__stage {
     position: relative;
     width: 100%;
     height: 100%;
+    overflow: hidden;
     background: #000;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
   }
 
-  .video__backdrop {
-    display: none;
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+  /* Blurred live mirror backdrop. Hidden until the video plays AND the mirror
+     can actually draw frames (mirror-on). Never used as a still fallback. */
+  .apex-video__blur {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover;
+    transform: scale(1.15);          /* hide blurred edges */
+    filter: blur(8px);
     z-index: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: opacity .4s ease;
-    will-change: opacity;
-  }
-  .video__backdrop > div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    transform: translate3d(-50%, -50%, 0);
-  }
-  .video__backdrop .jwplayer,
-  .video__backdrop .jw-wrapper,
-  .video__backdrop video { width: 100% !important; height: 100% !important; object-fit: cover; }
-
-  .video__blur {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-  }
-  .video__tint {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background: var(--edge);
-    opacity: .8;
-  }
-
-  .video__bg {
-    display: none;
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background-size: cover;
-    background-position: center;
-    opacity: 0;
+    opacity: 0;                      /* off by default */
     transition: opacity .4s ease;
   }
-  .video.has-bg .video__backdrop { display: none !important; }
-
-  @media (min-aspect-ratio: 16/9) {
-    .video__backdrop { display: block; }
-    .video__blur { display: block; }
-    .video__tint { display: block; }
-    .video__bg { display: block; }
-    .video.playing .video__backdrop { opacity: 1; }
-    .video.has-bg .video__bg { opacity: 1; }
+  /* Brand-color wash (white in light, #08062A in dark) - part of the mirror
+     effect, so also off until mirror-on. */
+  .apex-video__tint {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: var(--apex-bg);
+    opacity: 0;                      /* off by default */
+    transition: opacity .4s ease;
   }
+  .apex-video.mirror-on .apex-video__blur { opacity: 1; }
+  .apex-video.mirror-on .apex-video__tint { opacity: .8; }
 
-  .video__frame {
-    position: relative;
-    z-index: 2;
+  .apex-video__bg {
+    position: absolute; inset: 0; z-index: 0;
+    background-size: cover; background-position: center;
+    opacity: 0; transition: opacity .4s ease;
+  }
+  .apex-video.has-bg .apex-video__blur,
+  .apex-video.has-bg .apex-video__tint { opacity: 0 !important; }
+  .apex-video.has-bg .apex-video__bg { opacity: 1; }
+
+  /* The actual 16:9 player: as tall as the cap allows, width follows 16:9. */
+  .apex-video__pillar {
+    position: relative; z-index: 2;
     height: 100%;
-    max-width: 100%;
     aspect-ratio: 16 / 9;
+    max-width: 100%;
     background: #000;
+    border-radius: var(--apex-radius);
     overflow: hidden;
   }
-  .video__player { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .video__player .jwplayer,
-  .video__player .jw-wrapper { width: 100% !important; height: 100% !important; }
+  .apex-video__player { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .apex-video__player .jwplayer,
+  .apex-video__player .jw-wrapper { width: 100% !important; height: 100% !important; }
 
-  .video__poster {
-    position: absolute;
-    inset: 0;
-    z-index: 4;
-    background-image: var(--poster);
-    background-size: cover;
-    background-position: center;
+  .apex-video__live {
+    position: absolute; top: 12px; left: 12px; z-index: 5;
+    display: none; align-items: center; gap: 6px;
+    background: #CC1C27; color: #fff;
+    font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    padding: 5px 9px; border-radius: 3px;
+  }
+  .apex-video__live.is-on { display: inline-flex; }
+  .apex-video__live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #fff; animation: apexBlink 1.4s steps(1) infinite; }
+  @keyframes apexBlink { 50% { opacity: 0; } }
+
+  .apex-video__placeholder {
+    position: absolute; inset: 0; z-index: 3; display: flex; align-items: center; justify-content: center;
+    color: #fff; font-family: var(--apex-font); font-size: 13px; text-align: center; padding: 16px; background: #000;
+  }
+
+  /* Poster: branded still beneath the video. Visible immediately on load and
+     remains if the video fails. Hidden once the player reports it's playing. */
+  .apex-video__poster {
+    position: absolute; inset: 0; z-index: 1;
+    background-image: var(--apex-poster);
+    background-size: cover; background-position: center;
     transition: opacity .4s ease;
   }
-  .video.playing .video__poster { opacity: 0; z-index: 1; }
-
-  .video__badge {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    z-index: 5;
-    display: none;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 9px;
-    border-radius: 3px;
-    background: #CC1C27;
-    color: #fff;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-  }
-  .video__badge.on { display: inline-flex; }
-  .video__badge::before {
-    content: "";
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #fff;
-    animation: blink 1.4s steps(1) infinite;
-  }
-  @keyframes blink { 50% { opacity: 0; } }
-
-  .video__notice {
-    position: absolute;
-    inset: 0;
-    z-index: 3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    background: #000;
-    color: #fff;
-    font-size: 13px;
-    text-align: center;
-  }
+  .apex-video.is-playing .apex-video__poster { opacity: 0; }
 </style>
 </head>
 <body>
-<div class="video" id="video" role="region" aria-label="Featured video">
-  <div class="video__stage" id="stage">
-    <div class="video__bg" id="bg" aria-hidden="true"></div>
-    <div class="video__backdrop" id="backdrop" aria-hidden="true"><div id="backdropInner"></div></div>
-    <div class="video__blur" aria-hidden="true"></div>
-    <div class="video__tint" aria-hidden="true"></div>
-    <div class="video__frame" id="frame">
-      <span class="video__badge" id="badge">Live</span>
-      <div class="video__poster" id="poster" aria-hidden="true"></div>
-      <div class="video__player" id="player"></div>
+
+<div class="apex-video" id="apexVideo" role="region" aria-label="Featured video">
+  <div class="apex-video__stage" id="apexStage">
+    <canvas class="apex-video__blur" id="apexBlur" aria-hidden="true"></canvas>
+    <div class="apex-video__bg" id="apexBg" aria-hidden="true"></div>
+    <div class="apex-video__tint" aria-hidden="true"></div>
+    <div class="apex-video__pillar" id="apexPillar">
+      <div class="apex-video__poster" id="apexPoster" aria-hidden="true"></div>
+      <span class="apex-video__live" id="apexLive">Live</span>
+      <div class="apex-video__player" id="apexPlayer"></div>
     </div>
   </div>
 </div>
+
 <script>
 (function () {
   "use strict";
 
-  var config = {
-    theme: "auto",
-    playerId: "hVkrU1kZ",
-    mediaId: "rgE7wtxY",
-    streamUrl: "",
+  /* =======================================================================
+     EDIT HERE - JW Player (library/setup, so the live blurred mirror can
+     read the video frames; that needs a same-origin <video>, which the
+     library gives us and the cloud iframe does not).
+
+     playerId : player build ID (after the dash in a JW URL)
+     mediaId  : media/asset ID (before the dash)
+     streamUrl: optional HLS .m3u8 for a livestream (overrides mediaId)
+
+     Autoplay needs MUTED (browser policy) - mute is forced when autoplay:true.
+
+     SWAP (live -> recap -> live -> recap): change mediaId (or streamUrl) and
+     isLive, then redeploy; or call ApexVideo.swap({...}) from the host page.
+     ======================================================================= */
+  var VIDEO = {
+    theme: "auto",                 // "auto" | "dark" | "light"
+    playerId: "hVkrU1kZ",          // from your URL
+    mediaId:  "rgE7wtxY",          // from your URL
+    streamUrl: "",                 // optional HLS for livestream
     autoplay: true,
-    muted: true,
+    mute: true,                    // required for autoplay
     loop: true,
-    controls: false,
-    revealSeconds: 4,
-    isLive: false,
-    backdrop: true,
+    controls: false,               // hidden by default; right-click to reveal
+    revealSeconds: 4,              // how long controls stay up after a reveal
+    isLive: false,                 // true => blinking LIVE badge
+    mirror: true,                  // live blurred mirror in the gutters
     backgroundLight: "assets/header-background-light.jpg",
-    backgroundDark: "assets/header-background-dark.jpg"
+    backgroundDark:  "assets/header-background-dark.jpg"
   };
+  /* ===================== END EDIT ZONE ===================== */
 
-  var video = document.getElementById("video");
-  var frame = document.getElementById("frame");
-  var player = document.getElementById("player");
-  var backdropInner = document.getElementById("backdropInner");
-  var bg = document.getElementById("bg");
-  var badge = document.getElementById("badge");
-  var mainInstance = null;
-  var backdropInstance = null;
-  var revealTimer = null;
-  var bgLightUrl = null;
-  var bgDarkUrl = null;
-  var bgResolved = false;
-  var darkScheme = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
-  var wideScreen = window.matchMedia ? window.matchMedia("(min-aspect-ratio: 16/9)") : null;
-  var backdropReady = false;
+  var root    = document.getElementById("apexVideo");
+  var stage   = document.getElementById("apexStage");
+  var pillar  = document.getElementById("apexPillar");
+  var playerEl= document.getElementById("apexPlayer");
+  var liveEl  = document.getElementById("apexLive");
+  var blur    = document.getElementById("apexBlur");
+  var bctx    = blur.getContext ? blur.getContext("2d") : null;
 
-  function theme() {
-    if (config.theme === "dark" || config.theme === "light") return config.theme;
-    return darkScheme && darkScheme.matches ? "dark" : "light";
+  var darkMQ = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+  function resolveTheme(t) {
+    if (t === "dark" || t === "light") return t;
+    return (darkMQ && darkMQ.matches) ? "dark" : "light";
   }
-  function applyTheme() {
-    video.setAttribute("data-theme", theme());
-    applyBackground();
+  function applyTheme() { root.setAttribute("data-theme", resolveTheme(VIDEO.theme)); applyBackground(); }
+
+  function showPlaceholder(msg) {
+    var ph = pillar.querySelector(".apex-video__placeholder");
+    if (!ph) { ph = document.createElement("div"); ph.className = "apex-video__placeholder"; pillar.appendChild(ph); }
+    ph.textContent = msg;
+  }
+  function clearPlaceholder() {
+    var ph = pillar.querySelector(".apex-video__placeholder");
+    if (ph) ph.parentNode.removeChild(ph);
+  }
+  // On playback failure the branded poster IS the backup, so we don't cover it.
+  // We only ensure the poster is showing (remove the is-playing fade).
+  function showPlaceholderOverPoster() {
+    clearPlaceholder();
+    root.classList.remove("is-playing");
+    root.classList.remove("mirror-on");
   }
 
+  function libUrl() { return "https://cdn.jwplayer.com/libraries/" + VIDEO.playerId + ".js"; }
+  function needIds() { return !VIDEO.playerId || /REPLACE_/.test(VIDEO.playerId); }
+
+  function jwConfig() {
+    var auto = !!VIDEO.autoplay;
+    var cfg = {
+      width: "100%", height: "100%",
+      autostart: auto ? "viewable" : false,
+      mute: auto ? true : !!VIDEO.mute,
+      repeat: !!VIDEO.loop,
+      controls: VIDEO.controls !== false
+    };
+    if (VIDEO.streamUrl) cfg.file = VIDEO.streamUrl;
+    else cfg.playlist = "https://cdn.jwplayer.com/v2/media/" + VIDEO.mediaId;
+    return cfg;
+  }
+
+  var posterEl = document.getElementById("apexPoster");
+  var bgEl = document.getElementById("apexBg");
+
+  var bgLightUrl = null, bgDarkUrl = null, bgResolved = false;
   function probeImage(url, done) {
     if (!url) { done(null); return; }
     var img = new Image();
@@ -253,206 +235,155 @@
     img.onerror = function () { done(null); };
     img.src = url;
   }
-
-  function resolveBackgrounds(done) {
-    if (bgResolved) { done(); return; }
-    var pending = 2;
-    var finish = function () { if (--pending === 0) { bgResolved = true; done(); } };
-    probeImage(config.backgroundLight, function (url) { bgLightUrl = url; finish(); });
-    probeImage(config.backgroundDark, function (url) { bgDarkUrl = url; finish(); });
-  }
-
   function chosenBackground() {
-    var light = bgLightUrl;
-    var dark = bgDarkUrl;
-    if (!light && !dark) return null;
-    var fallback = light || dark;
-    if (theme() === "dark") return dark || fallback;
-    return light || fallback;
+    if (!bgLightUrl && !bgDarkUrl) return null;
+    var fallback = bgLightUrl || bgDarkUrl;
+    if (resolveTheme(VIDEO.theme) === "dark") return bgDarkUrl || fallback;
+    return bgLightUrl || fallback;
   }
-
   function applyBackground() {
     if (!bgResolved) return;
     var url = chosenBackground();
     if (url) {
-      bg.style.backgroundImage = "url('" + url + "')";
-      video.classList.add("has-bg");
+      bgEl.style.backgroundImage = "url('" + url + "')";
+      root.classList.add("has-bg");
+      root.classList.remove("mirror-on");   // image is the backdrop now: no blur/tint
+      VIDEO.mirror = false;
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+      if (bctx) bctx.clearRect(0, 0, blur.width, blur.height);  // wipe any painted frame
     } else {
-      bg.style.backgroundImage = "";
-      video.classList.remove("has-bg");
+      bgEl.style.backgroundImage = "";
+      root.classList.remove("has-bg");
     }
   }
+  function resolveBackgrounds(done) {
+    if (bgResolved) { done(); return; }
+    var pending = 2;
+    var finish = function () { if (--pending === 0) { bgResolved = true; done(); } };
+    probeImage(VIDEO.backgroundLight, function (u) { bgLightUrl = u; finish(); });
+    probeImage(VIDEO.backgroundDark, function (u) { bgDarkUrl = u; finish(); });
+  }
 
-  function notice(message) {
-    var el = frame.querySelector(".video__notice");
-    if (!el) {
-      el = document.createElement("div");
-      el.className = "video__notice";
-      frame.appendChild(el);
+  /* ---- live blurred mirror: paint the JW <video> onto the backdrop canvas ---- */
+  var rafId = null, mirrorVideo = null;
+  function findVideoEl() {
+    return playerEl.querySelector("video") || document.querySelector("#apexPlayer video");
+  }
+  // When the live mirror can't draw (cross-origin / no library), stop the loop
+  // and leave the gutters BLACK (no blur, no tint) per spec.
+  function stopMirror() {
+    VIDEO.mirror = false;
+    root.classList.remove("mirror-on");
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+  }
+  function sizeCanvas() {
+    var r = stage.getBoundingClientRect();
+    // small internal resolution is fine - it's blurred anyway; keeps it cheap
+    blur.width  = Math.max(16, Math.round(r.width  / 6));
+    blur.height = Math.max(9,  Math.round(r.height / 6));
+  }
+  function drawMirror() {
+    if (!VIDEO.mirror || !bctx) return;
+    if (!mirrorVideo) mirrorVideo = findVideoEl();
+    if (mirrorVideo && mirrorVideo.readyState >= 2 && mirrorVideo.videoWidth) {
+      try {
+        var cw = blur.width, ch = blur.height;
+        var vw = mirrorVideo.videoWidth, vh = mirrorVideo.videoHeight;
+        var scale = Math.max(cw / vw, ch / vh);   // cover
+        var dw = vw * scale, dh = vh * scale;
+        bctx.drawImage(mirrorVideo, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+        if (!root.classList.contains("mirror-on")) root.classList.add("mirror-on");  // reveal blur+tint on first good frame
+      } catch (e) { stopMirror(); return; }   // cross-origin: leave gutters black
     }
-    el.textContent = message;
+    rafId = requestAnimationFrame(drawMirror);
   }
-  function clearNotice() {
-    var el = frame.querySelector(".video__notice");
-    if (el) el.parentNode.removeChild(el);
-  }
-  function showPoster() {
-    clearNotice();
-    video.classList.remove("playing");
+  function startMirror() {
+    if (!VIDEO.mirror || !bctx) return;
+    sizeCanvas();
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(drawMirror);
   }
 
-  function isWide() {
-    return wideScreen ? wideScreen.matches : false;
+  /* ---- controls hidden by default; right-click (desktop) or tap (mobile)
+     reveals them, then they auto-hide after revealSeconds. ---- */
+  var revealTimer = null;
+  function bindReveal(p) {
+    var secs = (typeof VIDEO.revealSeconds === "number") ? VIDEO.revealSeconds : 4;
+    function hide() { try { p.setControls(false); } catch (e) {} }
+    function reveal() {
+      try { p.setControls(true); } catch (e) {}
+      if (revealTimer) clearTimeout(revealTimer);
+      revealTimer = setTimeout(hide, secs * 1000);
+    }
+    // start hidden regardless of any JW default
+    hide();
+    pillar.addEventListener("contextmenu", function (e) { e.preventDefault(); reveal(); });
+    pillar.addEventListener("touchend", function () { reveal(); });
   }
 
-  function jwOptions(forMirror) {
-    var autoplay = !!config.autoplay;
-    var options = {
-      width: "100%",
-      height: "100%",
-      autostart: forMirror ? true : (autoplay ? "viewable" : false),
-      mute: forMirror ? true : (autoplay ? true : !!config.muted),
-      repeat: !!config.loop,
-      controls: forMirror ? false : (config.controls !== false)
-    };
-    if (config.streamUrl) options.file = config.streamUrl;
-    else options.playlist = "https://cdn.jwplayer.com/v2/media/" + config.mediaId;
-    return options;
-  }
-
-  function startBackdrop() {
-    if (!config.backdrop || backdropReady || !window.jwplayer) return;
-    if (video.classList.contains("has-bg")) return;
-    if (!isWide()) return;
-    backdropReady = true;
+  function mountPlayer() {
+    clearPlaceholder();
+    if (needIds()) { showPlaceholder("Set playerId / mediaId in the VIDEO config."); return; }
+    if (!window.jwplayer) { showPlaceholderOverPoster(); stopMirror(); return; }  // no library: poster + black edges
     try {
-      backdropInstance = window.jwplayer(backdropInner);
-      backdropInstance.setup(jwOptions(true));
-      backdropInstance.on("firstFrame", syncBackdrop);
-    } catch (err) { backdropReady = false; }
-  }
-
-  function syncBackdrop() {
-    if (!backdropReady || !mainInstance || !backdropInstance) return;
-    var pos = 0;
-    try { pos = mainInstance.getPosition() || 0; } catch (err) { return; }
-    try { if (backdropInstance.seek) backdropInstance.seek(pos); } catch (err) {}
-  }
-
-  function stopBackdrop() {
-    if (!backdropReady) return;
-    backdropReady = false;
-    try { if (window.jwplayer) window.jwplayer(backdropInner).remove(); } catch (err) {}
-    backdropInstance = null;
-    backdropInner.innerHTML = "";
-  }
-
-  function onPlaying() {
-    video.classList.add("playing");
-  }
-
-  function mount() {
-    clearNotice();
-    if (!config.playerId) {
-      notice("Player not configured.");
-      return;
+      var p = window.jwplayer(playerEl);
+      p.setup(jwConfig());
+      p.on("ready", function () { mirrorVideo = findVideoEl(); bindReveal(p); });
+      // Video is actually up: fade the poster, and start the live mirror (which
+      // reveals the blur + brand tint on its first good frame).
+      p.on("firstFrame", function () { root.classList.add("is-playing"); if (VIDEO.mirror && !root.classList.contains("has-bg") && !rafId) startMirror(); });
+      p.on("play",       function () { root.classList.add("is-playing"); if (VIDEO.mirror && !root.classList.contains("has-bg") && !rafId) startMirror(); });
+      p.on("setupError", function () { showPlaceholderOverPoster(); stopMirror(); });  // failed: poster + black edges
+      p.on("error",      function () { showPlaceholderOverPoster(); stopMirror(); });
+    } catch (e) {
+      showPlaceholderOverPoster(); stopMirror();
+      if (window.console) console.warn("[apex-video]", e);
     }
-    if (!window.jwplayer) {
-      showPoster();
-      return;
-    }
-    try {
-      var instance = window.jwplayer(player);
-      mainInstance = instance;
-      instance.setup(jwOptions(false));
-      instance.on("firstFrame", onPlaying);
-      instance.on("play", onPlaying);
-      instance.on("complete", syncBackdrop);
-      instance.on("setupError", showPoster);
-      instance.on("error", showPoster);
-      instance.on("ready", bindReveal);
-      startBackdrop();
-    } catch (err) {
-      showPoster();
-    }
-  }
-
-  function hideControls() {
-    if (revealTimer) { clearTimeout(revealTimer); revealTimer = null; }
-    try { if (mainInstance && mainInstance.setControls) mainInstance.setControls(false); } catch (err) {}
-  }
-
-  function revealControls() {
-    try { if (mainInstance && mainInstance.setControls) mainInstance.setControls(true); } catch (err) {}
-    if (revealTimer) clearTimeout(revealTimer);
-    var ms = (config.revealSeconds > 0 ? config.revealSeconds : 4) * 1000;
-    revealTimer = setTimeout(hideControls, ms);
-  }
-
-  function bindReveal() {
-    var surface = player;
-    surface.addEventListener("contextmenu", function (e) {
-      e.preventDefault();
-      revealControls();
-    });
-    surface.addEventListener("touchend", function () {
-      revealControls();
-    }, { passive: true });
   }
 
   function start() {
     applyTheme();
-    badge.classList.toggle("on", !!config.isLive);
-    mount();
+    liveEl.classList.toggle("is-on", !!VIDEO.isLive);
+    mountPlayer();
   }
 
-  function load() {
-    if (window.jwplayer || !config.playerId) {
-      start();
-      return;
-    }
-    var script = document.createElement("script");
-    script.src = "https://cdn.jwplayer.com/libraries/" + config.playerId + ".js";
-    script.async = true;
-    script.onload = start;
-    script.onerror = start;
-    document.head.appendChild(script);
+  function boot() {
+    resolveBackgrounds(function () {
+      applyBackground();
+      if (window.jwplayer || needIds()) { start(); return; }
+      var sc = document.createElement("script");
+      sc.src = libUrl(); sc.async = true;
+      sc.onload = start;
+      sc.onerror = function () { start(); };
+      document.head.appendChild(sc);
+    });
   }
 
-  if (darkScheme) {
-    var onScheme = function () { if (config.theme === "auto") applyTheme(); };
-    if (darkScheme.addEventListener) darkScheme.addEventListener("change", onScheme);
-    else if (darkScheme.addListener) darkScheme.addListener(onScheme);
+  if (darkMQ) {
+    var onScheme = function () { if (VIDEO.theme === "auto") applyTheme(); };
+    if (darkMQ.addEventListener) darkMQ.addEventListener("change", onScheme);
+    else if (darkMQ.addListener) darkMQ.addListener(onScheme);
   }
+  var rt;
+  window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(function () { sizeCanvas(); }, 150); });
 
-  if (wideScreen) {
-    var onWide = function () {
-      if (isWide()) startBackdrop();
-      else stopBackdrop();
-    };
-    if (wideScreen.addEventListener) wideScreen.addEventListener("change", onWide);
-    else if (wideScreen.addListener) wideScreen.addListener(onWide);
-  }
-
-  window.FeaturedVideo = {
-    swap: function (options) {
-      options = options || {};
-      Object.keys(options).forEach(function (key) {
-        if (options[key] != null) config[key] = options[key];
+  window.ApexVideo = {
+    swap: function (opts) {
+      opts = opts || {};
+      ["playerId","mediaId","streamUrl","autoplay","mute","loop","controls","revealSeconds","isLive","theme","mirror"].forEach(function (k) {
+        if (opts[k] != null) VIDEO[k] = opts[k];
       });
-      video.classList.remove("playing");
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
       if (revealTimer) { clearTimeout(revealTimer); revealTimer = null; }
-      mainInstance = null;
-      stopBackdrop();
-      try { if (window.jwplayer) window.jwplayer(player).remove(); } catch (err) {}
+      mirrorVideo = null;
+      root.classList.remove("is-playing");   // show poster again while the new video loads
+      root.classList.remove("mirror-on");    // black edges until the new video plays
+      try { if (window.jwplayer) window.jwplayer(playerEl).remove(); } catch (e) {}
       start();
     }
   };
 
-  resolveBackgrounds(function () {
-    applyBackground();
-    load();
-  });
+  boot();
 })();
 </script>
 </body>
