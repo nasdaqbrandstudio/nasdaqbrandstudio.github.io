@@ -1,0 +1,16 @@
+<iframe id="apexHeader" src="https://nasdaqbrandstudio.github.io/apex/header/" title="SpaceX Livestream" allow="autoplay; fullscreen" scrolling="no" style="display:block;width:100%;border:0;"></iframe>
+<script>
+(function () {
+  var header = document.getElementById("apexHeader");
+  function size() {
+    var sixteenNine = document.documentElement.clientWidth * 9 / 16;
+    header.style.height = Math.min(sixteenNine, window.innerHeight) + "px";
+  }
+  size();
+  var timer;
+  window.addEventListener("resize", function () {
+    clearTimeout(timer);
+    timer = setTimeout(size, 120);
+  });
+})();
+</script>
