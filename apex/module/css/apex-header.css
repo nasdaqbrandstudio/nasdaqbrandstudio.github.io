@@ -1112,7 +1112,7 @@ figcaption {
 }
 
 .heading {
-  color: #0092bc;
+  color: #fff;
   letter-spacing: 0;
   text-transform: none;
   word-break: keep-all;
@@ -1939,7 +1939,7 @@ figcaption {
   justify-content: flex-start;
   align-items: center;
   width: 70%;
-  display: flex;
+  display: none;
 }
 
 .div-block-3 {
@@ -1990,6 +1990,7 @@ figcaption {
   border-radius: .5rem;
   font-size: 1.15rem;
   line-height: 1.5rem;
+  display: none;
 }
 
 .press-release:hover {
@@ -1998,7 +1999,7 @@ figcaption {
   border-color: #0092bc;
 }
 
-.q-and-a {
+.learn-more {
   color: #fff;
   background-color: #08062a;
   border: 2px solid #0092bc;
@@ -2007,7 +2008,7 @@ figcaption {
   line-height: 1.5rem;
 }
 
-.q-and-a:hover {
+.learn-more:hover {
   color: #08062a;
   background-color: #0092bc;
 }
@@ -2068,6 +2069,13 @@ figcaption {
   height: 100%;
   display: flex;
   position: absolute;
+}
+
+.text-span-4 {
+  color: #0092bc;
+  font-family: Bitter, serif;
+  font-style: italic;
+  font-weight: 400;
 }
 
 @media screen and (max-width: 991px) {
@@ -2542,7 +2550,7 @@ figcaption {
     background-color: #08062abf;
   }
 
-  .press-release, .q-and-a {
+  .press-release, .learn-more {
     font-size: 1rem;
   }
 
