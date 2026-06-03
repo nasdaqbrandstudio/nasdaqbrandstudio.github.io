@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Container</title>
+  <style>
+    * { box-sizing:border-box; }
+    html, body { margin:0; }
+    /* the switcher strip, iframed in */
+    iframe.switcher { width:100%; height:64px; border:0; display:block; }
+    /* the swappable header content, iframed in */
+    iframe.header   { width:100%; height:140px; border:0; display:block; }
+  </style>
+</head>
+<body>
+  <iframe class="switcher" src="switcher.html" title="Switcher"></iframe>
+  <iframe class="header" id="header" src="page-header.html" title="Header"></iframe>
+
+  <script>
+    const header = document.getElementById('header');
+    const pages  = { index: 'page-header.html', livestream: 'livestream.html' };
+
+    // The switcher (iframed above) sends a message; we swap the header iframe.
+    // This single handler is the only seam — anything that posts {type:'switch', view}
+    // can drive it, including a backend later, without changing the page.
+    window.addEventListener('message', function (e) {
+      if (!e.data || e.data.type !== 'switch') return;
+      const target = pages[e.data.view] || pages.index;
+      if (!header.src.endsWith(target)) header.src = target;
+    });
+  </script>
+</body>
+</html>
