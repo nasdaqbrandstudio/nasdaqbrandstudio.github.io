@@ -10,25 +10,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-  /* ============================================================
-     APEX VIDEO - video only (no caption). 16:9 player, centered,
-     height-capped so a wide window never forces extra scroll.
-     Live blurred mirror of the video fills the side gutters;
-     container edge is white (light) / #08062A (dark).
-     theme: "auto" follows OS, or force "dark" / "light".
-     ============================================================ */
   :root {
-    --apex-bg:     #08062A;        /* DARK gutter edge */
+    --apex-bg: #08062A;
     --apex-font: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    --apex-radius: 0px;
     --apex-poster: url('assets/spacex-background.jpg');
-    /* Height cap = 100vh - 48px - ticker height. Ticker is 64px,
-       so cap = 100vh - 112px. Adjust --apex-ticker-h if the ticker height changes. */
-    --apex-ticker-h: 64px;
-    --apex-gap: 48px;
-    --apex-maxh: calc(100vh - var(--apex-gap) - var(--apex-ticker-h));
   }
-  .apex-video[data-theme="light"] { --apex-bg: #FFFFFF; }  /* LIGHT gutter edge */
+  .apex-video[data-theme="light"] { --apex-bg: #FFFFFF; }
 
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; height: 100%; }
@@ -41,9 +28,6 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Stage: full width, height capped. Centers the 16:9 player.
-     Default gutters are BLACK; the blurred mirror + brand tint only appear
-     once the video is playing (mirror-on). */
   .apex-video__stage {
     position: relative;
     width: 100%;
@@ -53,23 +37,19 @@
     display: flex; align-items: center; justify-content: center;
   }
 
-  /* Blurred live mirror backdrop. Hidden until the video plays AND the mirror
-     can actually draw frames (mirror-on). Never used as a still fallback. */
   .apex-video__blur {
     position: absolute; inset: 0; width: 100%; height: 100%;
     object-fit: cover;
-    transform: scale(1.15);          /* hide blurred edges */
+    transform: scale(1.15);
     filter: blur(8px);
     z-index: 0;
-    opacity: 0;                      /* off by default */
+    opacity: 0;
     transition: opacity .4s ease;
   }
-  /* Brand-color wash (white in light, #08062A in dark) - part of the mirror
-     effect, so also off until mirror-on. */
   .apex-video__tint {
     position: absolute; inset: 0; z-index: 1; pointer-events: none;
     background: var(--apex-bg);
-    opacity: 0;                      /* off by default */
+    opacity: 0;
     transition: opacity .4s ease;
   }
   .apex-video.mirror-on .apex-video__blur { opacity: 1; }
@@ -84,14 +64,12 @@
   .apex-video.has-bg .apex-video__tint { opacity: 0 !important; }
   .apex-video.has-bg .apex-video__bg { opacity: 1; }
 
-  /* The actual 16:9 player: as tall as the cap allows, width follows 16:9. */
   .apex-video__pillar {
     position: relative; z-index: 2;
     height: 100%;
     aspect-ratio: 16 / 9;
     max-width: 100%;
     background: #000;
-    border-radius: var(--apex-radius);
     overflow: hidden;
   }
   .apex-video__player { position: absolute; inset: 0; width: 100%; height: 100%; }
@@ -114,8 +92,6 @@
     color: #fff; font-family: var(--apex-font); font-size: 13px; text-align: center; padding: 16px; background: #000;
   }
 
-  /* Poster: branded still beneath the video. Visible immediately on load and
-     remains if the video fails. Hidden once the player reports it's playing. */
   .apex-video__poster {
     position: absolute; inset: 0; z-index: 1;
     background-image: var(--apex-poster);
@@ -144,36 +120,21 @@
 (function () {
   "use strict";
 
-  /* =======================================================================
-     EDIT HERE - JW Player (library/setup, so the live blurred mirror can
-     read the video frames; that needs a same-origin <video>, which the
-     library gives us and the cloud iframe does not).
-
-     playerId : player build ID (after the dash in a JW URL)
-     mediaId  : media/asset ID (before the dash)
-     streamUrl: optional HLS .m3u8 for a livestream (overrides mediaId)
-
-     Autoplay needs MUTED (browser policy) - mute is forced when autoplay:true.
-
-     SWAP (live -> recap -> live -> recap): change mediaId (or streamUrl) and
-     isLive, then redeploy; or call ApexVideo.swap({...}) from the host page.
-     ======================================================================= */
   var VIDEO = {
-    theme: "auto",                 // "auto" | "dark" | "light"
-    playerId: "hVkrU1kZ",          // from your URL
-    mediaId:  "rgE7wtxY",          // from your URL
-    streamUrl: "",                 // optional HLS for livestream
+    theme: "auto",
+    playerId: "hVkrU1kZ",
+    mediaId:  "rgE7wtxY",
+    streamUrl: "",
     autoplay: true,
-    mute: true,                    // required for autoplay
+    mute: true,
     loop: true,
-    controls: false,               // hidden by default; right-click to reveal
-    revealSeconds: 4,              // how long controls stay up after a reveal
-    isLive: false,                 // true => blinking LIVE badge
-    mirror: true,                  // live blurred mirror in the gutters
+    controls: false,
+    revealSeconds: 4,
+    isLive: false,
+    mirror: true,
     backgroundLight: "assets/header-background-light.jpg",
     backgroundDark:  "assets/header-background-dark.jpg"
   };
-  /* ===================== END EDIT ZONE ===================== */
 
   var root    = document.getElementById("apexVideo");
   var stage   = document.getElementById("apexStage");
@@ -199,8 +160,6 @@
     var ph = pillar.querySelector(".apex-video__placeholder");
     if (ph) ph.parentNode.removeChild(ph);
   }
-  // On playback failure the branded poster IS the backup, so we don't cover it.
-  // We only ensure the poster is showing (remove the is-playing fade).
   function showPlaceholderOverPoster() {
     clearPlaceholder();
     root.classList.remove("is-playing");
@@ -224,7 +183,6 @@
     return cfg;
   }
 
-  var posterEl = document.getElementById("apexPoster");
   var bgEl = document.getElementById("apexBg");
 
   var bgLightUrl = null, bgDarkUrl = null, bgResolved = false;
@@ -247,10 +205,10 @@
     if (url) {
       bgEl.style.backgroundImage = "url('" + url + "')";
       root.classList.add("has-bg");
-      root.classList.remove("mirror-on");   // image is the backdrop now: no blur/tint
+      root.classList.remove("mirror-on");
       VIDEO.mirror = false;
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-      if (bctx) bctx.clearRect(0, 0, blur.width, blur.height);  // wipe any painted frame
+      if (bctx) bctx.clearRect(0, 0, blur.width, blur.height);
     } else {
       bgEl.style.backgroundImage = "";
       root.classList.remove("has-bg");
@@ -264,13 +222,10 @@
     probeImage(VIDEO.backgroundDark, function (u) { bgDarkUrl = u; finish(); });
   }
 
-  /* ---- live blurred mirror: paint the JW <video> onto the backdrop canvas ---- */
   var rafId = null, mirrorVideo = null;
   function findVideoEl() {
     return playerEl.querySelector("video") || document.querySelector("#apexPlayer video");
   }
-  // When the live mirror can't draw (cross-origin / no library), stop the loop
-  // and leave the gutters BLACK (no blur, no tint) per spec.
   function stopMirror() {
     VIDEO.mirror = false;
     root.classList.remove("mirror-on");
@@ -278,7 +233,6 @@
   }
   function sizeCanvas() {
     var r = stage.getBoundingClientRect();
-    // small internal resolution is fine - it's blurred anyway; keeps it cheap
     blur.width  = Math.max(16, Math.round(r.width  / 6));
     blur.height = Math.max(9,  Math.round(r.height / 6));
   }
@@ -289,11 +243,11 @@
       try {
         var cw = blur.width, ch = blur.height;
         var vw = mirrorVideo.videoWidth, vh = mirrorVideo.videoHeight;
-        var scale = Math.max(cw / vw, ch / vh);   // cover
+        var scale = Math.max(cw / vw, ch / vh);
         var dw = vw * scale, dh = vh * scale;
         bctx.drawImage(mirrorVideo, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
-        if (!root.classList.contains("mirror-on")) root.classList.add("mirror-on");  // reveal blur+tint on first good frame
-      } catch (e) { stopMirror(); return; }   // cross-origin: leave gutters black
+        if (!root.classList.contains("mirror-on")) root.classList.add("mirror-on");
+      } catch (e) { stopMirror(); return; }
     }
     rafId = requestAnimationFrame(drawMirror);
   }
@@ -304,8 +258,6 @@
     rafId = requestAnimationFrame(drawMirror);
   }
 
-  /* ---- controls hidden by default; right-click (desktop) or tap (mobile)
-     reveals them, then they auto-hide after revealSeconds. ---- */
   var revealTimer = null;
   function bindReveal(p) {
     var secs = (typeof VIDEO.revealSeconds === "number") ? VIDEO.revealSeconds : 4;
@@ -315,7 +267,6 @@
       if (revealTimer) clearTimeout(revealTimer);
       revealTimer = setTimeout(hide, secs * 1000);
     }
-    // start hidden regardless of any JW default
     hide();
     pillar.addEventListener("contextmenu", function (e) { e.preventDefault(); reveal(); });
     pillar.addEventListener("touchend", function () { reveal(); });
@@ -324,16 +275,14 @@
   function mountPlayer() {
     clearPlaceholder();
     if (needIds()) { showPlaceholder("Set playerId / mediaId in the VIDEO config."); return; }
-    if (!window.jwplayer) { showPlaceholderOverPoster(); stopMirror(); return; }  // no library: poster + black edges
+    if (!window.jwplayer) { showPlaceholderOverPoster(); stopMirror(); return; }
     try {
       var p = window.jwplayer(playerEl);
       p.setup(jwConfig());
       p.on("ready", function () { mirrorVideo = findVideoEl(); bindReveal(p); });
-      // Video is actually up: fade the poster, and start the live mirror (which
-      // reveals the blur + brand tint on its first good frame).
       p.on("firstFrame", function () { root.classList.add("is-playing"); if (VIDEO.mirror && !root.classList.contains("has-bg") && !rafId) startMirror(); });
       p.on("play",       function () { root.classList.add("is-playing"); if (VIDEO.mirror && !root.classList.contains("has-bg") && !rafId) startMirror(); });
-      p.on("setupError", function () { showPlaceholderOverPoster(); stopMirror(); });  // failed: poster + black edges
+      p.on("setupError", function () { showPlaceholderOverPoster(); stopMirror(); });
       p.on("error",      function () { showPlaceholderOverPoster(); stopMirror(); });
     } catch (e) {
       showPlaceholderOverPoster(); stopMirror();
@@ -376,8 +325,8 @@
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
       if (revealTimer) { clearTimeout(revealTimer); revealTimer = null; }
       mirrorVideo = null;
-      root.classList.remove("is-playing");   // show poster again while the new video loads
-      root.classList.remove("mirror-on");    // black edges until the new video plays
+      root.classList.remove("is-playing");
+      root.classList.remove("mirror-on");
       try { if (window.jwplayer) window.jwplayer(playerEl).remove(); } catch (e) {}
       start();
     }
