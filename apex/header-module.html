@@ -35,7 +35,6 @@
     padding: 0;
     vertical-align: top;
   }
-  .apex-frame--ticker { height: 64px; }
 
   img.apex-homepage {
     display: block;
@@ -56,33 +55,66 @@
   </div>
 </nav>
 
-<iframe class="apex-frame apex-frame--ticker" src="https://nasdaqbrandstudio.github.io/apex/ticker/" title="Market news ticker" scrolling="no"></iframe>
-
-<iframe id="apexHeader" class="apex-frame" src="https://nasdaqbrandstudio.github.io/apex/module/" title="Featured video" allow="autoplay; fullscreen" scrolling="no"></iframe>
-
-<img class="apex-homepage" src="https://nasdaqbrandstudio.github.io/apex/nasdaq-homepage.jpg" alt="Nasdaq homepage">
-
+<!-- header-module-container -->
+<iframe id="apexHeader" class="apex-frame" src="https://nasdaqbrandstudio.github.io/apex/module/" data-module="module" title="SpaceX Lists on Nasdaq" allow="autoplay; fullscreen" scrolling="no"></iframe>
 <script>
 (function () {
   "use strict";
-  var header = document.getElementById("apexHeader");
-  var nav = 48;
-  var ticker = 64;
 
+  /* GitHub URLs for testing; final hosting keeps the /apex/... levels. */
+  var MODULES = {
+    header: { src: "https://nasdaqbrandstudio.github.io/apex/header/", title: "SpaceX Livestream" },
+    module: { src: "https://nasdaqbrandstudio.github.io/apex/module/", title: "SpaceX Lists on Nasdaq" }
+  };
+
+  var frame = document.getElementById("apexHeader");
+
+  /* Height available below whatever sits above the container, measured
+     rather than hardcoded so nav changes don't break the math. */
+  function availableHeight() {
+    var top = frame.getBoundingClientRect().top + window.scrollY;
+    return window.innerHeight - top;
+  }
+
+  /* The data-module attribute is the source of truth for what's loaded.
+     Sizing rules differ per module:
+     - module: fixed content heights on mobile (the module's own CSS minimums),
+       full available height on desktop.
+     - header: 16:9 livestream, capped at the available height. */
   function size() {
-    var width = document.documentElement.clientWidth;
-    var sixteenNine = width * 9 / 16;
-    var fit = window.innerHeight - nav - ticker;
-    header.style.height = Math.min(sixteenNine, fit) + "px";
+    var vw = document.documentElement.clientWidth;
+    if (frame.getAttribute("data-module") === "module") {
+      frame.style.height = (vw < 480 ? 700 : vw < 992 ? 600 : Math.max(availableHeight(), 440)) + "px";
+    } else {
+      frame.style.height = Math.min(vw * 9 / 16, availableHeight()) + "px";
+    }
+  }
+
+  /* Switching hook. Call show("header") or show("module").
+     No-op if that module is already loaded, so it's safe to call repeatedly. */
+  function show(name) {
+    var m = MODULES[name];
+    if (!m || frame.getAttribute("data-module") === name) return;
+    frame.setAttribute("data-module", name);
+    frame.title = m.title;
+    frame.src = m.src;
+    size();
   }
 
   size();
+
   var timer;
   window.addEventListener("resize", function () {
     clearTimeout(timer);
     timer = setTimeout(size, 120);
   });
+
+  window.ApexHeaderContainer = { show: show };
 })();
 </script>
+<!-- /header-module-container -->
+
+<img class="apex-homepage" src="https://nasdaqbrandstudio.github.io/apex/nasdaq-homepage.jpg" alt="Nasdaq homepage">
+
 </body>
 </html>

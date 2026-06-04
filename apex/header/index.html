@@ -15,7 +15,6 @@
     --apex-font: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --apex-poster: url('assets/spacex-background.jpg');
   }
-  .apex-video[data-theme="light"] { --apex-bg: #FFFFFF; }
 
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; height: 100%; }
@@ -34,11 +33,16 @@
     height: 100%;
     overflow: hidden;
     background: #000;
-    display: flex; align-items: center; justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .apex-video__blur {
-    position: absolute; inset: 0; width: 100%; height: 100%;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     transform: scale(1.15);
     filter: blur(8px);
@@ -46,56 +50,103 @@
     opacity: 0;
     transition: opacity .4s ease;
   }
+
   .apex-video__tint {
-    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
     background: var(--apex-bg);
     opacity: 0;
     transition: opacity .4s ease;
   }
+
   .apex-video.mirror-on .apex-video__blur { opacity: 1; }
   .apex-video.mirror-on .apex-video__tint { opacity: .8; }
 
   .apex-video__bg {
-    position: absolute; inset: 0; z-index: 0;
-    background-size: cover; background-position: center;
-    opacity: 0; transition: opacity .4s ease;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity .4s ease;
   }
+
   .apex-video.has-bg .apex-video__blur,
   .apex-video.has-bg .apex-video__tint { opacity: 0 !important; }
   .apex-video.has-bg .apex-video__bg { opacity: 1; }
 
   .apex-video__pillar {
-    position: relative; z-index: 2;
+    position: relative;
+    z-index: 2;
     height: 100%;
     aspect-ratio: 16 / 9;
     max-width: 100%;
     background: #000;
     overflow: hidden;
   }
-  .apex-video__player { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  .apex-video__player {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
   .apex-video__player .jwplayer,
   .apex-video__player .jw-wrapper { width: 100% !important; height: 100% !important; }
 
   .apex-video__live {
-    position: absolute; top: 12px; left: 12px; z-index: 5;
-    display: none; align-items: center; gap: 6px;
-    background: #CC1C27; color: #fff;
-    font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
-    padding: 5px 9px; border-radius: 3px;
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 5;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    background: #CC1C27;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 5px 9px;
+    border-radius: 3px;
   }
   .apex-video__live.is-on { display: inline-flex; }
-  .apex-video__live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #fff; animation: apexBlink 1.4s steps(1) infinite; }
+  .apex-video__live::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #fff;
+    animation: apexBlink 1.4s steps(1) infinite;
+  }
   @keyframes apexBlink { 50% { opacity: 0; } }
 
   .apex-video__placeholder {
-    position: absolute; inset: 0; z-index: 3; display: flex; align-items: center; justify-content: center;
-    color: #fff; font-family: var(--apex-font); font-size: 13px; text-align: center; padding: 16px; background: #000;
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-family: var(--apex-font);
+    font-size: 13px;
+    text-align: center;
+    padding: 16px;
+    background: #000;
   }
 
   .apex-video__poster {
-    position: absolute; inset: 0; z-index: 1;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
     background-image: var(--apex-poster);
-    background-size: cover; background-position: center;
+    background-size: cover;
+    background-position: center;
     transition: opacity .4s ease;
   }
   .apex-video.is-playing .apex-video__poster { opacity: 0; }
@@ -121,7 +172,6 @@
   "use strict";
 
   var VIDEO = {
-    theme: "auto",
     playerId: "hVkrU1kZ",
     mediaId:  "rgE7wtxY",
     streamUrl: "",
@@ -132,39 +182,41 @@
     revealSeconds: 4,
     isLive: false,
     mirror: true,
-    backgroundLight: "assets/header-background-light.jpg",
-    backgroundDark:  "assets/header-background-dark.jpg"
+    background: "assets/header-background-dark.jpg"
   };
 
-  var root    = document.getElementById("apexVideo");
-  var stage   = document.getElementById("apexStage");
-  var pillar  = document.getElementById("apexPillar");
-  var playerEl= document.getElementById("apexPlayer");
-  var liveEl  = document.getElementById("apexLive");
-  var blur    = document.getElementById("apexBlur");
-  var bctx    = blur.getContext ? blur.getContext("2d") : null;
+  var root     = document.getElementById("apexVideo");
+  var stage    = document.getElementById("apexStage");
+  var pillar   = document.getElementById("apexPillar");
+  var playerEl = document.getElementById("apexPlayer");
+  var liveEl   = document.getElementById("apexLive");
+  var bgEl     = document.getElementById("apexBg");
+  var blur     = document.getElementById("apexBlur");
+  var bctx     = blur.getContext ? blur.getContext("2d") : null;
 
-  var darkMQ = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
-  function resolveTheme(t) {
-    if (t === "dark" || t === "light") return t;
-    return (darkMQ && darkMQ.matches) ? "dark" : "light";
-  }
-  function applyTheme() { root.setAttribute("data-theme", resolveTheme(VIDEO.theme)); applyBackground(); }
+  /* ---------- placeholder ---------- */
 
   function showPlaceholder(msg) {
     var ph = pillar.querySelector(".apex-video__placeholder");
-    if (!ph) { ph = document.createElement("div"); ph.className = "apex-video__placeholder"; pillar.appendChild(ph); }
+    if (!ph) {
+      ph = document.createElement("div");
+      ph.className = "apex-video__placeholder";
+      pillar.appendChild(ph);
+    }
     ph.textContent = msg;
   }
+
   function clearPlaceholder() {
     var ph = pillar.querySelector(".apex-video__placeholder");
     if (ph) ph.parentNode.removeChild(ph);
   }
-  function showPlaceholderOverPoster() {
+
+  function showPosterFallback() {
     clearPlaceholder();
-    root.classList.remove("is-playing");
-    root.classList.remove("mirror-on");
+    root.classList.remove("is-playing", "mirror-on");
   }
+
+  /* ---------- jwplayer config ---------- */
 
   function libUrl() { return "https://cdn.jwplayer.com/libraries/" + VIDEO.playerId + ".js"; }
   function needIds() { return !VIDEO.playerId || /REPLACE_/.test(VIDEO.playerId); }
@@ -172,7 +224,8 @@
   function jwConfig() {
     var auto = !!VIDEO.autoplay;
     var cfg = {
-      width: "100%", height: "100%",
+      width: "100%",
+      height: "100%",
       autostart: auto ? "viewable" : false,
       mute: auto ? true : !!VIDEO.mute,
       repeat: !!VIDEO.loop,
@@ -183,27 +236,14 @@
     return cfg;
   }
 
-  var bgEl = document.getElementById("apexBg");
+  /* ---------- static background (optional) ---------- */
 
-  var bgLightUrl = null, bgDarkUrl = null, bgResolved = false;
-  function probeImage(url, done) {
-    if (!url) { done(null); return; }
-    var img = new Image();
-    img.onload = function () { done(url); };
-    img.onerror = function () { done(null); };
-    img.src = url;
-  }
-  function chosenBackground() {
-    if (!bgLightUrl && !bgDarkUrl) return null;
-    var fallback = bgLightUrl || bgDarkUrl;
-    if (resolveTheme(VIDEO.theme) === "dark") return bgDarkUrl || fallback;
-    return bgLightUrl || fallback;
-  }
+  var bgUrl = null, bgResolved = false;
+
   function applyBackground() {
     if (!bgResolved) return;
-    var url = chosenBackground();
-    if (url) {
-      bgEl.style.backgroundImage = "url('" + url + "')";
+    if (bgUrl) {
+      bgEl.style.backgroundImage = "url('" + bgUrl + "')";
       root.classList.add("has-bg");
       root.classList.remove("mirror-on");
       VIDEO.mirror = false;
@@ -214,28 +254,41 @@
       root.classList.remove("has-bg");
     }
   }
-  function resolveBackgrounds(done) {
-    if (bgResolved) { done(); return; }
-    var pending = 2;
-    var finish = function () { if (--pending === 0) { bgResolved = true; done(); } };
-    probeImage(VIDEO.backgroundLight, function (u) { bgLightUrl = u; finish(); });
-    probeImage(VIDEO.backgroundDark, function (u) { bgDarkUrl = u; finish(); });
+
+  function resolveBackground(done) {
+    if (bgResolved || !VIDEO.background) {
+      bgResolved = true;
+      done();
+      return;
+    }
+    var img = new Image();
+    img.onload  = function () { bgUrl = VIDEO.background; bgResolved = true; done(); };
+    img.onerror = function () { bgUrl = null; bgResolved = true; done(); };
+    img.src = VIDEO.background;
   }
 
+  /* ---------- blurred video mirror ---------- */
+
   var rafId = null, mirrorVideo = null;
+
   function findVideoEl() {
+    // JW Player replaces the #apexPlayer element on setup, so the original
+    // playerEl reference may be detached — fall back to a live DOM query.
     return playerEl.querySelector("video") || document.querySelector("#apexPlayer video");
   }
+
   function stopMirror() {
     VIDEO.mirror = false;
     root.classList.remove("mirror-on");
     if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
   }
+
   function sizeCanvas() {
     var r = stage.getBoundingClientRect();
     blur.width  = Math.max(16, Math.round(r.width  / 6));
     blur.height = Math.max(9,  Math.round(r.height / 6));
   }
+
   function drawMirror() {
     if (!VIDEO.mirror || !bctx) return;
     if (!mirrorVideo) mirrorVideo = findVideoEl();
@@ -247,10 +300,14 @@
         var dw = vw * scale, dh = vh * scale;
         bctx.drawImage(mirrorVideo, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
         if (!root.classList.contains("mirror-on")) root.classList.add("mirror-on");
-      } catch (e) { stopMirror(); return; }
+      } catch (e) {
+        stopMirror();
+        return;
+      }
     }
     rafId = requestAnimationFrame(drawMirror);
   }
+
   function startMirror() {
     if (!VIDEO.mirror || !bctx) return;
     sizeCanvas();
@@ -258,7 +315,10 @@
     rafId = requestAnimationFrame(drawMirror);
   }
 
+  /* ---------- tap-to-reveal controls ---------- */
+
   var revealTimer = null;
+
   function bindReveal(p) {
     var secs = (typeof VIDEO.revealSeconds === "number") ? VIDEO.revealSeconds : 4;
     function hide() { try { p.setControls(false); } catch (e) {} }
@@ -272,61 +332,72 @@
     pillar.addEventListener("touchend", function () { reveal(); });
   }
 
+  /* ---------- player ---------- */
+
   function mountPlayer() {
     clearPlaceholder();
     if (needIds()) { showPlaceholder("Set playerId / mediaId in the VIDEO config."); return; }
-    if (!window.jwplayer) { showPlaceholderOverPoster(); stopMirror(); return; }
+    if (!window.jwplayer) { showPosterFallback(); stopMirror(); return; }
     try {
       var p = window.jwplayer(playerEl);
       p.setup(jwConfig());
-      p.on("ready", function () { mirrorVideo = findVideoEl(); bindReveal(p); });
-      p.on("firstFrame", function () { root.classList.add("is-playing"); if (VIDEO.mirror && !root.classList.contains("has-bg") && !rafId) startMirror(); });
-      p.on("play",       function () { root.classList.add("is-playing"); if (VIDEO.mirror && !root.classList.contains("has-bg") && !rafId) startMirror(); });
-      p.on("setupError", function () { showPlaceholderOverPoster(); stopMirror(); });
-      p.on("error",      function () { showPlaceholderOverPoster(); stopMirror(); });
+      p.on("ready", function () {
+        mirrorVideo = findVideoEl();
+        bindReveal(p);
+      });
+      p.on("firstFrame", onPlaying);
+      p.on("play", onPlaying);
+      p.on("setupError", function () { showPosterFallback(); stopMirror(); });
+      p.on("error",      function () { showPosterFallback(); stopMirror(); });
     } catch (e) {
-      showPlaceholderOverPoster(); stopMirror();
+      showPosterFallback();
+      stopMirror();
       if (window.console) console.warn("[apex-video]", e);
     }
   }
 
+  function onPlaying() {
+    root.classList.add("is-playing");
+    if (VIDEO.mirror && !root.classList.contains("has-bg") && !rafId) startMirror();
+  }
+
   function start() {
-    applyTheme();
     liveEl.classList.toggle("is-on", !!VIDEO.isLive);
     mountPlayer();
   }
 
   function boot() {
-    resolveBackgrounds(function () {
+    resolveBackground(function () {
       applyBackground();
       if (window.jwplayer || needIds()) { start(); return; }
       var sc = document.createElement("script");
-      sc.src = libUrl(); sc.async = true;
+      sc.src = libUrl();
+      sc.async = true;
       sc.onload = start;
       sc.onerror = function () { start(); };
       document.head.appendChild(sc);
     });
   }
 
-  if (darkMQ) {
-    var onScheme = function () { if (VIDEO.theme === "auto") applyTheme(); };
-    if (darkMQ.addEventListener) darkMQ.addEventListener("change", onScheme);
-    else if (darkMQ.addListener) darkMQ.addListener(onScheme);
-  }
   var rt;
-  window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(function () { sizeCanvas(); }, 150); });
+  window.addEventListener("resize", function () {
+    clearTimeout(rt);
+    rt = setTimeout(sizeCanvas, 150);
+  });
+
+  /* ---------- public API ---------- */
 
   window.ApexVideo = {
     swap: function (opts) {
       opts = opts || {};
-      ["playerId","mediaId","streamUrl","autoplay","mute","loop","controls","revealSeconds","isLive","theme","mirror"].forEach(function (k) {
+      ["playerId", "mediaId", "streamUrl", "autoplay", "mute", "loop", "controls",
+       "revealSeconds", "isLive", "mirror"].forEach(function (k) {
         if (opts[k] != null) VIDEO[k] = opts[k];
       });
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
       if (revealTimer) { clearTimeout(revealTimer); revealTimer = null; }
       mirrorVideo = null;
-      root.classList.remove("is-playing");
-      root.classList.remove("mirror-on");
+      root.classList.remove("is-playing", "mirror-on");
       try { if (window.jwplayer) window.jwplayer(playerEl).remove(); } catch (e) {}
       start();
     }
