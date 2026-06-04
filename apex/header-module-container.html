@@ -1,16 +1,46 @@
-<iframe id="apexHeader" src="https://nasdaqbrandstudio.github.io/apex/header/" title="SpaceX Livestream" allow="autoplay; fullscreen" scrolling="no" style="display:block;width:100%;border:0;"></iframe>
+<iframe id="apexHeader" src="/apex/module/" data-module="module" title="SpaceX Lists on Nasdaq" allow="autoplay; fullscreen" scrolling="no" style="display:block;width:100%;border:0;"></iframe>
 <script>
 (function () {
-  var header = document.getElementById("apexHeader");
-  function size() {
-    var sixteenNine = document.documentElement.clientWidth * 9 / 16;
-    header.style.height = Math.min(sixteenNine, window.innerHeight) + "px";
+  "use strict";
+
+  var MODULES = {
+    header: { src: "/apex/header/", title: "SpaceX Livestream" },
+    module: { src: "/apex/module/", title: "SpaceX Lists on Nasdaq" }
+  };
+
+  var frame = document.getElementById("apexHeader");
+
+  function availableHeight() {
+    var top = frame.getBoundingClientRect().top + window.scrollY;
+    return window.innerHeight - top;
   }
+
+  function size() {
+    var vw = document.documentElement.clientWidth;
+    if (frame.getAttribute("data-module") === "module") {
+      frame.style.height = (vw < 480 ? 700 : vw < 992 ? 600 : Math.max(availableHeight(), 440)) + "px";
+    } else {
+      frame.style.height = Math.min(vw * 9 / 16, availableHeight()) + "px";
+    }
+  }
+
+  function show(name) {
+    var m = MODULES[name];
+    if (!m || frame.getAttribute("data-module") === name) return;
+    frame.setAttribute("data-module", name);
+    frame.title = m.title;
+    frame.src = m.src;
+    size();
+  }
+
   size();
+
   var timer;
   window.addEventListener("resize", function () {
     clearTimeout(timer);
     timer = setTimeout(size, 120);
   });
+
+  window.ApexHeaderContainer = { show: show };
 })();
 </script>
