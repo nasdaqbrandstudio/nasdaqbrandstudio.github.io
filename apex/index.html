@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <title>Nasdaq APEX</title>
 <style>
   * { box-sizing: border-box; }
@@ -36,6 +39,38 @@
     vertical-align: top;
   }
 
+  img.apex-still {
+    display: block;
+    width: 100%;
+    object-fit: contain;
+    background: #000;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+
+  .apex-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 0;
+    background: #fff;
+  }
+  .apex-switcher button {
+    font: 500 13px/1 "Inter", Arial, sans-serif;
+    color: #08062A;
+    background: #fff;
+    border: 1px solid #08062A;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  .apex-switcher button.active {
+    background: #0092BC;
+    border-color: #0092BC;
+    color: #fff;
+  }
+
   img.apex-homepage {
     display: block;
     width: 100%;
@@ -55,7 +90,14 @@
   </div>
 </nav>
 
-<iframe id="apexHeader" class="apex-frame" src="https://nasdaqbrandstudio.github.io/apex/header/" title="Featured video" allow="autoplay; fullscreen" scrolling="no"></iframe>
+<iframe id="apexHeader" class="apex-frame" src="https://nasdaqbrandstudio.github.io/apex/header/" title="Featured video" allow="autoplay; fullscreen" scrolling="no" style="display: none;"></iframe>
+
+<img id="apexStill" class="apex-still" src="https://nasdaqbrandstudio.github.io/apex/header/assets/spacex-banner.jpg" alt="Featured image">
+
+<div class="apex-switcher">
+  <button id="btnImage" type="button" class="active">Image Module</button>
+  <button id="btnVideo" type="button">Video Module</button>
+</div>
 
 <img class="apex-homepage" src="https://nasdaqbrandstudio.github.io/apex/nasdaq-homepage.jpg" alt="Nasdaq homepage">
 
@@ -63,6 +105,9 @@
 (function () {
   "use strict";
   var header = document.getElementById("apexHeader");
+  var still = document.getElementById("apexStill");
+  var btnImage = document.getElementById("btnImage");
+  var btnVideo = document.getElementById("btnVideo");
   var nav = 48;
   var ticker = 64; // ticker removed, but its height is reserved to keep the header size unchanged
 
@@ -70,9 +115,23 @@
     var width = document.documentElement.clientWidth;
     var sixteenNine = width * 9 / 16;
     var fit = window.innerHeight - nav - ticker;
-    header.style.height = Math.min(sixteenNine, fit) + "px";
+    var h = Math.min(sixteenNine, fit) + "px";
+    header.style.height = h;
+    still.style.height = h;
   }
 
+  function show(mode) {
+    var video = mode === "video";
+    header.style.display = video ? "block" : "none";
+    still.style.display = video ? "none" : "block";
+    btnVideo.classList.toggle("active", video);
+    btnImage.classList.toggle("active", !video);
+  }
+
+  btnImage.addEventListener("click", function () { show("image"); });
+  btnVideo.addEventListener("click", function () { show("video"); });
+
+  show("image");
   size();
   var timer;
   window.addEventListener("resize", function () {
