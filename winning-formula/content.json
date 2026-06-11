@@ -52,17 +52,17 @@
   },
   "featured": {
     "eyebrow": "Latest Episode",
-    "headline": "Detroit's Comeback and The Importance of Financial Responsibility",
-    "guest": "Jalen Rose",
-    "guestNameMarkup": "Jalen Rose",
+    "headline": "From World Cups to Player Networking: <em>Behind The Business of Football</em>",
+    "guest": "Patrice Evra",
+    "guestNameMarkup": "Patrice Evra",
     "subtitle": "",
     "badge": "Featured",
-    "thumbnailAlt": "Jalen Rose on The Winning Formula",
-    "videoUrl": "https://cdn.jwplayer.com/players/09oVWuMQ-jO5YHc4l.html",
-    "episodeUrl": "https://cdn.jwplayer.com/players/09oVWuMQ-jO5YHc4l.html",
+    "thumbnailAlt": "Patrice Evra on The Winning Formula",
+    "videoUrl": "https://cdn.jwplayer.com/players/d1ACOUmt-jO5YHc4l.html",
+    "episodeUrl": "https://cdn.jwplayer.com/players/d1ACOUmt-jO5YHc4l.html",
     "duration": "",
-    "pullQuote": "\"Young people now need to be focused on fiscal literacy, because when I was in school NIL was not a thing. So it's important for young people to surround themselves with people who are going to help them grow their wealth earlier.\"",
-    "body": "In this episode of Nasdaq's The Winning Formula, NBA veteran and Same Page Entertainment CEO Jalen Rose talks about the importance of financial literacy, the founding of Same Page Entertainment, the creation of his new show South West High, and his toughest NBA defenders."
+    "pullQuote": "\"We are the best squad, but the biggest enemy of France is France. If we stay humble and respect every team, I don't see how France doesn't win the World Cup.\"",
+    "body": "In this episode of Nasdaq's The Winning Formula, Manchester United legend and former France captain Patrice Evra talks about the importance of financial literacy for young athletes, what it was like being coached by Sir Alex Ferguson, how diversity can be a strength for national teams, his GOAT list, and his predictions for France's World Cup."
   },
   "series": {
     "eyebrow": "The Series",
@@ -90,6 +90,23 @@
       }
     ],
     "episodes": [
+      {
+        "guest": "Jalen Rose",
+        "guestNameMarkup": "Jalen Rose",
+        "subtitle": "Detroit's Comeback and The Importance of Financial Responsibility",
+        "thumbnailAlt": "Jalen Rose on The Winning Formula",
+        "videoUrl": "https://cdn.jwplayer.com/players/09oVWuMQ-jO5YHc4l.html",
+        "episodeUrl": "https://cdn.jwplayer.com/players/09oVWuMQ-jO5YHc4l.html",
+        "duration": "",
+        "tag": "NBA",
+        "tagClass": "basketball",
+        "filters": [
+          "basketball"
+        ],
+        "episodeMeta": "Episode",
+        "title": "Jalen Rose",
+        "description": "In this episode of Nasdaq's The Winning Formula, NBA veteran and Same Page Entertainment CEO Jalen Rose talks about the importance of financial literacy, the founding of Same Page Entertainment, the creation of his new show South West High, and his toughest NBA defenders."
+      },
       {
         "guest": "Harold Reynolds & Al Leiter",
         "guestNameMarkup": "Harold Reynolds & Al Leiter",
