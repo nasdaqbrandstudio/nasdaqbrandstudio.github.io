@@ -101,7 +101,7 @@
         "tag": "NBA",
         "tagClass": "basketball",
         "filters": [
-          "basketball"
+          "athlete-founder","basketball"
         ],
         "episodeMeta": "Episode",
         "title": "Jalen Rose",
