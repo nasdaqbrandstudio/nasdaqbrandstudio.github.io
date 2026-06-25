@@ -631,27 +631,6 @@
       }
     ]
   },
-  },
-  "hosts": {
-    "eyebrow": "The Hosts",
-    "headline": "The voices <em>behind the series.</em>",
-    "people": [
-      {
-        "name": "Joel Kolani",
-        "title": "Head of Brand Strategy & Sports Marketing \u00b7 Nasdaq",
-        "photo": "https://nasdaqbrandstudio.github.io/winning-formula/images/JoelKolani.png",
-        "photoAlt": "Joel Kolani",
-        "bio": "A former sports radio host with expertise across the NFL, NBA, MLB, European soccer, and F1. Joel leads brand strategy and sports marketing at Nasdaq and brings a business lens and fans passion to every conversation."
-      },
-      {
-        "name": "Poppy Shen",
-        "title": "Journalist & Video Producer \u00b7 Nasdaq",
-        "photo": "https://nasdaqbrandstudio.github.io/winning-formula/images/PoppyShen.png",
-        "photoAlt": "Poppy Shen",
-        "bio": "A journalist and video producer with experience at Yahoo, AOL, and CNN. Poppy has covered stories spanning sports, culture, and the AAPI community, and brings depth and empathy to every interview."
-      }
-    ]
-  }
   "moments": {
     "eyebrow": "In Conversation",
     "headline": "Moments from the <em>series.</em>",
@@ -706,4 +685,25 @@
         "subhead": "Translating discipline into success."
       }
     ]
+  },
+  "hosts": {
+    "eyebrow": "The Hosts",
+    "headline": "The voices <em>behind the series.</em>",
+    "people": [
+      {
+        "name": "Joel Kolani",
+        "title": "Head of Brand Strategy & Sports Marketing \u00b7 Nasdaq",
+        "photo": "https://nasdaqbrandstudio.github.io/winning-formula/images/JoelKolani.png",
+        "photoAlt": "Joel Kolani",
+        "bio": "A former sports radio host with expertise across the NFL, NBA, MLB, European soccer, and F1. Joel leads brand strategy and sports marketing at Nasdaq and brings a business lens and fans passion to every conversation."
+      },
+      {
+        "name": "Poppy Shen",
+        "title": "Journalist & Video Producer \u00b7 Nasdaq",
+        "photo": "https://nasdaqbrandstudio.github.io/winning-formula/images/PoppyShen.png",
+        "photoAlt": "Poppy Shen",
+        "bio": "A journalist and video producer with experience at Yahoo, AOL, and CNN. Poppy has covered stories spanning sports, culture, and the AAPI community, and brings depth and empathy to every interview."
+      }
+    ]
+  }
 }
