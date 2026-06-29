@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 400">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+
+      .cls-3 {
+        clip-path: url(#clippath);
+      }
+    </style>
+    <clipPath id="clippath">
+      <rect class="cls-1" x="-6489.21" y="3483.03" width="13440" height="1890"/>
+    </clipPath>
+  </defs>
+  <g class="cls-3">
+    <image width="4926" height="3080" transform="translate(-6489.21 -77.07) scale(2.73)" xlink:href="../Downloads/takashi-miyazaki-64ajtpEzlYc-unsplash.jpg"/>
+  </g>
+  <path class="cls-2" d="M182.23,395.29H1.71v-129.13c0-52.25,4.5-93.36,13.49-123.34,9.42-30.41,26.55-57.6,51.39-81.59,24.84-23.98,56.53-42.83,95.08-56.53l35.33,74.52c-35.98,11.99-61.89,28.69-77.73,50.11-15.42,21.41-23.56,49.89-24.41,85.44h87.37v180.52ZM483.52,395.29h-180.52v-129.13c0-52.68,4.5-94.01,13.49-123.99,9.42-29.98,26.55-56.96,51.39-80.94,25.27-23.98,56.96-42.83,95.08-56.53l35.33,74.52c-35.97,11.99-61.88,28.69-77.73,50.11-15.42,21.41-23.55,49.89-24.41,85.44h87.37v180.52Z"/>
+</svg>
