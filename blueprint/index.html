@@ -1452,46 +1452,81 @@ window.addEventListener('message', function(event) {
     // Ignore non-JSON messages
   }
 });
+// Offset scrolling by the height of a fixed/sticky navbar so the target
+// lands just below it and the whole video + title is visible.
+function tlTopOffset() {
+  const navs = document.querySelectorAll('.nasdaq-navbar, .mobile-nav, .w-nav');
+  for (let i = 0; i < navs.length; i++) {
+    const n = navs[i];
+    const cs = getComputedStyle(n);
+    const h = n.getBoundingClientRect().height;
+    if ((cs.position === 'fixed' || cs.position === 'sticky') && cs.display !== 'none' && h > 0) {
+      return Math.round(h) + 16;
+    }
+  }
+  return 24;
+}
+function scrollToAnchorEl(el) {
+  if (!el) return;
+  const y = el.getBoundingClientRect().top + window.pageYOffset - tlTopOffset();
+  window.scrollTo({ top: y, behavior: 'smooth' });
+}
 function goToVideoAnchor() {
   const id = (location.hash || '').replace('#', '');
   if (!id) return;
+
+  // --- Client-module playlist (cl-*) ---
   const idx = videos.findIndex(function (v) { return v.anchor === id; });
   if (idx !== -1) {
-    // Client-module playlist: load that video, then scroll it into view
     setTimeout(function () {
       if (isMobile) {
         if (idx >= INITIAL_MOBILE_VIDEOS && !isExpanded) { toggleMobileVideos(); }
         const stack = document.getElementById('mobile-video-stack');
         const item = stack ? stack.children[idx] : null;
-        const target = item || document.getElementById('client-spotlights');
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        scrollToAnchorEl(item || document.getElementById('client-spotlights'));
       } else {
         loadVideo(idx);
-        const sec = document.getElementById('video-player-section') || document.getElementById('client-spotlights');
-        if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        scrollToAnchorEl(document.getElementById('video-player-section') || document.getElementById('client-spotlights'));
       }
     }, 150);
     return;
   }
-  // Thought-leadership (tl-*): on desktop the cards expand into an overlay
-  // article; on mobile the cards are hidden and the videos live inline in the
-  // mobile article view, so there we just scroll to that article (no open).
+
+  // --- Thought-leadership (tl-*) ---
+  // Desktop: the cards expand into an overlay article. Mobile: the cards are
+  // hidden; the videos live inline in the mobile article view. (The visible
+  // Liquidity article on mobile is .tl-article-2-mobile; -3- is display:none.)
   const tlMobile = {
-    'tl-liquidity-ecosystem': '.tl-article-3-mobile',
+    'tl-liquidity-ecosystem': '.tl-article-2-mobile',
     'tl-tech-driven-economy': '.tl-article-1-mobile'
   };
   const card = document.getElementById(id);
   if (!card && !tlMobile[id]) return;
-  setTimeout(function () {
-    if (isMobile && tlMobile[id]) {
-      const m = document.querySelector(tlMobile[id]) || document.getElementById('thought-leadership');
-      if (m) m.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    } else if (card) {
-      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      // trigger the Webflow click interaction that expands the article
-      card.click();
+
+  if (isMobile && tlMobile[id]) {
+    setTimeout(function () {
+      scrollToAnchorEl(document.querySelector(tlMobile[id]) || document.getElementById('thought-leadership'));
+    }, 150);
+    return;
+  }
+
+  if (card) {
+    const openCard = function () {
+      scrollToAnchorEl(card);
+      card.click(); // Webflow interaction expands the article
+    };
+    // If an article is already open, fire its close trigger first and wait for
+    // the close animation before opening the new card.
+    const sc = document.querySelector('.section-content');
+    const isOpen = sc && getComputedStyle(sc).display !== 'none';
+    if (isOpen) {
+      const closeBtns = document.querySelectorAll('.button-close');
+      for (let i = 0; i < closeBtns.length; i++) { closeBtns[i].click(); }
+      setTimeout(openCard, 600);
+    } else {
+      setTimeout(openCard, 150);
     }
-  }, 200);
+  }
 }
 window.addEventListener('hashchange', goToVideoAnchor);
 initializePlayer();
