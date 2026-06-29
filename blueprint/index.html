@@ -236,7 +236,7 @@
         <header id="thought-leadership" class="tl-container">
           <div class="tl-articles-mobile">
             <div class="tl-article-3-mobile">
-              <h3 class="tl-headline" id="video-heading-liquidity-ecosystem-tl-mobile-a">The Liquidity Ecosystem</h3>
+              <h3 class="tl-headline">The Liquidity Ecosystem</h3>
               <div class="thought-leadership-video w-embed w-iframe">
                 <!DOCTYPE html>
                 <html lang="en">
@@ -297,7 +297,7 @@
               </div>
             </div>
             <div class="tl-article-2-mobile">
-              <h3 class="tl-headline" id="video-heading-liquidity-ecosystem-tl-mobile-b">The Liquidity Ecosystem</h3>
+              <h3 class="tl-headline">The Liquidity Ecosystem</h3>
               <div class="thought-leadership-video w-embed w-iframe">
                 <!DOCTYPE html>
                 <html lang="en">
@@ -358,7 +358,7 @@
               </div>
             </div>
             <div id="thought-leadership-mobile" class="tl-article-1-mobile">
-              <h3 class="tl-headline" id="video-heading-tech-driven-economy-tl-mobile">A Tech-Driven Economy</h3>
+              <h3 class="tl-headline">A Tech-Driven Economy</h3>
               <div class="thought-leadership-video w-embed w-iframe">
                 <!DOCTYPE html>
                 <html lang="en">
@@ -435,7 +435,7 @@
                     <div class="container-article">
                       <div class="inner-container-2">
                         <div class="header-row">
-                          <h1 class="heading-2" id="video-heading-liquidity-ecosystem-article"><strong class="headline-1">The Liquidity Ecosystem<br></strong></h1>
+                          <h1 class="heading-2"><strong class="headline-1">The Liquidity Ecosystem<br></strong></h1>
                         </div>
                         <div class="inner-header-col">
                           <div class="survivor-1">Placeholder Copy<br></div>
@@ -510,7 +510,7 @@
                     <div class="container-article green">
                       <div class="inner-container-2 lilah">
                         <div class="header-row">
-                          <h1 class="heading-2" id="video-heading-tech-driven-economy-article"><strong class="headline-1">A Tech-Driven Economy<br></strong></h1>
+                          <h1 class="heading-2"><strong class="headline-1">A Tech-Driven Economy<br></strong></h1>
                         </div>
                         <div class="inner-header-col">
                           <div class="survivor-1">Lilah Jones<br></div>
@@ -669,7 +669,7 @@
                     </div>
                   </div>
                 </div>
-                <div data-w-id="cc1592b4-0fac-521c-8abf-ed912e983fb0" class="card-1">
+                <div data-w-id="cc1592b4-0fac-521c-8abf-ed912e983fb0" class="card-1" id="tl-liquidity-ecosystem">
                   <div data-w-id="cc1592b4-0fac-521c-8abf-ed912e983fb1" class="image-overlay"></div>
                   <div data-ix="display-none" data-w-id="cc1592b4-0fac-521c-8abf-ed912e983fb2" class="card-inner">
                     <div class="card-details-wrapper">
@@ -686,7 +686,7 @@
                     <div class="image-1"></div>
                   </div>
                 </div>
-                <div data-w-id="cc1592b4-0fac-521c-8abf-ed912e983fc1" class="card-2">
+                <div data-w-id="cc1592b4-0fac-521c-8abf-ed912e983fc1" class="card-2" id="tl-tech-driven-economy">
                   <div data-w-id="cc1592b4-0fac-521c-8abf-ed912e983fc2" class="image-overlay"></div>
                   <div data-ix="display-none" data-w-id="cc1592b4-0fac-521c-8abf-ed912e983fc3" class="card-inner">
                     <div class="card-details-wrapper">
@@ -947,7 +947,7 @@
   border: none;
   border-radius: 0.5rem;
 }
-.video-title {
+#video-title {
   font-family: 'Inter', sans-serif;
   font-weight: 300;
   font-size: 2rem;
@@ -1077,7 +1077,7 @@
 /* Below 768px: Hide carousel and main video, show mobile stack */
 @media (max-width: 767px) {
   .main-video-wrapper,
-  .video-title,
+  #video-title,
   #video-description,
   .playlist-carousel {
     display: none !important;
@@ -1109,7 +1109,7 @@
                 </div>
                 <!--  Title and Description  -->
                 <div style="margin-top: 2rem;">
-                  <h3 id="video-title" class="video-title"></h3>
+                  <h3 id="video-title"></h3>
                   <p id="video-description"></p>
                 </div>
                 <!--  Carousel Playlist  -->
@@ -1147,31 +1147,37 @@ const videos = [
   {
     url: "https://cdn.jwplayer.com/players/hRuzYana-jO5YHc4l.html",
     title: "Goldman Sachs Asset Management",
+    anchor: "cl-goldman-sachs",
     description: "Discover how Goldman Sachs Asset Management and Nasdaq help investors navigate a crowded ETF market — expanding access to innovation, growth and income through strategies like GPIQ."
   },
   {
     url: "https://cdn.jwplayer.com/players/bGVFuVLb-jO5YHc4l.html",
     title: "Invesco",
+    anchor: "cl-invesco",
     description: "From QQQ to the income-generating QQA, explore how Nasdaq and Invesco have partnered to deliver innovation and access to investors across the globe."
   },
   {  
     url: "https://cdn.jwplayer.com/players/f0XSsq0z-jO5YHc4l.html",
     title: "CME Group",
+    anchor: "cl-cme",
     description: "Learn how CME Group is democratizing access to the Nasdaq-100 — empowering investors of all types to participate in innovation through cutting-edge futures products."
   },
   {
     url: "https://cdn.jwplayer.com/players/osx7QYT9-jO5YHc4l.html",
     title: "Samsung Asset Management",
+    anchor: "cl-samsung",
     description: "Watch how Samsung Asset Management is partnering with Nasdaq to deliver forward-thinking investment solutions that unlock new opportunities for Korean investors."
   },
   {
     url: "https://cdn.jwplayer.com/players/X0mQYn16-jO5YHc4l.html",
     title: "Amova Asset Management",
+    anchor: "cl-amova",
     description: "Discover how Amova Asset Management is meeting Japan's growing demand for global tech exposure by using Nasdaq indexes to deliver streamlined, currency-hedged access to leading U.S. companies."
   },
   {
     url: "https://cdn.jwplayer.com/players/bykA1XjJ-jO5YHc4l.html",
     title: "Mirae Asset Global Investments",
+    anchor: "cl-mirae",
     description: "Explore how Mirae Asset Global Investments is driving innovation in Korea's investment landscape through its partnership with Nasdaq, offering tech-focused ETFs that turn global trends like AI and semiconductors into accessible opportunities for local investors."
   }
 ];
@@ -1188,9 +1194,6 @@ function extractPlayerId(url) {
 function getThumbnailUrl(url) {
   const playerId = extractPlayerId(url);
   return `https://cdn.jwplayer.com/v2/media/${playerId}/poster.jpg?width=720`;
-}
-function slugify(text) {
-  return String(text).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 function calculateItemsPerSlide() {
   const width = window.innerWidth;
@@ -1224,7 +1227,7 @@ function updateCarousel() {
         </div>
       </div>
       <div class="playlist-item-title-container">
-        <div class="playlist-item-title" id="video-heading-playlist-${slugify(video.title)}">${video.title}</div>
+        <div class="playlist-item-title" id="${video.anchor}">${video.title}</div>
       </div>
     `;
     item.onclick = () => loadVideo(i);
@@ -1295,7 +1298,7 @@ function createMobileStack() {
         <iframe src="${mobileUrl}" allowfullscreen allow="autoplay"></iframe>
       </div>
       <div class="client-video-details">
-        <h3 class="cs-video-title" id="video-heading-playlist-mobile-${slugify(video.title)}">${video.title}</h3>
+        <h3 class="cs-video-title">${video.title}</h3>
         <p class="text-intro">${video.description}</p>
       </div>
     `;
@@ -1374,11 +1377,7 @@ function loadVideo(index) {
   const video = videos[index];
   const urlWithAutoplay = video.url + (video.url.includes('?') ? '&' : '?') + 'autoplay=true';
   document.getElementById('main-video-iframe').src = urlWithAutoplay;
-  const mainTitleEl = document.querySelector('.video-title');
-  if (mainTitleEl) {
-    mainTitleEl.textContent = video.title;
-    mainTitleEl.id = 'video-heading-player-' + slugify(video.title);
-  }
+  document.getElementById('video-title').textContent = video.title;
   document.getElementById('video-description').textContent = video.description;
   ensureVideoVisible(index);
   updateCarousel();
@@ -1453,7 +1452,56 @@ window.addEventListener('message', function(event) {
     // Ignore non-JSON messages
   }
 });
+function goToVideoAnchor() {
+  const id = (location.hash || '').replace('#', '');
+  if (!id) return;
+  const idx = videos.findIndex(function (v) { return v.anchor === id; });
+  if (idx !== -1) {
+    // Client-module playlist: load that video, then scroll it into view
+    setTimeout(function () {
+      if (isMobile) {
+        if (idx >= INITIAL_MOBILE_VIDEOS && !isExpanded) { toggleMobileVideos(); }
+        const stack = document.getElementById('mobile-video-stack');
+        const item = stack ? stack.children[idx] : null;
+        const target = item || document.getElementById('client-spotlights');
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        loadVideo(idx);
+        const sec = document.getElementById('video-player-section') || document.getElementById('client-spotlights');
+        if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 150);
+    return;
+  }
+  // Thought-leadership (tl-*): on desktop the cards expand into an overlay
+  // article; on mobile the cards are hidden and the videos live inline in the
+  // mobile article view, so there we just scroll to that article (no open).
+  const tlMobile = {
+    'tl-liquidity-ecosystem': '.tl-article-3-mobile',
+    'tl-tech-driven-economy': '.tl-article-1-mobile'
+  };
+  const card = document.getElementById(id);
+  if (!card && !tlMobile[id]) return;
+  setTimeout(function () {
+    if (isMobile && tlMobile[id]) {
+      const m = document.querySelector(tlMobile[id]) || document.getElementById('thought-leadership');
+      if (m) m.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // trigger the Webflow click interaction that expands the article
+      card.click();
+    }
+  }, 200);
+}
+window.addEventListener('hashchange', goToVideoAnchor);
 initializePlayer();
+// On first load, wait until Webflow's interaction engine is ready before
+// firing, so a tl-* deep link can actually open the card.
+if (document.readyState === 'complete') {
+  goToVideoAnchor();
+} else {
+  window.addEventListener('load', goToVideoAnchor);
+}
 </script>
           </div>
           <div id="space" class="w-layout-grid cs-container-2">
@@ -1496,7 +1544,7 @@ initializePlayer();
                 </html>
               </div>
               <div class="client-video-details">
-                <p class="cs-video-title" id="video-heading-cme-group">CME Group</p>
+                <p class="cs-video-title">CME Group</p>
                 <div class="text-intro">Learn how CME Group is democratizing access to the Nasdaq-100 — empowering investors of all types to participate in innovation through cutting-edge futures products.<br></div>
               </div>
             </div>
@@ -1538,7 +1586,7 @@ initializePlayer();
                 </html>
               </div>
               <div class="client-video-details">
-                <p class="cs-video-title" id="video-heading-samsung-asset-management">Samsung Asset Management</p>
+                <p class="cs-video-title">Samsung Asset Management</p>
                 <div class="text-intro">Watch how Samsung Asset Management is partnering with Nasdaq to deliver forward-thinking investment solutions that unlock new opportunities for Korean investors.<br></div>
               </div>
             </div>
@@ -1582,7 +1630,7 @@ initializePlayer();
                 </html>
               </div>
               <div class="client-video-details">
-                <p class="cs-video-title" id="video-heading-amova-asset-management">Amova Asset Management</p>
+                <p class="cs-video-title">Amova Asset Management</p>
                 <div class="text-intro">Discover how Amova Asset Management is meeting Japan’s growing demand for global tech exposure by using Nasdaq indexes to deliver streamlined, currency-hedged access to leading U.S. companies.<br></div>
               </div>
             </div>
@@ -1625,7 +1673,7 @@ initializePlayer();
                 </html>
               </div>
               <div class="client-video-details">
-                <p class="cs-video-title" id="video-heading-mirae-asset-global-investments">Mirae Asset Global Investments</p>
+                <p class="cs-video-title">Mirae Asset Global Investments</p>
                 <div class="text-intro">Explore how Mirae Asset Global Investments is driving innovation in Korea’s investment landscape through its partnership with Nasdaq, offering tech-focused ETFs that turn global trends like AI and semiconductors into accessible opportunities for local investors.<br></div>
               </div>
             </div>
