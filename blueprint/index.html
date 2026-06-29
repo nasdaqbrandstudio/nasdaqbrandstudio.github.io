@@ -1455,16 +1455,19 @@ window.addEventListener('message', function(event) {
 // Offset scrolling by the height of a fixed/sticky navbar so the target
 // lands just below it and the whole video + title is visible.
 function tlTopOffset() {
+  // Bottom edge of whatever fixed/sticky nav is pinned at the top, so the
+  // target lands just beneath it (handles one or two stacked sticky navs).
   const navs = document.querySelectorAll('.nasdaq-navbar, .mobile-nav, .w-nav');
+  let bottom = 0;
   for (let i = 0; i < navs.length; i++) {
     const n = navs[i];
     const cs = getComputedStyle(n);
-    const h = n.getBoundingClientRect().height;
-    if ((cs.position === 'fixed' || cs.position === 'sticky') && cs.display !== 'none' && h > 0) {
-      return Math.round(h) + 16;
+    if ((cs.position === 'fixed' || cs.position === 'sticky') && cs.display !== 'none') {
+      const r = n.getBoundingClientRect();
+      if (r.height > 0 && r.top <= 4) bottom = Math.max(bottom, r.bottom);
     }
   }
-  return 24;
+  return (bottom > 0 ? bottom : 0) + 12;
 }
 function scrollToAnchorEl(el) {
   if (!el) return;
@@ -1480,10 +1483,19 @@ function goToVideoAnchor() {
   if (idx !== -1) {
     setTimeout(function () {
       if (isMobile) {
-        if (idx >= INITIAL_MOBILE_VIDEOS && !isExpanded) { toggleMobileVideos(); }
         const stack = document.getElementById('mobile-video-stack');
-        const item = stack ? stack.children[idx] : null;
-        scrollToAnchorEl(item || document.getElementById('client-spotlights'));
+        const scrollToItem = function () {
+          const item = stack ? stack.children[idx] : null;
+          // anchor on the video container; title/description sit below it
+          const videoBox = item ? item.querySelector('.client-video-embed') : null;
+          scrollToAnchorEl(videoBox || item || document.getElementById('client-spotlights'));
+        };
+        if (idx >= INITIAL_MOBILE_VIDEOS && !isExpanded) {
+          toggleMobileVideos();           // reveal the hidden ("see more") videos
+          setTimeout(scrollToItem, 500);  // wait for the reveal animation
+        } else {
+          scrollToItem();
+        }
       } else {
         loadVideo(idx);
         scrollToAnchorEl(document.getElementById('video-player-section') || document.getElementById('client-spotlights'));
