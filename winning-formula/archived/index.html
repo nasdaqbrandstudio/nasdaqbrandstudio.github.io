@@ -128,11 +128,13 @@
     background: var(--nasdaq-blue-50);
     color: #fff;
     font-family: var(--ff-sans);
-    font-weight: 700;
+    font-weight: 600;
     font-size: 9px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     flex-shrink: 0;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+    padding-right: calc(var(--s-4) + 10px);
   }
   .ticker-label::before {
     content: "";
@@ -308,7 +310,7 @@
     display: block;
     color: var(--nasdaq-blue-50);
     font-family: var(--ff-sans);
-    font-weight: 600;
+    font-weight: 500;
     font-size: 0.875rem;
     line-height: 1.5rem;
     letter-spacing: 0.75rem;   /* signature Nasdaq letterspaced eyebrow */
@@ -1105,9 +1107,7 @@
 
   .host-card {
     display: grid;
-    grid-template-columns: 1fr;
-    justify-items: center;
-    text-align: center;
+    grid-template-columns: 120px 1fr;
     gap: var(--s-5);
     padding: var(--s-6);
     border: 1px solid var(--line-on-dark);
@@ -1115,20 +1115,25 @@
     border-radius: var(--r-l);
     transition: border-color 200ms, background 200ms;
   }
-  .host-card .host-name,
-  .host-card .host-role,
-  .host-card .host-bio {
-    text-align: center;
-  }
   @media (max-width: 768px) {
-    .host-card { gap: var(--s-4); }
+    .host-card {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+      gap: var(--s-4);
+    }
+    .host-card .host-name,
+    .host-card .host-role,
+    .host-card .host-bio {
+      text-align: center;
+    }
   }
   .host-card:hover {
     border-color: var(--nasdaq-blue-50);
     background: rgba(0, 146, 188, 0.04);
   }
   .host-avatar {
-    width: 150px; height: 150px;
+    width: 120px; height: 120px;
     border-radius: 50%;
     object-fit: cover;
     display: block;
@@ -1156,84 +1161,6 @@
     line-height: 1.55;
     color: var(--text-on-dark-muted);
     font-weight: 300;
-  }
-
-
-  /* =========================================================
-     CONTACT / GET FEATURED — closing form-styled band
-     (full-bleed #0092BC · white text · all copy from content.json)
-     ========================================================= */
-  .contact-band {
-    background: var(--nasdaq-blue-50);
-  }
-  .contact-panel {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: var(--s-8) var(--s-7);
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    border-radius: var(--r-l);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: var(--s-4);
-  }
-  .contact-eyebrow {
-    font-family: var(--ff-mono);
-    font-size: 11px;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.9);
-  }
-  .contact-eyebrow:empty { display: none; }
-  .contact-heading {
-    font-family: var(--ff-sans);
-    font-weight: 500;
-    font-size: clamp(1.75rem, 3.6vw, 2.5rem);
-    line-height: 1.08;
-    letter-spacing: -0.02em;
-    color: #fff;
-    margin: 0;
-  }
-  .contact-heading:empty { display: none; }
-  .contact-line {
-    font-family: var(--ff-sans);
-    font-weight: 400;
-    font-size: clamp(1rem, 1.6vw, 1.125rem);
-    line-height: 1.5;
-    color: rgba(255, 255, 255, 0.92);
-    margin: 0;
-    max-width: 46ch;
-  }
-  .contact-line:empty { display: none; }
-  .contact-email {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--s-2);
-    margin-top: var(--s-2);
-    font-family: var(--ff-sans);
-    font-weight: 600;
-    font-size: 1rem;
-    letter-spacing: 0.01em;
-    color: var(--nasdaq-blue-80);
-    background: #fff;
-    border: 1px solid #fff;
-    border-radius: 999px;
-    padding: 14px 30px;
-    text-decoration: none;
-    transition: background 180ms var(--ease-nsdq), transform 180ms var(--ease-nsdq), box-shadow 180ms var(--ease-nsdq);
-  }
-  .contact-email:hover {
-    background: rgba(255, 255, 255, 0.9);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-  }
-  .contact-email:focus-visible {
-    outline: 2px solid #fff;
-    outline-offset: 3px;
-  }
-  @media (max-width: 768px) {
-    .contact-panel { padding: var(--s-7) var(--s-5); }
   }
 
 
@@ -1395,23 +1322,6 @@
 
     <div class="hosts-grid" id="hosts-grid">
       <!-- Host cards render here from content.json -->
-    </div>
-  </div>
-</section>
-
-
-<!-- =========================================================
-     CONTACT / GET FEATURED — closing form band
-     All copy comes from content.json → contact. Hidden until
-     the loader populates it, so nothing is hardcoded here.
-     ========================================================= -->
-<section class="contact-band section" id="contact-section" hidden>
-  <div class="wrap">
-    <div class="contact-panel reveal">
-      <div class="contact-eyebrow" id="contact-eyebrow"></div>
-      <h2 class="contact-heading" id="contact-heading"></h2>
-      <p class="contact-line" id="contact-line"></p>
-      <a class="contact-email" id="contact-email" href="#"></a>
     </div>
   </div>
 </section>
@@ -1804,7 +1714,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
      If the fetch fails, the existing static fallback markup that's
      already in the HTML remains, so the page never breaks.
      =========================================================== */
-  const CONTENT_URL = 'https://nasdaqbrandstudio.github.io/winning-formula/content-preview.json';
+  const CONTENT_URL = 'https://nasdaqbrandstudio.github.io/winning-formula/content.json';
 
   /* Tiny HTML-escaper for plain text fields (safe-by-default). */
   function esc(s) {
@@ -1821,18 +1731,6 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
   function richText(s) {
     if (s == null) return '';
     let out = esc(s);
-    /* Allow safe <a href="..."> links (mailto:, http, https only) */
-    out = out.replace(
-      /&lt;a href=&quot;(mailto:[^&]*|https?:\/\/[^&]*)&quot;&gt;/gi,
-      '<a href="$1" rel="noopener">'
-    );
-    out = out.replace(/&lt;\/a&gt;/gi, '</a>');
-    /* Allow safe colored text: <span style="color:#hex | var(--brand) | name"> */
-    out = out.replace(
-      /&lt;span style=&quot;color:\s*(#[0-9a-fA-F]{3,8}|var\(--[a-z0-9-]+\)|[a-zA-Z]+)&quot;&gt;/gi,
-      '<span style="color:$1">'
-    );
-    out = out.replace(/&lt;\/span&gt;/gi, '</span>');
     out = out.replace(/&lt;(\/?)(em|strong|br)\s*\/?&gt;/gi, '<$1$2>');
     return out;
   }
@@ -1865,7 +1763,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     const eyebrow = document.querySelector('[data-content="hero.eyebrow"]');
     const intro   = document.querySelector('[data-content="hero.intro"]');
     if (eyebrow && hero.eyebrow) eyebrow.textContent = hero.eyebrow;
-    if (intro && hero.intro)     intro.innerHTML     = richText(hero.intro);
+    if (intro && hero.intro)     intro.textContent   = hero.intro;
 
     /* Wordmark fallback text — also editable via JSON */
     if (hero.wordmarkFallback) {
@@ -2105,31 +2003,6 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       </div>`).join('');
   }
 
-  function renderContact(c) {
-    const section = document.getElementById('contact-section');
-    if (!c || !c.email) return;              /* nothing to show → stays hidden */
-    const eyebrowEl = document.getElementById('contact-eyebrow');
-    const headingEl = document.getElementById('contact-heading');
-    const lineEl    = document.getElementById('contact-line');
-    const emailEl   = document.getElementById('contact-email');
-
-    if (eyebrowEl) eyebrowEl.textContent = c.eyebrow || '';
-    if (headingEl) headingEl.textContent = c.heading || '';
-    if (lineEl)    lineEl.textContent    = c.text    || '';
-
-    if (emailEl) {
-      emailEl.textContent = c.label || c.email;
-      let href = 'mailto:' + c.email;
-      const params = [];
-      if (c.subject) params.push('subject=' + encodeURIComponent(c.subject));
-      if (c.body)    params.push('body=' + encodeURIComponent(c.body));
-      if (params.length) href += '?' + params.join('&');
-      emailEl.setAttribute('href', href);
-    }
-
-    if (section) section.hidden = false;     /* reveal now that it's populated */
-  }
-
   /* Master loader. Renders only what's present in the JSON. */
   async function loadContent() {
     let data = null;
@@ -2149,7 +2022,6 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     try { renderSeries(data.series);     } catch (e) { console.warn('[content] series render error', e); }
     try { renderMoments(data.moments);   } catch (e) { console.warn('[content] moments render error', e); }
     try { renderHosts(data.hosts);       } catch (e) { console.warn('[content] hosts render error', e); }
-    try { renderContact(data.contact);   } catch (e) { console.warn('[content] contact render error', e); }
 
     /* After we've replaced markup, re-wire the dynamic behaviors that
        depend on the new DOM nodes (filters, carousel nav, modal hooks,
