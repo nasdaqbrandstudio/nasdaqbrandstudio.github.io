@@ -105,7 +105,8 @@
         "tag": "NBA",
         "tagClass": "basketball",
         "filters": [
-          "athlete-founder","basketball"
+          "athlete-founder",
+          "basketball"
         ],
         "episodeMeta": "Episode",
         "title": "Jalen Rose",
@@ -127,11 +128,11 @@
         "episodeMeta": "Episode",
         "title": "Harold Reynolds & Al Leiter",
         "description": "In this episode of Nasdaq's The Winning Formula, MLB Network Analysts Harold Reynolds and Al Leiter talk about the start of the network, the impact of teaching the game to the next generation, how analytics have always been a part of baseball and the growth of the MLB to becoming the global game it is today."
-      },  
+      },
       {
         "guest": "Maria Sharapova",
         "guestNameMarkup": "Maria Sharapova",
-        "subtitle": "Five‑Time Grand Slam Champion \u00b7 Entrepreneur, Investor, and Mom",
+        "subtitle": "Five‑Time Grand Slam Champion · Entrepreneur, Investor, and Mom",
         "thumbnailAlt": "Maria Sharapova on The Winning Formula",
         "videoUrl": "https://cdn.jwplayer.com/players/vwlW1UPi-jO5YHc4l.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/vwlW1UPi-jO5YHc4l.html",
@@ -148,7 +149,7 @@
       {
         "guest": "Reggie Bush",
         "guestNameMarkup": "Reggie Bush",
-        "subtitle": "NBA MVP \u00b7 Entrepreneur",
+        "subtitle": "NBA MVP · Entrepreneur",
         "thumbnailAlt": "Reggie Bush on The Winning Formula",
         "videoUrl": "https://cdn.jwplayer.com/players/8DFhw51n-jO5YHc4l.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/8DFhw51n-jO5YHc4l.html",
@@ -165,7 +166,7 @@
       {
         "guest": "Derrick Rose",
         "guestNameMarkup": "Derrick Rose",
-        "subtitle": "NBA MVP \u00b7 Entrepreneur",
+        "subtitle": "NBA MVP · Entrepreneur",
         "thumbnailAlt": "Derrick Rose",
         "videoUrl": "https://cdn.jwplayer.com/players/aKWlVgRw-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/aKWlVgRw-qeq4Z2nO.html",
@@ -182,7 +183,7 @@
       {
         "guest": "George Kurtz",
         "guestNameMarkup": "George Kurtz",
-        "subtitle": "CEO & Co-founder \u00b7 CrowdStrike",
+        "subtitle": "CEO & Co-founder · CrowdStrike",
         "thumbnailAlt": "George Kurtz",
         "videoUrl": "https://cdn.jwplayer.com/players/iwACLS7X-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/iwACLS7X-qeq4Z2nO.html",
@@ -200,7 +201,7 @@
       {
         "guest": "Women's Sports Special",
         "guestNameMarkup": "Built to Scale",
-        "subtitle": "Special Edition \u00b7 The Winning Formula",
+        "subtitle": "Special Edition · The Winning Formula",
         "thumbnailAlt": "Women's Sports, Built to Scale",
         "videoUrl": "https://cdn.jwplayer.com/players/BsjTXbRb-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/BsjTXbRb-qeq4Z2nO.html",
@@ -213,12 +214,12 @@
         ],
         "episodeMeta": "Special",
         "title": "Women's Sports, Built to Scale",
-        "description": "A deep dive into the explosive growth of women's sports \u2014 from rising valuations to revenue growth to the infrastructure needed to sustain it. The data tells a different story than the old 'potential' narrative."
+        "description": "A deep dive into the explosive growth of women's sports — from rising valuations to revenue growth to the infrastructure needed to sustain it. The data tells a different story than the old 'potential' narrative."
       },
       {
         "guest": "Stefanie Strack",
         "guestNameMarkup": "Stefanie Strack",
-        "subtitle": "Founder & CEO \u00b7 Voice in Sport",
+        "subtitle": "Founder & CEO · Voice in Sport",
         "thumbnailAlt": "Stefanie Strack",
         "videoUrl": "https://cdn.jwplayer.com/players/Ti7TUHEU-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/Ti7TUHEU-qeq4Z2nO.html",
@@ -231,12 +232,12 @@
         ],
         "episodeMeta": "Episode",
         "title": "Stefanie Strack",
-        "description": "Stefanie Strack joins The Winning Formula to talk about why keeping girls in sports matters \u2014 and how we can break down the barriers holding them back."
+        "description": "Stefanie Strack joins The Winning Formula to talk about why keeping girls in sports matters — and how we can break down the barriers holding them back."
       },
       {
         "guest": "Tristan Thompson",
         "guestNameMarkup": "Tristan Thompson",
-        "subtitle": "NBA Champion \u00b7 Web3 Ambassador",
+        "subtitle": "NBA Champion · Web3 Ambassador",
         "thumbnailAlt": "Tristan Thompson",
         "videoUrl": "https://cdn.jwplayer.com/players/50k3giwJ-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/50k3giwJ-qeq4Z2nO.html",
@@ -253,7 +254,7 @@
       {
         "guest": "Bubba Watson",
         "guestNameMarkup": "Bubba Watson",
-        "subtitle": "2x Masters Champion \u00b7 LIV Golf",
+        "subtitle": "2x Masters Champion · LIV Golf",
         "thumbnailAlt": "Bubba Watson",
         "videoUrl": "https://cdn.jwplayer.com/players/V05gpfW5-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/V05gpfW5-qeq4Z2nO.html",
@@ -270,7 +271,7 @@
       {
         "guest": "Ndamukong Suh",
         "guestNameMarkup": "Ndamukong Suh",
-        "subtitle": "Super Bowl Champion \u00b7 Entrepreneur",
+        "subtitle": "Super Bowl Champion · Entrepreneur",
         "thumbnailAlt": "Ndamukong Suh",
         "videoUrl": "https://cdn.jwplayer.com/players/9C33L01U-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/9C33L01U-qeq4Z2nO.html",
@@ -287,7 +288,7 @@
       {
         "guest": "Bradley Lord",
         "guestNameMarkup": "Bradley Lord",
-        "subtitle": "Chief Communications Officer \u00b7 Mercedes-AMG F1",
+        "subtitle": "Chief Communications Officer · Mercedes-AMG F1",
         "thumbnailAlt": "Bradley Lord",
         "videoUrl": "https://cdn.jwplayer.com/players/4e9USnl7-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/4e9USnl7-qeq4Z2nO.html",
@@ -305,7 +306,7 @@
       {
         "guest": "Valtteri Bottas",
         "guestNameMarkup": "Valtteri Bottas",
-        "subtitle": "Third Driver \u00b7 Mercedes-AMG PETRONAS F1",
+        "subtitle": "Third Driver · Mercedes-AMG PETRONAS F1",
         "thumbnailAlt": "Valtteri Bottas",
         "videoUrl": "https://cdn.jwplayer.com/players/Tb9ycGIl-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/Tb9ycGIl-qeq4Z2nO.html",
@@ -322,7 +323,7 @@
       {
         "guest": "Ted Leonsis",
         "guestNameMarkup": "Ted Leonsis",
-        "subtitle": "CEO \u00b7 Monumental Sports & Entertainment",
+        "subtitle": "CEO · Monumental Sports & Entertainment",
         "thumbnailAlt": "Ted Leonsis",
         "videoUrl": "https://cdn.jwplayer.com/players/HPT1axrG-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/HPT1axrG-qeq4Z2nO.html",
@@ -339,7 +340,7 @@
       {
         "guest": "Christoph Grainger-Herr",
         "guestNameMarkup": "Christoph<br>Grainger-Herr",
-        "subtitle": "CEO \u00b7 IWC Schaffhausen",
+        "subtitle": "CEO · IWC Schaffhausen",
         "thumbnailAlt": "Christoph Grainger-Herr",
         "videoUrl": "https://cdn.jwplayer.com/players/e1kZLoPd-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/e1kZLoPd-qeq4Z2nO.html",
@@ -357,7 +358,7 @@
       {
         "guest": "CJ McCollum",
         "guestNameMarkup": "CJ McCollum",
-        "subtitle": "NBA Veteran \u00b7 Entrepreneur",
+        "subtitle": "NBA Veteran · Entrepreneur",
         "thumbnailAlt": "CJ McCollum",
         "videoUrl": "https://cdn.jwplayer.com/players/ct9cUIRg-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/ct9cUIRg-qeq4Z2nO.html",
@@ -374,7 +375,7 @@
       {
         "guest": "Alex Honnold",
         "guestNameMarkup": "Alex Honnold",
-        "subtitle": "Professional Rock Climber \u00b7 Honnold Foundation",
+        "subtitle": "Professional Rock Climber · Honnold Foundation",
         "thumbnailAlt": "Alex Honnold",
         "videoUrl": "https://cdn.jwplayer.com/players/BSvpXgrh-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/BSvpXgrh-qeq4Z2nO.html",
@@ -391,7 +392,7 @@
       {
         "guest": "Kelley O'Hara",
         "guestNameMarkup": "Kelley O'Hara",
-        "subtitle": "2x World Cup Champion \u00b7 USWNT",
+        "subtitle": "2x World Cup Champion · USWNT",
         "thumbnailAlt": "Kelley O'Hara",
         "videoUrl": "https://cdn.jwplayer.com/players/5XEtJGIU-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/5XEtJGIU-qeq4Z2nO.html",
@@ -427,7 +428,7 @@
       {
         "guest": "Alejandro Bedoya",
         "guestNameMarkup": "Alejandro Bedoya",
-        "subtitle": "Captain \u00b7 Philadelphia Union",
+        "subtitle": "Captain · Philadelphia Union",
         "thumbnailAlt": "Alejandro Bedoya",
         "videoUrl": "https://cdn.jwplayer.com/players/vwiq3RC5-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/vwiq3RC5-qeq4Z2nO.html",
@@ -444,7 +445,7 @@
       {
         "guest": "Brandon Marshall",
         "guestNameMarkup": "Brandon Marshall",
-        "subtitle": "6x NFL Pro Bowler \u00b7 Mental Health Advocate",
+        "subtitle": "6x NFL Pro Bowler · Mental Health Advocate",
         "thumbnailAlt": "Brandon Marshall",
         "videoUrl": "https://cdn.jwplayer.com/players/wFOWBhDa-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/wFOWBhDa-qeq4Z2nO.html",
@@ -461,7 +462,7 @@
       {
         "guest": "Marques Colston",
         "guestNameMarkup": "Marques Colston",
-        "subtitle": "Super Bowl XLIV Champion \u00b7 Champion Venture Partners",
+        "subtitle": "Super Bowl XLIV Champion · Champion Venture Partners",
         "thumbnailAlt": "Marques Colston",
         "videoUrl": "https://cdn.jwplayer.com/players/reDyhqnx-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/reDyhqnx-qeq4Z2nO.html",
@@ -478,7 +479,7 @@
       {
         "guest": "Jimmy Butler",
         "guestNameMarkup": "Jimmy Butler",
-        "subtitle": "NBA All-Star \u00b7 Founder, BIGFACE Coffee",
+        "subtitle": "NBA All-Star · Founder, BIGFACE Coffee",
         "thumbnailAlt": "Jimmy Butler",
         "videoUrl": "https://cdn.jwplayer.com/players/BN841b7I-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/BN841b7I-qeq4Z2nO.html",
@@ -495,7 +496,7 @@
       {
         "guest": "Allyson Felix",
         "guestNameMarkup": "Allyson Felix",
-        "subtitle": "11x Olympic Medalist \u00b7 Founder, Always Alpha",
+        "subtitle": "11x Olympic Medalist · Founder, Always Alpha",
         "thumbnailAlt": "Allyson Felix",
         "videoUrl": "https://cdn.jwplayer.com/players/zx7smJw6-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/zx7smJw6-qeq4Z2nO.html",
@@ -513,7 +514,7 @@
       {
         "guest": "Isiah Thomas",
         "guestNameMarkup": "Isiah Thomas",
-        "subtitle": "NBA Hall of Famer \u00b7 Business Leader",
+        "subtitle": "NBA Hall of Famer · Business Leader",
         "thumbnailAlt": "Isiah Thomas",
         "videoUrl": "https://cdn.jwplayer.com/players/UfBwsa2Q-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/UfBwsa2Q-qeq4Z2nO.html",
@@ -530,7 +531,7 @@
       {
         "guest": "Don McGuire",
         "guestNameMarkup": "Don McGuire",
-        "subtitle": "CMO \u00b7 Qualcomm",
+        "subtitle": "CMO · Qualcomm",
         "thumbnailAlt": "Don McGuire",
         "videoUrl": "https://cdn.jwplayer.com/players/ezxWjwWZ-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/ezxWjwWZ-qeq4Z2nO.html",
@@ -548,7 +549,7 @@
       {
         "guest": "Steve Young",
         "guestNameMarkup": "Steve Young",
-        "subtitle": "Pro Football Hall of Famer \u00b7 Former 49ers QB",
+        "subtitle": "Pro Football Hall of Famer · Former 49ers QB",
         "thumbnailAlt": "Steve Young",
         "videoUrl": "https://cdn.jwplayer.com/players/MJjFfDam-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/MJjFfDam-qeq4Z2nO.html",
@@ -582,7 +583,7 @@
       {
         "guest": "Toto Wolff",
         "guestNameMarkup": "Toto Wolff",
-        "subtitle": "CEO & Team Principal \u00b7 Mercedes-AMG PETRONAS F1",
+        "subtitle": "CEO & Team Principal · Mercedes-AMG PETRONAS F1",
         "thumbnailAlt": "Toto Wolff",
         "videoUrl": "https://cdn.jwplayer.com/players/GFVVb6LI-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/GFVVb6LI-qeq4Z2nO.html",
@@ -600,7 +601,7 @@
       {
         "guest": "Sloane Stephens",
         "guestNameMarkup": "Sloane Stephens",
-        "subtitle": "2017 US Open Champion \u00b7 Pro Tennis Player",
+        "subtitle": "2017 US Open Champion · Pro Tennis Player",
         "thumbnailAlt": "Sloane Stephens",
         "videoUrl": "https://cdn.jwplayer.com/players/PIEUfJwG-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/PIEUfJwG-qeq4Z2nO.html",
@@ -613,12 +614,12 @@
         ],
         "episodeMeta": "Episode",
         "title": "Sloane Stephens",
-        "description": "Professional Tennis Player Sloane Stephens joins Nasdaq on The Winning Formula to discuss her incredible career journey and living life on her own terms. From winning the 2017 US Open to founding the Sloane Stephens podcast and more \u2014 she shares how she continues to bring fun and hard work into everything she does."
+        "description": "Professional Tennis Player Sloane Stephens joins Nasdaq on The Winning Formula to discuss her incredible career journey and living life on her own terms. From winning the 2017 US Open to founding the Sloane Stephens podcast and more — she shares how she continues to bring fun and hard work into everything she does."
       },
       {
         "guest": "Jordan Chiles",
         "guestNameMarkup": "Jordan Chiles",
-        "subtitle": "2x Olympic Medalist \u00b7 UCLA Gymnast",
+        "subtitle": "2x Olympic Medalist · UCLA Gymnast",
         "thumbnailAlt": "Jordan Chiles",
         "videoUrl": "https://cdn.jwplayer.com/players/pfiDUg5H-qeq4Z2nO.html",
         "episodeUrl": "https://cdn.jwplayer.com/players/pfiDUg5H-qeq4Z2nO.html",
@@ -696,14 +697,14 @@
     "people": [
       {
         "name": "Joel Kolani",
-        "title": "Head of Brand Strategy & Sports Marketing \u00b7 Nasdaq",
+        "title": "Head of Brand Strategy & Sports Marketing · Nasdaq",
         "photo": "https://nasdaqbrandstudio.github.io/winning-formula/images/JoelKolani.png",
         "photoAlt": "Joel Kolani",
         "bio": "Joel is the Head of Brand Strategy and Sports Marketing at Nasdaq and a former sports radio host with expertise across the NFL, NBA, MLB, European soccer, and F1. He brings a business lens and fans passion to every conversation."
       },
       {
         "name": "Poppy Shen",
-        "title": "Journalist & Video Producer \u00b7 Nasdaq",
+        "title": "Journalist & Video Producer · Nasdaq",
         "photo": "https://nasdaqbrandstudio.github.io/winning-formula/images/PoppyShen.png",
         "photoAlt": "Poppy Shen",
         "bio": "A journalist and video producer with experience at Yahoo, AOL, and CNN. Poppy has covered stories spanning sports, culture, and the AAPI community, and brings depth and empathy to every interview."
@@ -711,9 +712,8 @@
     ]
   },
   "contact": {
-    "eyebrow": "Get Featured",
     "heading": "Interested in being featured?",
-    "text": "For interest in being featured on The Winning Formula, reach out to our team:",
+    "text": "Please reach out to our team.",
     "email": "thewinningformula@nasdaq.com",
     "subject": "Featured Talent for The Winning Formula",
     "body": "Thanks for your interest in The Winning Formula!"
