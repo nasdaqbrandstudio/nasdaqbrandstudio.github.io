@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Winning Formula — Tag Editor</title>
+<style>
+  :root{
+    --ink:#08062A; --ink-2:#0d0b33; --panel:#12103f; --panel-2:#171550;
+    --line:rgba(255,255,255,.10); --line-2:rgba(255,255,255,.18);
+    --blue:#0092BC; --blue-2:#096D93; --blue-hi:#39b4d8;
+    --text:#eef0f6; --muted:#a4a7c4; --faint:#6d719a;
+    --good:#3ecf8e; --warn:#f0b64b;
+    --r:12px; --r-s:8px;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:var(--sans); background:var(--ink); color:var(--text);
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(1200px 600px at 80% -10%, rgba(0,146,188,.10), transparent 60%);
+    min-height:100vh;
+  }
+  a{color:var(--blue-hi)}
+  .wrap{max-width:1240px; margin:0 auto; padding:28px 20px 140px}
+
+  header.top{display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-bottom:6px}
+  .eyebrow{font:600 11px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--blue-hi); background:rgba(0,146,188,.12); border:1px solid rgba(0,146,188,.3); padding:6px 9px; border-radius:6px; display:inline-block; margin-bottom:14px}
+  h1{font-size:26px; font-weight:700; letter-spacing:-.02em; margin:0}
+  .sub{color:var(--muted); font-size:14px; margin-top:6px; max-width:60ch}
+  .status{font:500 12px/1.4 var(--mono); color:var(--faint); text-align:right}
+  .status b{color:var(--text)}
+  .status .dot{display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--faint); margin-right:6px; vertical-align:middle}
+  .status.ready .dot{background:var(--good)}
+
+  .panel{background:linear-gradient(180deg,var(--panel),var(--ink-2)); border:1px solid var(--line); border-radius:var(--r); padding:18px}
+  .setup{margin:22px 0; display:grid; gap:14px; grid-template-columns:1fr 1fr}
+  @media(max-width:820px){ .setup{grid-template-columns:1fr} }
+  .panel h2{font-size:12px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:0 0 12px; font-family:var(--mono)}
+
+  label.fld{display:block; font-size:12px; color:var(--muted); margin:0 0 5px}
+  input[type=text],textarea,select{
+    width:100%; background:var(--ink); color:var(--text); border:1px solid var(--line-2);
+    border-radius:var(--r-s); padding:9px 11px; font-family:var(--sans); font-size:14px; outline:none;
+  }
+  input[type=text]:focus,textarea:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,146,188,.22)}
+  textarea{resize:vertical; min-height:74px; font-family:var(--mono); font-size:12.5px; line-height:1.5}
+  select{appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23a4a7c4' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 10px center; padding-right:30px}
+  .row{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end}
+  .row > *{flex:1; min-width:0}
+
+  button{font-family:var(--sans); font-weight:600; font-size:13.5px; border-radius:var(--r-s); border:1px solid transparent; padding:9px 15px; cursor:pointer; transition:filter .15s,background .15s,border-color .15s; white-space:nowrap}
+  button:focus-visible{outline:2px solid var(--blue-hi); outline-offset:2px}
+  .btn-pri{background:var(--blue); color:#03121a; border-color:var(--blue)}
+  .btn-pri:hover{filter:brightness(1.08)}
+  .btn-ghost{background:transparent; color:var(--text); border-color:var(--line-2)}
+  .btn-ghost:hover{border-color:var(--blue); color:var(--blue-hi)}
+  .btn-sm{padding:6px 10px; font-size:12px}
+  button:disabled{opacity:.45; cursor:not-allowed; filter:none !important}
+  .hint{font-size:12px; color:var(--faint); margin-top:8px}
+  .file-in{position:relative; overflow:hidden; display:inline-block}
+  .file-in input[type=file]{position:absolute; inset:0; opacity:0; cursor:pointer}
+
+  /* body layout */
+  .board{display:grid; grid-template-columns:300px 1fr; gap:20px; align-items:start; margin-top:8px}
+  @media(max-width:900px){ .board{grid-template-columns:1fr} }
+  .side{position:sticky; top:16px; display:grid; gap:16px}
+  @media(max-width:900px){ .side{position:static} }
+
+  .chip-list{display:flex; flex-direction:column; gap:8px}
+  .frow{display:flex; align-items:center; gap:8px}
+  .frow input{flex:1}
+  .frow .val{font:500 11px/1 var(--mono); color:var(--faint)}
+  .x{background:transparent; border:1px solid var(--line-2); color:var(--muted); width:30px; height:30px; padding:0; border-radius:6px; flex:0 0 auto; font-size:15px; line-height:1}
+  .x:hover{border-color:#e0637a; color:#e0637a}
+  .locked{opacity:.6}
+
+  .swatches{display:flex; flex-wrap:wrap; gap:7px}
+  .sw{display:flex; align-items:center; gap:6px; font:500 11px/1 var(--mono); color:var(--muted); border:1px solid var(--line); border-radius:20px; padding:4px 9px 4px 5px}
+  .sw i{width:12px; height:12px; border-radius:50%; display:inline-block}
+
+  /* search + count */
+  .listhead{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; flex-wrap:wrap}
+  .listhead .search{flex:1; min-width:200px; max-width:320px}
+  .count{font:500 12px/1 var(--mono); color:var(--faint)}
+  .count b{color:var(--text)}
+
+  /* video card */
+  .cards{display:flex; flex-direction:column; gap:12px}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:var(--r); padding:14px; display:grid; grid-template-columns:132px 1fr; gap:14px}
+  @media(max-width:560px){ .card{grid-template-columns:1fr} }
+  .thumb{position:relative; border-radius:var(--r-s); overflow:hidden; aspect-ratio:16/9; background:var(--ink-2); border:1px solid var(--line)}
+  .thumb img{width:100%; height:100%; object-fit:cover; display:block}
+  .thumb .mid{position:absolute; left:6px; bottom:6px; font:500 10px/1 var(--mono); background:rgba(4,6,20,.82); color:var(--muted); padding:3px 6px; border-radius:5px}
+  .vtitle{font-size:15px; font-weight:600; letter-spacing:-.01em; margin:0 0 2px}
+  .vdur{font:500 11px/1 var(--mono); color:var(--faint); margin-bottom:10px}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  @media(max-width:560px){ .grid2{grid-template-columns:1fr} }
+  .field{margin-bottom:10px}
+  .field:last-child{margin-bottom:0}
+
+  .filterbox{display:flex; flex-wrap:wrap; gap:6px}
+  .filterbox label{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--muted); border:1px solid var(--line-2); border-radius:20px; padding:5px 10px; cursor:pointer; user-select:none}
+  .filterbox label:hover{border-color:var(--blue-2)}
+  .filterbox input{accent-color:var(--blue); margin:0}
+  .filterbox label.on{border-color:var(--blue); color:var(--text); background:rgba(0,146,188,.12)}
+
+  .previewline{display:flex; align-items:center; gap:8px; margin-top:2px}
+  .preview-chip{font:600 10px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; padding:5px 8px; border-radius:5px; color:#fff; background:var(--blue-2)}
+  .preview-none{font:500 11px/1 var(--mono); color:var(--faint)}
+  .feat-toggle{background:none;border:none;color:var(--blue-hi);font:500 12px/1 var(--sans);cursor:pointer;padding:0;margin-top:2px}
+  .feat{display:none; margin-top:10px; padding-top:10px; border-top:1px dashed var(--line)}
+  .feat.show{display:block}
+  .edited-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--blue);margin-left:7px;vertical-align:middle}
+
+  /* export bar */
+  .exportbar{position:fixed; left:0; right:0; bottom:0; background:rgba(8,6,30,.92); backdrop-filter:blur(10px); border-top:1px solid var(--line-2); padding:12px 20px; display:flex; align-items:center; gap:12px; justify-content:center; flex-wrap:wrap; z-index:20}
+  .exportbar .meta{font:500 12px/1.4 var(--mono); color:var(--muted); margin-right:auto}
+  .exportbar .meta b{color:var(--text)}
+
+  dialog{border:1px solid var(--line-2); background:var(--ink-2); color:var(--text); border-radius:var(--r); padding:0; max-width:760px; width:92vw}
+  dialog::backdrop{background:rgba(4,4,14,.72)}
+  .dlg-h{display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--line)}
+  .dlg-h h3{margin:0; font-size:15px}
+  .dlg-b{padding:16px 18px}
+  .dlg-b textarea{min-height:300px; width:100%}
+  .css-note{background:rgba(240,182,75,.09); border:1px solid rgba(240,182,75,.32); border-radius:var(--r-s); padding:11px 13px; font-size:13px; color:#f4d79a; margin-bottom:14px}
+  .css-note code{font-family:var(--mono); font-size:12px; color:#ffe6b0}
+  .toast{position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--good); color:#04140c; font-weight:600; font-size:13px; padding:10px 16px; border-radius:8px; opacity:0; pointer-events:none; transition:opacity .2s,transform .2s; z-index:40}
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+  .empty{border:1px dashed var(--line-2); border-radius:var(--r); padding:38px 20px; text-align:center; color:var(--muted)}
+  .empty b{color:var(--text); display:block; margin-bottom:6px; font-size:15px}
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <span class="eyebrow">Editorial Tool · content.json</span>
+      <h1>The Winning Formula — Tag Editor</h1>
+      <p class="sub">Pull the live playlist from JW, tag and filter each episode against your existing options or new ones, then export an updated <code>content.json</code> to commit.</p>
+    </div>
+    <div class="status" id="status"><span class="dot"></span><span id="statusText">Load your videos and content.json to begin</span></div>
+  </header>
+
+  <section class="setup">
+    <div class="panel">
+      <h2>1 · Load videos from JW</h2>
+      <div class="row">
+        <div style="flex:2">
+          <label class="fld" for="pid">Playlist ID</label>
+          <input type="text" id="pid" value="Mgmy6TMn" spellcheck="false">
+        </div>
+        <button class="btn-pri" id="loadVideos" style="flex:0 0 auto">Load videos</button>
+      </div>
+      <p class="hint">Reads the playlist live. New uploads appear here automatically — nothing to type in by hand.</p>
+    </div>
+
+    <div class="panel">
+      <h2>2 · Load current content.json</h2>
+      <div class="row">
+        <button class="btn-ghost btn-sm" id="fetchLive" style="flex:0 0 auto">Fetch from site</button>
+        <span class="btn-ghost btn-sm file-in" style="flex:0 0 auto">Upload file<input type="file" id="fileIn" accept=".json,application/json"></span>
+        <button class="btn-ghost btn-sm" id="pasteToggle" style="flex:0 0 auto">Paste JSON</button>
+      </div>
+      <div id="pasteWrap" style="display:none; margin-top:10px">
+        <textarea id="pasteArea" placeholder="Paste the full content.json here, then Apply"></textarea>
+        <button class="btn-pri btn-sm" id="pasteApply" style="margin-top:8px">Apply pasted JSON</button>
+      </div>
+      <p class="hint">Carries over every tag, subtitle and filter you already have, and keeps the rest of the file untouched on export.</p>
+    </div>
+  </section>
+
+  <div class="board">
+    <aside class="side">
+      <div class="panel">
+        <h2>Filters</h2>
+        <div class="chip-list" id="filterList"></div>
+        <div class="row" style="margin-top:12px">
+          <input type="text" id="newFilterLabel" placeholder="New filter name">
+          <button class="btn-ghost btn-sm" id="addFilter" style="flex:0 0 auto">Add</button>
+        </div>
+        <p class="hint">These are the pills at the top of The Series. A video shows under a pill only if you check it below.</p>
+      </div>
+
+      <div class="panel">
+        <h2>Tag colors</h2>
+        <div class="swatches" id="swatches"></div>
+        <div class="row" style="margin-top:12px">
+          <input type="text" id="newClassName" placeholder="class name, e.g. cricket" spellcheck="false">
+          <input type="color" id="newClassColor" value="#0092BC" style="flex:0 0 44px; height:38px; padding:2px; background:var(--ink); border:1px solid var(--line-2); border-radius:8px; cursor:pointer">
+          <button class="btn-ghost btn-sm" id="addClass" style="flex:0 0 auto">Add</button>
+        </div>
+        <p class="hint">Swatch colors here are indicative — the real chip color lives in the site's CSS. New colors export a CSS snippet to add once.</p>
+      </div>
+    </aside>
+
+    <main>
+      <div class="listhead">
+        <input type="text" id="search" class="search" placeholder="Search episodes…">
+        <span class="count" id="count"></span>
+      </div>
+      <div class="cards" id="cards">
+        <div class="empty"><b>No videos loaded yet</b>Load the playlist from JW above to start tagging.</div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="exportbar">
+  <span class="meta" id="exportMeta">Load videos + content.json to export</span>
+  <button class="btn-ghost" id="copyBtn" disabled>Copy content.json</button>
+  <button class="btn-pri" id="downloadBtn" disabled>Download content.json</button>
+</div>
+
+<dialog id="outDlg">
+  <div class="dlg-h"><h3>Updated content.json</h3><button class="x" id="closeDlg" style="width:auto;padding:0 8px">Close</button></div>
+  <div class="dlg-b">
+    <div id="cssNote"></div>
+    <textarea id="outArea" spellcheck="false" readonly></textarea>
+    <div class="row" style="margin-top:12px; justify-content:flex-end">
+      <button class="btn-ghost btn-sm" id="selectAll" style="flex:0 0 auto">Select all</button>
+      <button class="btn-pri btn-sm" id="copyOut" style="flex:0 0 auto">Copy to clipboard</button>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  const $=s=>document.querySelector(s);
+  const CJW="https://cdn.jwplayer.com";
+
+  const SWATCH={ soc:"#2E6DF6", basketball:"#E56020", nba:"#C8102E", baseball:"#1D6DB5",
+    nfl:"#1B3D6D", f1:"#E10600", biz:"#0092BC", wnba:"#FF6A13", tennis:"#5C9A46",
+    ten:"#5C9A46", tf:"#B5651D", gym:"#8E44AD" };
+
+  const state={
+    baseDoc:null, playerId:"jO5YHc4l", playlistId:"Mgmy6TMn",
+    videos:[], filters:[{label:"All",value:"all"}], newColors:{}, loadedContent:false
+  };
+
+  /* ---------- helpers mirror the site ---------- */
+  const stripTitle=t=>(t||"").replace(/^\s*the winning formula\s*:\s*/i,"").trim()||(t||"").trim();
+  const mediaId=u=>{const m=(u||"").match(/\/players\/([A-Za-z0-9]+)-/);return m?m[1]:"";};
+  function leadQuote(d){const m=(d||"").match(/^\s*["“]([^"”]+)["”]\s*([\s\S]*)$/);return m?{quote:m[1].trim(),body:(m[2]||"").trim()}:{quote:"",body:(d||"").trim()};}
+  const fmtDur=s=>{s=Math.round(s||0);const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),x=s%60;const p=n=>String(n).padStart(2,"0");return h?`${h}:${p(m)}:${p(x)}`:`${m}:${p(x)}`;};
+  const slug=s=>(s||"").toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
+  const colorFor=c=>state.newColors[c]||SWATCH[c]||"#096D93";
+
+  function setStatus(txt,ready){$("#statusText").textContent=txt;$("#status").classList.toggle("ready",!!ready);}
+  function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),1800);}
+
+  /* ---------- known tag classes (from overrides + defaults + new) ---------- */
+  function knownClasses(){
+    const set=new Set(Object.keys(SWATCH));
+    state.videos.forEach(v=>{const c=v.override&&v.override.tagClass;if(c)set.add(c);});
+    Object.keys(state.newColors).forEach(c=>set.add(c));
+    return [...set].sort();
+  }
+
+  /* ---------- load content.json ---------- */
+  function applyContent(doc){
+    state.baseDoc=doc;
+    state.loadedContent=true;
+    const v=doc.videos||{};
+    if(v.playlistId){ state.playlistId=v.playlistId; $("#pid").value=v.playlistId; }
+    if(v.playerId) state.playerId=v.playerId;
+    if(doc.series&&Array.isArray(doc.series.filters)&&doc.series.filters.length){
+      state.filters=doc.series.filters.map(f=>({label:f.label,value:f.value}));
+      if(!state.filters.some(f=>f.value==="all")) state.filters.unshift({label:"All",value:"all"});
+    }
+    // merge overrides into any loaded videos
+    if(state.videos.length) mergeOverrides(v.overrides||{});
+    renderFilters(); renderSwatches(); renderCards(); refreshExport();
+    setStatus("content.json loaded"+(state.videos.length?" · ready":""), state.videos.length>0);
+    toast("content.json loaded");
+  }
+  function mergeOverrides(ov){
+    state.videos.forEach(vid=>{ vid.override=Object.assign({}, ov[vid.mediaid]||{}); });
+    // add rows for override IDs not in the feed (archive), using series.episodes for title if present
+    const have=new Set(state.videos.map(v=>v.mediaid));
+    const eps=(state.baseDoc&&state.baseDoc.series&&state.baseDoc.series.episodes)||[];
+    const epById={}; eps.forEach(e=>{const id=mediaId(e.videoUrl); if(id)epById[id]=e;});
+    Object.keys(ov).forEach(id=>{
+      if(have.has(id)) return;
+      const e=epById[id]||{};
+      state.videos.push({
+        mediaid:id, title:(e.guest?("The Winning Formula: "+e.guest):("(not in feed) "+id)),
+        poster:`${CJW}/v2/media/${id}/poster.jpg?width=320`, description:e.description||"", duration:0, pubdate:0,
+        override:Object.assign({}, ov[id]), notInFeed:true
+      });
+    });
+  }
+
+  async function fetchLiveContent(){
+    const urls=[
+      "https://nasdaqbrandstudio.github.io/winning-formula/content-preview.json",
+      "https://nasdaqbrandstudio.github.io/winning-formula/content.json"
+    ];
+    setStatus("Fetching content.json from site…");
+    for(const u of urls){
+      try{ const r=await fetch(u,{cache:"no-store"}); if(r.ok){ applyContent(await r.json()); return; } }catch(e){}
+    }
+    setStatus("Couldn't fetch from site — use Upload or Paste instead");
+    toast("Fetch blocked — upload or paste the file");
+  }
+
+  /* ---------- load videos from JW ---------- */
+  async function loadVideos(){
+    const pid=$("#pid").value.trim(); if(!pid){toast("Enter a playlist ID");return;}
+    state.playlistId=pid;
+    setStatus("Loading videos from JW…");
+    $("#loadVideos").disabled=true;
+    try{
+      const r=await fetch(`${CJW}/v2/playlists/${pid}?format=json&page_limit=500`,{cache:"no-store"});
+      if(!r.ok) throw new Error("HTTP "+r.status);
+      const feed=await r.json();
+      const items=(feed.playlist||[]).slice().sort((a,b)=>(b.pubdate||0)-(a.pubdate||0));
+      const existing=(state.baseDoc&&state.baseDoc.videos&&state.baseDoc.videos.overrides)||{};
+      state.videos=items.map(it=>({
+        mediaid:it.mediaid, title:it.title||"", poster:(it.image||`${CJW}/v2/media/${it.mediaid}/poster.jpg?width=320`),
+        description:it.description||"", duration:it.duration||0, pubdate:it.pubdate||0,
+        override:Object.assign({}, existing[it.mediaid]||{})
+      }));
+      if(state.loadedContent) mergeOverrides(existing);
+      renderCards(); refreshExport();
+      setStatus(`${state.videos.length} videos loaded`+(state.loadedContent?" · ready":" · now load content.json"), state.loadedContent);
+      toast(`${state.videos.length} videos loaded`);
+    }catch(e){
+      setStatus("Couldn't load playlist: "+e.message);
+      toast("Playlist load failed");
+    }finally{ $("#loadVideos").disabled=false; }
+  }
+
+  /* ---------- render: filters ---------- */
+  function renderFilters(){
+    const box=$("#filterList"); box.innerHTML="";
+    state.filters.forEach((f,i)=>{
+      const row=document.createElement("div"); row.className="frow"+(f.value==="all"?" locked":"");
+      const inp=document.createElement("input"); inp.type="text"; inp.value=f.label; inp.setAttribute("aria-label","Filter label");
+      if(f.value==="all"){ inp.disabled=true; }
+      inp.addEventListener("input",()=>{ f.label=inp.value; });
+      const val=document.createElement("span"); val.className="val"; val.textContent=f.value;
+      row.appendChild(inp); row.appendChild(val);
+      if(f.value!=="all"){
+        const x=document.createElement("button"); x.className="x"; x.textContent="×"; x.title="Remove filter";
+        x.addEventListener("click",()=>{ state.filters.splice(i,1); state.videos.forEach(v=>{ if(v.override.filters) v.override.filters=v.override.filters.filter(q=>q!==f.value); }); renderFilters(); renderCards(); refreshExport(); });
+        row.appendChild(x);
+      }
+      box.appendChild(row);
+    });
+  }
+  function addFilter(){
+    const lab=$("#newFilterLabel").value.trim(); if(!lab)return;
+    const val=slug(lab); if(!val)return;
+    if(state.filters.some(f=>f.value===val)){toast("That filter already exists");return;}
+    state.filters.push({label:lab,value:val}); $("#newFilterLabel").value="";
+    renderFilters(); renderCards(); refreshExport();
+  }
+
+  /* ---------- render: swatches ---------- */
+  function renderSwatches(){
+    const box=$("#swatches"); box.innerHTML="";
+    knownClasses().forEach(c=>{
+      const s=document.createElement("span"); s.className="sw";
+      const i=document.createElement("i"); i.style.background=colorFor(c);
+      s.appendChild(i); s.appendChild(document.createTextNode(c));
+      box.appendChild(s);
+    });
+  }
+  function addClass(){
+    const name=slug($("#newClassName").value); const col=$("#newClassColor").value;
+    if(!name){toast("Enter a class name");return;}
+    state.newColors[name]=col; $("#newClassName").value="";
+    renderSwatches(); renderCards(); refreshExport();
+    toast("Color added — remember the CSS snippet on export");
+  }
+
+  /* ---------- render: cards ---------- */
+  function hasOverride(o){ return o && Object.keys(o).some(k=>{const v=o[k]; return Array.isArray(v)?v.length:(v!==undefined&&v!=="");}); }
+
+  function renderCards(){
+    const wrap=$("#cards"); const q=($("#search").value||"").toLowerCase().trim();
+    const list=state.videos.filter(v=>!q || (v.title.toLowerCase().includes(q) || (v.override.guest||"").toLowerCase().includes(q) || v.mediaid.toLowerCase().includes(q)));
+    $("#count").innerHTML = state.videos.length ? `<b>${list.length}</b> of <b>${state.videos.length}</b> episodes` : "";
+    if(!state.videos.length){ wrap.innerHTML='<div class="empty"><b>No videos loaded yet</b>Load the playlist from JW above to start tagging.</div>'; return; }
+    wrap.innerHTML="";
+    list.forEach(v=>wrap.appendChild(card(v)));
+  }
+
+  function card(v){
+    const o=v.override;
+    const lq=leadQuote(v.description);
+    const derivedGuest=stripTitle(v.title);
+    const el=document.createElement("div"); el.className="card";
+
+    // thumb
+    const th=document.createElement("div"); th.className="thumb";
+    th.innerHTML=`<img loading="lazy" src="${v.poster}" alt=""><span class="mid">${v.mediaid}</span>`;
+    el.appendChild(th);
+
+    const body=document.createElement("div");
+    const dot = hasOverride(o) ? '<span class="edited-dot" title="Has overrides"></span>' : '';
+    body.innerHTML=`<div class="vtitle">${escapeHtml(v.title)}${dot}</div><div class="vdur">${v.notInFeed?"not in current feed · ":""}${v.duration?fmtDur(v.duration):""}</div>`;
+
+    // guest + subtitle
+    const g2=document.createElement("div"); g2.className="grid2";
+    g2.appendChild(field("Guest",text(o.guest||"",derivedGuest,val=>set(o,"guest",val))));
+    g2.appendChild(field("Subtitle (credential)",text(o.subtitle||"","e.g. NBA MVP · Entrepreneur",val=>set(o,"subtitle",val))));
+    body.appendChild(g2);
+
+    // tag + color
+    const g3=document.createElement("div"); g3.className="grid2";
+    const tagInput=text(o.tag||"","e.g. NBA",val=>{set(o,"tag",val); paintChip();});
+    g3.appendChild(field("Tag label",tagInput));
+    const sel=document.createElement("select"); sel.setAttribute("aria-label","Tag color class");
+    function fillSel(){ sel.innerHTML='<option value="">— color —</option>'+knownClasses().map(c=>`<option value="${c}">${c}</option>`).join(""); sel.value=o.tagClass||""; }
+    fillSel();
+    sel.addEventListener("change",()=>{ if(!o.tag&&sel.value){/*allow*/} set(o,"tagClass",sel.value); paintChip(); });
+    g3.appendChild(field("Tag color",sel));
+    body.appendChild(g3);
+
+    // chip preview
+    const pv=document.createElement("div"); pv.className="field previewline";
+    const chip=document.createElement("span");
+    const none=document.createElement("span"); none.className="preview-none"; none.textContent="no chip — untagged";
+    pv.appendChild(chip); pv.appendChild(none);
+    function paintChip(){
+      const t=(o.tag||"").trim();
+      if(t){ chip.className="preview-chip"; chip.style.background=colorFor(o.tagClass); chip.textContent=t; chip.style.display=""; none.style.display="none"; }
+      else{ chip.style.display="none"; none.style.display=""; }
+    }
+    paintChip();
+    body.appendChild(field("On-card preview",pv));
+
+    // filters
+    const fb=document.createElement("div"); fb.className="filterbox";
+    state.filters.filter(f=>f.value!=="all").forEach(f=>{
+      const lab=document.createElement("label");
+      const cb=document.createElement("input"); cb.type="checkbox"; cb.value=f.value;
+      const on=Array.isArray(o.filters)&&o.filters.includes(f.value); cb.checked=on; if(on)lab.classList.add("on");
+      cb.addEventListener("change",()=>{
+        let arr=Array.isArray(o.filters)?o.filters.slice():[];
+        if(cb.checked){ if(!arr.includes(f.value))arr.push(f.value); lab.classList.add("on"); }
+        else { arr=arr.filter(x=>x!==f.value); lab.classList.remove("on"); }
+        set(o,"filters",arr); refreshExport();
+      });
+      lab.appendChild(cb); lab.appendChild(document.createTextNode(f.label));
+      fb.appendChild(lab);
+    });
+    if(!state.filters.filter(f=>f.value!=="all").length){ fb.innerHTML='<span class="preview-none">Add a filter on the left to tag episodes</span>'; }
+    body.appendChild(field("Filters",fb));
+
+    // featured fields (collapsible)
+    const ft=document.createElement("div"); ft.className="feat";
+    ft.appendChild(field("Headline (Featured slot · allows <em>)",text(o.headline||"",derivedGuest,val=>set(o,"headline",val))));
+    ft.appendChild(field("Pull quote (Featured slot)",textarea(o.pullQuote||"", lq.quote?('"'+lq.quote+'"'):"Leading quote from the description is used if left blank",val=>set(o,"pullQuote",val))));
+    const tog=document.createElement("button"); tog.className="feat-toggle"; tog.type="button"; tog.textContent="+ Featured-slot copy (headline / pull-quote)";
+    tog.addEventListener("click",()=>{ ft.classList.toggle("show"); tog.textContent=(ft.classList.contains("show")?"− ":"+ ")+"Featured-slot copy (headline / pull-quote)"; });
+    body.appendChild(tog); body.appendChild(ft);
+
+    el.appendChild(body);
+    return el;
+
+    function set(obj,k,val){ if(Array.isArray(val)){obj[k]=val;} else {obj[k]=val;} markEdited(); refreshExport(); }
+    function markEdited(){ const d=body.querySelector(".edited-dot"); if(hasOverride(o)&&!d){ body.querySelector(".vtitle").insertAdjacentHTML("beforeend",'<span class="edited-dot" title="Has overrides"></span>'); } }
+  }
+
+  function field(labelText,control){
+    const w=document.createElement("div"); w.className="field";
+    const l=document.createElement("label"); l.className="fld"; l.innerHTML=labelText;
+    w.appendChild(l); w.appendChild(control); return w;
+  }
+  function text(val,ph,on){ const i=document.createElement("input"); i.type="text"; i.value=val; i.placeholder=ph||""; i.addEventListener("input",()=>on(i.value)); return i; }
+  function textarea(val,ph,on){ const t=document.createElement("textarea"); t.value=val; t.placeholder=ph||""; t.addEventListener("input",()=>on(t.value)); return t; }
+  function escapeHtml(s){ return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+  /* ---------- build export ---------- */
+  function cleanOverride(o){
+    const out={};
+    ["guest","guestNameMarkup","subtitle","headline","pullQuote","tag","tagClass","thumbnailAlt","episodeMeta","title","description","body"].forEach(k=>{
+      if(o[k]!==undefined && String(o[k]).trim()!=="") out[k]=o[k];
+    });
+    if(Array.isArray(o.filters)&&o.filters.length) out.filters=o.filters.slice();
+    return out;
+  }
+  function buildDoc(){
+    const base = state.baseDoc ? JSON.parse(JSON.stringify(state.baseDoc)) : {};
+    base.series = base.series || {};
+    base.series.filters = state.filters.map(f=>({label:f.label,value:f.value}));
+    base.videos = base.videos || {};
+    base.videos.playlistId = state.playlistId;
+    base.videos.playerId = state.playerId;
+    const ov={};
+    state.videos.forEach(v=>{ const c=cleanOverride(v.override); if(Object.keys(c).length) ov[v.mediaid]=c; });
+    base.videos.overrides = ov;
+    return base;
+  }
+  function refreshExport(){
+    const ready = state.videos.length>0;
+    $("#copyBtn").disabled=!ready; $("#downloadBtn").disabled=!ready;
+    const edited=state.videos.filter(v=>hasOverride(v.override)).length;
+    $("#exportMeta").innerHTML = ready
+      ? `<b>${state.videos.length}</b> videos · <b>${edited}</b> tagged · <b>${state.filters.length-1}</b> filters${state.loadedContent?"":" · <span style='color:var(--warn)'>content.json not loaded — export will be partial</span>"}`
+      : "Load videos + content.json to export";
+  }
+  function cssSnippet(){
+    const keys=Object.keys(state.newColors); if(!keys.length) return "";
+    return keys.map(c=>`.ep-league-chip.${c}{ background:${state.newColors[c]}; color:#fff; }`).join("\n");
+  }
+  function openExport(){
+    const doc=buildDoc();
+    const json=JSON.stringify(doc,null,2);
+    $("#outArea").value=json;
+    const css=cssSnippet();
+    $("#cssNote").innerHTML = css
+      ? `<div class="css-note">You added new tag colors. Add this once to the site's CSS (in <code>index.html</code>) so the chips render in your color:<br><br><code>${escapeHtml(css).replace(/\n/g,"<br>")}</code></div>`
+      : "";
+    if(!state.loadedContent) $("#cssNote").innerHTML += `<div class="css-note">Heads-up: no content.json was loaded, so this file contains only the <code>videos</code> block and <code>series.filters</code>. Merge it into your full content.json rather than replacing the whole file.</div>`;
+    $("#outDlg").showModal();
+  }
+  function download(){
+    const doc=buildDoc(); const json=JSON.stringify(doc,null,2);
+    try{
+      const blob=new Blob([json],{type:"application/json"});
+      const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+      a.download = state.loadedContent ? "content.json" : "content-videos-partial.json";
+      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(a.href);
+      toast("Downloaded");
+    }catch(e){ openExport(); toast("Copy it from here instead"); }
+  }
+  async function copyDoc(){
+    const doc=buildDoc(); const json=JSON.stringify(doc,null,2);
+    try{ await navigator.clipboard.writeText(json); toast("content.json copied"); }
+    catch(e){ openExport(); }
+  }
+
+  /* ---------- wire up ---------- */
+  $("#loadVideos").addEventListener("click",loadVideos);
+  $("#fetchLive").addEventListener("click",fetchLiveContent);
+  $("#pasteToggle").addEventListener("click",()=>{ const w=$("#pasteWrap"); w.style.display=w.style.display==="none"?"block":"none"; });
+  $("#pasteApply").addEventListener("click",()=>{ try{ applyContent(JSON.parse($("#pasteArea").value)); $("#pasteWrap").style.display="none"; }catch(e){ toast("That isn't valid JSON"); } });
+  $("#fileIn").addEventListener("change",e=>{ const f=e.target.files[0]; if(!f)return; const rd=new FileReader(); rd.onload=()=>{ try{ applyContent(JSON.parse(rd.result)); }catch(err){ toast("That file isn't valid JSON"); } }; rd.readAsText(f); });
+  $("#addFilter").addEventListener("click",addFilter);
+  $("#newFilterLabel").addEventListener("keydown",e=>{ if(e.key==="Enter")addFilter(); });
+  $("#addClass").addEventListener("click",addClass);
+  $("#search").addEventListener("input",renderCards);
+  $("#copyBtn").addEventListener("click",copyDoc);
+  $("#downloadBtn").addEventListener("click",download);
+  $("#closeDlg").addEventListener("click",()=>$("#outDlg").close());
+  $("#selectAll").addEventListener("click",()=>{ $("#outArea").select(); });
+  $("#copyOut").addEventListener("click",async()=>{ try{ await navigator.clipboard.writeText($("#outArea").value); toast("Copied"); }catch(e){ $("#outArea").select(); document.execCommand&&document.execCommand("copy"); toast("Copied"); } });
+
+  renderFilters(); renderSwatches(); refreshExport();
+})();
+</script>
+</body>
+</html>

@@ -2128,6 +2128,68 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     if (section) section.hidden = false;     /* reveal now that it's populated */
   }
 
+  /* ===========================================================
+     JW PLAYLIST → FEATURED + SERIES
+     The video list, order, thumbnails, titles and which one is
+     Featured all come from the JW playlist (newest = Featured).
+     Per-video editorial fields (subtitle, league tag, filters,
+     headline, pullQuote) come from content.json → videos.overrides,
+     keyed by JW media ID. Anything the capped feed omits is merged
+     back in from the static series.episodes archive so nothing drops.
+     =========================================================== */
+  function jwStripTitle(t) {
+    return (t || '').replace(/^\s*the winning formula\s*:\s*/i, '').trim() || (t || '').trim();
+  }
+  function jwLeadQuote(desc) {
+    const m = (desc || '').match(/^\s*["“]([^"”]+)["”]\s*([\s\S]*)$/);
+    if (m) return { quote: m[1].trim(), body: (m[2] || '').trim() };
+    return { quote: '', body: (desc || '').trim() };
+  }
+  function jwMediaId(url) {
+    const m = (url || '').match(/\/players\/([A-Za-z0-9]+)-/);
+    return m ? m[1] : '';
+  }
+  function jwMapItem(item, cfg) {
+    const id = item.mediaid || '';
+    const ov = (cfg.overrides && cfg.overrides[id]) || {};
+    const guest = ov.guest || jwStripTitle(item.title || '');
+    const url = 'https://cdn.jwplayer.com/players/' + id + '-' + (cfg.playerId || 'jO5YHc4l') + '.html';
+    const lead = jwLeadQuote(item.description || '');
+    const bio = lead.quote ? (lead.body || item.description || '') : (item.description || '');
+    return {
+      _mediaid: id,
+      guest: guest,
+      guestNameMarkup: ov.guestNameMarkup || guest,
+      subtitle: ov.subtitle || '',
+      thumbnailAlt: ov.thumbnailAlt || (guest ? guest + ' on The Winning Formula' : (item.title || '')),
+      videoUrl: url,
+      episodeUrl: url,
+      tag: ov.tag || '',
+      tagClass: ov.tagClass || 'biz',
+      filters: Array.isArray(ov.filters) ? ov.filters : [],
+      episodeMeta: ov.episodeMeta || 'Episode',
+      title: ov.title || guest,
+      description: ov.description || bio,
+      headline: ov.headline || guest,
+      pullQuote: ov.pullQuote || (lead.quote ? '"' + lead.quote + '"' : ''),
+      body: ov.body || bio
+    };
+  }
+  function buildVideosData(feed, cfg, staticSeries) {
+    let items = (feed && Array.isArray(feed.playlist)) ? feed.playlist.slice() : [];
+    items.sort((a, b) => (b.pubdate || 0) - (a.pubdate || 0));   /* newest first */
+    const mapped = items.map(it => jwMapItem(it, cfg));
+    const seen = new Set(mapped.map(m => m._mediaid));
+    /* Merge any archive episodes the capped feed left out (older than its window). */
+    const staticEps = (staticSeries && Array.isArray(staticSeries.episodes)) ? staticSeries.episodes : [];
+    staticEps.forEach(ep => {
+      const id = jwMediaId(ep.videoUrl);
+      if (id && !seen.has(id)) { mapped.push(ep); seen.add(id); }
+    });
+    if (!mapped.length) return null;
+    return { featured: mapped[0], episodes: mapped.slice(1) };
+  }
+
   /* Master loader. Renders only what's present in the JSON. */
   async function loadContent() {
     let data = null;
@@ -2143,8 +2205,32 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
 
     try { renderTicker(data.ticker);     } catch (e) { console.warn('[content] ticker render error', e); }
     try { renderHero(data.hero);         } catch (e) { console.warn('[content] hero render error', e); }
-    try { renderFeatured(data.featured); } catch (e) { console.warn('[content] featured render error', e); }
-    try { renderSeries(data.series);     } catch (e) { console.warn('[content] series render error', e); }
+
+    /* Featured + Series: prefer the live JW playlist (newest = Featured,
+       rest = The Series, auto-rotating). Fall back to the static
+       featured/series.episodes in content.json if the playlist is
+       unavailable. */
+    let featuredData = data.featured;
+    let seriesData   = data.series;
+    if (data.videos && data.videos.playlistId) {
+      try {
+        const purl = 'https://cdn.jwplayer.com/v2/playlists/' + data.videos.playlistId + '?format=json&page_limit=100';
+        const pres = await fetch(purl, { cache: 'no-store' });
+        if (!pres.ok) throw new Error('playlist fetch ' + pres.status);
+        const feed = await pres.json();
+        const built = buildVideosData(feed, data.videos, data.series);
+        if (built) {
+          featuredData = Object.assign({}, data.featured, built.featured);
+          seriesData   = Object.assign({}, data.series, { episodes: built.episodes });
+          console.log('[content] playlist-driven — ' + ((feed.playlist || []).length) + ' from JW, ' + (built.episodes.length + 1) + ' total videos');
+        }
+      } catch (e) {
+        console.warn('[content] playlist unavailable — using static featured/series:', e && e.message);
+      }
+    }
+
+    try { renderFeatured(featuredData); } catch (e) { console.warn('[content] featured render error', e); }
+    try { renderSeries(seriesData);     } catch (e) { console.warn('[content] series render error', e); }
     try { renderMoments(data.moments);   } catch (e) { console.warn('[content] moments render error', e); }
     try { renderHosts(data.hosts);       } catch (e) { console.warn('[content] hosts render error', e); }
     try { renderContact(data.contact);   } catch (e) { console.warn('[content] contact render error', e); }

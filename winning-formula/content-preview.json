@@ -636,6 +636,318 @@
       }
     ]
   },
+  "videos": {
+    "playlistId": "Mgmy6TMn",
+    "playerId": "jO5YHc4l",
+    "_note": "The video list, order, thumbnails, titles, and which one is Featured all come from the JW playlist above (newest = Featured, rest = The Series). Per-video editorial fields live in overrides, keyed by JW media ID. Add a new video to the JW playlist and it appears automatically; add an override here only when you want a custom subtitle/tag/filters/headline/pullQuote.",
+    "overrides": {
+      "d1ACOUmt": {
+        "guest": "Patrice Evra",
+        "headline": "From World Cups to Player Networking: <em>Behind The Business of Football</em>",
+        "pullQuote": "\"We are the best squad, but the biggest enemy of France is France. If we stay humble and respect every team, I don't see how France doesn't win the World Cup.\"",
+        "tag": "SOCCER",
+        "tagClass": "soc",
+        "filters": [
+          "athlete-founder"
+        ]
+      },
+      "09oVWuMQ": {
+        "guest": "Jalen Rose",
+        "subtitle": "Detroit's Comeback and The Importance of Financial Responsibility",
+        "tag": "NBA",
+        "tagClass": "basketball",
+        "filters": [
+          "athlete-founder",
+          "basketball"
+        ]
+      },
+      "9NCy0tY5": {
+        "guest": "Harold Reynolds & Al Leiter",
+        "subtitle": "Growing the Sport While <em>Teaching The Game</em>",
+        "tag": "MLB",
+        "tagClass": "baseball",
+        "filters": [
+          "baseball"
+        ]
+      },
+      "vwlW1UPi": {
+        "guest": "Maria Sharapova",
+        "subtitle": "Five‑Time Grand Slam Champion · Entrepreneur, Investor, and Mom",
+        "tag": "WMNS",
+        "tagClass": "tennis",
+        "filters": [
+          "womens-sports"
+        ]
+      },
+      "8DFhw51n": {
+        "guest": "Reggie Bush",
+        "subtitle": "NBA MVP · Entrepreneur",
+        "tag": "NFL",
+        "tagClass": "nfl",
+        "filters": [
+          "athlete-founder"
+        ]
+      },
+      "aKWlVgRw": {
+        "guest": "Derrick Rose",
+        "subtitle": "NBA MVP · Entrepreneur",
+        "tag": "NBA",
+        "tagClass": "nba",
+        "filters": [
+          "athlete-founder"
+        ]
+      },
+      "iwACLS7X": {
+        "guest": "George Kurtz",
+        "subtitle": "CEO & Co-founder · CrowdStrike",
+        "tag": "BIZ",
+        "tagClass": "biz",
+        "filters": [
+          "sports-executives",
+          "accelerating-leadership"
+        ]
+      },
+      "BsjTXbRb": {
+        "guest": "Women's Sports Special",
+        "guestNameMarkup": "Built to Scale",
+        "subtitle": "Special Edition · The Winning Formula",
+        "tag": "WMNS",
+        "tagClass": "wnba",
+        "filters": [
+          "womens-sports",
+          "sports-executives"
+        ]
+      },
+      "Ti7TUHEU": {
+        "guest": "Stefanie Strack",
+        "subtitle": "Founder & CEO · Voice in Sport",
+        "tag": "WMNS",
+        "tagClass": "wnba",
+        "filters": [
+          "womens-sports",
+          "athlete-founder"
+        ]
+      },
+      "50k3giwJ": {
+        "guest": "Tristan Thompson",
+        "subtitle": "NBA Champion · Web3 Ambassador",
+        "tag": "NBA",
+        "tagClass": "nba",
+        "filters": [
+          "athlete-founder"
+        ]
+      },
+      "V05gpfW5": {
+        "guest": "Bubba Watson",
+        "subtitle": "2x Masters Champion · LIV Golf",
+        "tag": "GOLF",
+        "tagClass": "biz",
+        "filters": [
+          "athlete-founder"
+        ]
+      },
+      "9C33L01U": {
+        "guest": "Ndamukong Suh",
+        "subtitle": "Super Bowl Champion · Entrepreneur",
+        "tag": "NFL",
+        "tagClass": "nfl",
+        "filters": [
+          "athlete-founder"
+        ]
+      },
+      "4e9USnl7": {
+        "guest": "Bradley Lord",
+        "subtitle": "Chief Communications Officer · Mercedes-AMG F1",
+        "tag": "F1",
+        "tagClass": "f1",
+        "filters": [
+          "accelerating-leadership",
+          "sports-executives"
+        ]
+      },
+      "Tb9ycGIl": {
+        "guest": "Valtteri Bottas",
+        "subtitle": "Third Driver · Mercedes-AMG PETRONAS F1",
+        "tag": "F1",
+        "tagClass": "f1",
+        "filters": [
+          "accelerating-leadership"
+        ]
+      },
+      "HPT1axrG": {
+        "guest": "Ted Leonsis",
+        "subtitle": "CEO · Monumental Sports & Entertainment",
+        "tag": "BIZ",
+        "tagClass": "biz",
+        "filters": [
+          "sports-executives"
+        ]
+      },
+      "e1kZLoPd": {
+        "guest": "Christoph Grainger-Herr",
+        "guestNameMarkup": "Christoph<br>Grainger-Herr",
+        "subtitle": "CEO · IWC Schaffhausen",
+        "tag": "BIZ",
+        "tagClass": "biz",
+        "filters": [
+          "sports-executives",
+          "accelerating-leadership"
+        ]
+      },
+      "ct9cUIRg": {
+        "guest": "CJ McCollum",
+        "subtitle": "NBA Veteran · Entrepreneur",
+        "tag": "NBA",
+        "tagClass": "nba",
+        "filters": [
+          "athlete-founder"
+        ]
+      },
+      "BSvpXgrh": {
+        "guest": "Alex Honnold",
+        "subtitle": "Professional Rock Climber · Honnold Foundation",
+        "tag": "CLIMB",
+        "tagClass": "biz",
+        "filters": [
+          "athlete-founder"
+        ]
+      },
+      "5XEtJGIU": {
+        "guest": "Kelley O'Hara",
+        "subtitle": "2x World Cup Champion · USWNT",
+        "tag": "USWNT",
+        "tagClass": "soc",
+        "filters": [
+          "athlete-founder",
+          "womens-sports"
+        ]
+      },
+      "XiIzGVmC": {
+        "guest": "Wolff & Russell",
+        "guestNameMarkup": "Wolff &amp; Russell",
+        "subtitle": "Mercedes-AMG PETRONAS F1 Team",
+        "tag": "F1",
+        "tagClass": "f1",
+        "filters": [
+          "accelerating-leadership",
+          "sports-executives"
+        ]
+      },
+      "vwiq3RC5": {
+        "guest": "Alejandro Bedoya",
+        "subtitle": "Captain · Philadelphia Union",
+        "tag": "MLS",
+        "tagClass": "soc",
+        "filters": [
+          "athlete-founder"
+        ]
+      },
+      "wFOWBhDa": {
+        "guest": "Brandon Marshall",
+        "subtitle": "6x NFL Pro Bowler · Mental Health Advocate",
+        "tag": "NFL",
+        "tagClass": "nfl",
+        "filters": [
+          "athlete-founder"
+        ]
+      },
+      "reDyhqnx": {
+        "guest": "Marques Colston",
+        "subtitle": "Super Bowl XLIV Champion · Champion Venture Partners",
+        "tag": "NFL",
+        "tagClass": "nfl",
+        "filters": [
+          "athlete-founder"
+        ]
+      },
+      "BN841b7I": {
+        "guest": "Jimmy Butler",
+        "subtitle": "NBA All-Star · Founder, BIGFACE Coffee",
+        "tag": "NBA",
+        "tagClass": "nba",
+        "filters": [
+          "athlete-founder"
+        ]
+      },
+      "zx7smJw6": {
+        "guest": "Allyson Felix",
+        "subtitle": "11x Olympic Medalist · Founder, Always Alpha",
+        "tag": "T&F",
+        "tagClass": "tf",
+        "filters": [
+          "athlete-founder",
+          "womens-sports"
+        ]
+      },
+      "UfBwsa2Q": {
+        "guest": "Isiah Thomas",
+        "subtitle": "NBA Hall of Famer · Business Leader",
+        "tag": "NBA",
+        "tagClass": "nba",
+        "filters": [
+          "athlete-founder"
+        ]
+      },
+      "ezxWjwWZ": {
+        "guest": "Don McGuire",
+        "subtitle": "CMO · Qualcomm",
+        "tag": "BIZ",
+        "tagClass": "biz",
+        "filters": [
+          "sports-executives",
+          "accelerating-leadership"
+        ]
+      },
+      "MJjFfDam": {
+        "guest": "Steve Young",
+        "subtitle": "Pro Football Hall of Famer · Former 49ers QB",
+        "tag": "NFL",
+        "tagClass": "nfl",
+        "filters": [
+          "athlete-founder"
+        ]
+      },
+      "SWrHcx9f": {
+        "guest": "Joey Logano",
+        "subtitle": "3x NASCAR Cup Series Champion",
+        "tag": "NSCR",
+        "tagClass": "biz",
+        "filters": [
+          "athlete-founder"
+        ]
+      },
+      "GFVVb6LI": {
+        "guest": "Toto Wolff",
+        "subtitle": "CEO & Team Principal · Mercedes-AMG PETRONAS F1",
+        "tag": "F1",
+        "tagClass": "f1",
+        "filters": [
+          "accelerating-leadership",
+          "sports-executives"
+        ]
+      },
+      "PIEUfJwG": {
+        "guest": "Sloane Stephens",
+        "subtitle": "2017 US Open Champion · Pro Tennis Player",
+        "tag": "TEN",
+        "tagClass": "ten",
+        "filters": [
+          "athlete-founder",
+          "womens-sports"
+        ]
+      },
+      "pfiDUg5H": {
+        "guest": "Jordan Chiles",
+        "subtitle": "2x Olympic Medalist · UCLA Gymnast",
+        "tag": "GYM",
+        "tagClass": "gym",
+        "filters": [
+          "athlete-founder",
+          "womens-sports"
+        ]
+      }
+    }
+  },
   "moments": {
     "eyebrow": "In Conversation",
     "headline": "Moments from the <em>series.</em>",
