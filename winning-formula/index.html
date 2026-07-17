@@ -808,6 +808,7 @@
     align-items: center;
     gap: var(--s-4);
     flex-wrap: wrap;
+    flex-basis: 100%;
   }
   .filters {
     display: flex;
@@ -1339,7 +1340,8 @@
       </div>
       <div class="episodes-controls">
         <div class="filters" id="series-filters">
-          <!-- Filter pills render here from the JW feed (#tags on each video) -->
+          <button class="active" data-filter="all">All</button>
+          <!-- remaining pills render from the JW feed (#tags on each video) -->
         </div>
       </div>
     </div>
