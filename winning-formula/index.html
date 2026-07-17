@@ -2134,18 +2134,20 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
      content.json holds NO video data.
 
      TAG CONVENTION (set these on each video's Tags in JW):
-       Filters (pills):  [athlete-founders] [womens-sports]
-                         [sports-executives] [accelerating-leadership]
-       League chip:      any other bracketed tag, e.g. [nba] [mlb] [wmns]
-     Only [bracketed] tags are read; organic tags like
-     "TheWinningFormula" are ignored. Edit the config below to
-     add/rename filters or give a league a custom label.
+       League chip (displayed):  @code  →  e.g. @nba @mlb @wmns @f1
+       Filters (site action):    #code  →  #athlete-founders
+                                 #womens-sports #sports-executives
+                                 #accelerating-leadership
+     @ = the chip shown next to the episode number (first @ wins).
+     # = a filter pill (must match the FILTERS list below). Tags without
+     @ or # — like "TheWinningFormula" or any other playlist's tags — are
+     ignored, so nothing foreign can leak into the filters.
      =========================================================== */
   const PLAYLIST_ID = 'Mgmy6TMn';
   const PLAYER_ID   = 'jO5YHc4l';
 
-  /* Filter pills above The Series ("All" is always first). A video
-     appears under a pill when it carries the matching [bracket] tag. */
+  /* Filter pills above The Series ("All" is always first). A video appears
+     under a pill when it carries the matching plain (unbracketed) tag. */
   const FILTERS = [
     { value: 'all',                     label: 'All' },
     { value: 'athlete-founders',        label: 'Athlete Founders' },
@@ -2155,9 +2157,9 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
   ];
   const FILTER_VALUES = new Set(FILTERS.filter(f => f.value !== 'all').map(f => f.value));
 
-  /* Pretty labels for the league chip. Any league code not listed here
-     just shows as uppercase (e.g. [nba] → "NBA"). */
-  const LEAGUE_LABELS = { soc: 'SOCCER', ten: 'TENNIS', climb: 'CLIMB', biz: 'BIZ', wmns: 'WMNS' };
+  /* Custom labels for the league chip where the code isn't just its
+     uppercase form. Everything else shows as uppercase (@nba → "NBA"). */
+  const LEAGUE_LABELS = { tf: 'T&F' };
 
   function jwStripTitle(t) {
     return (t || '').replace(/^\s*the winning formula\s*:\s*/i, '').trim() || (t || '').trim();
@@ -2167,18 +2169,21 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     if (m) return { quote: m[1].trim(), body: (m[2] || '').trim() };
     return { quote: '', body: (desc || '').trim() };
   }
-  /* Read [bracketed] JW tags → { league, filters }. Only bracketed tags
-     are directives; the first non-filter one becomes the chip. */
+  /* Read JW tags → { league, filters }. @code = league chip (first @ wins);
+     #code = filter (must match a known FILTER value); everything else is
+     ignored, so foreign tags can never affect the site. */
   function jwParseTags(raw) {
     const arr = Array.isArray(raw) ? raw : String(raw || '').split(',');
     let league = null;
     const filters = [];
     arr.forEach(t => {
-      const m = String(t).trim().match(/^\[(.+)\]$/);
-      if (!m) return;
-      const key = m[1].trim().toLowerCase();
-      if (FILTER_VALUES.has(key)) filters.push(key);
-      else if (!league) league = key;
+      const s = String(t).trim();
+      if (s.charAt(0) === '@') {
+        if (!league) league = s.slice(1).trim().toLowerCase();
+      } else if (s.charAt(0) === '#') {
+        const key = s.slice(1).trim().toLowerCase();
+        if (FILTER_VALUES.has(key)) filters.push(key);
+      }
     });
     return { league, filters };
   }
