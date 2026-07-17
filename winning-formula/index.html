@@ -1309,7 +1309,7 @@
       <div class="hero-accent-rule"></div>
 
       <p class="hero-intro" data-content="hero.intro">
-        We invite high profile guests from around the sporting world, from athlete entrepreneurs to league executives, to discuss the similarities and through-lines between the sports and business world.
+        The Winning Formula is the preeminent destination for breaking news and insightful discussions around the business of sports. Through sit-down conversations with high-profile athlete-entrepreneurs, league executives and team owners, we cover major announcements and explore the intersection of sports, business and technology.
       </p>
     </div>
   </div>
@@ -1339,11 +1339,7 @@
       </div>
       <div class="episodes-controls">
         <div class="filters" id="series-filters">
-          <button class="active" data-filter="all">All</button>
-          <button data-filter="athlete-founder">Athlete Founders</button>
-          <button data-filter="womens-sports">Women's Sports</button>
-          <button data-filter="league-exec">League Exec</button>
-          <button data-filter="motorsport">Motorsport</button>
+          <!-- Filter pills render here from the JW feed (#tags on each video) -->
         </div>
       </div>
     </div>
@@ -1389,7 +1385,7 @@
 <section class="hosts-band section">
   <div class="wrap">
     <div class="section-eyebrow" id="hosts-eyebrow">The Hosts</div>
-    <h2 class="section-title" id="hosts-title" style="margin-bottom: var(--s-7);">The voices <em>behind the bell.</em></h2>
+    <h2 class="section-title" id="hosts-title" style="margin-bottom: var(--s-7);">The voices <em>behind the series.</em></h2>
 
     <div class="hosts-grid" id="hosts-grid">
       <!-- Host cards render here from content.json -->
@@ -1945,11 +1941,15 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       </div>`;
   }
 
-  /* Filter pills — built from the FILTERS config (not from JSON). */
-  function renderSeriesFilters() {
+  /* Filter pills — built from the #tag codes found in the feed (not a fixed
+     list). "All" is always first; each code becomes a Title-Case label. */
+  function renderSeriesFilters(filterCodes) {
     const filtersEl = document.getElementById('series-filters');
     if (!filtersEl) return;
-    filtersEl.innerHTML = FILTERS.map((f, i) =>
+    const pills = [{ value: 'all', label: 'All' }].concat(
+      (filterCodes || []).map(c => ({ value: c, label: jwTitle(c) }))
+    );
+    filtersEl.innerHTML = pills.map((f, i) =>
       `<button class="${i === 0 ? 'active' : ''}" data-filter="${esc(f.value)}">${esc(f.label)}</button>`
     ).join('');
   }
@@ -2137,29 +2137,32 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
        League chip (displayed):  @code  →  e.g. @nba @mlb @wmns @f1
        Filters (site action):    #code  →  #athlete-founders
                                  #womens-sports #sports-executives
-                                 #accelerating-leadership
-     @ = the chip shown next to the episode number (first @ wins).
-     # = a filter pill (must match the FILTERS list below). Tags without
-     @ or # — like "TheWinningFormula" or any other playlist's tags — are
-     ignored, so nothing foreign can leak into the filters.
+     @ = the chip shown next to the episode number (first @ wins), ALL CAPS.
+     # = a filter pill, Title Case. The pill list is built automatically
+     from whatever #tags exist in the feed — add a new #tag to a video and
+     its pill appears, no site change. Tags without @/# (e.g.
+     "TheWinningFormula" or any other playlist's tags) are ignored.
      =========================================================== */
   const PLAYLIST_ID = 'Mgmy6TMn';
   const PLAYER_ID   = 'jO5YHc4l';
 
-  /* Filter pills above The Series ("All" is always first). A video appears
-     under a pill when it carries the matching plain (unbracketed) tag. */
-  const FILTERS = [
-    { value: 'all',                     label: 'All' },
-    { value: 'athlete-founders',        label: 'Athlete Founders' },
-    { value: 'womens-sports',           label: "Women's Sports" },
-    { value: 'sports-executives',       label: 'Sports Executives' },
-    { value: 'accelerating-leadership', label: 'Accelerating Leadership' }
-  ];
-  const FILTER_VALUES = new Set(FILTERS.filter(f => f.value !== 'all').map(f => f.value));
-
-  /* Custom labels for the league chip where the code isn't just its
-     uppercase form. Everything else shows as uppercase (@nba → "NBA"). */
-  const LEAGUE_LABELS = { tf: 'T&F' };
+  /* ---- Tag → label rules ------------------------------------------------
+     Labels are generated from the tag code, so new @leagues and #filters
+     need NO site change. A single "-" is a word break; a double "--" is a
+     literal hyphen (compound word).
+       @  → ALL CAPS     @nba → "NBA",  @some-league → "SOME LEAGUE"
+       #  → Title Case   #athlete-founders → "Athlete Founders"
+                         #athlete--founders → "Athlete-Founders"          */
+  function jwWords(code) {
+    return String(code || '')
+      .split('--')                          /* compound segments */
+      .map(seg => seg.split('-').join(' '))  /* single hyphen → space */
+      .join('-');                            /* double hyphen → literal hyphen */
+  }
+  function jwUpper(code) { return jwWords(code).toUpperCase(); }
+  function jwTitle(code) {
+    return jwWords(code).replace(/(^|[\s-])([a-z])/g, (m, pre, ch) => pre + ch.toUpperCase());
+  }
 
   function jwStripTitle(t) {
     return (t || '').replace(/^\s*the winning formula\s*:\s*/i, '').trim() || (t || '').trim();
@@ -2170,8 +2173,8 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     return { quote: '', body: (desc || '').trim() };
   }
   /* Read JW tags → { league, filters }. @code = league chip (first @ wins);
-     #code = filter (must match a known FILTER value); everything else is
-     ignored, so foreign tags can never affect the site. */
+     #code = a filter — ANY code counts, since the pill list is built from
+     whatever #tags exist in the feed. Tags without @/# are ignored. */
   function jwParseTags(raw) {
     const arr = Array.isArray(raw) ? raw : String(raw || '').split(',');
     let league = null;
@@ -2182,7 +2185,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
         if (!league) league = s.slice(1).trim().toLowerCase();
       } else if (s.charAt(0) === '#') {
         const key = s.slice(1).trim().toLowerCase();
-        if (FILTER_VALUES.has(key)) filters.push(key);
+        if (key) filters.push(key);
       }
     });
     return { league, filters };
@@ -2201,7 +2204,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       guest: guest,
       thumbnailAlt: guest ? guest + ' on The Winning Formula' : title,
       videoUrl: url,
-      leagueLabel: league ? (LEAGUE_LABELS[league] || league.toUpperCase()) : '',
+      leagueLabel: league ? jwUpper(league) : '',
       filters: parsed.filters,
       title: guest,
       description: bio,
@@ -2220,7 +2223,27 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     /* Auto-number by release order: oldest = Episode 1, newest = Episode N. */
     const total = mapped.length;
     mapped.forEach((m, i) => { m.episodeMeta = 'Episode ' + (total - i); });
-    return { featured: mapped[0], episodes: mapped.slice(1) };
+    /* Build the filter list from whatever #tags exist, in first-seen order. */
+    const filterCodes = [];
+    mapped.forEach(m => (m.filters || []).forEach(f => {
+      if (filterCodes.indexOf(f) === -1) filterCodes.push(f);
+    }));
+    return { featured: mapped[0], episodes: mapped.slice(1), filterCodes: filterCodes };
+  }
+
+  /* Remember the last content.json that loaded cleanly, so if a later load
+     fails (network hiccup, CDN blip) the page falls back to the last real
+     content instead of the baked-in HTML defaults. Storage is best-effort. */
+  const CONTENT_CACHE_KEY = 'twf:lastContent';
+  function saveLastContent(data) {
+    try { localStorage.setItem(CONTENT_CACHE_KEY, JSON.stringify(data)); } catch (e) {}
+  }
+  function lastGoodContent() {
+    try {
+      const c = localStorage.getItem(CONTENT_CACHE_KEY);
+      if (c) { console.log('[content] using last cached content.json'); return JSON.parse(c); }
+    } catch (e) {}
+    return {};
   }
 
   /* Master loader. Site chrome (ticker/hero/moments/hosts/contact) comes
@@ -2229,17 +2252,18 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     let data = {};
     try {
       const res = await fetch(CONTENT_URL + '?t=' + Math.floor(Date.now() / 60000), { cache: 'no-store' });
-      if (res.ok) { data = await res.json(); }
-      else console.warn('[content] content.json fetch failed: ' + res.status);
+      if (res.ok) { data = await res.json(); saveLastContent(data); }
+      else { console.warn('[content] content.json fetch failed: ' + res.status); data = lastGoodContent(); }
     } catch (err) {
       console.warn('[content] Could not load content.json:', err && err.message);
+      data = lastGoodContent();
     }
 
     try { renderTicker(data.ticker); } catch (e) { console.warn('[content] ticker render error', e); }
     try { renderHero(data.hero);     } catch (e) { console.warn('[content] hero render error', e); }
 
-    /* Videos — the JW playlist is the single source of truth. */
-    renderSeriesFilters();
+    /* Videos — the JW playlist is the single source of truth (list, order,
+       chip, and the filter pills all come from it). */
     try {
       const purl = 'https://cdn.jwplayer.com/v2/playlists/' + PLAYLIST_ID + '?format=json&page_limit=500';
       const pres = await fetch(purl, { cache: 'no-store' });
@@ -2247,9 +2271,10 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       const feed = await pres.json();
       const built = buildVideos(feed);
       if (built) {
+        renderSeriesFilters(built.filterCodes);
         renderFeatured(built.featured);
         renderSeries(built.episodes);
-        console.log('[content] playlist-driven — ' + (built.episodes.length + 1) + ' videos from JW');
+        console.log('[content] playlist-driven — ' + (built.episodes.length + 1) + ' videos, ' + built.filterCodes.length + ' filters from JW');
       }
     } catch (e) {
       console.warn('[content] playlist unavailable — video sections empty this load:', e && e.message);
