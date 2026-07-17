@@ -1945,23 +1945,20 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       </div>`;
   }
 
-  function renderSeries(s) {
-    if (!s) return;
-    const eyebrowEl = document.getElementById('series-eyebrow');
-    const titleEl   = document.getElementById('series-title');
+  /* Filter pills — built from the FILTERS config (not from JSON). */
+  function renderSeriesFilters() {
     const filtersEl = document.getElementById('series-filters');
-    const carousel  = document.getElementById('episodes-carousel');
-    if (eyebrowEl && s.eyebrow) eyebrowEl.textContent = s.eyebrow;
-    if (titleEl && s.headline)   titleEl.innerHTML    = richText(s.headline);
+    if (!filtersEl) return;
+    filtersEl.innerHTML = FILTERS.map((f, i) =>
+      `<button class="${i === 0 ? 'active' : ''}" data-filter="${esc(f.value)}">${esc(f.label)}</button>`
+    ).join('');
+  }
 
-    if (filtersEl && Array.isArray(s.filters)) {
-      filtersEl.innerHTML = s.filters.map((f, i) =>
-        `<button class="${i === 0 ? 'active' : ''}" data-filter="${esc(f.value)}">${esc(f.label)}</button>`
-      ).join('');
-    }
-
-    if (!carousel || !Array.isArray(s.episodes)) return;
-    carousel.innerHTML = s.episodes.map((ep, idx) => `
+  /* Episode cards — takes the array built from the JW playlist. */
+  function renderSeries(episodes) {
+    const carousel = document.getElementById('episodes-carousel');
+    if (!carousel || !Array.isArray(episodes)) return;
+    carousel.innerHTML = episodes.map((ep, idx) => `
       <div class="ep-card reveal${idx >= 6 ? ' is-overflow' : ''}"
            role="button" tabindex="0"
            data-tags="${esc((ep.filters || []).join(' '))}"
@@ -1972,7 +1969,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
           <div class="thumb-play"><div class="thumb-play-btn"></div></div>
         </div>
         <div class="ep-meta-row">
-          ${ep.tag ? `<span class="ep-league-chip ${esc(ep.tagClass || 'biz')}">${esc(ep.tag)}</span>` : ''}
+          ${ep.leagueLabel ? `<span class="ep-league-chip">${esc(ep.leagueLabel)}</span>` : ''}
           ${ep.episodeMeta ? `<span>${esc(ep.episodeMeta)}</span>` : ''}
         </div>
         ${ep.title ? `<div class="ep-title">${esc(ep.title)}</div>` : ''}
@@ -2129,14 +2126,39 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
   }
 
   /* ===========================================================
-     JW PLAYLIST → FEATURED + SERIES
-     The video list, order, thumbnails, titles and which one is
-     Featured all come from the JW playlist (newest = Featured).
-     Per-video editorial fields (subtitle, league tag, filters,
-     headline, pullQuote) come from content.json → videos.overrides,
-     keyed by JW media ID. Anything the capped feed omits is merged
-     back in from the static series.episodes archive so nothing drops.
+     JW PLAYLIST → FEATURED + SERIES  (single source of truth)
+     Everything about the videos comes live from JW: the list,
+     order, thumbnails, titles, descriptions, and — via JW tags —
+     the league chip and filter categories. Newest video is
+     Featured; the rest fill The Series, auto-numbered by release.
+     content.json holds NO video data.
+
+     TAG CONVENTION (set these on each video's Tags in JW):
+       Filters (pills):  [athlete-founders] [womens-sports]
+                         [sports-executives] [accelerating-leadership]
+       League chip:      any other bracketed tag, e.g. [nba] [mlb] [wmns]
+     Only [bracketed] tags are read; organic tags like
+     "TheWinningFormula" are ignored. Edit the config below to
+     add/rename filters or give a league a custom label.
      =========================================================== */
+  const PLAYLIST_ID = 'Mgmy6TMn';
+  const PLAYER_ID   = 'jO5YHc4l';
+
+  /* Filter pills above The Series ("All" is always first). A video
+     appears under a pill when it carries the matching [bracket] tag. */
+  const FILTERS = [
+    { value: 'all',                     label: 'All' },
+    { value: 'athlete-founders',        label: 'Athlete Founders' },
+    { value: 'womens-sports',           label: "Women's Sports" },
+    { value: 'sports-executives',       label: 'Sports Executives' },
+    { value: 'accelerating-leadership', label: 'Accelerating Leadership' }
+  ];
+  const FILTER_VALUES = new Set(FILTERS.filter(f => f.value !== 'all').map(f => f.value));
+
+  /* Pretty labels for the league chip. Any league code not listed here
+     just shows as uppercase (e.g. [nba] → "NBA"). */
+  const LEAGUE_LABELS = { soc: 'SOCCER', ten: 'TENNIS', climb: 'CLIMB', biz: 'BIZ', wmns: 'WMNS' };
+
   function jwStripTitle(t) {
     return (t || '').replace(/^\s*the winning formula\s*:\s*/i, '').trim() || (t || '').trim();
   }
@@ -2145,104 +2167,92 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     if (m) return { quote: m[1].trim(), body: (m[2] || '').trim() };
     return { quote: '', body: (desc || '').trim() };
   }
-  function jwMediaId(url) {
-    const m = (url || '').match(/\/players\/([A-Za-z0-9]+)-/);
-    return m ? m[1] : '';
+  /* Read [bracketed] JW tags → { league, filters }. Only bracketed tags
+     are directives; the first non-filter one becomes the chip. */
+  function jwParseTags(raw) {
+    const arr = Array.isArray(raw) ? raw : String(raw || '').split(',');
+    let league = null;
+    const filters = [];
+    arr.forEach(t => {
+      const m = String(t).trim().match(/^\[(.+)\]$/);
+      if (!m) return;
+      const key = m[1].trim().toLowerCase();
+      if (FILTER_VALUES.has(key)) filters.push(key);
+      else if (!league) league = key;
+    });
+    return { league, filters };
   }
-  function jwMapItem(item, cfg) {
-    const id = item.mediaid || '';
-    const ov = (cfg.overrides && cfg.overrides[id]) || {};
-    const guest = ov.guest || jwStripTitle(item.title || '');
-    const url = 'https://cdn.jwplayer.com/players/' + id + '-' + (cfg.playerId || 'jO5YHc4l') + '.html';
-    const lead = jwLeadQuote(item.description || '');
-    const bio = lead.quote ? (lead.body || item.description || '') : (item.description || '');
+  function jwMapItem(item) {
+    const id    = item.mediaid || '';
+    const title = item.title || '';
+    const guest = jwStripTitle(title);
+    const url   = 'https://cdn.jwplayer.com/players/' + id + '-' + PLAYER_ID + '.html';
+    const lead  = jwLeadQuote(item.description || '');
+    const bio   = lead.quote ? (lead.body || item.description || '') : (item.description || '');
+    const parsed = jwParseTags(item.tags);
+    const league = parsed.league;
     return {
       _mediaid: id,
       guest: guest,
-      guestNameMarkup: ov.guestNameMarkup || guest,
-      subtitle: ov.subtitle || '',
-      thumbnailAlt: ov.thumbnailAlt || (guest ? guest + ' on The Winning Formula' : (item.title || '')),
+      thumbnailAlt: guest ? guest + ' on The Winning Formula' : title,
       videoUrl: url,
-      episodeUrl: url,
-      tag: ov.tag || '',
-      tagClass: ov.tagClass || 'biz',
-      filters: Array.isArray(ov.filters) ? ov.filters : [],
-      episodeMeta: ov.episodeMeta || 'Episode',
-      title: ov.title || guest,
-      description: ov.description || bio,
-      headline: ov.headline || guest,
-      pullQuote: ov.pullQuote || (lead.quote ? '"' + lead.quote + '"' : ''),
-      body: ov.body || bio
+      leagueLabel: league ? (LEAGUE_LABELS[league] || league.toUpperCase()) : '',
+      filters: parsed.filters,
+      title: guest,
+      description: bio,
+      /* Featured headline: JW custom parameter "headline" if present, else guest. */
+      headline: (item.headline && String(item.headline).trim()) || guest,
+      pullQuote: lead.quote ? '"' + lead.quote + '"' : '',
+      body: bio,
+      pubdate: item.pubdate || 0
     };
   }
-  function buildVideosData(feed, cfg, staticSeries) {
+  function buildVideos(feed) {
     let items = (feed && Array.isArray(feed.playlist)) ? feed.playlist.slice() : [];
     items.sort((a, b) => (b.pubdate || 0) - (a.pubdate || 0));   /* newest first */
-    const mapped = items.map(it => jwMapItem(it, cfg));
-    const seen = new Set(mapped.map(m => m._mediaid));
-    /* Merge any archive episodes the capped feed left out (older than its window). */
-    const staticEps = (staticSeries && Array.isArray(staticSeries.episodes)) ? staticSeries.episodes : [];
-    staticEps.forEach(ep => {
-      const id = jwMediaId(ep.videoUrl);
-      if (id && !seen.has(id)) { mapped.push(ep); seen.add(id); }
-    });
+    const mapped = items.map(jwMapItem);
     if (!mapped.length) return null;
-    /* Auto-number by release order: oldest = Episode 1, newest = Episode N.
-       The array is newest-first, so number = total − index. An explicit
-       episodeMeta override still wins (anything other than the default). */
+    /* Auto-number by release order: oldest = Episode 1, newest = Episode N. */
     const total = mapped.length;
-    mapped.forEach((m, i) => {
-      if (m && (m.episodeMeta === undefined || m.episodeMeta === '' || m.episodeMeta === 'Episode')) {
-        m.episodeMeta = 'Episode ' + (total - i);
-      }
-    });
+    mapped.forEach((m, i) => { m.episodeMeta = 'Episode ' + (total - i); });
     return { featured: mapped[0], episodes: mapped.slice(1) };
   }
 
-  /* Master loader. Renders only what's present in the JSON. */
+  /* Master loader. Site chrome (ticker/hero/moments/hosts/contact) comes
+     from content.json; ALL video content comes live from the JW playlist. */
   async function loadContent() {
-    let data = null;
+    let data = {};
     try {
       const res = await fetch(CONTENT_URL + '?t=' + Math.floor(Date.now() / 60000), { cache: 'no-store' });
-      if (!res.ok) throw new Error('content fetch failed: ' + res.status);
-      data = await res.json();
-      console.log('[content] loaded — ' + (data.series?.episodes?.length || 0) + ' episodes, ' + (data.hosts?.people?.length || 0) + ' hosts');
+      if (res.ok) { data = await res.json(); }
+      else console.warn('[content] content.json fetch failed: ' + res.status);
     } catch (err) {
-      console.warn('[content] Could not load content.json — using inline fallback. Reason:', err && err.message);
-      return;
+      console.warn('[content] Could not load content.json:', err && err.message);
     }
 
-    try { renderTicker(data.ticker);     } catch (e) { console.warn('[content] ticker render error', e); }
-    try { renderHero(data.hero);         } catch (e) { console.warn('[content] hero render error', e); }
+    try { renderTicker(data.ticker); } catch (e) { console.warn('[content] ticker render error', e); }
+    try { renderHero(data.hero);     } catch (e) { console.warn('[content] hero render error', e); }
 
-    /* Featured + Series: prefer the live JW playlist (newest = Featured,
-       rest = The Series, auto-rotating). Fall back to the static
-       featured/series.episodes in content.json if the playlist is
-       unavailable. */
-    let featuredData = data.featured;
-    let seriesData   = data.series;
-    if (data.videos && data.videos.playlistId) {
-      try {
-        const purl = 'https://cdn.jwplayer.com/v2/playlists/' + data.videos.playlistId + '?format=json&page_limit=100';
-        const pres = await fetch(purl, { cache: 'no-store' });
-        if (!pres.ok) throw new Error('playlist fetch ' + pres.status);
-        const feed = await pres.json();
-        const built = buildVideosData(feed, data.videos, data.series);
-        if (built) {
-          featuredData = Object.assign({}, data.featured, built.featured);
-          seriesData   = Object.assign({}, data.series, { episodes: built.episodes });
-          console.log('[content] playlist-driven — ' + ((feed.playlist || []).length) + ' from JW, ' + (built.episodes.length + 1) + ' total videos');
-        }
-      } catch (e) {
-        console.warn('[content] playlist unavailable — using static featured/series:', e && e.message);
+    /* Videos — the JW playlist is the single source of truth. */
+    renderSeriesFilters();
+    try {
+      const purl = 'https://cdn.jwplayer.com/v2/playlists/' + PLAYLIST_ID + '?format=json&page_limit=500';
+      const pres = await fetch(purl, { cache: 'no-store' });
+      if (!pres.ok) throw new Error('playlist fetch ' + pres.status);
+      const feed = await pres.json();
+      const built = buildVideos(feed);
+      if (built) {
+        renderFeatured(built.featured);
+        renderSeries(built.episodes);
+        console.log('[content] playlist-driven — ' + (built.episodes.length + 1) + ' videos from JW');
       }
+    } catch (e) {
+      console.warn('[content] playlist unavailable — video sections empty this load:', e && e.message);
     }
 
-    try { renderFeatured(featuredData); } catch (e) { console.warn('[content] featured render error', e); }
-    try { renderSeries(seriesData);     } catch (e) { console.warn('[content] series render error', e); }
-    try { renderMoments(data.moments);   } catch (e) { console.warn('[content] moments render error', e); }
-    try { renderHosts(data.hosts);       } catch (e) { console.warn('[content] hosts render error', e); }
-    try { renderContact(data.contact);   } catch (e) { console.warn('[content] contact render error', e); }
+    try { renderMoments(data.moments); } catch (e) { console.warn('[content] moments render error', e); }
+    try { renderHosts(data.hosts);     } catch (e) { console.warn('[content] hosts render error', e); }
+    try { renderContact(data.contact); } catch (e) { console.warn('[content] contact render error', e); }
 
     /* After we've replaced markup, re-wire the dynamic behaviors that
        depend on the new DOM nodes (filters, carousel nav, modal hooks,
