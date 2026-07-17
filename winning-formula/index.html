@@ -2187,6 +2187,15 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       if (id && !seen.has(id)) { mapped.push(ep); seen.add(id); }
     });
     if (!mapped.length) return null;
+    /* Auto-number by release order: oldest = Episode 1, newest = Episode N.
+       The array is newest-first, so number = total − index. An explicit
+       episodeMeta override still wins (anything other than the default). */
+    const total = mapped.length;
+    mapped.forEach((m, i) => {
+      if (m && (m.episodeMeta === undefined || m.episodeMeta === '' || m.episodeMeta === 'Episode')) {
+        m.episodeMeta = 'Episode ' + (total - i);
+      }
+    });
     return { featured: mapped[0], episodes: mapped.slice(1) };
   }
 
