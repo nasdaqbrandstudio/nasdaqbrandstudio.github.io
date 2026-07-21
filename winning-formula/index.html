@@ -430,6 +430,13 @@
     gap: var(--s-8);
     align-items: center;
   }
+  /* No pull quote in the JW description → align the copy to the top of the
+     video and give it the same blue rule the quote would have carried. */
+  .featured-grid.no-quote { align-items: start; }
+  .featured-body-lead {
+    padding-left: var(--s-5);
+    border-left: 2px solid var(--nasdaq-blue-50);
+  }
   @media (max-width: 980px) {
     .featured-grid { grid-template-columns: 1fr; gap: var(--s-6); }
   }
@@ -1034,8 +1041,9 @@
     outline-offset: 4px;
   }
 
-  .ep-card { display: flex; flex-direction: column; gap: var(--s-4); transition: transform 300ms var(--ease-nsdq); }
-  .ep-card:hover { transform: translateY(-4px); }
+  /* Only the video itself is clickable, so only it lifts on hover — the
+     copy beneath is plain text. */
+  .ep-card { display: flex; flex-direction: column; gap: var(--s-4); }
   .ep-card .thumb { aspect-ratio: 16/9; border-radius: var(--r-m); }
   .ep-card .thumb-name { font-size: clamp(1.5rem, 2.2vw, 2rem); }
 
@@ -1047,13 +1055,21 @@
     text-transform: uppercase;
     color: var(--text-on-dark-subtle);
   }
+  /* Clicking a chip filters The Series by that tag. */
   .ep-league-chip {
     font-family: var(--ff-sans);
     font-weight: 600;
+    font-size: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
     padding: 3px 7px;
     border-radius: var(--r-xs);
     color: #fff;
+    cursor: pointer;
+    transition: color 160ms var(--ease-nsdq), background 160ms var(--ease-nsdq);
   }
+  .ep-league-chip:hover { color: var(--nasdaq-blue-40); background: rgba(0, 146, 188, 0.14); }
+  .ep-league-chip:focus-visible { outline: 2px solid var(--nasdaq-blue-50); outline-offset: 2px; }
   .ep-league-chip.nba  { background: #C9082A; }
   .ep-league-chip.nfl  { background: #013369; }
   .ep-league-chip.ten  { background: #005338; }
@@ -1159,6 +1175,45 @@
     font-weight: 300;
   }
 
+
+  /* =========================================================
+     AWARDS — optional section, hidden until content.json has items.
+     Logos centre in the band, sit side by side on desktop, and wrap onto
+     as many rows as needed on mobile. Size and spacing are set from
+     content.json (awards.imageSize / imageSizeMobile / gap).
+     ========================================================= */
+  .awards-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--awards-gap, var(--s-6));
+    margin-top: var(--s-6);
+  }
+  .award-item {
+    flex: 0 0 auto;
+    width: var(--awards-size, 180px);
+    max-width: 100%;
+    text-align: center;
+  }
+  .award-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .award-caption {
+    margin-top: var(--s-3);
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-on-dark-muted);
+  }
+  .award-caption:empty { display: none; }
+  @media (max-width: 768px) {
+    .awards-grid { gap: var(--awards-gap-mobile, var(--s-5)); }
+    .award-item  { width: var(--awards-size-mobile, 130px); }
+  }
 
   /* =========================================================
      CONTACT / GET FEATURED — closing form-styled band
@@ -1401,6 +1456,19 @@
      All copy comes from content.json → contact. Hidden until
      the loader populates it, so nothing is hardcoded here.
      ========================================================= -->
+<!-- =========================================================
+     AWARDS — stays hidden until content.json → awards.items has
+     entries. Position on the page is set by awards.placeAfter.
+     ========================================================= -->
+<section class="section" id="awards-section" hidden>
+  <div class="wrap">
+    <div class="section-eyebrow" id="awards-eyebrow"></div>
+    <h2 class="section-title" id="awards-title"></h2>
+    <div class="awards-grid" id="awards-grid"></div>
+  </div>
+</section>
+
+
 <section class="contact-band section" id="contact-section" hidden>
   <div class="wrap">
     <div class="contact-panel reveal">
@@ -1502,23 +1570,60 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
      =========================================================== */
   const carousel = document.getElementById('episodes-carousel');
 
-  document.addEventListener('click', (e) => {
-    const btn = e.target.closest('#series-filters button');
-    if (!btn) return;
-    const container = document.getElementById('series-filters');
-    if (container) container.querySelectorAll('button').forEach(x => x.classList.remove('active'));
-    btn.classList.add('active');
-    const filter = btn.getAttribute('data-filter');
+  /* Show only the cards carrying `value` ('all' shows everything). Card tags
+     are stored pipe-delimited (|tag one|tag two|) so multi-word tags match. */
+  function applyFilter(value) {
     if (!carousel) return;
     carousel.querySelectorAll('.ep-card').forEach(card => {
-      const tags = (card.getAttribute('data-tags') || '').split(/\s+/);
-      const match = filter === 'all' || tags.includes(filter);
+      const tags = card.getAttribute('data-tags') || '';
+      const match = value === 'all' || tags.indexOf('|' + value + '|') !== -1;
       card.classList.toggle('filter-hidden', !match);
     });
     carousel.scrollTo({ left: 0, behavior: 'smooth' });
     updateCarouselNav();
     /* Recompute show-more for the new visible set */
     if (typeof refreshShowMoreState === 'function') refreshShowMoreState();
+  }
+
+  /* Clicking a league chip filters by that tag. Because chips aren't in the
+     pill row, we add a temporary pill so the active filter is visible and
+     clearable — it's removed as soon as another filter is chosen. */
+  function setActivePill(value, tempLabel) {
+    const container = document.getElementById('series-filters');
+    if (!container) return;
+    const temp = container.querySelector('button[data-temp="1"]');
+    if (temp) temp.remove();
+    let target = null;
+    container.querySelectorAll('button').forEach(x => {
+      x.classList.remove('active');
+      if (!target && x.getAttribute('data-filter') === value) target = x;
+    });
+    if (!target && tempLabel) {
+      target = document.createElement('button');
+      target.setAttribute('data-filter', value);
+      target.setAttribute('data-temp', '1');
+      target.textContent = tempLabel;
+      container.appendChild(target);
+    }
+    if (target) target.classList.add('active');
+  }
+
+  document.addEventListener('click', (e) => {
+    /* League chip on a card → filter by that tag */
+    const chip = e.target.closest('.ep-league-chip[data-tag-filter]');
+    if (chip) {
+      const value = chip.getAttribute('data-tag-filter');
+      if (!value) return;
+      setActivePill(value, chip.getAttribute('data-tag-label') || value);
+      applyFilter(value);
+      return;
+    }
+    /* Filter pill */
+    const btn = e.target.closest('#series-filters button');
+    if (!btn) return;
+    const value = btn.getAttribute('data-filter');
+    setActivePill(value, btn.getAttribute('data-temp') ? btn.textContent : null);
+    applyFilter(value);
   });
 
   /* ===========================================================
@@ -1931,52 +2036,61 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
         <div class="section-eyebrow">${esc(f.eyebrow || 'Latest Episode')}</div>
         <h2 class="section-title">${richText(f.headline || '')}</h2>
       </div>
-      <div class="featured-grid">
+      <div class="featured-grid${f.pullQuote ? '' : ' no-quote'}">
         <div class="thumb" role="button" tabindex="0" data-video-url="${esc(f.videoUrl || '')}" data-title="${esc(f.guest || '')}">
           ${thumbImgHTML(f.videoUrl, f.thumbnailAlt || f.guest)}
           <div class="thumb-play"><div class="thumb-play-btn"></div></div>
         </div>
         <div class="reveal">
           ${f.pullQuote ? `<blockquote class="featured-quote">${richText(f.pullQuote)}</blockquote>` : ''}
-          ${f.body ? `<p class="featured-body">${esc(f.body)}</p>` : ''}
+          ${f.body
+            ? (f.pullQuote
+                ? `<p class="featured-body">${esc(f.body)}</p>`
+                : `<div class="featured-body-lead"><p class="featured-body">${esc(f.body)}</p></div>`)
+            : ''}
         </div>
       </div>`;
   }
 
-  /* Filter pills — built from the #tag codes found in the feed (not a fixed
-     list). "All" is always first; each code becomes a Title-Case label. */
+  /* Filter pills — built from the #tags found in the feed (not a fixed list).
+     "All" is always first; each pill keeps the label as it was typed in JW. */
   function renderSeriesFilters(filterCodes) {
     const filtersEl = document.getElementById('series-filters');
     if (!filtersEl) return;
-    const pills = [{ value: 'all', label: 'All' }].concat(
-      (filterCodes || []).map(c => ({ value: c, label: jwTitle(c) }))
-    );
+    const pills = [{ value: 'all', label: 'All' }].concat(filterCodes || []);
     filtersEl.innerHTML = pills.map((f, i) =>
       `<button class="${i === 0 ? 'active' : ''}" data-filter="${esc(f.value)}">${esc(f.label)}</button>`
     ).join('');
   }
 
-  /* Episode cards — takes the array built from the JW playlist. */
+  /* Episode cards — takes the array built from the JW playlist.
+     Only the video thumbnail is clickable (the copy below it is not).
+     The league chip is a button that filters the carousel by that tag. */
   function renderSeries(episodes) {
     const carousel = document.getElementById('episodes-carousel');
     if (!carousel || !Array.isArray(episodes)) return;
-    carousel.innerHTML = episodes.map((ep, idx) => `
-      <div class="ep-card reveal${idx >= 6 ? ' is-overflow' : ''}"
-           role="button" tabindex="0"
-           data-tags="${esc((ep.filters || []).join(' '))}"
-           data-video-url="${esc(ep.videoUrl || '')}"
-           data-title="${esc(ep.guest || '')}">
-        <div class="thumb">
+    carousel.innerHTML = episodes.map((ep, idx) => {
+      /* Pipe-delimited so multi-word tags match cleanly. Includes the @league
+         value so clicking a chip can filter on it too. */
+      const keys = (ep.filters || []).map(f => f.value);
+      if (ep.leagueValue) keys.unshift(ep.leagueValue);
+      const tagAttr = keys.length ? '|' + keys.join('|') + '|' : '';
+      return `
+      <div class="ep-card reveal${idx >= 6 ? ' is-overflow' : ''}" data-tags="${esc(tagAttr)}">
+        <div class="thumb" role="button" tabindex="0"
+             data-video-url="${esc(ep.videoUrl || '')}"
+             data-title="${esc(ep.guest || '')}">
           ${thumbImgHTML(ep.videoUrl, ep.thumbnailAlt || ep.guest)}
           <div class="thumb-play"><div class="thumb-play-btn"></div></div>
         </div>
         <div class="ep-meta-row">
-          ${ep.leagueLabel ? `<span class="ep-league-chip">${esc(ep.leagueLabel)}</span>` : ''}
+          ${ep.leagueLabel ? `<button type="button" class="ep-league-chip" data-tag-filter="${esc(ep.leagueValue)}" data-tag-label="${esc(ep.leagueLabel)}" title="Show all ${esc(ep.leagueLabel)} videos">${esc(ep.leagueLabel)}</button>` : ''}
           ${ep.episodeMeta ? `<span>${esc(ep.episodeMeta)}</span>` : ''}
         </div>
         ${ep.title ? `<div class="ep-title">${esc(ep.title)}</div>` : ''}
         ${ep.description ? `<div class="ep-desc">${esc(ep.description)}</div>` : ''}
-      </div>`).join('');
+      </div>`;
+    }).join('');
 
     /* "Show more" button is rendered by a separate function so it can be
        refreshed independently when filters change. */
@@ -2102,6 +2216,70 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       </div>`).join('');
   }
 
+  /* ===========================================================
+     AWARDS — fully optional. Stays hidden unless content.json has
+     awards.items with at least one entry, so you can add the block
+     whenever you're ready and it appears on its own.
+
+     "awards": {
+       "eyebrow": "Recognition",
+       "headline": "Awards & <em>honors.</em>",
+       "placeAfter": "hosts",        // hero | featured | series | moments | hosts | contact
+       "imageSize": 180,             // desktop logo width in px
+       "imageSizeMobile": 130,       // mobile logo width in px
+       "gap": 32,                    // space between logos in px
+       "gapMobile": 24,
+       "items": [ { "image": "...", "alt": "", "caption": "", "link": "" } ]
+     }
+     =========================================================== */
+  const AWARDS_ANCHORS = {
+    hero:     '.hero',
+    featured: '.featured-band',
+    series:   '#episodes',
+    episodes: '#episodes',
+    moments:  '.photo-marquee-band',
+    hosts:    '.hosts-band',
+    contact:  '#contact-section'
+  };
+  function renderAwards(a) {
+    const section = document.getElementById('awards-section');
+    if (!section) return;
+    const items = (a && Array.isArray(a.items)) ? a.items.filter(i => i && i.image) : [];
+    if (!items.length) { section.hidden = true; return; }   /* nothing yet → stay hidden */
+
+    const eyebrowEl = document.getElementById('awards-eyebrow');
+    const titleEl   = document.getElementById('awards-title');
+    const gridEl    = document.getElementById('awards-grid');
+    if (eyebrowEl) eyebrowEl.textContent = a.eyebrow || '';
+    if (titleEl)   titleEl.innerHTML     = richText(a.headline || '');
+
+    /* Size + spacing come from the JSON so they can be tuned as logos are added. */
+    if (a.imageSize)       section.style.setProperty('--awards-size', parseInt(a.imageSize, 10) + 'px');
+    if (a.imageSizeMobile) section.style.setProperty('--awards-size-mobile', parseInt(a.imageSizeMobile, 10) + 'px');
+    if (a.gap)             section.style.setProperty('--awards-gap', parseInt(a.gap, 10) + 'px');
+    if (a.gapMobile)       section.style.setProperty('--awards-gap-mobile', parseInt(a.gapMobile, 10) + 'px');
+
+    if (gridEl) {
+      gridEl.innerHTML = items.map(it => {
+        const img = `<img src="${esc(it.image)}" alt="${esc(it.alt || it.caption || '')}" loading="lazy">`;
+        const media = it.link
+          ? `<a href="${esc(it.link)}" target="_blank" rel="noopener">${img}</a>`
+          : img;
+        return `<div class="award-item reveal">${media}<div class="award-caption">${esc(it.caption || '')}</div></div>`;
+      }).join('');
+    }
+
+    /* Move the section if the JSON says where it belongs. */
+    const anchorKey = String(a.placeAfter || '').toLowerCase();
+    const anchorSel = AWARDS_ANCHORS[anchorKey];
+    if (anchorSel) {
+      const anchor = document.querySelector(anchorSel);
+      if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(section, anchor.nextSibling);
+    }
+
+    section.hidden = false;
+  }
+
   function renderContact(c) {
     const section = document.getElementById('contact-section');
     if (!c || !c.email) return;              /* nothing to show → stays hidden */
@@ -2149,21 +2327,29 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
   const PLAYER_ID   = 'jO5YHc4l';
 
   /* ---- Tag → label rules ------------------------------------------------
-     Labels are generated from the tag code, so new @leagues and #filters
-     need NO site change. A single "-" is a word break; a double "--" is a
-     literal hyphen (compound word).
-       @  → ALL CAPS     @nba → "NBA",  @some-league → "SOME LEAGUE"
-       #  → Title Case   #athlete-founders → "Athlete Founders"
-                         #athlete--founders → "Athlete-Founders"          */
-  function jwWords(code) {
-    return String(code || '')
-      .split('--')                          /* compound segments */
-      .map(seg => seg.split('-').join(' '))  /* single hyphen → space */
-      .join('-');                            /* double hyphen → literal hyphen */
+     Only the FIRST character of a tag is a directive. Everything after it is
+     plain text: &, $, !, ', -, +, ", :, ;, — and any other symbol are kept
+     exactly as typed. Write the tag how you want it to read.
+       @  → league chip, shown ALL CAPS      @T&F        → "T&F"
+       #  → filter pill, first letters capped #Women's Sports
+       *  → editorial headline (Featured);  [bracketed] text renders in the
+            blue italic Bitter face.  *From World Cups: [Behind The Business]
+     Spaces and hyphens are interchangeable for MATCHING, so "#Athlete
+     Founders" and "#athlete-founders" are the same filter — the label shows
+     however it was typed on the first video that used it.                */
+  function jwKey(text) {
+    /* match key: case-insensitive, spaces/hyphens/underscores equivalent */
+    return String(text || '').toLowerCase().replace(/[\s\-_]+/g, ' ').trim();
   }
-  function jwUpper(code) { return jwWords(code).toUpperCase(); }
-  function jwTitle(code) {
-    return jwWords(code).replace(/(^|[\s-])([a-z])/g, (m, pre, ch) => pre + ch.toUpperCase());
+  function jwCaps(text) { return String(text || '').trim().toUpperCase(); }
+  function jwTitle(text) {
+    /* Capitalise the first letter of each word; never lowercase existing
+       caps, so acronyms like MLS and T&F survive as typed. */
+    return String(text || '').trim().replace(/(^|[\s\-–—/(])([a-z])/g, (m, pre, ch) => pre + ch.toUpperCase());
+  }
+  /* *headline → HTML. [bracketed] becomes <em> (blue italic Bitter). */
+  function jwHeadline(text) {
+    return String(text || '').trim().replace(/\[([^\]]*)\]/g, '<em>$1</em>');
   }
 
   function jwStripTitle(t) {
@@ -2174,23 +2360,33 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     if (m) return { quote: m[1].trim(), body: (m[2] || '').trim() };
     return { quote: '', body: (desc || '').trim() };
   }
-  /* Read JW tags → { league, filters }. @code = league chip (first @ wins);
-     #code = a filter — ANY code counts, since the pill list is built from
-     whatever #tags exist in the feed. Tags without @/# are ignored. */
+  /* Read JW tags → { league, filters, headline }.
+     JW separates tags with commas, so a headline containing a comma arrives
+     split; any fragment that doesn't start with @ / # / * is re-joined onto
+     the *headline it follows. Put the *headline tag LAST when it contains
+     commas. Fragments with no marker (e.g. "TheWinningFormula") are ignored. */
   function jwParseTags(raw) {
     const arr = Array.isArray(raw) ? raw : String(raw || '').split(',');
-    let league = null;
+    let league = null, headline = '';
     const filters = [];
+    let carry = null;                    /* collecting a comma-split headline */
     arr.forEach(t => {
       const s = String(t).trim();
-      if (s.charAt(0) === '@') {
-        if (!league) league = s.slice(1).trim().toLowerCase();
-      } else if (s.charAt(0) === '#') {
-        const key = s.slice(1).trim().toLowerCase();
-        if (key) filters.push(key);
+      if (!s) return;
+      const c = s.charAt(0);
+      if (c === '@' || c === '#' || c === '*') carry = null;
+      if (c === '@') {
+        if (!league) league = s.slice(1).trim();
+      } else if (c === '#') {
+        const label = s.slice(1).trim();
+        if (label) filters.push({ value: jwKey(label), label: jwTitle(label) });
+      } else if (c === '*') {
+        if (!headline) { headline = s.slice(1).trim(); carry = 'headline'; }
+      } else if (carry === 'headline') {
+        headline += ', ' + s;            /* comma was part of the headline */
       }
     });
-    return { league, filters };
+    return { league, filters, headline };
   }
   function jwMapItem(item) {
     const id    = item.mediaid || '';
@@ -2206,12 +2402,13 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       guest: guest,
       thumbnailAlt: guest ? guest + ' on The Winning Formula' : title,
       videoUrl: url,
-      leagueLabel: league ? jwUpper(league) : '',
+      leagueLabel: league ? jwCaps(league) : '',
+      leagueValue: league ? jwKey(league) : '',
       filters: parsed.filters,
       title: guest,
       description: bio,
-      /* Featured headline: JW custom parameter "headline" if present, else guest. */
-      headline: (item.headline && String(item.headline).trim()) || guest,
+      /* Featured headline: the *tag if present, else the plain guest name. */
+      headline: parsed.headline ? jwHeadline(parsed.headline) : guest,
       pullQuote: lead.quote ? '"' + lead.quote + '"' : '',
       body: bio,
       pubdate: item.pubdate || 0
@@ -2225,10 +2422,13 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     /* Auto-number by release order: oldest = Episode 1, newest = Episode N. */
     const total = mapped.length;
     mapped.forEach((m, i) => { m.episodeMeta = 'Episode ' + (total - i); });
-    /* Build the filter list from whatever #tags exist, in first-seen order. */
+    /* Build the filter list from whatever #tags exist, in first-seen order.
+       Deduped on the match key, so "#Athlete Founders" and "#athlete-founders"
+       collapse into one pill (labelled however it was first typed). */
     const filterCodes = [];
+    const seenFilters = {};
     mapped.forEach(m => (m.filters || []).forEach(f => {
-      if (filterCodes.indexOf(f) === -1) filterCodes.push(f);
+      if (!seenFilters[f.value]) { seenFilters[f.value] = true; filterCodes.push(f); }
     }));
     return { featured: mapped[0], episodes: mapped.slice(1), filterCodes: filterCodes };
   }
@@ -2284,6 +2484,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
 
     try { renderMoments(data.moments); } catch (e) { console.warn('[content] moments render error', e); }
     try { renderHosts(data.hosts);     } catch (e) { console.warn('[content] hosts render error', e); }
+    try { renderAwards(data.awards);   } catch (e) { console.warn('[content] awards render error', e); }
     try { renderContact(data.contact); } catch (e) { console.warn('[content] contact render error', e); }
 
     /* After we've replaced markup, re-wire the dynamic behaviors that

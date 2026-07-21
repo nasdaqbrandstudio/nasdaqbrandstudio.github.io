@@ -130,6 +130,17 @@
       }
     ]
   },
+  "awards": {
+    "_note": "Awards stays hidden until items has at least one entry. placeAfter accepts: hero, featured, series, moments, hosts, contact.",
+    "eyebrow": "",
+    "headline": "",
+    "placeAfter": "hosts",
+    "imageSize": 180,
+    "imageSizeMobile": 130,
+    "gap": 32,
+    "gapMobile": 24,
+    "items": []
+  },
   "contact": {
     "heading": "Feature & Collaboration Inquiries",
     "text": "Interested in being featured on The Winning Formula or partnering with our team? Contact us at:",
