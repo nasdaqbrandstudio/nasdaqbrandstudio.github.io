@@ -123,8 +123,7 @@
   .ticker-label {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 0 var(--s-4) 0 var(--s-3);
+    padding: 0 var(--s-4) 0 var(--s-4);
     background: var(--nasdaq-blue-50);
     color: #fff;
     font-family: var(--ff-sans);
@@ -133,18 +132,6 @@
     letter-spacing: 0.14em;
     text-transform: uppercase;
     flex-shrink: 0;
-  }
-  .ticker-label::before {
-    content: "";
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: var(--signal-up);
-    box-shadow: 0 0 8px var(--signal-up);
-    animation: pulse 1.6s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%      { opacity: 0.5; transform: scale(0.8); }
   }
 
   .ticker-viewport {
