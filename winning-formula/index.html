@@ -1603,7 +1603,11 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       target.setAttribute('data-filter', value);
       target.setAttribute('data-temp', '1');
       target.textContent = tempLabel;
-      container.appendChild(target);
+      /* Sit directly after the "All" pill, not at the end of the row. */
+      const allBtn = container.querySelector('button[data-filter="all"]');
+      if (allBtn && allBtn.nextSibling) container.insertBefore(target, allBtn.nextSibling);
+      else if (allBtn) container.appendChild(target);
+      else container.insertBefore(target, container.firstChild);
     }
     if (target) target.classList.add('active');
   }
@@ -2084,7 +2088,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
           <div class="thumb-play"><div class="thumb-play-btn"></div></div>
         </div>
         <div class="ep-meta-row">
-          ${ep.leagueLabel ? `<button type="button" class="ep-league-chip" data-tag-filter="${esc(ep.leagueValue)}" data-tag-label="${esc(ep.leagueLabel)}" title="Show all ${esc(ep.leagueLabel)} videos">${esc(ep.leagueLabel)}</button>` : ''}
+          ${ep.leagueLabel ? `<button type="button" class="ep-league-chip" data-tag-filter="${esc(ep.leagueValue)}" data-tag-label="${esc(jwTitle(ep.leagueText || ep.leagueLabel))}" title="Show all ${esc(ep.leagueLabel)} videos">${esc(ep.leagueLabel)}</button>` : ''}
           ${ep.episodeMeta ? `<span>${esc(ep.episodeMeta)}</span>` : ''}
         </div>
         ${ep.title ? `<div class="ep-title">${esc(ep.title)}</div>` : ''}
@@ -2403,6 +2407,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       thumbnailAlt: guest ? guest + ' on The Winning Formula' : title,
       videoUrl: url,
       leagueLabel: league ? jwCaps(league) : '',
+      leagueText: league ? String(league).trim() : '',
       leagueValue: league ? jwKey(league) : '',
       filters: parsed.filters,
       title: guest,
