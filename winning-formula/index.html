@@ -84,6 +84,8 @@
   html {
     scroll-behavior: smooth;
     scrollbar-gutter: stable;
+    overflow-x: hidden;   /* belt-and-braces with body, kills stray sideways scroll */
+    max-width: 100%;
   }
 
   body {
@@ -298,7 +300,11 @@
     font-weight: 600;
     font-size: 0.875rem;
     line-height: 1.5rem;
-    letter-spacing: 0.75rem;   /* signature Nasdaq letterspaced eyebrow */
+    /* Signature Nasdaq letterspaced eyebrow. Full 0.75rem tracking is kept
+       at every width where "Nasdaq Original Series" still fits one line
+       (~530px and up); below that it ramps down, hitting 0 at ~300px before
+       the line is allowed to break. */
+    letter-spacing: clamp(0rem, calc((100vw - 300px) / 17.6), 0.625rem);
     text-transform: uppercase;
     margin-bottom: var(--s-5);
   }
@@ -378,9 +384,11 @@
     display: inline-block;
     color: var(--nasdaq-blue-50);
     font-family: var(--ff-sans);
-    font-weight: 500;
-    font-size: 0.8125rem;
-    letter-spacing: 0.5rem;
+    /* Matches the hero eyebrow exactly — same weight, size and tracking. */
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    letter-spacing: clamp(0rem, calc((100vw - 300px) / 17.6), 0.625rem);
     text-transform: uppercase;
     margin-bottom: var(--s-4);
   }
@@ -798,12 +806,36 @@
   }
 
   .episodes-controls {
+    position: relative;
     display: flex;
     align-items: center;
     gap: var(--s-4);
     flex-wrap: wrap;
     flex-basis: 100%;
   }
+  /* Filter-row scroll arrows — mobile only, shown only when there are more
+     pills beyond that edge. */
+  .filters-nav {
+    display: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    width: 20px; height: 30px;   /* 30px ≈ pill height */
+    align-items: center; justify-content: center;
+    background: none;
+    border: 0;
+    color: var(--text-on-dark);
+    padding: 0;
+    transition: opacity 200ms var(--ease-nsdq), visibility 200ms, color 160ms;
+  }
+  .filters-nav:hover { color: var(--nasdaq-blue-40); }
+  .filters-nav svg { width: 18px; height: 18px; }
+  /* The chevron tip sits ~4px inside its viewBox, so nudge each arrow out by
+     that much to land the point exactly on the page margin. */
+  .filters-nav.prev { left: -4px; justify-content: flex-start; }
+  .filters-nav.next { right: -4px; justify-content: flex-end; }
+  .filters-nav.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
   .filters {
     display: flex;
     flex-wrap: wrap;
@@ -835,9 +867,38 @@
     .episodes-controls {
       width: 100%;
     }
+    /* Mobile: one scrollable row rather than stacked pills. Stays inside the
+       page gutter (no negative-margin bleed, which could nudge the page into
+       a horizontal scroll); the edges fade instead of hard-clipping. */
     .filters {
       width: 100%;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding-right: 2px;
     }
+    .filters::-webkit-scrollbar { display: none; }
+    .filters button { flex: 0 0 auto; }
+
+    /* Fade whichever end has more pills beyond it. The first ~26px is fully
+       clear so the arrow never overlaps readable text, then it ramps to solid
+       over a short distance so pills stay as readable as possible. */
+    .filters.can-scroll-right {
+      -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 56px), transparent calc(100% - 24px), transparent 100%);
+              mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 56px), transparent calc(100% - 24px), transparent 100%);
+    }
+    .filters.can-scroll-left {
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 24px, #000 56px, #000 100%);
+              mask-image: linear-gradient(90deg, transparent 0, transparent 24px, #000 56px, #000 100%);
+    }
+    .filters.can-scroll-left.can-scroll-right {
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 24px, #000 56px, #000 calc(100% - 56px), transparent calc(100% - 24px), transparent 100%);
+              mask-image: linear-gradient(90deg, transparent 0, transparent 24px, #000 56px, #000 calc(100% - 56px), transparent calc(100% - 24px), transparent 100%);
+    }
+    .filters-nav { display: inline-flex; }
   }
 
   .carousel-stage {
@@ -1381,6 +1442,12 @@
         <h2 class="section-title" id="series-title">Operators, owners, and <em>originals.</em></h2>
       </div>
       <div class="episodes-controls">
+        <button class="filters-nav prev is-hidden" type="button" data-fdir="-1" aria-label="Scroll filters left">
+          <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M9 2 L3 7 L9 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="filters-nav next is-hidden" type="button" data-fdir="1" aria-label="Scroll filters right">
+          <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 2 L11 7 L5 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
         <div class="filters" id="series-filters">
           <button class="active" data-filter="all">All</button>
           <!-- remaining pills render from the JW feed (#tags on each video) -->
@@ -1557,6 +1624,50 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
      =========================================================== */
   const carousel = document.getElementById('episodes-carousel');
 
+  /* If the chosen pill is only half-showing in the scrolled row, ease it fully
+     into view — clear of the fade/arrow zone at either edge. */
+  function ensurePillVisible(btn) {
+    const row = document.getElementById('series-filters');
+    if (!row || !btn) return;
+    const pad = 58;                       /* clears the arrow AND the fade ramp */
+    const r = row.getBoundingClientRect();
+    const b = btn.getBoundingClientRect();
+    let delta = 0;
+    if (b.left < r.left + pad)        delta = b.left - (r.left + pad);
+    else if (b.right > r.right - pad) delta = b.right - (r.right - pad);
+    if (delta) row.scrollBy({ left: delta, behavior: 'smooth' });
+  }
+
+  /* ---- Mobile filter row: edge fades + scroll arrows ------------------
+     Shows a fade (and an arrow) only on the side that has more pills. */
+  function updateFilterScroll() {
+    const row = document.getElementById('series-filters');
+    if (!row) return;
+    const max = row.scrollWidth - row.clientWidth - 1;
+    const canLeft  = row.scrollLeft > 1;
+    const canRight = row.scrollLeft < max;
+    row.classList.toggle('can-scroll-left', canLeft);
+    row.classList.toggle('can-scroll-right', canRight);
+    const prev = document.querySelector('.filters-nav.prev');
+    const next = document.querySelector('.filters-nav.next');
+    if (prev) prev.classList.toggle('is-hidden', !canLeft);
+    if (next) next.classList.toggle('is-hidden', !canRight);
+  }
+  document.addEventListener('click', (e) => {
+    const nav = e.target.closest('.filters-nav');
+    if (!nav) return;
+    const row = document.getElementById('series-filters');
+    if (!row) return;
+    const dir = parseInt(nav.getAttribute('data-fdir'), 10) || 1;
+    row.scrollBy({ left: dir * Math.max(120, row.clientWidth * 0.6), behavior: 'smooth' });
+  });
+  (function () {
+    const row = document.getElementById('series-filters');
+    if (row) row.addEventListener('scroll', updateFilterScroll, { passive: true });
+    window.addEventListener('resize', updateFilterScroll);
+    updateFilterScroll();
+  })();
+
   /* Show only the cards carrying `value` ('all' shows everything). Card tags
      are stored pipe-delimited (|tag one|tag two|) so multi-word tags match. */
   function applyFilter(value) {
@@ -1590,13 +1701,19 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       target.setAttribute('data-filter', value);
       target.setAttribute('data-temp', '1');
       target.textContent = tempLabel;
-      /* Sit directly after the "All" pill, not at the end of the row. */
-      const allBtn = container.querySelector('button[data-filter="all"]');
-      if (allBtn && allBtn.nextSibling) container.insertBefore(target, allBtn.nextSibling);
-      else if (allBtn) container.appendChild(target);
-      else container.insertBefore(target, container.firstChild);
+      /* Slot it alphabetically among the filter pills ("All" stays first). */
+      const cmp = (a, b) => String(a).localeCompare(String(b), undefined, { sensitivity: 'base', numeric: true });
+      let before = null;
+      container.querySelectorAll('button').forEach(x => {
+        if (before || x.getAttribute('data-filter') === 'all') return;
+        if (cmp(tempLabel, x.textContent) < 0) before = x;
+      });
+      if (before) container.insertBefore(target, before);
+      else container.appendChild(target);
     }
     if (target) target.classList.add('active');
+    if (typeof updateFilterScroll === 'function') requestAnimationFrame(updateFilterScroll);
+    if (target && typeof ensurePillVisible === 'function') requestAnimationFrame(() => ensurePillVisible(target));
   }
 
   document.addEventListener('click', (e) => {
@@ -1896,7 +2013,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
      If the fetch fails, the existing static fallback markup that's
      already in the HTML remains, so the page never breaks.
      =========================================================== */
-  const CONTENT_URL = 'https://nasdaqbrandstudio.github.io/winning-formula/content-preview.json';
+  const CONTENT_URL = 'https://nasdaqbrandstudio.github.io/winning-formula/content.json';
 
   /* Tiny HTML-escaper for plain text fields (safe-by-default). */
   function esc(s) {
@@ -2052,6 +2169,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     filtersEl.innerHTML = pills.map((f, i) =>
       `<button class="${i === 0 ? 'active' : ''}" data-filter="${esc(f.value)}">${esc(f.label)}</button>`
     ).join('');
+    if (typeof updateFilterScroll === 'function') requestAnimationFrame(updateFilterScroll);
   }
 
   /* Episode cards — takes the array built from the JW playlist.
@@ -2067,7 +2185,7 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
       if (ep.leagueValue) keys.unshift(ep.leagueValue);
       const tagAttr = keys.length ? '|' + keys.join('|') + '|' : '';
       return `
-      <div class="ep-card reveal${idx >= 6 ? ' is-overflow' : ''}" data-tags="${esc(tagAttr)}">
+      <div class="ep-card reveal" data-tags="${esc(tagAttr)}">
         <div class="thumb" role="button" tabindex="0"
              data-video-url="${esc(ep.videoUrl || '')}"
              data-title="${esc(ep.guest || '')}">
@@ -2097,6 +2215,20 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
      This function injects/removes the toggle button and wires
      its click handler.
      =========================================================== */
+  /* Mark which cards sit past the mobile fold, counting only the cards the
+     current filter leaves visible. Recomputed on every filter change, so a
+     video that was originally 20th still shows when its filter narrows the
+     list to a handful. */
+  const MOBILE_VISIBLE_COUNT = 6;
+  function recomputeOverflow(carousel) {
+    let shown = 0;
+    carousel.querySelectorAll('.ep-card').forEach(card => {
+      if (card.classList.contains('filter-hidden')) { card.classList.remove('is-overflow'); return; }
+      card.classList.toggle('is-overflow', shown >= MOBILE_VISIBLE_COUNT);
+      shown++;
+    });
+  }
+
   function refreshShowMoreState() {
     const carousel = document.getElementById('episodes-carousel');
     if (!carousel) return;
@@ -2107,6 +2239,9 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
 
     /* Reset to collapsed whenever cards re-render or filter changes */
     carousel.classList.remove('is-expanded');
+
+    /* Re-mark the fold against the cards this filter actually shows */
+    recomputeOverflow(carousel);
 
     /* Only on mobile, and only if there are overflow cards visible
        under the current filter. */
@@ -2414,14 +2549,18 @@ const WORDMARK_JSON = {"v":"5.10.0","fr":30,"ip":0,"op":110,"w":1920,"h":465,"nm
     /* Auto-number by release order: oldest = Episode 1, newest = Episode N. */
     const total = mapped.length;
     mapped.forEach((m, i) => { m.episodeMeta = 'Episode ' + (total - i); });
-    /* Build the filter list from whatever #tags exist, in first-seen order.
-       Deduped on the match key, so "#Athlete Founders" and "#athlete-founders"
-       collapse into one pill (labelled however it was first typed). */
+    /* Build the filter list from whatever #tags exist. Deduped on the match
+       key, so "#Athlete Founders" and "#athlete-founders" collapse into one
+       pill (labelled however it was first typed), then sorted A–Z so the row
+       stays predictable as new tags are added in JW. */
     const filterCodes = [];
     const seenFilters = {};
     mapped.forEach(m => (m.filters || []).forEach(f => {
       if (!seenFilters[f.value]) { seenFilters[f.value] = true; filterCodes.push(f); }
     }));
+    filterCodes.sort((a, b) =>
+      String(a.label).localeCompare(String(b.label), undefined, { sensitivity: 'base', numeric: true })
+    );
     return { featured: mapped[0], episodes: mapped.slice(1), filterCodes: filterCodes };
   }
 
