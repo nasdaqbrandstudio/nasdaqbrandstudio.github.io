@@ -1,16 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160" role="img" aria-label="Placeholder">
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 160 160">
+  <!-- Generator: Adobe Illustrator 30.6.0, SVG Export Plug-In . SVG Version: 2.1.4 Build 109)  -->
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #0092bc;
+        stroke-width: 3px;
+      }
+
+      .st1 {
+        fill: url(#linear-gradient);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="-416.38" y1="454.16" x2="-415.38" y2="453.16" gradientTransform="translate(66621 72666) scale(160 -160)" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#0092bc"/>
       <stop offset="1" stop-color="#08062a"/>
     </linearGradient>
   </defs>
-  <circle cx="80" cy="80" r="80" fill="url(#g)"/>
-  <circle cx="80" cy="80" r="78" fill="none" stroke="#0092bc" stroke-width="3"/>
-  <g fill="none" stroke="#e0f1fe" stroke-width="4" stroke-linecap="round" opacity=".85">
-    <path d="M52 104 L80 56 L108 104"/>
-    <path d="M64 104 L96 104"/>
-  </g>
-  <text x="80" y="132" text-anchor="middle" font-family="Inter, sans-serif" font-size="13"
-        letter-spacing="2" fill="#e0f1fe" opacity=".7">PLACEHOLDER</text>
+  <circle class="st1" cx="80" cy="80" r="80"/>
+  <circle class="st0" cx="80" cy="80" r="78"/>
 </svg>

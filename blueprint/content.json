@@ -28,8 +28,7 @@
   },
   "sectionOrder": [
     "hero",
-    "thoughtLeadership",
-    "clientSpotlights",
+    "videoHub",
     "solutions",
     "cityscape"
   ],
@@ -48,12 +47,8 @@
     },
     "items": [
       {
-        "label": "Thought Leadership",
-        "href": "#thought-leadership"
-      },
-      {
-        "label": "Client Spotlights",
-        "href": "#client-spotlights"
+        "label": "Videos",
+        "href": "#videos"
       },
       {
         "label": "Our Global Index Solutions",
@@ -64,6 +59,27 @@
       "label": "Who We Serve",
       "items": []
     }
+  },
+  "videoHub": {
+    "id": "videos",
+    "headline": "<span class=\"rt-accent\">Watch the series:</span> Thought leadership and partner stories",
+    "intro": "Nasdaq and its partners are empowering global investors and shaping tomorrow’s markets through index-based solutions.",
+    "railLabel": "Browse every video",
+    "allLabel": "All Videos",
+    "showFilters": true,
+    "backgroundImage": "blue-background",
+    "filters": [
+      {
+        "id": "thought-leadership",
+        "label": "Thought Leadership",
+        "from": "thoughtLeadership"
+      },
+      {
+        "id": "client-spotlights",
+        "label": "Client Spotlights",
+        "from": "clientSpotlights"
+      }
+    ]
   },
   "hero": {
     "id": "header",

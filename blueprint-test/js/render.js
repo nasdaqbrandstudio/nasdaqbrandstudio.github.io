@@ -397,15 +397,159 @@
       + '<header id="' + esc(d.id || 'thought-leadership') + '" class="tl-container bp-eps">'
       + '<div class="bp-eps-inner">'
       + (d.headline ? '<p class="bp-eps-headline">' + richText(d.headline) + '</p>' : '')
+      + '<div class="bp-eps-detail">' + panels + '</div>'
       + '<div class="bp-eps-railhead">'
       + '<span class="bp-eps-eyebrow">' + esc(d.railLabel || d.cue || '') + '</span>'
       + arrows
       + '</div>'
       + '<div class="bp-eps-rail" role="tablist">' + thumbs + '</div>'
-      + '<div class="bp-eps-detail">' + panels + '</div>'
       + '</div>'
       + '<div class="background-image-2" ' + bgAttrs({ image: d.backgroundImage }) + '></div>'
       + '</header>';
+  }
+
+  // ---------------------------------------------------------------- Video hub
+  // One module for every video on the page. Sources are pulled from the
+  // sections that already hold them, so nothing is duplicated in the JSON --
+  // a filter just points at `thoughtLeadership` or `clientSpotlights`.
+  function hubItems(d, data, feed) {
+    var out = [];
+    (d.filters || []).forEach(function (f) {
+      var src = data[f.from];
+      if (!src) return;
+      var list = src.features || src.videos || [];
+      var routeFeed = routed(feed, f.route || (src.features ? 'feature' : 'spotlight'));
+      if (routeFeed) list = routeFeed;
+      list.forEach(function (v) {
+        out.push({
+          title: v.title,
+          body: v.body || (v.description ? [v.description] : []),
+          quote: v.quote,
+          thumbnail: v.thumbnail || v.cardImage,
+          video: v.video || v,
+          anchor: v.anchor,
+          badge: v.badge,
+          filterId: f.id,
+          filterLabel: f.label
+        });
+      });
+    });
+    return out;
+  }
+
+  function renderVideoHub(d, feed, data) {
+    if (!d) return '';
+    var items = hubItems(d, data, feed);
+    if (!items.length) return '';
+
+    items.forEach(function (v, i) {
+      if (v.anchor) ANCHORS[v.anchor] = { type: 'hub', index: i };
+    });
+
+    var pills = '';
+    if (d.showFilters !== false && (d.filters || []).length > 1) {
+      pills = '<div class="bp-hub-filters" role="tablist">'
+        + '<button type="button" class="bp-hub-pill is-active" data-filter="all">'
+        + esc(d.allLabel || 'All') + '</button>'
+        + (d.filters || []).map(function (f) {
+            return '<button type="button" class="bp-hub-pill" data-filter="' + esc(f.id) + '">'
+              + esc(f.label) + '</button>';
+          }).join('')
+        + '</div>';
+    }
+
+    var grid = items.map(function (v, i) {
+      var img = v.thumbnail ? imgUrl(v.thumbnail) : jwPoster(v.video, 640);
+      return '<button type="button" class="bp-hub-thumb' + (i === 0 ? ' is-active' : '') + '"'
+        + ' data-hub="' + i + '" data-filter="' + esc(v.filterId) + '"'
+        + (v.anchor ? ' data-anchor="' + esc(v.anchor) + '"' : '') + '>'
+        + '<span class="bp-hub-thumb-media">'
+        + (img ? '<img src="' + esc(img) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '')
+        + (v.badge ? '<span class="bp-eps-badge">' + esc(v.badge) + '</span>' : '')
+        + '</span>'
+        + '<span class="bp-hub-thumb-meta">'
+        + '<span class="bp-hub-thumb-tag">' + esc(v.filterLabel || '') + '</span>'
+        + '<span class="bp-hub-thumb-title">' + richText(v.title) + '</span>'
+        + '</span></button>';
+    }).join('');
+
+    var panels = items.map(function (v, i) {
+      var body = (v.body || []).map(function (t) {
+        return '<p class="bp-eps-para">' + richText(t) + '</p>';
+      }).join('');
+      return '<div class="bp-eps-panel' + (i === 0 ? ' is-active" ' : '" ')
+        + (v.anchor ? 'id="' + esc(v.anchor) + '" ' : '')
+        + 'data-hub-panel="' + i + '">'
+        + '<div class="bp-eps-video">' + videoEmbed(v.video) + '</div>'
+        + '<aside class="bp-eps-info">'
+        + '<span class="bp-hub-thumb-tag">' + esc(v.filterLabel || '') + '</span>'
+        + '<h3 class="bp-eps-title">' + richText(v.title) + '</h3>'
+        + (body ? '<div class="bp-eps-body">' + body + '</div>' : '')
+        + epsQuote(v.quote)
+        + '</aside></div>';
+    }).join('');
+
+    return ''
+      + '<section id="' + esc(d.id || 'videos') + '" class="bp-eps bp-hub">'
+      + '<div class="bp-eps-inner">'
+      + (d.headline ? '<h3 class="cs-headline">' + richText(d.headline) + '</h3>' : '')
+      + (d.intro ? '<p class="bp-eps-headline">' + richText(d.intro) + '</p>' : '')
+      + '<div class="bp-eps-detail">' + panels + '</div>'
+      + (d.railLabel ? '<div class="bp-eps-railhead"><span class="bp-eps-eyebrow">' + esc(d.railLabel) + '</span></div>' : '')
+      + pills
+      + '<div class="bp-hub-grid">' + grid + '</div>'
+      + '</div>'
+      + '<div class="background-image-2" ' + bgAttrs({ image: d.backgroundImage }) + '></div>'
+      + '</section>';
+  }
+
+  function initVideoHub() {
+    var root = document.querySelector('.bp-hub');
+    if (!root) return;
+    var thumbs = Array.prototype.slice.call(root.querySelectorAll('.bp-hub-thumb'));
+    var panels = Array.prototype.slice.call(root.querySelectorAll('.bp-eps-panel'));
+    var pills = Array.prototype.slice.call(root.querySelectorAll('.bp-hub-pill'));
+    if (!thumbs.length) return;
+
+    function select(i) {
+      if (i < 0 || i >= thumbs.length) return;
+      unmountVideo();
+      thumbs.forEach(function (t, n) { t.classList.toggle('is-active', n === i); });
+      panels.forEach(function (p, n) { p.classList.toggle('is-active', n === i); });
+    }
+
+    function filter(id) {
+      pills.forEach(function (b) { b.classList.toggle('is-active', b.getAttribute('data-filter') === id); });
+      thumbs.forEach(function (t) {
+        var on = id === 'all' || t.getAttribute('data-filter') === id;
+        t.hidden = !on;
+      });
+      // keep a visible item selected
+      var active = thumbs.filter(function (t) { return t.classList.contains('is-active'); })[0];
+      if (active && active.hidden) {
+        var first = thumbs.filter(function (t) { return !t.hidden; })[0];
+        if (first) select(thumbs.indexOf(first));
+      }
+    }
+
+    thumbs.forEach(function (t, i) {
+      t.addEventListener('click', function () {
+        select(i);
+        var slug = t.getAttribute('data-anchor');
+        if (slug && location.hash !== '#' + slug) history.replaceState(null, '', '#' + slug);
+        root.querySelector('.bp-eps-detail').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    });
+    pills.forEach(function (b) {
+      b.addEventListener('click', function () { filter(b.getAttribute('data-filter')); });
+    });
+
+    window.__bpSelectHub = function (i) {
+      var t = thumbs[i];
+      if (t && t.hidden) filter('all');
+      select(i);
+      root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
   }
 
   function renderClientSpotlights(d, feed) {
@@ -849,12 +993,13 @@
   var SECTIONS = {
     hero: renderHero,
     thoughtLeadership: renderThoughtLeadership,
+    videoHub: renderVideoHub,
     clientSpotlights: renderClientSpotlights,
     solutions: renderSolutions,
     cityscape: renderCityscape
   };
 
-  var INNER = { thoughtLeadership: 1, clientSpotlights: 1, solutions: 1, cityscape: 1 };
+  var INNER = { thoughtLeadership: 1, videoHub: 1, clientSpotlights: 1, solutions: 1, cityscape: 1 };
 
   function render(data, feed) {
     CFG = data.config || {};
@@ -867,7 +1012,7 @@
     order.forEach(function (key) {
       var fn = SECTIONS[key];
       if (!fn || !data[key]) return;
-      var html = fn(data[key], feed);
+      var html = fn(data[key], feed, data);
       if (INNER[key]) inner += html; else top += html;
     });
 
@@ -894,6 +1039,7 @@
   function afterRender(data) {
     initVideos();
     initThoughtLeadership();
+    initVideoHub();
     initSolutions();
     initClientSpotlights(data);
     initAnchors();
@@ -919,6 +1065,7 @@
     if (target.type !== 'feature' && window.__bpCloseFeature) window.__bpCloseFeature();
     if (target.type === 'feature' && window.__bpOpenFeature) window.__bpOpenFeature(target.index);
     if (target.type === 'spotlight' && window.__bpSelectSpotlight) window.__bpSelectSpotlight(target.index);
+    if (target.type === 'hub' && window.__bpSelectHub) window.__bpSelectHub(target.index);
     return true;
   }
 
