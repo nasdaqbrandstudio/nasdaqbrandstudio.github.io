@@ -54,6 +54,11 @@
   }
 
   var CFG = {};
+  var UI = {};
+
+  // anchor slug -> how to reveal it. Populated during render from the `anchor`
+  // field on any feature or spotlight, so a new deep link is a JSON edit.
+  var ANCHORS = {};
 
   function absUrl(path) {
     if (!path) return '';
@@ -122,14 +127,59 @@
     return 'https://cdn.jwplayer.com/v2/media/' + v.jwMedia + '/poster.jpg?width=' + (width || 720);
   }
 
+  // Players are mounted on demand, never up front. The export put a live iframe
+  // in every slot -- hero desktop, hero mobile, each article, each mobile stack
+  // item -- so a player configured to autoplay would start several at once and
+  // you would hear all of them. Here each slot renders a poster and mounts its
+  // iframe only when asked, and mounting one unmounts whatever was playing.
+  var mounted = null;
+
   function videoEmbed(v, extraClass) {
     var src = jwPlayerUrl(v);
     if (!src) return '';
-    return '<div class="bp-video ' + (extraClass || '') + '">'
-      + '<iframe ' + attr({
-        src: src, title: v.title || '', loading: 'lazy',
-        allow: 'autoplay; fullscreen; picture-in-picture', allowfullscreen: 'true', frameborder: '0'
-      }) + '></iframe></div>';
+    var poster = jwPoster(v, 1280);
+    return '<div class="bp-video ' + (extraClass || '') + '" data-video="' + esc(src) + '"'
+      + ' role="button" tabindex="0" aria-label="' + esc(UI.play || 'Play') + (v.title ? ': ' + esc(v.title) : '') + '">'
+      + (poster ? '<img class="bp-video-poster" src="' + esc(poster) + '" alt="" loading="lazy">' : '')
+      + '<span class="bp-video-play" aria-hidden="true">'
+      + '<img src="' + esc(chromeUrl('images/play-button.svg')) + '" alt="">'
+      + '</span></div>';
+  }
+
+  function unmountVideo() {
+    if (!mounted) return;
+    var frame = mounted.querySelector('iframe');
+    if (frame) frame.remove();
+    mounted.classList.remove('is-playing');
+    mounted = null;
+  }
+
+  function mountVideo(box, autoplay) {
+    if (!box || box.classList.contains('is-playing')) return;
+    unmountVideo();
+    var src = box.getAttribute('data-video');
+    if (!src) return;
+    if (autoplay !== false) src += (src.indexOf('?') > -1 ? '&' : '?') + 'autoplay=true';
+    var frame = document.createElement('iframe');
+    frame.src = src;
+    frame.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+    frame.setAttribute('allowfullscreen', 'true');
+    frame.setAttribute('frameborder', '0');
+    box.appendChild(frame);
+    box.classList.add('is-playing');
+    mounted = box;
+  }
+
+  function initVideos() {
+    document.addEventListener('click', function (e) {
+      var box = e.target.closest && e.target.closest('.bp-video');
+      if (box) mountVideo(box);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var box = e.target.closest && e.target.closest('.bp-video');
+      if (box) { e.preventDefault(); mountVideo(box); }
+    });
   }
 
   function parseTags(tags) {
@@ -301,9 +351,14 @@
     }
     if (!features.length) return '';
 
+    features.forEach(function (f, i) {
+      if (f.anchor) ANCHORS[f.anchor] = { type: 'feature', index: i };
+    });
+
     var mobile = features.map(function (f, i) {
       return '<div class="' + (i === 0 ? 'tl-article-1-mobile' : 'tl-article-2-mobile') + '"'
-        + (i === 0 ? ' id="thought-leadership-mobile"' : '') + '>'
+        + (f.anchor ? ' id="' + esc(f.anchor) + '-mobile"' : '')
+        + (i === 0 ? ' data-first-mobile' : '') + '>'
         + '<h3 class="tl-headline">' + richText(f.title) + '</h3>'
         + '<div class="thought-leadership-video">' + videoEmbed(f.video) + '</div>'
         + '<div class="tl-video-text">'
@@ -318,7 +373,9 @@
         ? '<div class="card-video w-embed"><video autoplay muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;">'
           + '<source src="' + esc(f.cardVideo) + '" type="video/mp4"></video></div>'
         : '';
-      return '<div class="tl-card" data-tl-index="' + i + '" role="button" tabindex="0" aria-label="' + esc(f.title) + '">'
+      return '<div class="tl-card" data-tl-index="' + i + '"'
+        + (f.anchor ? ' data-anchor="' + esc(f.anchor) + '"' : '')
+        + ' role="button" tabindex="0" aria-label="' + esc(f.title) + '">'
         + '<div class="image-overlay"></div>'
         + '<div class="card-inner"><div class="card-details-wrapper">'
         + (f.cardNote ? '<div class="title-wrapper"><div class="highlights">' + richText(f.cardNote) + '</div></div>' : '')
@@ -330,8 +387,9 @@
     }).join('');
 
     var articles = features.map(function (f, i) {
-      return '<div class="tl-article" data-tl-article="' + i + '">'
-        + '<a href="#" class="button-close" aria-label="Close">✕</a>'
+      return '<div class="tl-article" data-tl-article="' + i + '"'
+        + (f.anchor ? ' id="' + esc(f.anchor) + '"' : '') + '>'
+        + '<a href="#" class="button-close" aria-label="' + esc(UI.close || 'Close') + '">✕</a>'
         + '<div class="container-article"><div class="inner-container-2">'
         + '<div class="header-row"><h1 class="heading-2"><strong class="headline-1">' + richText(f.title) + '</strong></h1></div>'
         + '<div class="video-container">' + videoEmbed(f.video) + '</div>'
@@ -367,6 +425,11 @@
     if (fromFeed) videos = fromFeed;
     if (!videos.length) return '';
 
+    videos.forEach(function (v, i) {
+      if (v.anchor) ANCHORS[v.anchor] = { type: 'spotlight', index: i };
+    });
+    d.__videos = videos;
+
     return ''
       + '<section id="' + esc(d.id || 'client-spotlights') + '" class="client-spotlights-archive">'
       + '<h3 class="cs-headline">' + richText(d.headline) + '</h3>'
@@ -375,9 +438,9 @@
       + '<div class="main-video-wrapper" id="main-video-container"><iframe id="main-video-iframe" src="" allowfullscreen allow="autoplay; fullscreen"></iframe></div>'
       + '<div style="margin-top:2rem;"><h3 id="video-title"></h3><p id="video-description"></p></div>'
       + '<div class="playlist-carousel">'
-      + '<button class="carousel-nav prev" id="prev-btn" aria-label="Previous"><svg viewBox="0 0 35.8 61.4"><path d="M30.4,5.7L5.4,30.7l25,25"></path></svg></button>'
+      + '<button class="carousel-nav prev" id="prev-btn" aria-label="' + esc(UI.prev || 'Previous') + '"><svg viewBox="0 0 35.8 61.4"><path d="M30.4,5.7L5.4,30.7l25,25"></path></svg></button>'
       + '<div class="carousel-wrapper"><div class="playlist-container" id="playlist-container"></div></div>'
-      + '<button class="carousel-nav next" id="next-btn" aria-label="Next"><svg viewBox="0 0 35.8 61.4"><path d="M5.4,55.7l25-25L5.4,5.7"></path></svg></button>'
+      + '<button class="carousel-nav next" id="next-btn" aria-label="' + esc(UI.next || 'Next') + '"><svg viewBox="0 0 35.8 61.4"><path d="M5.4,55.7l25-25L5.4,5.7"></path></svg></button>'
       + '<div class="carousel-indicators" id="carousel-indicators"></div>'
       + '</div></div>'
       + '<div class="mobile-video-stack" id="mobile-video-stack"></div>'
@@ -389,6 +452,15 @@
   }
 
   var CARD_CONTAINER = { 1: 'income-gen-container', 2: 'mega-trends-container' };
+
+  // The export used a 2-up grid only where the count filled it evenly (4 cards).
+  // Everything else stacked. An odd count or fewer than four falls back to a stack
+  // so no row is left half empty.
+  function cardColumns(b) {
+    if (b.cardColumns) return b.cardColumns;
+    var n = (b.cards || []).length;
+    return (n >= 4 && n % 2 === 0) ? 2 : 1;
+  }
 
   function solLinks(links) {
     return '<div class="ancillary-link-container">'
@@ -405,7 +477,7 @@
   function solBody(b, mobile) {
     var cards = '';
     if (b.cards && b.cards.length) {
-      var cls = CARD_CONTAINER[b.cardColumns || (b.cards.length > 2 ? 2 : 1)] || 'income-gen-container';
+      var cls = CARD_CONTAINER[cardColumns(b)] || 'income-gen-container';
       cards = '<div class="' + cls + '">' + b.cards.map(function (c) {
         var bg = bgAttrs({ image: c.image, overlay: c.overlay || 'linear-gradient(#08062ab3, #08062ab3)', size: 'auto, cover', position: '0 0, 50%' });
         var arrow = function (hover) {
@@ -565,6 +637,22 @@
     });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
 
+    window.__bpCloseFeature = close;
+
+    window.__bpOpenFeature = function (i) {
+      if (i < 0 || i >= cards.length) return;
+      if (window.innerWidth < 992) {
+        var block = document.querySelectorAll('.tl-articles-mobile > div')[i];
+        if (block) block.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      var host = document.querySelector('.tl-module-container');
+      if (host) host.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      stage.classList.remove('is-rest');
+      hover(i);
+      open(i);
+    };
+
     stage.classList.add('is-rest');
     cards[0].classList.add('is-titled');
     stage.addEventListener('mouseenter', function () { stage.classList.remove('is-rest'); }, { once: true });
@@ -691,6 +779,19 @@
       els.more.classList.toggle('expanded', expanded);
     }
 
+    window.__bpSelectSpotlight = function (i) {
+      if (i < 0 || i >= videos.length) return;
+      if (isMobile()) {
+        if (!expanded && i >= INITIAL) toggleMore();
+        var box = els.stack.children[i];
+        if (box) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        load(i);
+        var rail = document.querySelector('.client-spotlights-archive');
+        if (rail) rail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    };
+
     els.prev.onclick = function () { if (offset > 0) { offset--; drawCarousel(); } };
     els.next.onclick = function () { if (offset < maxOffset()) { offset++; drawCarousel(); } };
     els.more.onclick = toggleMore;
@@ -719,6 +820,16 @@
     window.addEventListener('resize', sync);
   }
 
+  function applyFonts() {
+    if (!CFG.fontsHref) return;
+    if (document.querySelector('link[data-bp-fonts]')) return;
+    var l = document.createElement('link');
+    l.rel = 'stylesheet';
+    l.href = CFG.fontsHref;
+    l.setAttribute('data-bp-fonts', '');
+    document.head.appendChild(l);
+  }
+
   function applyMeta(m) {
     if (!m) return;
     if (m.title) document.title = m.title;
@@ -732,7 +843,10 @@
     set('meta[name="twitter:title"]', m.ogTitle || m.title);
     set('meta[name="twitter:description"]', m.description);
     if (m.ogImage) set('meta[property="og:image"]', imgUrl(m.ogImage));
-    if (m.lang) document.documentElement.lang = m.lang;
+    if (m.lang) {
+      document.documentElement.lang = m.lang;
+      document.body.classList.add('lang-' + m.lang.toLowerCase().split('-')[0]);
+    }
   }
 
   var SECTIONS = {
@@ -747,6 +861,8 @@
 
   function render(data, feed) {
     CFG = data.config || {};
+    UI = data.ui || {};
+    applyFonts();
     applyMeta(data.meta);
 
     var order = data.sectionOrder || Object.keys(SECTIONS);
@@ -779,9 +895,11 @@
   }
 
   function afterRender(data) {
+    initVideos();
     initThoughtLeadership();
     initSolutions();
     initClientSpotlights(data);
+    initAnchors();
 
     loadScript('js/vendor/jquery.min.js')
       .then(function () { return loadScript('js/webflow.js'); })
@@ -789,10 +907,42 @@
       .catch(function (e) { console.warn('[blueprint]', e); });
   }
 
+  function goToAnchor(hash) {
+    var slug = String(hash || '').replace(/^#/, '');
+    if (!slug) return false;
+    var target = ANCHORS[slug];
+    if (!target) {
+      // not a registered video anchor -- let it behave as a normal page anchor
+      var el = document.getElementById(slug);
+      if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); return true; }
+      return false;
+    }
+    // Jumping to anything other than a feature closes an open article panel,
+    // otherwise the panel covers whatever the reader just navigated to.
+    if (target.type !== 'feature' && window.__bpCloseFeature) window.__bpCloseFeature();
+    if (target.type === 'feature' && window.__bpOpenFeature) window.__bpOpenFeature(target.index);
+    if (target.type === 'spotlight' && window.__bpSelectSpotlight) window.__bpSelectSpotlight(target.index);
+    return true;
+  }
+
+  function initAnchors() {
+    if (location.hash) setTimeout(function () { goToAnchor(location.hash); }, 400);
+    window.addEventListener('hashchange', function () { goToAnchor(location.hash); });
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var slug = a.getAttribute('href').slice(1);
+      if (!slug || !ANCHORS[slug]) return;
+      e.preventDefault();
+      if (location.hash !== '#' + slug) history.pushState(null, '', '#' + slug);
+      goToAnchor(slug);
+    });
+  }
+
   function fail(msg) {
     var host = document.querySelector('.site-container');
     if (host) {
-      host.innerHTML = '<div class="bp-error"><p>This page could not load its content.</p>'
+      host.innerHTML = '<div class="bp-error"><p>' + esc(UI.loadError || 'This page could not load its content.') + '</p>'
         + '<p style="opacity:.7;font-size:.875rem">' + esc(msg) + '</p></div>';
     }
     document.body.classList.add('bp-ready');
@@ -804,6 +954,7 @@
       .then(function (data) {
         try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch (e) {}
         CFG = data.config || {};
+        UI = data.ui || {};
         return fetchPlaylist().then(function (feed) {
           render(data, feed);
           afterRender(data);

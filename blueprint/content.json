@@ -19,6 +19,13 @@
       "headlineTag": "*"
     }
   },
+  "ui": {
+    "play": "Play video",
+    "close": "Close",
+    "prev": "Previous",
+    "next": "Next",
+    "loadError": "This page could not load its content."
+  },
   "sectionOrder": [
     "hero",
     "thoughtLeadership",
@@ -101,7 +108,8 @@
           "name": "Emily Spurling",
           "role": "Head of Nasdaq Global Indexes, Nasdaq",
           "headshot": "headshot-emily-spurling"
-        }
+        },
+        "anchor": "tl-liquidity-ecosystem"
       },
       {
         "id": "tech-driven-economy",
@@ -123,6 +131,29 @@
           "name": "Aaron Jung",
           "role": "Global ETF Strategy Manager, Mirae Asset Global Investments",
           "headshot": "headshot-aaron-jung"
+        },
+        "anchor": "tl-tech-driven-economy"
+      },
+      {
+        "id": "index-options",
+        "anchor": "tl-index-options",
+        "title": "Nasdaq-100 Index Options",
+        "cardImage": "building-nasdaq-100",
+        "cardNote": "",
+        "video": {
+          "url": "https://cdn.jwplayer.com/players/jeOazJCj-jO5YHc4l.html",
+          "title": "Nasdaq-100 Index Options",
+          "route": "@feature"
+        },
+        "body": [
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore."
+        ],
+        "quote": {
+          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.”",
+          "name": "Placeholder Name",
+          "role": "Placeholder Title, Nasdaq",
+          "headshot": "icon-placeholder.svg"
         }
       }
     ],
@@ -142,32 +173,38 @@
       {
         "jwMedia": "hRuzYana",
         "title": "Goldman Sachs Asset Management",
-        "description": "Discover how Goldman Sachs Asset Management and Nasdaq help investors navigate a crowded ETF market — expanding access to innovation, growth and income through strategies like GPIQ."
+        "description": "Discover how Goldman Sachs Asset Management and Nasdaq help investors navigate a crowded ETF market — expanding access to innovation, growth and income through strategies like GPIQ.",
+        "anchor": "cl-goldman-sachs"
       },
       {
         "jwMedia": "bGVFuVLb",
         "title": "Invesco",
-        "description": "From QQQ to the income-generating QQA, explore how Nasdaq and Invesco have partnered to deliver innovation and access to investors across the globe."
+        "description": "From QQQ to the income-generating QQA, explore how Nasdaq and Invesco have partnered to deliver innovation and access to investors across the globe.",
+        "anchor": "cl-invesco"
       },
       {
         "jwMedia": "f0XSsq0z",
         "title": "CME Group",
-        "description": "Learn how CME Group is democratizing access to the Nasdaq-100 — empowering investors of all types to participate in innovation through cutting-edge futures products."
+        "description": "Learn how CME Group is democratizing access to the Nasdaq-100 — empowering investors of all types to participate in innovation through cutting-edge futures products.",
+        "anchor": "cl-cme"
       },
       {
         "jwMedia": "osx7QYT9",
         "title": "Samsung Asset Management",
-        "description": "Watch how Samsung Asset Management is partnering with Nasdaq to deliver forward-thinking investment solutions that unlock new opportunities for Korean investors."
+        "description": "Watch how Samsung Asset Management is partnering with Nasdaq to deliver forward-thinking investment solutions that unlock new opportunities for Korean investors.",
+        "anchor": "cl-samsung"
       },
       {
         "jwMedia": "X0mQYn16",
         "title": "Amova Asset Management",
-        "description": "Discover how Amova Asset Management is meeting Japan's growing demand for global tech exposure by using Nasdaq indexes to deliver streamlined, currency-hedged access to leading U.S. companies."
+        "description": "Discover how Amova Asset Management is meeting Japan's growing demand for global tech exposure by using Nasdaq indexes to deliver streamlined, currency-hedged access to leading U.S. companies.",
+        "anchor": "cl-amova"
       },
       {
         "jwMedia": "bykA1XjJ",
         "title": "Mirae Asset Global Investments",
-        "description": "Explore how Mirae Asset Global Investments is driving innovation in Korea's investment landscape through its partnership with Nasdaq, offering tech-focused ETFs that turn global trends like AI and semiconductors into accessible opportunities for local investors."
+        "description": "Explore how Mirae Asset Global Investments is driving innovation in Korea's investment landscape through its partnership with Nasdaq, offering tech-focused ETFs that turn global trends like AI and semiconductors into accessible opportunities for local investors.",
+        "anchor": "cl-mirae"
       }
     ]
   },
