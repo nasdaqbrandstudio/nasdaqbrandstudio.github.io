@@ -61,7 +61,7 @@
   "hero": {
     "id": "header",
     "eyebrow": "Nasdaq Global Index Solutions",
-    "headline": "<span class=\"rt-accent\">Blueprint</span> of Tomorrow",
+    "headline": "<span class=\"rt-accent rt-serif\">Blueprint</span> of Tomorrow",
     "intro": "Explore how Nasdaq indexes are shaping the modern economy – igniting innovation, unlocking opportunity, and building the financial infrastructure of the future",
     "scrollLabel": "Scroll to Continue",
     "scrollLottie": "./documents/scroll-arrow-blue.json",

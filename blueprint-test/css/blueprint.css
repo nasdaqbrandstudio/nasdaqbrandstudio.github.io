@@ -1,11 +1,3 @@
-@font-face {
-  font-family: Bitter Variablefont Wght;
-  src: url('../fonts/Bitter-VariableFont_wght.ttf') format("truetype");
-  font-weight: 100 900;
-  font-style: italic;
-  font-display: auto;
-}
-
 :root {
   --white: white;
   --black: black;
@@ -10911,10 +10903,3 @@ figcaption {
 }
 
 
-@font-face {
-  font-family: 'Bitter Variablefont Wght';
-  src: url('../fonts/Bitter-VariableFont_wght.ttf') format('truetype');
-  font-weight: 100 900;
-  font-style: italic;
-  font-display: auto;
-}

@@ -21,7 +21,7 @@
   }
 
   var RT_TAGS = /^(em|strong|b|i|br|sup|sub|u|small|mark)$/i;
-  var RT_SPAN_CLASS = /^rt-(accent|muted|serif|light|nowrap)$/;
+  var RT_SPAN_CLASS = /^rt-(accent|muted|serif|light|nowrap|eyebrow)(\s+rt-(accent|muted|serif|light|nowrap|eyebrow))*$/;
 
   function richText(s) {
     if (s == null) return '';
@@ -394,7 +394,7 @@
     return '<div class="ancillary-link-container">'
       + (links || []).map(function (l) {
           return '<a href="' + esc(l.url) + '" target="_blank" rel="noopener" class="ancillary-link">'
-            + '<div class="link-text">' + (l.eyebrow ? '<span class="rt-accent">' + richText(l.eyebrow) + '</span> ' : '') + richText(l.text) + '</div>'
+            + '<div class="link-text">' + (l.eyebrow ? '<span class="rt-eyebrow">' + richText(l.eyebrow) + '</span> ' : '') + richText(l.text) + '</div>'
             + '<div class="right-click-spacer"><img src="' + esc(chromeUrl('images/arrow-transparent.svg')) + '" loading="lazy" alt="" class="arrow-spacer"></div>'
             + '<div class="right-click-desktop"><img src="' + esc(chromeUrl('images/arrow-dark.svg')) + '" loading="lazy" alt="" class="arrow-right"></div>'
             + '</a>';
