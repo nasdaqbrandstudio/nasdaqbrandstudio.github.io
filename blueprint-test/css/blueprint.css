@@ -1430,7 +1430,7 @@ figcaption {
 
 .call-out {
   background-color: #0000;
-  background-image: linear-gradient(#08062ae6, #08062ae6), url('../images/cityscape-square.webp');
+  background-image: none;
   background-position: 0 0, 50%;
   background-size: auto, cover;
   justify-content: center;
@@ -4264,7 +4264,7 @@ figcaption {
 .b3-s-3 {
   grid-column-gap: 0rem;
   grid-row-gap: 0rem;
-  background-image: linear-gradient(#08062ab3, #08062ab3), url('../images/cityscape-square.webp');
+  background-image: none;
   background-position: 0 0, 50%;
   background-repeat: repeat, no-repeat;
   background-size: auto, cover;
@@ -5707,7 +5707,7 @@ figcaption {
 }
 
 .article-cover {
-  background-image: url('../images/cityscape-square.webp');
+  background-image: none;
   background-position: 0 0;
   background-size: auto;
   width: 100%;
@@ -6025,7 +6025,7 @@ figcaption {
 }
 
 .image-4 {
-  background-image: url('../images/cityscape-square.webp');
+  background-image: none;
   background-position: 35%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -10271,7 +10271,7 @@ figcaption {
   }
 
   .quote-wrap {
-    background-image: linear-gradient(#08062ae6, #08062ae6), url('../images/cityscape-square.webp');
+    background-image: none;
     background-position: 0 0, 50%;
     background-size: auto, cover;
     max-height: none;
@@ -10824,7 +10824,7 @@ figcaption {
   }
 
   .quote-wrap-mobile {
-    background-image: linear-gradient(#08062ae6, #08062ae6), url('../images/cityscape-square.webp');
+    background-image: none;
     background-position: 0 0, 50%;
     background-size: auto, cover;
     max-height: none;

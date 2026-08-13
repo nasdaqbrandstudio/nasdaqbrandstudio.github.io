@@ -85,16 +85,12 @@
   "thoughtLeadership": {
     "id": "thought-leadership",
     "headline": "Nasdaq and its partners are empowering global investors and shaping tomorrow’s markets through index-based solutions.",
-    "cue": "Click to Watch Videos",
+    "railLabel": "Watch every conversation",
     "backgroundImage": "blue-background",
-    "expandedWidth": "65%",
     "features": [
       {
         "id": "liquidity-ecosystem",
         "title": "The Liquidity Ecosystem",
-        "cardImage": "tl-liquidity-ecosystem",
-        "cardVideo": "https://cdn.jwplayer.com/videos/Byz8dwtq-qgCdanU1.mp4",
-        "cardNote": "",
         "video": {
           "jwMedia": "vj8X2VKe",
           "title": "The Liquidity Ecosystem",
@@ -109,14 +105,12 @@
           "role": "Head of Nasdaq Global Indexes, Nasdaq",
           "headshot": "headshot-emily-spurling"
         },
-        "anchor": "tl-liquidity-ecosystem"
+        "anchor": "tl-liquidity-ecosystem",
+        "thumbnail": "tl-liquidity-ecosystem"
       },
       {
         "id": "tech-driven-economy",
         "title": "A Tech-Driven Economy",
-        "cardImage": "tl-tech-economy",
-        "cardVideo": "https://cdn.jwplayer.com/videos/LZEnM35Y-qgCdanU1.mp4",
-        "cardNote": "",
         "video": {
           "jwMedia": "tzNuJWRB",
           "title": "A Tech-Driven Economy",
@@ -132,14 +126,13 @@
           "role": "Global ETF Strategy Manager, Mirae Asset Global Investments",
           "headshot": "headshot-aaron-jung"
         },
-        "anchor": "tl-tech-driven-economy"
+        "anchor": "tl-tech-driven-economy",
+        "thumbnail": "tl-tech-economy"
       },
       {
         "id": "index-options",
         "anchor": "tl-index-options",
         "title": "Nasdaq-100 Index Options",
-        "cardImage": "building-nasdaq-100",
-        "cardNote": "",
         "video": {
           "url": "https://cdn.jwplayer.com/players/jeOazJCj-jO5YHc4l.html",
           "title": "Nasdaq-100 Index Options",
@@ -154,10 +147,11 @@
           "name": "Placeholder Name",
           "role": "Placeholder Title, Nasdaq",
           "headshot": "icon-placeholder.svg"
-        }
+        },
+        "thumbnail": "building-nasdaq-100",
+        "badge": "New"
       }
-    ],
-    "quoteBackground": "cityscape-square"
+    ]
   },
   "clientSpotlights": {
     "id": "client-spotlights",

@@ -140,7 +140,8 @@
     var poster = jwPoster(v, 1280);
     return '<div class="bp-video ' + (extraClass || '') + '" data-video="' + esc(src) + '"'
       + ' role="button" tabindex="0" aria-label="' + esc(UI.play || 'Play') + (v.title ? ': ' + esc(v.title) : '') + '">'
-      + (poster ? '<img class="bp-video-poster" src="' + esc(poster) + '" alt="" loading="lazy">' : '')
+      + (poster ? '<img class="bp-video-poster" src="' + esc(poster) + '" alt="" loading="lazy"'
+          + ' onerror="this.style.display=\'none\'">' : '')
       + '<span class="bp-video-play" aria-hidden="true">'
       + '<img src="' + esc(chromeUrl('images/play-button.svg')) + '" alt="">'
       + '</span></div>';
@@ -323,20 +324,18 @@
       + '</header>'
       + '<div class="hero-container"><div id="hero-video" class="hero-embed-body">' + videoEmbed(v) + '</div></div>';
   }
-
-  function tlQuote(q, bg, mobile) {
-    if (!q) return '';
-    var head = '<div class="headshot-container' + (mobile ? '-mobile' : '') + '">'
-      + '<div class="bp-headshot" ' + bgAttrs({ image: q.headshot }) + '></div>'
-      + '<div class="name-container"><div class="name">' + esc(q.name) + '</div>'
-      + '<div class="title">' + esc(q.role) + '</div></div></div>';
-    var body = '<div class="quote-outer-container' + (mobile ? '-mobile' : '') + '"><div class="quote-center-container">'
-      + '<div class="quote-container"><img src="' + esc(chromeUrl('images/quote_white.svg')) + '" loading="lazy" alt="" class="quote">'
-      + '<p class="paragraph-light">' + richText(q.text) + '</p></div></div></div>';
-    return '<div class="quote-wrap' + (mobile ? '-mobile' : '') + '" ' + bgAttrs({ image: bg, overlay: 'linear-gradient(#08062ae6, #08062ae6)', size: 'auto, cover', position: '0 0, 50%' }) + '>'
-      + '<div class="call-out-container' + (mobile ? '-mobile' : '') + '">'
-      + (mobile ? body + head : head + body)
-      + '</div></div>';
+  function epsQuote(q) {
+    if (!q || !q.text) return '';
+    return '<div class="bp-eps-quote">'
+      + '<img class="quote" src="' + esc(chromeUrl('images/quote_white.svg')) + '" loading="lazy" alt="">'
+      + '<p class="paragraph-light">' + richText(q.text) + '</p>'
+      + (q.name
+          ? '<div class="bp-eps-attrib">'
+            + (q.headshot ? '<div class="bp-headshot" ' + bgAttrs({ image: q.headshot }) + '></div>' : '')
+            + '<div class="name-container"><div class="name">' + esc(q.name) + '</div>'
+            + (q.role ? '<div class="title">' + esc(q.role) + '</div>' : '') + '</div></div>'
+          : '')
+      + '</div>';
   }
 
   function renderThoughtLeadership(d, feed) {
@@ -355,67 +354,58 @@
       if (f.anchor) ANCHORS[f.anchor] = { type: 'feature', index: i };
     });
 
-    var mobile = features.map(function (f, i) {
-      return '<div class="' + (i === 0 ? 'tl-article-1-mobile' : 'tl-article-2-mobile') + '"'
-        + (f.anchor ? ' id="' + esc(f.anchor) + '-mobile"' : '')
-        + (i === 0 ? ' data-first-mobile' : '') + '>'
-        + '<h3 class="tl-headline">' + richText(f.title) + '</h3>'
-        + '<div class="thought-leadership-video">' + videoEmbed(f.video) + '</div>'
-        + '<div class="tl-video-text">'
-        + (f.body || []).map(function (p) { return '<p class="tl-intro">' + richText(p) + '</p>'; }).join('')
-        + '</div>'
-        + tlQuote(f.quote, d.quoteBackground, true)
+    var thumbs = features.map(function (f, i) {
+      var img = f.thumbnail || f.cardImage;
+      var src = img ? imgUrl(img) : jwPoster(f.video, 640);
+      return '<button type="button" class="bp-eps-thumb' + (i === 0 ? ' is-active' : '') + '"'
+        + ' role="tab" aria-selected="' + (i === 0 ? 'true' : 'false') + '" data-eps="' + i + '"'
+        + (f.anchor ? ' data-anchor="' + esc(f.anchor) + '"' : '') + '>'
+        + '<span class="bp-eps-thumb-media">'
+        + (src ? '<img src="' + esc(src) + '" alt="" loading="lazy">' : '')
+        + (f.badge ? '<span class="bp-eps-badge">' + esc(f.badge) + '</span>' : '')
+        + '</span>'
+        + '<span class="bp-eps-thumb-title">' + richText(f.title) + '</span>'
+        + '</button>';
+    }).join('');
+
+    var panels = features.map(function (f, i) {
+      var body = (f.body || []).map(function (p) {
+        return '<p class="bp-eps-para">' + richText(p) + '</p>';
+      }).join('');
+      return '<div class="bp-eps-panel' + (i === 0 ? ' is-active" ' : '" ')
+        + (f.anchor ? 'id="' + esc(f.anchor) + '" ' : '')
+        + 'data-eps-panel="' + i + '" role="tabpanel">'
+        + '<div class="bp-eps-video">' + videoEmbed(f.video) + '</div>'
+        + '<aside class="bp-eps-info">'
+        + '<h3 class="bp-eps-title">' + richText(f.title) + '</h3>'
+        + (body ? '<div class="bp-eps-body">' + body + '</div>' : '')
+        + epsQuote(f.quote)
+        + '</aside>'
         + '</div>';
     }).join('');
 
-    var cards = features.map(function (f, i) {
-      var media = f.cardVideo
-        ? '<div class="card-video w-embed"><video autoplay muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;">'
-          + '<source src="' + esc(f.cardVideo) + '" type="video/mp4"></video></div>'
-        : '';
-      return '<div class="tl-card" data-tl-index="' + i + '"'
-        + (f.anchor ? ' data-anchor="' + esc(f.anchor) + '"' : '')
-        + ' role="button" tabindex="0" aria-label="' + esc(f.title) + '">'
-        + '<div class="image-overlay"></div>'
-        + '<div class="card-inner"><div class="card-details-wrapper">'
-        + (f.cardNote ? '<div class="title-wrapper"><div class="highlights">' + richText(f.cardNote) + '</div></div>' : '')
-        + '<h2 class="main-heading"><strong>' + richText(f.title) + '</strong></h2>'
-        + '</div></div>'
-        + '<div class="image-wrapper">' + media
-        + '<div class="tl-card-image" ' + bgAttrs({ image: f.cardImage, size: 'cover', position: '50%' }) + '></div>'
-        + '</div></div>';
-    }).join('');
-
-    var articles = features.map(function (f, i) {
-      return '<div class="tl-article" data-tl-article="' + i + '"'
-        + (f.anchor ? ' id="' + esc(f.anchor) + '"' : '') + '>'
-        + '<a href="#" class="button-close" aria-label="' + esc(UI.close || 'Close') + '">✕</a>'
-        + '<div class="container-article"><div class="inner-container-2">'
-        + '<div class="header-row"><h1 class="heading-2"><strong class="headline-1">' + richText(f.title) + '</strong></h1></div>'
-        + '<div class="video-container">' + videoEmbed(f.video) + '</div>'
-        + (f.body || []).map(function (p, n) {
-            return '<p class="' + (n === 0 ? 'first-line' : 'paragraph-3') + '">' + richText(p) + '</p>';
-          }).join('')
-        + '<div class="divider-div"></div>'
-        + tlQuote(f.quote, d.quoteBackground, false)
-        + '</div></div></div>';
-    }).join('');
+    var arrows = features.length > 1
+      ? '<div class="bp-eps-nav">'
+        + '<button type="button" class="bp-eps-arrow prev" aria-label="' + esc(UI.prev || 'Previous') + '">'
+        + '<svg viewBox="0 0 35.8 61.4" aria-hidden="true"><path d="M30.4,5.7L5.4,30.7l25,25"></path></svg></button>'
+        + '<button type="button" class="bp-eps-arrow next" aria-label="' + esc(UI.next || 'Next') + '">'
+        + '<svg viewBox="0 0 35.8 61.4" aria-hidden="true"><path d="M5.4,55.7l25-25L5.4,5.7"></path></svg></button>'
+        + '</div>'
+      : '';
 
     return ''
-      + '<header id="' + esc(d.id || 'thought-leadership') + '" class="tl-container">'
-      + '<div class="tl-articles-mobile">' + mobile + '</div>'
-      + '<div class="tl-module-container">'
-      + '<div class="headline-container-2">'
-      + '<div class="headline-2">' + richText(d.headline) + '</div>'
-      + (d.cue ? '<div class="text-block-15">' + esc(d.cue) + '</div>' : '')
+      + '<header id="' + esc(d.id || 'thought-leadership') + '" class="tl-container bp-eps">'
+      + '<div class="bp-eps-inner">'
+      + (d.headline ? '<p class="bp-eps-headline">' + richText(d.headline) + '</p>' : '')
+      + '<div class="bp-eps-railhead">'
+      + '<span class="bp-eps-eyebrow">' + esc(d.railLabel || d.cue || '') + '</span>'
+      + arrows
       + '</div>'
-      + '<div class="portraits-container"><div class="section-2" style="--tl-count:' + features.length
-      + ';--tl-expanded:' + esc(d.expandedWidth || '65%') + '">'
-      + '<div class="section-content tl-panel">' + articles + '</div>'
-      + cards
-      + '</div></div>'
+      + '<div class="bp-eps-rail" role="tablist">' + thumbs + '</div>'
+      + '<div class="bp-eps-detail">' + panels + '</div>'
+      + '</div>'
       + '<div class="background-image-2" ' + bgAttrs({ image: d.backgroundImage }) + '></div>'
-      + '</div></header>';
+      + '</header>';
   }
 
   function renderClientSpotlights(d, feed) {
@@ -593,69 +583,76 @@
       + '<div class="copyright-inline-2">' + esc(String(d.copyright || '').replace('{year}', year)) + '</div>'
       + '</div></div></section></footer>';
   }
-
   function initThoughtLeadership() {
-    var stage = document.querySelector('.section-2');
-    if (!stage) return;
-    var cards = Array.prototype.slice.call(stage.querySelectorAll('.tl-card'));
-    var panel = stage.querySelector('.tl-panel');
-    var articles = Array.prototype.slice.call(stage.querySelectorAll('.tl-article'));
-    if (!cards.length) return;
+    var root = document.querySelector('.bp-eps');
+    if (!root) return;
+    var thumbs = Array.prototype.slice.call(root.querySelectorAll('.bp-eps-thumb'));
+    var panels = Array.prototype.slice.call(root.querySelectorAll('.bp-eps-panel'));
+    var rail = root.querySelector('.bp-eps-rail');
+    if (!thumbs.length) return;
 
-    if (cards.length === 1) stage.classList.add('no-hover');
+    var current = 0;
 
-    var moduleEl = stage.closest('.tl-module-container');
-    function hover(i) {
-      cards.forEach(function (c, n) { c.classList.toggle('is-hovered', n === i); });
-      if (moduleEl) moduleEl.classList.toggle('is-active', i >= 0);
-    }
-    function open(i) {
-      stage.classList.add('is-open');
-      articles.forEach(function (a, n) { a.classList.toggle('is-active', n === i); });
-      panel.classList.add('is-open');
-      panel.scrollTop = 0;
-      document.body.classList.add('bp-panel-open');
-    }
-    function close() {
-      stage.classList.remove('is-open');
-      panel.classList.remove('is-open');
-      document.body.classList.remove('bp-panel-open');
+    function select(i, scrollRail) {
+      if (i < 0 || i >= thumbs.length) return;
+      current = i;
+      unmountVideo();
+      thumbs.forEach(function (t, n) {
+        var on = n === i;
+        t.classList.toggle('is-active', on);
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      panels.forEach(function (p, n) { p.classList.toggle('is-active', n === i); });
+      if (scrollRail !== false && rail) {
+        var t = thumbs[i];
+        var left = t.offsetLeft - (rail.clientWidth - t.offsetWidth) / 2;
+        rail.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+      }
     }
 
-    cards.forEach(function (c, i) {
-      c.addEventListener('mouseenter', function () { hover(i); });
-      c.addEventListener('focus', function () { hover(i); });
-      c.addEventListener('click', function () { open(i); });
-      c.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(i); }
+    thumbs.forEach(function (t, i) {
+      t.addEventListener('click', function () {
+        select(i);
+        var slug = t.getAttribute('data-anchor');
+        if (slug && location.hash !== '#' + slug) history.replaceState(null, '', '#' + slug);
       });
     });
-    stage.addEventListener('mouseleave', function () { hover(-1); });
-    panel.addEventListener('click', function (e) {
-      var btn = e.target.closest('.button-close');
-      if (btn) { e.preventDefault(); close(); }
-    });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
 
-    window.__bpCloseFeature = close;
+    rail.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      var next = current + (e.key === 'ArrowRight' ? 1 : -1);
+      if (next < 0 || next >= thumbs.length) return;
+      select(next);
+      thumbs[next].focus();
+    });
+
+    var prev = root.querySelector('.bp-eps-arrow.prev');
+    var next = root.querySelector('.bp-eps-arrow.next');
+
+    function pageRail(dir) {
+      if (!rail) return;
+      rail.scrollBy({ left: dir * Math.round(rail.clientWidth * 0.8), behavior: 'smooth' });
+    }
+    function syncArrows() {
+      if (!prev || !next || !rail) return;
+      var max = rail.scrollWidth - rail.clientWidth - 1;
+      prev.disabled = rail.scrollLeft <= 0;
+      next.disabled = rail.scrollLeft >= max;
+    }
+    if (prev) prev.addEventListener('click', function () { pageRail(-1); });
+    if (next) next.addEventListener('click', function () { pageRail(1); });
+    if (rail) {
+      rail.addEventListener('scroll', syncArrows, { passive: true });
+      window.addEventListener('resize', syncArrows);
+      syncArrows();
+    }
 
     window.__bpOpenFeature = function (i) {
-      if (i < 0 || i >= cards.length) return;
-      if (window.innerWidth < 992) {
-        var block = document.querySelectorAll('.tl-articles-mobile > div')[i];
-        if (block) block.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        return;
-      }
-      var host = document.querySelector('.tl-module-container');
-      if (host) host.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      stage.classList.remove('is-rest');
-      hover(i);
-      open(i);
+      select(i);
+      root.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
-
-    stage.classList.add('is-rest');
-    cards[0].classList.add('is-titled');
-    stage.addEventListener('mouseenter', function () { stage.classList.remove('is-rest'); }, { once: true });
+    window.__bpCloseFeature = function () {};
   }
 
   function initSolutions() {
