@@ -8,6 +8,12 @@
     return q || window.BLUEPRINT_CONTENT_URL || (meta && meta.content) || 'content.json';
   })();
 
+  var SECTION_OVERRIDE = (function () {
+    var meta = document.querySelector('meta[name="blueprint-sections"]');
+    var raw = (meta && meta.content) || window.BLUEPRINT_SECTIONS || '';
+    return raw ? String(raw).split(',').map(function (s) { return s.trim(); }).filter(Boolean) : null;
+  })();
+
   var CONTENT_BASE = (function () {
     try { return new URL(CONTENT_URL, document.baseURI).href; } catch (e) { return document.baseURI; }
   })();
@@ -407,12 +413,11 @@
       + '<div class="background-image-2" ' + bgAttrs({ image: d.backgroundImage }) + '></div>'
       + '</header>';
   }
-
-  // ---------------------------------------------------------------- Video hub
-  // One module for every video on the page. Sources are pulled from the
-  // sections that already hold them, so nothing is duplicated in the JSON --
-  // a filter just points at `thoughtLeadership` or `clientSpotlights`.
-  function hubItems(d, data, feed) {
+  // ------------------------------------------------------------ Video library
+  // Winning Formula pattern: one featured player, filter pills, and a grid of
+  // every video. Sources are read from the sections that already hold them, so
+  // no video data is duplicated in the JSON.
+  function libraryItems(d, data, feed) {
     var out = [];
     (d.filters || []).forEach(function (f) {
       var src = data[f.from];
@@ -423,8 +428,7 @@
       list.forEach(function (v) {
         out.push({
           title: v.title,
-          body: v.body || (v.description ? [v.description] : []),
-          quote: v.quote,
+          description: (v.body && v.body[0]) || v.description || '',
           thumbnail: v.thumbnail || v.cardImage,
           video: v.video || v,
           anchor: v.anchor,
@@ -437,22 +441,34 @@
     return out;
   }
 
-  function renderVideoHub(d, feed, data) {
+  function renderVideoLibrary(d, feed, data) {
     if (!d) return '';
-    var items = hubItems(d, data, feed);
+    var items = libraryItems(d, data, feed);
     if (!items.length) return '';
 
     items.forEach(function (v, i) {
-      if (v.anchor) ANCHORS[v.anchor] = { type: 'hub', index: i };
+      if (v.anchor) ANCHORS[v.anchor] = { type: 'library', index: i };
     });
+
+    var featured = items.map(function (v, i) {
+      return '<div class="bp-lib-feature' + (i === 0 ? ' is-active" ' : '" ')
+        + (v.anchor ? 'id="' + esc(v.anchor) + '" ' : '')
+        + 'data-lib-feature="' + i + '">'
+        + videoEmbed(v.video)
+        + '<div class="bp-lib-meta">'
+        + (v.filterLabel ? '<span class="bp-lib-tag">' + esc(v.filterLabel) + '</span>' : '')
+        + '<h4 class="bp-lib-title">' + richText(v.title) + '</h4>'
+        + (v.description ? '<p class="bp-lib-desc">' + richText(v.description) + '</p>' : '')
+        + '</div></div>';
+    }).join('');
 
     var pills = '';
     if (d.showFilters !== false && (d.filters || []).length > 1) {
-      pills = '<div class="bp-hub-filters" role="tablist">'
-        + '<button type="button" class="bp-hub-pill is-active" data-filter="all">'
+      pills = '<div class="bp-lib-filters">'
+        + '<button type="button" class="bp-lib-pill is-active" data-filter="all">'
         + esc(d.allLabel || 'All') + '</button>'
         + (d.filters || []).map(function (f) {
-            return '<button type="button" class="bp-hub-pill" data-filter="' + esc(f.id) + '">'
+            return '<button type="button" class="bp-lib-pill" data-filter="' + esc(f.id) + '">'
               + esc(f.label) + '</button>';
           }).join('')
         + '</div>';
@@ -460,93 +476,80 @@
 
     var grid = items.map(function (v, i) {
       var img = v.thumbnail ? imgUrl(v.thumbnail) : jwPoster(v.video, 640);
-      return '<button type="button" class="bp-hub-thumb' + (i === 0 ? ' is-active' : '') + '"'
-        + ' data-hub="' + i + '" data-filter="' + esc(v.filterId) + '"'
+      return '<button type="button" class="bp-lib-card' + (i === 0 ? ' is-active' : '') + '"'
+        + ' data-lib="' + i + '" data-filter="' + esc(v.filterId) + '"'
         + (v.anchor ? ' data-anchor="' + esc(v.anchor) + '"' : '') + '>'
-        + '<span class="bp-hub-thumb-media">'
+        + '<span class="bp-lib-card-media">'
         + (img ? '<img src="' + esc(img) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '')
+        + '<span class="bp-lib-card-play"><img src="' + esc(chromeUrl('images/play-button.svg')) + '" alt=""></span>'
         + (v.badge ? '<span class="bp-eps-badge">' + esc(v.badge) + '</span>' : '')
         + '</span>'
-        + '<span class="bp-hub-thumb-meta">'
-        + '<span class="bp-hub-thumb-tag">' + esc(v.filterLabel || '') + '</span>'
-        + '<span class="bp-hub-thumb-title">' + richText(v.title) + '</span>'
-        + '</span></button>';
-    }).join('');
-
-    var panels = items.map(function (v, i) {
-      var body = (v.body || []).map(function (t) {
-        return '<p class="bp-eps-para">' + richText(t) + '</p>';
-      }).join('');
-      return '<div class="bp-eps-panel' + (i === 0 ? ' is-active" ' : '" ')
-        + (v.anchor ? 'id="' + esc(v.anchor) + '" ' : '')
-        + 'data-hub-panel="' + i + '">'
-        + '<div class="bp-eps-video">' + videoEmbed(v.video) + '</div>'
-        + '<aside class="bp-eps-info">'
-        + '<span class="bp-hub-thumb-tag">' + esc(v.filterLabel || '') + '</span>'
-        + '<h3 class="bp-eps-title">' + richText(v.title) + '</h3>'
-        + (body ? '<div class="bp-eps-body">' + body + '</div>' : '')
-        + epsQuote(v.quote)
-        + '</aside></div>';
+        + '<span class="bp-lib-card-tag">' + esc(v.filterLabel || '') + '</span>'
+        + '<span class="bp-lib-card-title">' + richText(v.title) + '</span>'
+        + '</button>';
     }).join('');
 
     return ''
-      + '<section id="' + esc(d.id || 'videos') + '" class="bp-eps bp-hub">'
-      + '<div class="bp-eps-inner">'
+      + '<section id="' + esc(d.id || 'videos') + '" class="bp-lib">'
+      + '<div class="bp-lib-inner">'
       + (d.headline ? '<h3 class="cs-headline">' + richText(d.headline) + '</h3>' : '')
-      + (d.intro ? '<p class="bp-eps-headline">' + richText(d.intro) + '</p>' : '')
-      + '<div class="bp-eps-detail">' + panels + '</div>'
-      + (d.railLabel ? '<div class="bp-eps-railhead"><span class="bp-eps-eyebrow">' + esc(d.railLabel) + '</span></div>' : '')
+      + (d.intro ? '<p class="bp-lib-intro">' + richText(d.intro) + '</p>' : '')
+      + '<div class="bp-lib-stage">' + featured + '</div>'
+      + (d.railLabel ? '<div class="bp-lib-railhead"><span class="bp-eps-eyebrow">' + esc(d.railLabel) + '</span></div>' : '')
       + pills
-      + '<div class="bp-hub-grid">' + grid + '</div>'
+      + '<div class="bp-lib-grid">' + grid + '</div>'
       + '</div>'
       + '<div class="background-image-2" ' + bgAttrs({ image: d.backgroundImage }) + '></div>'
       + '</section>';
   }
 
-  function initVideoHub() {
-    var root = document.querySelector('.bp-hub');
+  function initVideoLibrary() {
+    var root = document.querySelector('.bp-lib');
     if (!root) return;
-    var thumbs = Array.prototype.slice.call(root.querySelectorAll('.bp-hub-thumb'));
-    var panels = Array.prototype.slice.call(root.querySelectorAll('.bp-eps-panel'));
-    var pills = Array.prototype.slice.call(root.querySelectorAll('.bp-hub-pill'));
-    if (!thumbs.length) return;
+    var cards = Array.prototype.slice.call(root.querySelectorAll('.bp-lib-card'));
+    var features = Array.prototype.slice.call(root.querySelectorAll('.bp-lib-feature'));
+    var pills = Array.prototype.slice.call(root.querySelectorAll('.bp-lib-pill'));
+    var stage = root.querySelector('.bp-lib-stage');
+    if (!cards.length) return;
 
-    function select(i) {
-      if (i < 0 || i >= thumbs.length) return;
+    function select(i, play) {
+      if (i < 0 || i >= cards.length) return;
       unmountVideo();
-      thumbs.forEach(function (t, n) { t.classList.toggle('is-active', n === i); });
-      panels.forEach(function (p, n) { p.classList.toggle('is-active', n === i); });
+      cards.forEach(function (c, n) { c.classList.toggle('is-active', n === i); });
+      features.forEach(function (f, n) { f.classList.toggle('is-active', n === i); });
+      if (play) {
+        var box = features[i].querySelector('.bp-video');
+        if (box) mountVideo(box);
+      }
     }
 
     function filter(id) {
       pills.forEach(function (b) { b.classList.toggle('is-active', b.getAttribute('data-filter') === id); });
-      thumbs.forEach(function (t) {
-        var on = id === 'all' || t.getAttribute('data-filter') === id;
-        t.hidden = !on;
+      cards.forEach(function (c) {
+        c.hidden = !(id === 'all' || c.getAttribute('data-filter') === id);
       });
-      // keep a visible item selected
-      var active = thumbs.filter(function (t) { return t.classList.contains('is-active'); })[0];
+      var active = cards.filter(function (c) { return c.classList.contains('is-active'); })[0];
       if (active && active.hidden) {
-        var first = thumbs.filter(function (t) { return !t.hidden; })[0];
-        if (first) select(thumbs.indexOf(first));
+        var first = cards.filter(function (c) { return !c.hidden; })[0];
+        if (first) select(cards.indexOf(first));
       }
     }
 
-    thumbs.forEach(function (t, i) {
-      t.addEventListener('click', function () {
-        select(i);
-        var slug = t.getAttribute('data-anchor');
+    cards.forEach(function (c, i) {
+      c.addEventListener('click', function () {
+        select(i, true);
+        var slug = c.getAttribute('data-anchor');
         if (slug && location.hash !== '#' + slug) history.replaceState(null, '', '#' + slug);
-        root.querySelector('.bp-eps-detail').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (stage) stage.scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
     });
     pills.forEach(function (b) {
       b.addEventListener('click', function () { filter(b.getAttribute('data-filter')); });
     });
 
-    window.__bpSelectHub = function (i) {
-      var t = thumbs[i];
-      if (t && t.hidden) filter('all');
+    window.__bpSelectLibrary = function (i) {
+      var c = cards[i];
+      if (c && c.hidden) filter('all');
       select(i);
       root.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
@@ -993,13 +996,13 @@
   var SECTIONS = {
     hero: renderHero,
     thoughtLeadership: renderThoughtLeadership,
-    videoHub: renderVideoHub,
+    videoLibrary: renderVideoLibrary,
     clientSpotlights: renderClientSpotlights,
     solutions: renderSolutions,
     cityscape: renderCityscape
   };
 
-  var INNER = { thoughtLeadership: 1, videoHub: 1, clientSpotlights: 1, solutions: 1, cityscape: 1 };
+  var INNER = { thoughtLeadership: 1, videoLibrary: 1, clientSpotlights: 1, solutions: 1, cityscape: 1 };
 
   function render(data, feed) {
     CFG = data.config || {};
@@ -1007,7 +1010,7 @@
     applyFonts();
     applyMeta(data.meta);
 
-    var order = data.sectionOrder || Object.keys(SECTIONS);
+    var order = SECTION_OVERRIDE || data.sectionOrder || Object.keys(SECTIONS);
     var top = '', inner = '';
     order.forEach(function (key) {
       var fn = SECTIONS[key];
@@ -1024,6 +1027,12 @@
       + renderFooter(data.footer)
       + '</main>';
 
+    Array.prototype.slice.call(document.querySelectorAll('.sections .nav-item, .mobile-nav-menu .mnav-item'))
+      .forEach(function (a) {
+        var slug = (a.getAttribute('href') || '').replace(/^#/, '');
+        if (slug && slug !== 'home' && !document.getElementById(slug) && !ANCHORS[slug]) a.remove();
+      });
+
     document.body.classList.add('bp-ready');
   }
 
@@ -1039,7 +1048,7 @@
   function afterRender(data) {
     initVideos();
     initThoughtLeadership();
-    initVideoHub();
+    initVideoLibrary();
     initSolutions();
     initClientSpotlights(data);
     initAnchors();
@@ -1065,7 +1074,7 @@
     if (target.type !== 'feature' && window.__bpCloseFeature) window.__bpCloseFeature();
     if (target.type === 'feature' && window.__bpOpenFeature) window.__bpOpenFeature(target.index);
     if (target.type === 'spotlight' && window.__bpSelectSpotlight) window.__bpSelectSpotlight(target.index);
-    if (target.type === 'hub' && window.__bpSelectHub) window.__bpSelectHub(target.index);
+    if (target.type === 'library' && window.__bpSelectLibrary) window.__bpSelectLibrary(target.index);
     return true;
   }
 
@@ -1089,6 +1098,12 @@
       host.innerHTML = '<div class="bp-error"><p>' + esc(UI.loadError || 'This page could not load its content.') + '</p>'
         + '<p style="opacity:.7;font-size:.875rem">' + esc(msg) + '</p></div>';
     }
+    Array.prototype.slice.call(document.querySelectorAll('.sections .nav-item, .mobile-nav-menu .mnav-item'))
+      .forEach(function (a) {
+        var slug = (a.getAttribute('href') || '').replace(/^#/, '');
+        if (slug && slug !== 'home' && !document.getElementById(slug) && !ANCHORS[slug]) a.remove();
+      });
+
     document.body.classList.add('bp-ready');
   }
 

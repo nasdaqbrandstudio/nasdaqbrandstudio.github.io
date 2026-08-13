@@ -758,18 +758,68 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
 }
 
 /* ==========================================================================
-   Video hub — every video in one filterable module
+   Video library — featured player, filters, full grid
    ========================================================================== */
-.bp-hub .cs-headline { width: 100%; margin-bottom: 1.5rem; }
-.bp-hub .bp-eps-headline { margin-bottom: 3rem; }
+.bp-lib {
+  position: relative;
+  width: 100%;
+  padding: 8rem 4rem;
+  overflow: hidden;
+}
+.bp-lib-inner { position: relative; z-index: 2; width: 80%; margin: 0 auto; }
+.bp-lib .cs-headline { width: 100%; margin-bottom: 1.25rem; }
+.bp-lib-intro {
+  color: #fff;
+  text-align: center;
+  font-size: 1.125rem;
+  font-weight: 200;
+  line-height: 1.5rem;
+  max-width: 48rem;
+  margin: 0 auto 3.5rem;
+}
 
-.bp-hub-filters {
+.bp-lib-stage { margin-bottom: 4rem; }
+.bp-lib-feature { display: none; }
+.bp-lib-feature.is-active { display: block; }
+.bp-lib-meta {
+  text-align: center;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  align-items: center;
+}
+.bp-lib-tag {
+  color: #0092bc;
+  text-transform: uppercase;
+  letter-spacing: .25rem;
+  font-size: .75rem;
+  font-weight: 600;
+}
+.bp-lib-title {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 2.5rem;
+  margin: 0;
+}
+.bp-lib-desc {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 200;
+  line-height: 1.375rem;
+  max-width: 44rem;
+  margin: 0;
+}
+
+.bp-lib-railhead { margin-bottom: 1.25rem; }
+.bp-lib-filters {
   display: flex;
   flex-wrap: wrap;
   gap: .75rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
-.bp-hub-pill {
+.bp-lib-pill {
   background: none;
   border: 1.5px solid #0092bc;
   border-radius: 2rem;
@@ -782,17 +832,16 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
   cursor: pointer;
   transition: background-color .25s ease, color .25s ease;
 }
-.bp-hub-pill:hover { background-color: #0092bc33; }
-.bp-hub-pill.is-active { background-color: #0092bc; color: #08062a; }
-.bp-hub-pill:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.bp-lib-pill:hover { background-color: #0092bc33; }
+.bp-lib-pill.is-active { background-color: #0092bc; color: #08062a; }
+.bp-lib-pill:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
-/* auto-fit means three items span the row evenly and nine wrap tidily */
-.bp-hub-grid {
+.bp-lib-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: 2rem 1.5rem;
+  gap: 2.5rem 1.5rem;
 }
-.bp-hub-thumb {
+.bp-lib-card {
   background: none;
   border: 0;
   padding: 0;
@@ -800,10 +849,10 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: .75rem;
+  gap: .5rem;
 }
-.bp-hub-thumb[hidden] { display: none; }
-.bp-hub-thumb-media {
+.bp-lib-card[hidden] { display: none; }
+.bp-lib-card-media {
   position: relative;
   width: 100%;
   padding-bottom: 56.25%;
@@ -811,44 +860,68 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
   overflow: hidden;
   border: 2px solid transparent;
   background: #08062a;
+  margin-bottom: .25rem;
   transition: border-color .25s ease, transform .25s ease;
 }
-.bp-hub-thumb-media img {
+.bp-lib-card-media img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: .6;
+  opacity: .7;
   transition: opacity .25s ease;
 }
-.bp-hub-thumb:hover .bp-hub-thumb-media { transform: translateY(-2px); }
-.bp-hub-thumb:hover .bp-hub-thumb-media img { opacity: .85; }
-.bp-hub-thumb.is-active .bp-hub-thumb-media { border-color: #0092bc; }
-.bp-hub-thumb.is-active .bp-hub-thumb-media img { opacity: 1; }
-.bp-hub-thumb:focus-visible .bp-hub-thumb-media { outline: 2px solid #0092bc; outline-offset: 3px; }
-.bp-hub-thumb-meta { display: flex; flex-direction: column; gap: .35rem; }
-.bp-hub-thumb-tag {
+.bp-lib-card-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.bp-lib-card-play::before {
+  content: '';
+  position: absolute;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: rgba(0, 146, 188, .85);
+}
+.bp-lib-card-play img { position: relative; width: .875rem; height: auto; }
+.bp-lib-card:hover .bp-lib-card-media { transform: translateY(-3px); }
+.bp-lib-card:hover .bp-lib-card-media img { opacity: 1; }
+.bp-lib-card:hover .bp-lib-card-play { opacity: 1; }
+.bp-lib-card.is-active .bp-lib-card-media { border-color: #0092bc; }
+.bp-lib-card.is-active .bp-lib-card-media img { opacity: 1; }
+.bp-lib-card:focus-visible .bp-lib-card-media { outline: 2px solid #0092bc; outline-offset: 3px; }
+.bp-lib-card-tag {
   color: #0092bc;
   text-transform: uppercase;
   letter-spacing: .15rem;
   font-size: .6875rem;
   font-weight: 600;
 }
-.bp-hub-thumb-title {
+.bp-lib-card-title {
   color: #9e9e9e;
   font-size: 1rem;
   font-weight: 300;
   line-height: 1.25rem;
   transition: color .25s ease;
 }
-.bp-hub-thumb.is-active .bp-hub-thumb-title,
-.bp-hub-thumb:hover .bp-hub-thumb-title { color: #fff; }
-.bp-eps-info .bp-hub-thumb-tag { margin-bottom: -.5rem; }
+.bp-lib-card.is-active .bp-lib-card-title,
+.bp-lib-card:hover .bp-lib-card-title { color: #fff; }
 
+@media screen and (max-width: 991px) {
+  .bp-lib { padding: 6rem 3rem; }
+  .bp-lib-inner { width: 100%; }
+  .bp-lib-title { font-size: 1.5rem; line-height: 2rem; }
+}
 @media screen and (max-width: 767px) {
-  .bp-hub-grid { grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 1.5rem 1rem; }
+  .bp-lib { padding: 4rem 2rem; }
+  .bp-lib-grid { grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 2rem 1rem; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .bp-hub-thumb-media, .bp-hub-thumb-title, .bp-hub-pill { transition: none; }
+  .bp-lib-card-media, .bp-lib-card-title, .bp-lib-card-play, .bp-lib-pill { transition: none; }
 }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Nasdaq Global Index Solutions | Blueprint of Tomorrow</title>
+  <meta name="description" content="">
+  <meta property="og:title" content="">
+  <meta property="og:description" content="">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="">
+  <meta name="twitter:description" content="">
+  <meta property="og:image" content="">
+
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+  <link rel="apple-touch-icon" href="images/webclip.png">
+
+  <meta name="blueprint-content" content="https://nasdaqbrandstudio.github.io/blueprint/content.json">
+  <meta name="blueprint-sections" content="hero, videoLibrary, solutions, cityscape">
+
+  <link rel="preconnect" href="https://cdn.jwplayer.com">
+
+  <link href="css/normalize.css" rel="stylesheet" type="text/css">
+  <link href="css/components.css" rel="stylesheet" type="text/css">
+  <link href="css/blueprint.css" rel="stylesheet" type="text/css">
+  <link href="css/vendor/swiper-bundle.min.css" rel="stylesheet">
+
+  <link href="css/overrides.css" rel="stylesheet" type="text/css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Bitter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+  <style>
+    /* Hero embeds fade in on their own; GSAP only sharpens the timing. */
+    .hero-container, .hero-container-mobile, .hero-embed-body {
+      opacity: 0;
+      transition: opacity .8s ease .3s;
+    }
+    body.bp-ready .hero-container,
+    body.bp-ready .hero-container-mobile,
+    body.bp-ready .hero-embed-body { opacity: 1; }
+    .nasdaq-navbar, .nasdaq-subnav, .mobile-nav { opacity: 1 !important; visibility: visible !important; }
+    /* Minimal styles for the generated nav links, which replace hardcoded ones */
+    .sections .nav-item { text-decoration: none; }
+  </style>
+</head>
+<body class="body">
+
+  <div class="w-layout-blockcontainer site-container w-container"></div>
+
+  <script src="js/vendor/gsap.min.js"></script>
+  <script src="js/vendor/ScrollTrigger.min.js"></script>
+  <script src="js/vendor/swiper-bundle.min.js"></script>
+  <script src="js/render.js"></script>
+</body>
+</html>

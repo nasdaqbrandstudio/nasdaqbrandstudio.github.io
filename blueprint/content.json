@@ -28,7 +28,8 @@
   },
   "sectionOrder": [
     "hero",
-    "videoHub",
+    "thoughtLeadership",
+    "clientSpotlights",
     "solutions",
     "cityscape"
   ],
@@ -51,6 +52,14 @@
         "href": "#videos"
       },
       {
+        "label": "Thought Leadership",
+        "href": "#thought-leadership"
+      },
+      {
+        "label": "Client Spotlights",
+        "href": "#client-spotlights"
+      },
+      {
         "label": "Our Global Index Solutions",
         "href": "#solutions"
       }
@@ -60,11 +69,11 @@
       "items": []
     }
   },
-  "videoHub": {
+  "videoLibrary": {
     "id": "videos",
-    "headline": "<span class=\"rt-accent\">Watch the series:</span> Thought leadership and partner stories",
+    "headline": "<span class=\"rt-accent\">Blueprint of Tomorrow:</span> The Video Series",
     "intro": "Nasdaq and its partners are empowering global investors and shaping tomorrow’s markets through index-based solutions.",
-    "railLabel": "Browse every video",
+    "railLabel": "Browse the series",
     "allLabel": "All Videos",
     "showFilters": true,
     "backgroundImage": "blue-background",
