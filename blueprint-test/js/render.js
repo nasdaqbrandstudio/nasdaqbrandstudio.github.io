@@ -1,8 +1,18 @@
 (function () {
   'use strict';
 
-  var CONTENT_URL = 'content.json';
-  var CACHE_KEY = 'bp-content-cache-v1';
+  var CONTENT_URL = (function () {
+    var q = null;
+    try { q = new URLSearchParams(location.search).get('content'); } catch (e) {}
+    var meta = document.querySelector('meta[name="blueprint-content"]');
+    return q || window.BLUEPRINT_CONTENT_URL || (meta && meta.content) || 'content.json';
+  })();
+
+  var CONTENT_BASE = (function () {
+    try { return new URL(CONTENT_URL, document.baseURI).href; } catch (e) { return document.baseURI; }
+  })();
+
+  var CACHE_KEY = 'bp-content-cache-v1:' + CONTENT_BASE;
 
   function esc(s) {
     return String(s == null ? '' : s)
@@ -45,21 +55,31 @@
 
   var CFG = {};
 
+  function absUrl(path) {
+    if (!path) return '';
+    if (/^(https?:)?\/\//.test(path)) return path;
+    if (path.indexOf('./') === 0) return chromeUrl(path.slice(2));
+    try { return new URL(path, CONTENT_BASE).href; } catch (e) { return path; }
+  }
+
+  function chromeUrl(path) {
+    if (!path) return '';
+    if (/^(https?:)?\/\//.test(path)) return path;
+    try { return new URL(path, document.baseURI).href; } catch (e) { return path; }
+  }
+
   function imgUrl(name) {
     if (!name) return '';
     if (/^(https?:)?\/\//.test(name) || name.charAt(0) === '/') return name;
-    if (/\.(webp|png|jpe?g|svg|gif|avif|ico)$/i.test(name)) return (CFG.imagePath || 'images/') + name;
-    return (CFG.imagePath || 'images/') + name + '.webp';
+    if (name.indexOf('./') === 0) return chromeUrl(name.slice(2));
+    var file = /\.(webp|png|jpe?g|svg|gif|avif|ico)$/i.test(name) ? name : name + '.webp';
+    return absUrl((CFG.imagePath || 'images/') + file);
   }
 
   function videoUrl(name) {
     if (!name) return '';
-    if (/^(https?:)?\/\//.test(name)) return name;
-    return (CFG.videoPath || 'videos/') + name;
-  }
-
-  function absUrl(path) {
-    try { return new URL(path, document.baseURI).href; } catch (e) { return path; }
+    if (/^(https?:)?\/\//.test(name) || name.charAt(0) === '/') return name;
+    return absUrl((CFG.videoPath || 'videos/') + name);
   }
 
   function bgStyle(spec) {
@@ -67,13 +87,13 @@
     if (typeof spec === 'string') spec = { image: spec };
     var layers = [];
     if (spec.overlay) layers.push(spec.overlay);
-    if (spec.image) layers.push('url("' + absUrl(imgUrl(spec.image)) + '")');
+    if (spec.image) layers.push('url("' + imgUrl(spec.image) + '")');
     if (!layers.length) return '';
     var out = '--bg:' + layers.join(', ') + ';';
     if (spec.hoverImage) {
       var h = [];
       if (spec.hoverOverlay || spec.overlay) h.push(spec.hoverOverlay || spec.overlay);
-      h.push('url("' + absUrl(imgUrl(spec.hoverImage)) + '")');
+      h.push('url("' + imgUrl(spec.hoverImage) + '")');
       out += '--bg-hover:' + h.join(', ') + ';';
     }
     if (spec.size) out += '--bg-size:' + spec.size + ';';
@@ -220,7 +240,7 @@
       return '<div class="' + cls + '"><div class="scroll">'
         + '<div class="scroll-text">' + esc(d.scrollLabel || '') + '</div>'
         + (d.scrollLottie
-            ? '<div class="lottie-open" data-animation-type="lottie" data-src="' + esc(d.scrollLottie)
+            ? '<div class="lottie-open" data-animation-type="lottie" data-src="' + esc(absUrl(d.scrollLottie))
               + '" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg"'
               + ' data-default-duration="0" data-duration="2" data-loading="eager"></div>'
             : '')
@@ -261,7 +281,7 @@
       + '<div class="name-container"><div class="name">' + esc(q.name) + '</div>'
       + '<div class="title">' + esc(q.role) + '</div></div></div>';
     var body = '<div class="quote-outer-container' + (mobile ? '-mobile' : '') + '"><div class="quote-center-container">'
-      + '<div class="quote-container"><img src="' + esc(imgUrl('quote_white.svg')) + '" loading="lazy" alt="" class="quote">'
+      + '<div class="quote-container"><img src="' + esc(chromeUrl('images/quote_white.svg')) + '" loading="lazy" alt="" class="quote">'
       + '<p class="paragraph-light">' + richText(q.text) + '</p></div></div></div>';
     return '<div class="quote-wrap' + (mobile ? '-mobile' : '') + '" ' + bgAttrs({ image: bg, overlay: 'linear-gradient(#08062ae6, #08062ae6)', size: 'auto, cover', position: '0 0, 50%' }) + '>'
       + '<div class="call-out-container' + (mobile ? '-mobile' : '') + '">'
@@ -375,8 +395,8 @@
       + (links || []).map(function (l) {
           return '<a href="' + esc(l.url) + '" target="_blank" rel="noopener" class="ancillary-link">'
             + '<div class="link-text">' + (l.eyebrow ? '<span class="rt-accent">' + richText(l.eyebrow) + '</span> ' : '') + richText(l.text) + '</div>'
-            + '<div class="right-click-spacer"><img src="' + esc(imgUrl('arrow-transparent.svg')) + '" loading="lazy" alt="" class="arrow-spacer"></div>'
-            + '<div class="right-click-desktop"><img src="' + esc(imgUrl('arrow-dark.svg')) + '" loading="lazy" alt="" class="arrow-right"></div>'
+            + '<div class="right-click-spacer"><img src="' + esc(chromeUrl('images/arrow-transparent.svg')) + '" loading="lazy" alt="" class="arrow-spacer"></div>'
+            + '<div class="right-click-desktop"><img src="' + esc(chromeUrl('images/arrow-dark.svg')) + '" loading="lazy" alt="" class="arrow-right"></div>'
             + '</a>';
         }).join('')
       + '</div>';
@@ -391,7 +411,7 @@
         var arrow = function (hover) {
           return '<div class="' + (hover ? 'arrow-overlay-hover' : 'arrow-overlay') + '">'
             + '<div class="hover-text-block">' + esc(c.cta || 'Learn More') + '</div>'
-            + '<img src="' + esc(imgUrl('arrow-dark.svg')) + '" loading="lazy" alt="" class="down-arrow"></div>';
+            + '<img src="' + esc(chromeUrl('images/arrow-dark.svg')) + '" loading="lazy" alt="" class="down-arrow"></div>';
         };
         return '<div class="sol-card">'
           + '<div class="sol-card-rest" ' + bg + '><div class="block-spacer"><div class="info-card">' + richText(c.title) + '</div></div>' + arrow(false) + '</div>'
@@ -415,7 +435,7 @@
     var bodyLink = b.bodyLink
       ? '<a href="' + esc(b.bodyLink.url) + '" target="_blank" rel="noopener" class="solutions-body-link">'
         + '<div class="body-link">' + richText(b.bodyLink.text) + '</div>'
-        + '<div class="click-body"><img src="' + esc(imgUrl('arrow-dark.svg')) + '" loading="lazy" alt="" class="arrow-right"></div></a>'
+        + '<div class="click-body"><img src="' + esc(chromeUrl('images/arrow-dark.svg')) + '" loading="lazy" alt="" class="arrow-right"></div></a>'
       : '';
 
     return '<div class="solutions-body">'
@@ -462,7 +482,7 @@
       + '<div class="solutions-headline"><h3 class="solutions-headline">' + richText(d.headline) + '</h3>'
       + '<p class="paragraph">' + richText(d.intro) + '</p></div>'
       + (d.swipeLabel ? '<div class="solutions-scroll"><div class="text-block-12">' + esc(d.swipeLabel) + '</div>'
-          + '<img src="' + esc(imgUrl('arrow-blue.svg')) + '" loading="lazy" alt="" class="image-2"></div>' : '')
+          + '<img src="' + esc(chromeUrl('images/arrow-blue.svg')) + '" loading="lazy" alt="" class="image-2"></div>' : '')
       + '<div class="solutions-module">'
       + '<div class="solutions-mobile"><div class="solutions-grid-mobile">' + mobileGroups + '</div></div>'
       + '<div class="solutions-container"><div class="solutions-grid">' + tiles() + '</div>' + desktopPanels + '</div>'

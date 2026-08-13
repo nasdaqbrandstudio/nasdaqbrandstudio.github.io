@@ -28,7 +28,7 @@
   ],
   "nav": {
     "logo": {
-      "src": "Vectors-Wrapper.svg",
+      "src": "./images/Vectors-Wrapper.svg",
       "alt": "Nasdaq Logo",
       "href": "https://www.nasdaq.com/",
       "width": 85,
@@ -64,10 +64,10 @@
     "headline": "<span class=\"rt-accent\">Blueprint</span> of Tomorrow",
     "intro": "Explore how Nasdaq indexes are shaping the modern economy – igniting innovation, unlocking opportunity, and building the financial infrastructure of the future",
     "scrollLabel": "Scroll to Continue",
-    "scrollLottie": "documents/scroll-arrow-blue.json",
+    "scrollLottie": "./documents/scroll-arrow-blue.json",
     "backgroundVideo": {
       "mp4": "https://cdn.jwplayer.com/videos/FLwg9bSz-qgCdanU1.mp4",
-      "poster": "hero-poster"
+      "poster": "./images/hero-poster.webp"
     },
     "video": {
       "jwMedia": "8oiWG9v2",
@@ -176,12 +176,6 @@
     "headline": "Our Global Index Solutions",
     "intro": "The Blueprint of Tomorrow is not drafted overnight. With a comprehensive range of indexes that cover various asset classes, sectors, and geographies, Nasdaq Global Indexes architects powerful benchmarks that are in sync with the dynamic market environment.",
     "swipeLabel": "Swipe for More",
-    "background": {
-      "image": "solutions-background",
-      "overlay": "linear-gradient(#08062ad9, #08062a)",
-      "size": "auto, auto 150vh",
-      "position": "0 0, 50% 0"
-    },
     "buildings": [
       {
         "id": "nasdaq-100",
@@ -430,8 +424,7 @@
     ]
   },
   "cityscape": {
-    "id": "cityscape",
-    "image": "cityscape.svg"
+    "id": "cityscape"
   },
   "footer": {
     "id": "footer",
@@ -504,7 +497,7 @@
         "id": "facebook",
         "label": "Facebook",
         "url": "https://www.facebook.com/Nasdaq/",
-        "icon": "facebook-social.svg"
+        "icon": "./images/facebook-social.svg"
       },
       {
         "id": "x",

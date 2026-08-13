@@ -601,7 +601,7 @@ figcaption {
 .intro-header {
   color: #fff;
   background-color: #f4f4f4;
-  background-image: url('../images/portfolio-2---wide.svg');
+  background-image: none;
   background-position: 0 0;
   background-size: cover;
   justify-content: center;
@@ -865,7 +865,7 @@ figcaption {
 .project-overview-header {
   color: #fff;
   background-color: #f4f4f4;
-  background-image: url('../images/portfolio-1---wide.svg');
+  background-image: none;
   background-position: 50%;
   background-size: cover;
   justify-content: center;
@@ -875,12 +875,12 @@ figcaption {
 }
 
 .project-overview-header.cc-project-2-header {
-  background-image: url('../images/portfolio-2---wide.svg');
+  background-image: none;
   background-position: 50%;
 }
 
 .project-overview-header.cc-project-3-header {
-  background-image: url('../images/portfolio-3---wide.svg');
+  background-image: none;
   background-size: cover;
 }
 
@@ -1191,7 +1191,7 @@ figcaption {
   z-index: 1;
   aspect-ratio: 3 / 5;
   object-fit: fill;
-  background-image: url('../images/plus-minus.svg');
+  background-image: none;
   background-position: 0%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -1576,7 +1576,7 @@ figcaption {
 
 .video-embed-1 {
   z-index: 0;
-  background-image: url('../images/video-still.webp');
+  background-image: none;
   background-position: 50%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -1593,7 +1593,7 @@ figcaption {
 
 .video-embed-2 {
   z-index: 0;
-  background-image: url('../images/video-still.webp');
+  background-image: none;
   background-position: 50%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -1611,7 +1611,7 @@ figcaption {
 
 .video-3-embed {
   z-index: 0;
-  background-image: url('../images/video-still.webp');
+  background-image: none;
   background-position: 50%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -2482,7 +2482,7 @@ figcaption {
 
 .video-playlist-thumbnail {
   z-index: 0;
-  background-image: url('../images/video-still.webp');
+  background-image: none;
   background-position: 50%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -5188,7 +5188,7 @@ figcaption {
 }
 
 .solutions-image {
-  background-image: linear-gradient(#08062ad9, #08062a), url('../images/cityscape.webp');
+  background-image: linear-gradient(#08062ad9, #08062a), none;
   background-position: 0 0, 50% 0;
   background-repeat: repeat, no-repeat;
   background-size: auto, cover;
