@@ -48,10 +48,6 @@
     },
     "items": [
       {
-        "label": "Videos",
-        "href": "#videos"
-      },
-      {
         "label": "Thought Leadership",
         "href": "#thought-leadership"
       },
@@ -68,27 +64,6 @@
       "label": "Who We Serve",
       "items": []
     }
-  },
-  "videoLibrary": {
-    "id": "videos",
-    "headline": "<span class=\"rt-accent\">Blueprint of Tomorrow:</span> The Video Series",
-    "intro": "Nasdaq and its partners are empowering global investors and shaping tomorrow’s markets through index-based solutions.",
-    "railLabel": "Browse the series",
-    "allLabel": "All Videos",
-    "showFilters": true,
-    "backgroundImage": "blue-background",
-    "filters": [
-      {
-        "id": "thought-leadership",
-        "label": "Thought Leadership",
-        "from": "thoughtLeadership"
-      },
-      {
-        "id": "client-spotlights",
-        "label": "Client Spotlights",
-        "from": "clientSpotlights"
-      }
-    ]
   },
   "hero": {
     "id": "header",
@@ -110,9 +85,32 @@
   "thoughtLeadership": {
     "id": "thought-leadership",
     "headline": "Nasdaq and its partners are empowering global investors and shaping tomorrow’s markets through index-based solutions.",
-    "railLabel": "Watch every conversation",
     "backgroundImage": "blue-background",
     "features": [
+      {
+        "id": "index-options",
+        "anchor": "tl-index-options",
+        "title": "Nasdaq-100 Index Options",
+        "video": {
+          "url": "https://cdn.jwplayer.com/players/jeOazJCj-jO5YHc4l.html",
+          "title": "Nasdaq-100 Index Options",
+          "route": "@feature"
+        },
+        "body": [
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore."
+        ],
+        "quote": {
+          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.”",
+          "name": "Placeholder Name",
+          "role": "Placeholder Title, Nasdaq",
+          "headshot": "icon-placeholder.svg"
+        },
+        "cta": {
+          "label": "Explore Nasdaq-100 Index Options",
+          "url": "https://www.nasdaq.com/products/north-american-markets/nasdaq-100-options-xnd-ndx"
+        }
+      },
       {
         "id": "liquidity-ecosystem",
         "title": "The Liquidity Ecosystem",
@@ -153,41 +151,16 @@
         },
         "anchor": "tl-tech-driven-economy",
         "thumbnail": "tl-tech-economy"
-      },
-      {
-        "id": "index-options",
-        "anchor": "tl-index-options",
-        "title": "Nasdaq-100 Index Options",
-        "video": {
-          "url": "https://cdn.jwplayer.com/players/jeOazJCj-jO5YHc4l.html",
-          "title": "Nasdaq-100 Index Options",
-          "route": "@feature"
-        },
-        "body": [
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-          "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore."
-        ],
-        "quote": {
-          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.”",
-          "name": "Placeholder Name",
-          "role": "Placeholder Title, Nasdaq",
-          "headshot": "icon-placeholder.svg"
-        },
-        "thumbnail": "building-nasdaq-100",
-        "badge": "New"
       }
-    ]
+    ],
+    "route": "feature",
+    "nowPlayingLabel": "Now playing",
+    "newBadge": "New"
   },
   "clientSpotlights": {
     "id": "client-spotlights",
     "headline": "<span class=\"rt-accent\">Building Tomorrow, Together:</span> Hear from Nasdaq’s Global Partners",
-    "layout": "carousel",
-    "itemsPerSlide": 3,
-    "mobileInitialCount": 4,
-    "autoAdvance": true,
-    "nowPlayingLabel": "NOW PLAYING",
-    "seeMoreLabel": "SEE MORE",
-    "seeLessLabel": "SEE LESS",
+    "nowPlayingLabel": "Now playing",
     "videos": [
       {
         "jwMedia": "hRuzYana",
@@ -225,7 +198,10 @@
         "description": "Explore how Mirae Asset Global Investments is driving innovation in Korea's investment landscape through its partnership with Nasdaq, offering tech-focused ETFs that turn global trends like AI and semiconductors into accessible opportunities for local investors.",
         "anchor": "cl-mirae"
       }
-    ]
+    ],
+    "route": "spotlight",
+    "backgroundImage": "",
+    "newBadge": "New"
   },
   "solutions": {
     "id": "solutions",
