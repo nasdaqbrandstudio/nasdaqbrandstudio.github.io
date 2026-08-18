@@ -752,7 +752,8 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
    than the 1.5px used elsewhere, since it runs the full width of the page.
    Blink clamps border-width to a whole pixel, so the line is drawn as an
    element and scaled: one device pixel on retina, a soft 1px elsewhere. */
-.nasdaq-subnav { position: relative; }
+/* No position declaration here: the export makes this sticky, and sticky
+   already establishes the containing block the hairline needs. */
 .nasdaq-subnav::after {
   content: '';
   position: absolute;
