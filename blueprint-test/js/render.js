@@ -68,6 +68,12 @@
   var CFG = {};
   var UI = {};
 
+  // Every language, in one place. Read from languages.json beside the content
+  // file so adding a language means editing that one file, not every
+  // translation. config.languages still works as a fallback.
+  var LANGUAGES = [];
+  var LANG_DEFAULT = '';
+
   // anchor slug -> how to reveal it. Populated during render from the `anchor`
   // field on any feature or spotlight, so a new deep link is a JSON edit.
   var ANCHORS = {};
@@ -265,12 +271,12 @@
     return hits.length ? hits : null;
   }
 
-  // Shown only when config.languages lists more than one entry, so a
+  // Shown only when the language list has more than one entry, so a
   // single-language site has no toggle at all.
   function renderLanguages() {
-    var list = (CFG.languages || []).filter(function (l) { return l && l.code; });
+    var list = LANGUAGES.filter(function (l) { return l && l.code; });
     if (list.length < 2) return '';
-    var current = LANG || CFG.defaultLanguage || list[0].code;
+    var current = LANG || LANG_DEFAULT || list[0].code;
     return '<div class="bp-lang" role="group" aria-label="Language">'
       + list.map(function (l) {
           return '<a class="bp-lang-item' + (l.code === current ? ' is-active' : '') + '"'
@@ -916,23 +922,44 @@
 
   // A language is just another content file. index.html stays the same page;
   // ?lang=xx picks which JSON it loads.
-  function resolveLanguage(data) {
-    var list = (data.config && data.config.languages) || [];
-    if (!LANG || list.length < 2) return null;
-    var hit = list.filter(function (l) { return l.code === LANG; })[0];
+  function resolveLanguage() {
+    if (!LANG || LANGUAGES.length < 2) return null;
+    var hit = LANGUAGES.filter(function (l) { return l.code === LANG; })[0];
     if (!hit || !hit.content) return null;
     var url = absUrl(hit.content);
     return url === CONTENT_BASE ? null : url;
   }
 
+  // Missing or malformed is not an error -- it just means one language.
+  function fetchLanguages() {
+    var url;
+    try { url = new URL('languages.json', CONTENT_BASE).href; } catch (e) { return Promise.resolve(null); }
+    return fetch(url, { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        if (!j) return null;
+        var list = Array.isArray(j) ? j : j.languages;
+        if (!Array.isArray(list)) return null;
+        LANG_DEFAULT = (j && j.default) || '';
+        return list;
+      })
+      .catch(function () { return null; });
+  }
+
   function boot() {
-    fetch(CONTENT_URL, { cache: 'no-cache' })
-      .then(function (r) { if (!r.ok) throw new Error(CONTENT_URL + ' returned ' + r.status); return r.json(); })
-      .then(function (data) {
+    Promise.all([
+      fetch(CONTENT_URL, { cache: 'no-cache' })
+        .then(function (r) { if (!r.ok) throw new Error(CONTENT_URL + ' returned ' + r.status); return r.json(); }),
+      fetchLanguages()
+    ])
+      .then(function (both) {
+        var data = both[0];
         try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch (e) {}
         CFG = data.config || {};
         UI = data.ui || {};
-        var alt = resolveLanguage(data);
+        LANGUAGES = both[1] || CFG.languages || [];
+        LANG_DEFAULT = LANG_DEFAULT || CFG.defaultLanguage || '';
+        var alt = resolveLanguage();
         if (alt) {
           CONTENT_BASE = alt;
           return fetch(alt, { cache: 'no-cache' })
@@ -940,6 +967,7 @@
             .then(function (translated) {
               CFG = translated.config || CFG;
               UI = translated.ui || UI;
+              if (both[1]) LANGUAGES = both[1];
               return fetchPlaylist().then(function (feed) {
                 render(translated, feed);
                 afterRender(translated);

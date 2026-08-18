@@ -5,7 +5,7 @@
   "_anchorsAreShared": "Anchor slugs stay in English so the same deep links work in every language.",
   "_placeholderCopy": "The Nasdaq-100 Index Options feature still holds lorem ipsum in the English file, so it is left untranslated here too. Replace in both files together.",
   "_reviewNeeded": "Machine translation. Have a native speaker and legal review before publishing, especially product names, the copyright line and any regulatory wording.",
-  "_howToAddALanguage": "Copy this file, translate it, then add an entry to config.languages in every language file: {\"code\":\"fr\",\"label\":\"FR\",\"content\":\"content-fr.json\"}. The toggle appears once more than one entry exists.",
+  "_howToAddALanguage": "Languages are listed in languages.json, not here. Copy this file, translate it, then add one line to languages.json.",
   "meta": {
     "title": "Soluciones de Índices Globales de Nasdaq | Blueprint del Mañana",
     "description": "Descubre cómo los índices de Nasdaq están dando forma a la economía moderna: impulsando la innovación, abriendo oportunidades y construyendo la infraestructura financiera del futuro",
@@ -16,19 +16,6 @@
   "config": {
     "imagePath": "images/",
     "videoPath": "videos/",
-    "defaultLanguage": "en",
-    "languages": [
-      {
-        "code": "en",
-        "label": "EN",
-        "content": "content.json"
-      },
-      {
-        "code": "es",
-        "label": "ES",
-        "content": "content-es.json"
-      }
-    ],
     "jw": {
       "playerId": "jO5YHc4l",
       "playlistId": "",

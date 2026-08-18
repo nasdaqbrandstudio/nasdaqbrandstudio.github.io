@@ -9,14 +9,6 @@
   "config": {
     "imagePath": "images/",
     "videoPath": "videos/",
-    "defaultLanguage": "en",
-    "languages": [
-      {
-        "code": "en",
-        "label": "EN",
-        "content": "content.json"
-      }
-    ],
     "jw": {
       "playerId": "jO5YHc4l",
       "playlistId": "",
