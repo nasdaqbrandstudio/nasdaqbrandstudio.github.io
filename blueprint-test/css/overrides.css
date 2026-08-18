@@ -133,7 +133,7 @@ body.bp-panel-open { overflow: hidden; }
 @media screen and (max-width: 479px) {
   .mobile-nav-menu .mnav-item {
     color: #9e9e9e;
-    border-top: .75px solid #0092bc;
+    border-top: 1.5px solid #0092bc;
     justify-content: center;
     align-items: center;
     padding: 1rem;
@@ -152,374 +152,6 @@ body.bp-panel-open { overflow: hidden; }
 .rt-light   { font-weight: 200; }
 .rt-nowrap  { white-space: nowrap; }
 .rt-eyebrow { color: #fff; font-weight: 200; }
-
-#video-player-section {
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-.playlist-carousel {
-  position: relative;
-  margin-top: 4rem;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0 3.75rem;
-}
-
-.carousel-wrapper {
-  position: relative;
-  border-radius: 0.5rem;
-
-  overflow: visible;
-  padding: 3rem 0 2rem 0;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.carousel-wrapper::before,
-.carousel-wrapper::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.playlist-container {
-  display: flex;
-  transition: transform 0.3s ease-in-out;
-  gap: 1.5rem;
-  align-items: flex-start;
-  width: 100%;
-  padding: 0;
-  box-sizing: border-box;
-}
-.playlist-item {
-
-  flex: 0 0 calc((100% - 3rem) / 3);
-  cursor: pointer;
-  box-sizing: border-box;
-  min-width: 0;
-  flex-shrink: 0;
-  position: relative;
-}
-.playlist-item-thumbnail-wrapper {
-  position: relative;
-  width: 100%;
-  transition: transform 0.2s ease;
-  overflow: visible;
-
-  padding: 2.5%;
-  margin: -2.5%;
-}
-.playlist-item:hover .playlist-item-thumbnail-wrapper {
-  transform: scale(1.05);
-  z-index: 5;
-}
-.playlist-item-thumbnail {
-  position: relative;
-  overflow: hidden;
-  border-radius: 0.5rem;
-  width: 100%;
-  padding-bottom: 56.25%;
-}
-.playlist-item-thumbnail img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%!important;
-  height: 100%!important;
-  object-fit: cover;
-  border-radius: 0.5rem;
-}
-.playlist-item-title-container {
-  width: 100%;
-  padding: 0 0.5rem;
-  box-sizing: border-box;
-}
-.playlist-item-title {
-  margin-top: 1rem;
-  font-family: 'Inter', sans-serif;
-  font-weight: 300;
-  font-size: 1.25rem;
-  line-height: 1.5rem;
-  color: #0092BC;
-  text-align: center;
-  word-wrap: break-word;
-}
-.now-playing-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 146, 188, 0.85);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  font-size: 1rem;
-  line-height: 1.25rem;
-  letter-spacing: 0.25rem;
-  text-align: center;
-  padding: 1.25rem;
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-  border-radius: 0.5rem;
-}
-.playlist-item.active .now-playing-overlay {
-  opacity: 1;
-}
-
-.carousel-nav {
-  position: absolute;
-  top: calc(3rem + 28.125%);
-  transform: translateY(-50%);
-  background: transparent;
-  color: white;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0;
-  transition: all 0.3s ease;
-  z-index: 10;
-  opacity: 1;
-  visibility: visible;
-  padding: 0;
-}
-.carousel-nav svg {
-  height: 2.5rem;
-  width: auto;
-}
-.carousel-nav svg path {
-  fill: none;
-  stroke: #0092BC;
-  stroke-width: 6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: stroke 0.3s ease;
-}
-.carousel-nav:hover svg path {
-  stroke: rgba(0, 146, 188, 0.7);
-}
-.carousel-nav:disabled {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-.carousel-nav.prev {
-  left: 0.3125rem;
-}
-.carousel-nav.next {
-  right: 0.3125rem;
-}
-
-.carousel-indicators {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
-  width: 100%;
-}
-.indicator {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background: rgba(0, 146, 188, 0.3);
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-.indicator.active {
-  background: #0092BC;
-}
-
-.main-video-wrapper {
-  position: relative;
-  padding-bottom: 56.25%;
-  height: 0;
-  overflow: hidden;
-  border-radius: 0.5rem;
-  width: 100%;
-  box-sizing: border-box;
-}
-.main-video-wrapper iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
-  border-radius: 0.5rem;
-}
-#video-title {
-  font-family: 'Inter', sans-serif;
-  font-weight: 300;
-  font-size: 2rem;
-  line-height: 2.5rem;
-  color: #0092BC;
-  margin-bottom: 1.25rem;
-  text-align: center;
-}
-#video-description {
-  font-family: 'Inter', sans-serif;
-  font-weight: 300;
-  font-size: 1rem;
-  line-height: 1.25rem;
-  color: white;
-  text-align: center;
-}
-
-.mobile-video-stack {
-  display: none;
-}
-.cs-video {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  margin-bottom: 3rem;
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  transition: opacity 0.6s ease, max-height 0.6s ease;
-}
-.cs-video.visible {
-  opacity: 1;
-  max-height: 2000px;
-}
-.cs-video.hidden {
-  opacity: 0;
-  max-height: 0;
-  margin-bottom: 0;
-}
-.client-video-embed {
-  position: relative;
-  padding-bottom: 56.25%;
-  height: 0;
-  overflow: hidden;
-  border-radius: 0.5rem;
-  width: 100%;
-  box-sizing: border-box;
-}
-.client-video-embed iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
-  border-radius: 0.5rem;
-}
-.client-video-details {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-.cs-video-title {
-  font-family: 'Inter', sans-serif;
-  font-weight: 300;
-  font-size: 2rem;
-  line-height: 2.5rem;
-  color: #0092BC;
-  text-align: center;
-}
-.text-intro {
-  font-family: 'Inter', sans-serif;
-  font-weight: 300;
-  font-size: 1rem;
-  line-height: 1.25rem;
-  color: white;
-  text-align: center;
-}
-
-.see-more-container {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 2rem;
-  cursor: pointer;
-}
-.see-more-arrow {
-  background: transparent;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  margin-bottom: 1rem;
-  padding: 0;
-}
-.see-more-arrow svg {
-  width: 2rem;
-  height: auto;
-  transition: transform 0.3s ease;
-}
-.see-more-arrow svg path {
-  fill: none;
-  stroke: #0092BC;
-  stroke-width: 6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: stroke 0.3s ease;
-}
-.see-more-container:hover .see-more-arrow svg path {
-  stroke: rgba(0, 146, 188, 0.7);
-}
-.see-more-container.expanded .see-more-arrow svg {
-  transform: rotate(180deg);
-}
-.see-more-text {
-  font-family: 'Inter', sans-serif;
-  font-weight: 400;
-  font-size: 0.75rem;
-  line-height: 1rem;
-  letter-spacing: 0.25rem;
-  color: #0092BC;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-@media (max-width: 767px) {
-  .main-video-wrapper,
-  #video-title,
-  #video-description,
-  .playlist-carousel {
-    display: none !important;
-  }
-  .mobile-video-stack {
-    display: block;
-  }
-  .see-more-container {
-    display: flex;
-  }
-  .cs-video-title {
-    font-size: 1.5rem;
-    line-height: 2rem;
-  }
-  .text-intro {
-    font-size: 0.875rem;
-    line-height: 1.125rem;
-  }
-}
-
-.ancillary-link {
-  background-color: #0092bc00;
-  transition: background-color .3s ease;
-}
-.ancillary-link .link-text { transition: color .5s ease; }
-.ancillary-link:hover,
-.ancillary-link:focus-visible { background-color: #0092bc; }
-.ancillary-link:hover .link-text,
-.ancillary-link:focus-visible .link-text { color: #08062a; }
-.ancillary-link:hover .rt-eyebrow,
-.ancillary-link:focus-visible .rt-eyebrow { color: #fff; }
 
 /* Video facade: poster plus play button until the player is mounted */
 .bp-video { cursor: pointer; }
@@ -547,7 +179,7 @@ body.bp-panel-open { overflow: hidden; }
   height: 4.5rem;
   border-radius: 50%;
   background: rgba(8, 6, 42, .55);
-  border: 2px solid #0092bc;
+  border: 1.5px solid #0092bc;
   transition: background .25s ease;
 }
 .bp-video-play img { position: relative; width: 1.25rem; height: auto; }
@@ -561,6 +193,12 @@ body.bp-panel-open { overflow: hidden; }
   .bp-video-play { transition: none; }
 }
 
+/* On small screens the ring crowds the frame; the mark alone reads fine. */
+@media screen and (max-width: 767px) {
+  .bp-video-play::before { display: none; }
+  .bp-video-play img { width: 2.25rem; }
+}
+
 /* Language variants: the export shipped JP/KR type ramps, keyed off body class */
 body.lang-ja, body.lang-jp { font-family: 'Noto Sans JP', Inter, sans-serif; }
 body.lang-ko { font-family: 'Noto Sans KR', Inter, sans-serif; }
@@ -572,356 +210,580 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
   font-weight: 400;
 }
 
-/* ==========================================================================
-   Thought Leadership — episode rail + player + info panel
-   Selector rail scales to any number of videos; the detail area holds only
-   what this content actually has: the video, its copy, and the quote.
-   ========================================================================== */
-.bp-eps {
-  position: relative;
-  width: 100%;
-  padding: 8rem 4rem;
-  box-shadow: 0 0 6rem #0092bc80;
-  overflow: hidden;
-}
-.bp-eps-inner { position: relative; z-index: 2; width: 80%; margin: 0 auto; }
-@media screen and (max-width: 991px) { .bp-eps-inner { width: 100%; } }
-
-.bp-eps-headline {
-  color: #fff;
-  text-align: center;
-  font-size: 2rem;
-  font-weight: 200;
-  line-height: 2.5rem;
-  margin: 0 auto 4rem;
-  max-width: 56rem;
-}
-
-.bp-eps-railhead {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-.bp-eps-eyebrow {
-  color: #0092bc;
-  text-transform: uppercase;
-  letter-spacing: .25rem;
-  font-size: .875rem;
-  font-weight: 600;
-}
-.bp-eps-nav { display: flex; gap: .5rem; }
-.bp-eps-arrow {
-  background: none;
-  border: 0;
-  padding: 0 .25rem;
-  cursor: pointer;
-  transition: opacity .2s ease;
-}
-.bp-eps-arrow svg { height: 1.5rem; width: auto; display: block; }
-.bp-eps-arrow svg path { fill: none; stroke: #0092bc; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
-.bp-eps-arrow:hover svg path { stroke: rgba(0, 146, 188, .7); }
-.bp-eps-arrow:disabled { opacity: 0; pointer-events: none; }
-
-/* Rail */
-.bp-eps-rail {
-  display: flex;
-  gap: 1.5rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  padding-bottom: .5rem;
-}
-.bp-eps-rail::-webkit-scrollbar { display: none; }
-.bp-eps-thumb {
-  flex: 1 1 0;
-  min-width: 0;
-  scroll-snap-align: start;
-  background: none;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  gap: .75rem;
-}
-.bp-eps-thumb-media {
-  position: relative;
-  display: block;
-  width: 100%;
-  padding-bottom: 56.25%;
-  border-radius: .5rem;
-  overflow: hidden;
-  border: 2px solid transparent;
-  transition: border-color .25s ease, transform .25s ease;
-  background: #08062a;
-}
-.bp-eps-thumb-media img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: .6;
-  transition: opacity .25s ease;
-}
-.bp-eps-thumb:hover .bp-eps-thumb-media { transform: translateY(-2px); }
-.bp-eps-thumb:hover .bp-eps-thumb-media img { opacity: .85; }
-.bp-eps-thumb.is-active .bp-eps-thumb-media { border-color: #0092bc; }
-.bp-eps-thumb.is-active .bp-eps-thumb-media img { opacity: 1; }
-.bp-eps-thumb:focus-visible .bp-eps-thumb-media { outline: 2px solid #0092bc; outline-offset: 3px; }
-.bp-eps-thumb-title {
-  color: #9e9e9e;
-  font-size: 1rem;
-  font-weight: 300;
-  line-height: 1.25rem;
-  transition: color .25s ease;
-}
-.bp-eps-thumb.is-active .bp-eps-thumb-title,
-.bp-eps-thumb:hover .bp-eps-thumb-title { color: #fff; }
-.bp-eps-badge {
-  position: absolute;
-  top: .5rem;
-  right: .5rem;
-  background: #0092bc;
-  color: #08062a;
-  text-transform: uppercase;
-  letter-spacing: .1rem;
-  font-size: .625rem;
-  font-weight: 600;
-  padding: .2rem .45rem;
-  border-radius: .2rem;
-}
-
-/* Detail */
-.bp-eps-detail { margin-bottom: 4rem; }
-.bp-eps-panel { display: none; grid-template-columns: 2fr 1fr; gap: 2rem; align-items: start; }
-.bp-eps-panel.is-active { display: grid; }
-.bp-eps-video { width: 100%; }
-
-.bp-eps-info {
-  background-color: #08062abf;
-  border: 1.5px solid #0092bc;
-  border-radius: .5rem;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-.bp-eps-title {
-  color: #0092bc;
-  font-size: 1.5rem;
-  font-weight: 300;
-  line-height: 1.875rem;
-  margin: 0;
-}
-.bp-eps-body { display: flex; flex-direction: column; gap: .75rem; }
-.bp-eps-para {
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 200;
-  line-height: 1.375rem;
-  margin: 0;
-}
-.bp-eps-quote {
-  border-top: 1px solid #0092bc4d;
-  padding-top: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-.bp-eps-quote .quote { width: 1.5rem; height: auto; }
-.bp-eps-quote .paragraph-light { font-size: 1.125rem; line-height: 1.5rem; }
-.bp-eps-attrib { display: flex; align-items: center; gap: 1rem; }
-.bp-eps-attrib .bp-headshot { width: 3.5rem; height: 3.5rem; flex: none; }
-.bp-eps-attrib .name { font-size: .875rem; letter-spacing: .15rem; }
-.bp-eps-attrib .title { font-size: .875rem; line-height: 1.125rem; }
-
-@media screen and (max-width: 991px) {
-  .bp-eps { padding: 6rem 3rem; }
-  .bp-eps-headline { font-size: 1.5rem; line-height: 2rem; margin-bottom: 3rem; }
-  .bp-eps-thumb { flex: 0 0 calc((100% - 1.5rem) / 2); }
-  .bp-eps-panel.is-active { grid-template-columns: 1fr; }
-}
-@media screen and (max-width: 767px) {
-  .bp-eps { padding: 4rem 2rem; }
-  .bp-eps-thumb { flex: 0 0 72%; }
-  .bp-eps-nav { display: none; }
-  .bp-eps-info { padding: 1.5rem; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bp-eps-thumb-media, .bp-eps-thumb-title, .bp-eps-arrow { transition: none; }
-  .bp-eps-rail { scroll-behavior: auto; }
-}
 
 /* ==========================================================================
-   Video library — featured player, filters, full grid
+   Video section — player left, playlist right, details underneath
+   Used by every video list on the page, so both sections behave identically.
    ========================================================================== */
-.bp-lib {
+/* One vertical rhythm for every video section, so stacking two of them reads
+   as one continuous run rather than two differently-padded blocks. */
+.bp-vs {
+  --vs-gap: 4rem;
+  --stroke: 1.5px;
   position: relative;
   width: 100%;
-  padding: 8rem 4rem;
+  padding: 7rem 4rem;
+  background-color: #090b2a;
   overflow: hidden;
 }
-.bp-lib-inner { position: relative; z-index: 2; width: 80%; margin: 0 auto; }
-.bp-lib .cs-headline { width: 100%; margin-bottom: 1.25rem; }
-.bp-lib-intro {
+:root { --stroke: 1.5px; }
+
+/* One rule between every section below the hero */
+.bp-vs,
+.solutions,
+.footer-wrapper { border-top: var(--stroke) solid #0092bc4d; }
+.bp-vs-inner { position: relative; z-index: 2; width: 80%; margin: 0 auto; }
+
+/* The Webflow rule sets position:absolute but no offsets, so the element lands
+   at its static position -- the bottom of the section -- instead of behind it. */
+.bp-vs .background-image-2 { inset: 0; height: 100%; }
+.bp-vs .cs-headline { width: 100%; margin: 0 0 var(--vs-gap); }
+.bp-vs-intro {
   color: #fff;
   text-align: center;
   font-size: 1.125rem;
   font-weight: 200;
   line-height: 1.5rem;
   max-width: 48rem;
-  margin: 0 auto 3.5rem;
+  margin: -1rem auto var(--vs-gap);
 }
 
-.bp-lib-stage { margin-bottom: 4rem; }
-.bp-lib-feature { display: none; }
-.bp-lib-feature.is-active { display: block; }
-.bp-lib-meta {
-  text-align: center;
-  margin-top: 2rem;
+/* A single 12-column grid. The active item uses display:contents so its player,
+   copy and quote become direct grid children and can be placed independently:
+   player and playlist share the top row, copy and quote split the row beneath. */
+.bp-vs-layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: auto auto;
+  column-gap: 2rem;
+  row-gap: 1.75rem;
+  align-items: start;
+}
+.bp-vs-player { grid-column: 1 / 9; grid-row: 1; }
+.bp-vs-lower  { grid-column: 1 / 9; grid-row: 2; }
+.bp-vs-list   { grid-column: 9 / 13; grid-row: 1; }
+
+/* With a quote, the copy and the quote sit in one panel across the full width. */
+.bp-vs.has-quotes .bp-vs-lower {
+  grid-column: 1 / 13;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* No quote here, so the playlist may run down past the copy -- as far as the
+   bottom of that copy, then the arrows take over. */
+.bp-vs:not(.has-quotes) .bp-vs-list {
+  grid-row: 1 / 3;
+  max-height: var(--col-h, 30rem);
+}
+
+/* Stage */
+/* The stage wrapper must pass through too, or the grid only ever sees it and
+   the playlist as children. */
+.bp-vs-stage { display: contents; }
+.bp-vs-item { display: none; }
+.bp-vs-item.is-active { display: contents; }
+.bp-vs-meta {
   display: flex;
   flex-direction: column;
-  gap: .75rem;
-  align-items: center;
+  gap: 1rem;
 }
-.bp-lib-tag {
-  color: #0092bc;
-  text-transform: uppercase;
-  letter-spacing: .25rem;
-  font-size: .75rem;
-  font-weight: 600;
-}
-.bp-lib-title {
+.bp-vs-title {
   color: #fff;
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 300;
-  line-height: 2.5rem;
+  line-height: 2.125rem;
   margin: 0;
 }
-.bp-lib-desc {
+.bp-vs-body { display: flex; flex-direction: column; gap: .75rem; }
+.bp-vs-para {
   color: #fff;
   font-size: 1rem;
   font-weight: 200;
-  line-height: 1.375rem;
-  max-width: 44rem;
+  line-height: 1.5rem;
   margin: 0;
 }
-
-.bp-lib-railhead { margin-bottom: 1.25rem; }
-.bp-lib-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .75rem;
-  margin-bottom: 2.5rem;
-}
-.bp-lib-pill {
-  background: none;
-  border: 1.5px solid #0092bc;
-  border-radius: 2rem;
-  color: #0092bc;
-  font-family: Inter, sans-serif;
-  font-size: .875rem;
-  font-weight: 300;
-  line-height: 1;
-  padding: .625rem 1.25rem;
-  cursor: pointer;
-  transition: background-color .25s ease, color .25s ease;
-}
-.bp-lib-pill:hover { background-color: #0092bc33; }
-.bp-lib-pill.is-active { background-color: #0092bc; color: #08062a; }
-.bp-lib-pill:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
-
-.bp-lib-grid {
+.bp-vs-quote {
+  margin: 0;
+  padding-left: 2.5rem;
+  border-left: var(--stroke) solid #0092bc4d;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: 2.5rem 1.5rem;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 1rem;
+  row-gap: 1.25rem;
+  align-items: start;
 }
-.bp-lib-card {
-  background: none;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-  text-align: left;
+.bp-vs-quote .quote { width: 1.5rem; height: auto; grid-column: 1; grid-row: 1; margin-top: .2rem; }
+.bp-vs-quote .paragraph-light { grid-column: 2; grid-row: 1; font-size: 1.125rem; line-height: 1.5rem; margin: 0; }
+.bp-vs-attrib { grid-column: 2; grid-row: 2; display: flex; align-items: center; gap: 1rem; }
+.bp-vs-attrib .bp-headshot { width: 3.5rem; height: 3.5rem; flex: none; }
+.bp-vs-attrib .name { font-size: .875rem; letter-spacing: .15rem; }
+.bp-vs-attrib .title { font-size: .875rem; line-height: 1.125rem; }
+
+/* Playlist */
+.bp-vs-list {
+  border: var(--stroke) solid #0092bc4d;
+  border-radius: .5rem;
+  background-color: #08062a99;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  min-height: 0;
+  /* The frame hugs its rows; the grid area it sits in sets the ceiling. */
+  align-self: start;
+  max-height: 100%;
 }
-.bp-lib-card[hidden] { display: none; }
-.bp-lib-card-media {
+.bp-vs-list-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.bp-vs-list-scroll::-webkit-scrollbar { display: none; }
+
+/* Arrows replace the scrollbar and only appear when the rows overflow. */
+.bp-vs-list-arrow {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 100%;
+  padding: .5rem 0;
+  background-color: #0092bc;
+  border: 0;
+  color: #08062a;
+  cursor: pointer;
+  transition: background-color .2s ease;
+}
+/* Only rendered when there is somewhere to go in that direction. */
+.bp-vs-list.is-scrollable .bp-vs-list-arrow:not(:disabled) { display: flex; }
+.bp-vs-list-arrow svg { width: 1.125rem; height: auto; display: block; }
+.bp-vs-list-arrow:hover { background-color: #33a8cb; }
+
+/* With a quote below it, the playlist stops at the player's height. */
+.bp-vs.has-quotes .bp-vs-list { max-height: var(--player-h, 26rem); }
+.bp-vs-list-scroll::-webkit-scrollbar { width: 6px; }
+.bp-vs-list-scroll::-webkit-scrollbar-thumb { background: #0092bc80; border-radius: 3px; }
+
+.bp-vs-row {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: .75rem;
+  align-items: start;
+  width: 100%;
+  background: none;
+  border: 0;
+  border-left: var(--stroke) solid transparent;
+  padding: .75rem 1rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color .2s ease, border-color .2s ease;
+}
+.bp-vs-row:hover { background-color: #0092bc1f; }
+.bp-vs-row.is-active { background-color: #0092bc26; border-left-color: #0092bc; }
+.bp-vs-row:focus-visible { outline: 2px solid #0092bc; outline-offset: -2px; }
+.bp-vs-row-media {
   position: relative;
   width: 100%;
   padding-bottom: 56.25%;
-  border-radius: .5rem;
+  border-radius: .25rem;
   overflow: hidden;
-  border: 2px solid transparent;
   background: #08062a;
-  margin-bottom: .25rem;
-  transition: border-color .25s ease, transform .25s ease;
 }
-.bp-lib-card-media img {
+.bp-vs-row-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.bp-vs-row-index {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: .7;
-  transition: opacity .25s ease;
+  left: .25rem;
+  top: .25rem;
+  background: #08062acc;
+  color: #fff;
+  font-size: .625rem;
+  font-weight: 500;
+  line-height: 1;
+  padding: .2rem .35rem;
+  border-radius: .2rem;
 }
-.bp-lib-card-play {
+.bp-vs-badge {
   position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity .25s ease;
+  right: .25rem;
+  bottom: .25rem;
+  background: #0092bc;
+  color: #08062a;
+  text-transform: uppercase;
+  letter-spacing: .05rem;
+  font-size: .5625rem;
+  font-weight: 600;
+  padding: .15rem .3rem;
+  border-radius: .2rem;
 }
-.bp-lib-card-play::before {
-  content: '';
-  position: absolute;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  background: rgba(0, 146, 188, .85);
+.bp-vs-row-meta { display: flex; flex-direction: column; gap: .25rem; min-width: 0; }
+.bp-vs-row-title {
+  color: #d5d5d5;
+  overflow-wrap: anywhere;
+  font-size: .875rem;
+  font-weight: 300;
+  line-height: 1.125rem;
+  transition: color .2s ease;
 }
-.bp-lib-card-play img { position: relative; width: .875rem; height: auto; }
-.bp-lib-card:hover .bp-lib-card-media { transform: translateY(-3px); }
-.bp-lib-card:hover .bp-lib-card-media img { opacity: 1; }
-.bp-lib-card:hover .bp-lib-card-play { opacity: 1; }
-.bp-lib-card.is-active .bp-lib-card-media { border-color: #0092bc; }
-.bp-lib-card.is-active .bp-lib-card-media img { opacity: 1; }
-.bp-lib-card:focus-visible .bp-lib-card-media { outline: 2px solid #0092bc; outline-offset: 3px; }
-.bp-lib-card-tag {
+.bp-vs-row:hover .bp-vs-row-title { color: #fff; }
+.bp-vs-row.is-active .bp-vs-row-title { color: #fff; }
+.bp-vs-row-now {
+  display: none;
+  white-space: nowrap;
   color: #0092bc;
   text-transform: uppercase;
-  letter-spacing: .15rem;
-  font-size: .6875rem;
+  letter-spacing: .1rem;
+  font-size: .625rem;
   font-weight: 600;
 }
-.bp-lib-card-title {
-  color: #9e9e9e;
+.bp-vs-row.is-active .bp-vs-row-now { display: block; }
+
+@media screen and (max-width: 1200px) {
+  .bp-vs-layout { grid-template-columns: minmax(0, 1fr) 17rem; }
+  /* Not enough width beside the thumbnail, so the title moves underneath it
+     rather than being clipped. */
+  .bp-vs-row { grid-template-columns: 1fr; gap: .5rem; }
+  .bp-vs-row-media { width: 9rem; }
+}
+@media screen and (max-width: 991px) {
+  .bp-vs { --vs-gap: 3rem; padding: 5rem 3rem; }
+  .bp-vs-inner { width: 100%; }
+  /* Stacked: every video is on the page in full, so the playlist would only
+     duplicate what is already visible. */
+  .bp-vs-layout { display: block; }
+  .bp-vs-stage { display: block; }
+  .bp-vs-list { display: none; }
+  .bp-vs-item,
+  .bp-vs-item.is-active { display: block; padding-bottom: 3rem; }
+  .bp-vs-item + .bp-vs-item { border-top: var(--stroke) solid #0092bc33; padding-top: 3rem; }
+  /* The panel already closes each block, so a rule between them is noise -- and
+     without the rule the pair of paddings reads as a gap twice as wide. */
+
+  .bp-vs-lower { margin-top: 1.5rem; }
+  .bp-vs.has-quotes .bp-vs-lower { grid-template-columns: 1fr; gap: 1.5rem; }
+  .bp-vs-quote { padding-left: 0; border-left: 0; padding-top: 1.5rem; border-top: var(--stroke) solid #0092bc4d; }
+  .bp-vs-title { font-size: 1.5rem; line-height: 1.875rem; }
+}
+@media screen and (max-width: 767px) {
+  .bp-vs { padding: 4rem 2rem; }
+  
+  .bp-vs-row { grid-template-columns: 5.5rem 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bp-vs-row, .bp-vs-row-title { transition: none; }
+  .bp-vs-list-scroll { scroll-behavior: auto; }
+}
+
+/* Video CTA */
+.bp-vs-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .25rem; }
+/* Same treatment as the Solutions "Learn More" bar: white at rest, blue on
+   hover, with the label staying dark navy throughout. */
+.bp-vs-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: .625rem;
+  background-color: #fff;
+  border-radius: .5rem;
+  padding: .625rem 1rem;
+  text-decoration: none;
+  transition: background-color .3s ease;
+}
+.bp-vs-cta-label {
+  color: #08062a;
+  text-align: left;
   font-size: 1rem;
   font-weight: 300;
   line-height: 1.25rem;
+}
+.bp-vs-cta-arrow { display: flex; align-items: center; }
+.bp-vs-cta-arrow img { width: .5rem; min-width: .5rem; transition: transform .3s ease; }
+.bp-vs-cta:hover { background-color: #0092bc; }
+.bp-vs-cta:hover .bp-vs-cta-arrow img { transform: translateX(2px); }
+.bp-vs-cta:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* The Solutions ancillary links fill solid blue on hover. This was an IX2
+   interaction in the export (a-14/a-15) and does not run any more. */
+.ancillary-link {
+  background-color: #0092bc00;
+  transition: background-color .3s ease;
+}
+.ancillary-link .link-text { transition: color .5s ease; }
+.ancillary-link:hover,
+.ancillary-link:focus-visible { background-color: #0092bc; }
+.ancillary-link:hover .link-text,
+.ancillary-link:focus-visible .link-text { color: #08062a; }
+.ancillary-link:hover .rt-eyebrow,
+.ancillary-link:focus-visible .rt-eyebrow { color: #fff; }
+.ancillary-link .arrow-right { transition: transform .3s ease; }
+.ancillary-link:hover .arrow-right { transform: translateX(2px); }
+
+/* The Solutions links had their hover in a Webflow interaction that no longer runs. */
+.solutions-body-link { transition: background-color .3s ease; }
+.solutions-body-link .click-body { transition: background-color .3s ease; }
+.solutions-body-link .arrow-right { transition: transform .3s ease; }
+.solutions-body-link:hover { background-color: #0092bc; }
+.solutions-body-link:hover .click-body { background-color: #e4f2ff; }
+.solutions-body-link:hover .arrow-right { transform: translateX(2px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .bp-vs-cta, .bp-vs-cta-label, .bp-vs-cta-arrow img, .ancillary-link, .ancillary-link .link-text,
+  .solutions-body-link, .solutions-body-link .click-body, .solutions-body-link .arrow-right { transition: none; }
+}
+
+/* Scroll cue, drawn inline so it needs no external animation file */
+.bp-scroll-arrow {
+  color: #0092bc;
+  width: 2rem;
+  margin-top: .5rem;
+  display: flex;
+  justify-content: center;
+  animation: bp-scroll-bob 2s ease-in-out infinite;
+}
+.bp-scroll-arrow svg { width: 100%; height: auto; display: block; }
+@keyframes bp-scroll-bob {
+  0%, 100% { transform: translateY(0); opacity: .75; }
+  50%      { transform: translateY(.35rem); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .bp-scroll-arrow { animation: none; } }
+
+/* ==========================================================================
+   Navigation and footer colour scheme
+   ========================================================================== */
+
+/* Top bar: dark behind the Nasdaq mark (logo letters are white in the SVG) */
+.nasdaq-navbar { background-color: #08062a; }
+
+/* Secondary nav: white with dark text, wordmark accent stays blue.
+   Weights come up because the export's 200/300 read thin on white. */
+.nasdaq-subnav { background-color: #fff; }
+.nasdaq-subnav .subnav-home { color: #08062a; font-weight: 500; }
+.nasdaq-subnav .subnav-home-span { color: #0092bc; }
+.nasdaq-subnav .line {
+  background-color: #f5f5fa;
+  color: #f5f5fa;
+  width: 3px;
+  height: 2.75rem;
+  align-self: center;
+  border-radius: 2px;
+  flex: none;
+}
+.nasdaq-subnav .sections .nav-item,
+.nasdaq-subnav .who-we-serve { color: #08062a; font-weight: 500; }
+.nasdaq-subnav .sections .nav-item:hover,
+.nasdaq-subnav .who-we-serve:hover { color: #0092bc; }
+.nasdaq-subnav .menu-arrow-svg { color: #08062a; }
+
+/* Mobile bar mirrors the secondary nav */
+@media screen and (max-width: 479px) {
+  .mobile-nav,
+  .mobile-nav .nav-container,
+  .mobile-nav-menu { background-color: #fff; }
+  .mobile-nav .subnav-home { color: #08062a; font-weight: 500; }
+  .mobile-nav .subnav-home-span { color: #0092bc; }
+  /* the button is a plain trigger, not a filled box */
+  .mobile-nav .mobile-nav-button,
+  .mobile-nav .hamburger-icon { background-color: transparent; color: #08062a; }
+  .mobile-nav .hamburger-line { background-color: #08062a; border-color: #08062a; }
+  .mobile-nav-menu .mnav-item { color: #08062a; border-top-color: #d5d5d5; }
+  .mobile-nav-menu .mnav-item:hover,
+  .mobile-nav-menu .mnav-item:active { color: #0092bc; }
+}
+
+/* Below 992px: logo top-left with the copyright directly under it. On tablet
+   the icons sit to the right of that pair; on phones they stack beneath. */
+@media screen and (max-width: 991px) {
+  .footer-container .logo-copyright-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "logo  icons"
+      "copy  icons";
+    grid-column-gap: 2rem;
+    grid-row-gap: 1rem;
+    align-items: end;
+    justify-items: start;
+    width: 100%;
+    padding: 0;
+  }
+  .footer-container .nasdaq-logo-container {
+    grid-area: logo;
+    width: auto;
+    padding: 0;
+    margin: 0;
+  }
+  .footer-container .nasdaq-logo-container .nasdaq-logo { width: auto; height: 3.5rem; }
+  .footer-container .nasdaq-logo-footer { justify-content: flex-start; align-items: flex-start; }
+  .footer-container .copyright-inline-2 { grid-area: copy; text-align: left; }
+  .footer-container .social-icons {
+    grid-area: icons;
+    display: flex;
+    width: auto;
+    justify-self: end;
+    justify-content: flex-end;
+    gap: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .footer-container .logo-copyright-container {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "logo"
+      "copy"
+      "icons";
+    grid-row-gap: 1.25rem;
+    align-items: start;
+    /* the two blocks sit in the same grid row here, so they need their own
+       separation rather than the container's row gap */
+    margin-top: 2.5rem;
+  }
+  .footer-container .social-icons { justify-self: start; justify-content: flex-start; }
+}
+
+/* Footer */
+.footer-wrapper, .footer-container { background-color: #08062a; }
+/* The export pins a 450px min-height, which is what left the dead space under
+   the columns once the link rows stopped stretching. */
+.footer-container {
+  grid-row-gap: 2rem;
+  min-height: 0;
+  max-width: none;
+  width: 100%;
+  padding: 3.5rem 4rem;
+}
+
+/* The export's columns are grids with auto rows, and auto rows stretch to fill
+   a stretched column -- which is what pushed the links so far apart. */
+.footer-container .columns { align-items: start; }
+/* The export declares five explicit rows; a four-link column left an empty
+   fifth row whose gap pushed the block 20px past its last link. */
+.footer-container .link-column {
+  align-content: start;
+  grid-row-gap: 1.25rem;
+  grid-template-rows: none;
+  grid-auto-rows: max-content;
+  /* the export also sets grid-auto-flow: column, which turns the links
+     sideways once the explicit rows are gone */
+  grid-auto-flow: row;
+}
+.footer-container .column-container { grid-template-columns: 3fr 1.4fr; }
+.footer-link {
+  color: #9a7df4;
+  text-transform: none;
+  font-size: 1rem;
+  line-height: 1.25rem;
   transition: color .25s ease;
 }
-.bp-lib-card.is-active .bp-lib-card-title,
-.bp-lib-card:hover .bp-lib-card-title { color: #fff; }
+.footer-link:hover { color: #fff; }
+.footer-link.privacy-legal { color: #fff; }
+.footer-link.privacy-legal:hover { color: #9a7df4; }
 
-@media screen and (max-width: 991px) {
-  .bp-lib { padding: 6rem 3rem; }
-  .bp-lib-inner { width: 100%; }
-  .bp-lib-title { font-size: 1.5rem; line-height: 2rem; }
+@media screen and (min-width: 992px) {
+  .footer-container .logo-copyright-container { display: none; }
 }
+
+/* Right-hand column: logo and copyright at the top, icons pushed to the
+   bottom so they land on the same line as the last row of links. */
+.nasdaq-logo-container-full {
+  grid-row-gap: 1.25rem;
+  align-items: flex-end;
+  justify-content: flex-start;
+  height: 100%;
+}
+.nasdaq-logo-container-full .social-icons { margin-top: auto; }
+.footer-container .copyright-inline-2 {
+  color: #fff;
+  font-size: .875rem;
+  line-height: 1.25rem;
+}
+.nasdaq-logo-container-full .copyright-inline-2 {
+  white-space: nowrap;
+  text-align: right;
+}
+.nasdaq-logo-container-full .social-icons {
+  width: auto;
+  gap: 1.5rem;
+  justify-content: flex-end;
+}
+
+/* The icons come from two sources with different artboards, so size them by
+   height and let the widths fall where the glyphs do. */
+.social-icons img,
+.social-icons-mobile img {
+  height: 1.125rem;
+  width: auto;
+  display: block;
+}
+.social-icons a,
+.social-icons-mobile a {
+  display: flex;
+  align-items: center;
+  opacity: .85;
+  transition: opacity .25s ease;
+}
+.social-icons a:hover,
+.social-icons-mobile a:hover { opacity: 1; }
+.nasdaq-logo-container-full .nasdaq-logo { width: auto; height: 4.25rem; }
+@media (prefers-reduced-motion: reduce) { .social-icons a, .social-icons-mobile a { transition: none; } }
 @media screen and (max-width: 767px) {
-  .bp-lib { padding: 4rem 2rem; }
-  .bp-lib-grid { grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 2rem 1rem; }
+  .nasdaq-logo-container-full { align-items: flex-start; }
+  .nasdaq-logo-container-full .copyright-inline-2 { text-align: left; }
+  .nasdaq-logo-container-full .social-icons { justify-content: flex-start; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .bp-lib-card-media, .bp-lib-card-title, .bp-lib-card-play, .bp-lib-pill { transition: none; }
+@media (prefers-reduced-motion: reduce) { .footer-link { transition: none; } }
+
+/* ==========================================================================
+   Solutions sub-cards
+   ========================================================================== */
+
+/* The "Learn More" bar reads white at rest, blue on hover. */
+.sol-card .arrow-overlay { background-color: #fff; }
+.sol-card .arrow-overlay-hover { background-color: #0092bc; }
+
+/* On hover the card shows its title and description over the artwork, so both
+   need to be white -- the inherited dark text was unreadable there. */
+.sol-card-active .info-card,
+.sol-card-active .info-card-details,
+.sol-card-rest .info-card { color: #fff; }
+
+/* Secondary nav sits on white, so it needs its own edge -- a hairline rather
+   than the 1.5px used elsewhere, since it runs the full width of the page.
+   Blink clamps border-width to a whole pixel, so the line is drawn as an
+   element and scaled: one device pixel on retina, a soft 1px elsewhere. */
+.nasdaq-subnav { position: relative; }
+.nasdaq-subnav::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background-color: #08062a;
+  transform: scaleY(.5);
+  transform-origin: 50% 100%;
+  pointer-events: none;
 }
+
+/* ==========================================================================
+   Language toggle — rendered only when config.languages has more than one
+   ========================================================================== */
+.bp-lang { display: flex; align-items: center; gap: .25rem; margin-left: auto; }
+.bp-lang-item {
+  color: #08062a;
+  font-size: .875rem;
+  font-weight: 500;
+  line-height: 1;
+  padding: .375rem .5rem;
+  border-radius: .25rem;
+  text-decoration: none;
+  transition: color .2s ease, background-color .2s ease;
+}
+.bp-lang-item:hover { color: #0092bc; }
+.bp-lang-item.is-active { background-color: #0092bc; color: #fff; }
+.bp-lang-item:focus-visible { outline: 2px solid #0092bc; outline-offset: 2px; }
+@media screen and (max-width: 479px) {
+  .mobile-nav-menu .bp-lang { justify-content: center; padding: 1rem; margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .bp-lang-item { transition: none; } }

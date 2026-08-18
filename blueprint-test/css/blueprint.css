@@ -283,7 +283,7 @@ figcaption {
 .primary-button.land {
   color: #08062a;
   background-color: #00eb8000;
-  border: 1px solid #00eb80;
+  border: 1.5px solid #00eb80;
   border-radius: .5rem;
   transition-property: none;
 }
@@ -292,7 +292,7 @@ figcaption {
   box-shadow: none;
   background-color: #8050ed00;
   border-style: solid;
-  border-width: 1px;
+  border-width: 1.5px;
   padding-top: 0;
   padding-left: 0;
   padding-right: 0;
@@ -302,7 +302,7 @@ figcaption {
 .primary-button.vid-3 {
   outline-offset: 0px;
   background-color: #0092bc00;
-  border: 1px solid #0092bc;
+  border: 1.5px solid #0092bc;
   border-radius: .5rem;
   outline: 1px #0092bc;
   padding: 0;
@@ -316,7 +316,7 @@ figcaption {
 
 .primary-button.vid-2 {
   background-color: #0092bc00;
-  border: 1px solid #0092bc;
+  border: 1.5px solid #0092bc;
   display: flex;
 }
 
@@ -326,7 +326,7 @@ figcaption {
 
 .primary-button.vid-1 {
   background-color: #0092bc00;
-  border: 1px solid #0092bc;
+  border: 1.5px solid #0092bc;
   display: flex;
 }
 
@@ -676,7 +676,7 @@ figcaption {
 }
 
 .contact-form-wrap {
-  border: 1px solid #eee;
+  border: 1.5px solid #eee;
   padding: 45px 50px 50px;
 }
 
@@ -698,7 +698,7 @@ figcaption {
 }
 
 .text-field {
-  border: 1px solid #e4e4e4;
+  border: 1.5px solid #e4e4e4;
   border-radius: 0;
   margin-bottom: 18px;
   padding: 21px 20px;
@@ -1288,7 +1288,7 @@ figcaption {
 .headline {
   grid-column-gap: 1.5rem;
   grid-row-gap: 1.5rem;
-  border-bottom: 2px #8050ed;
+  border-bottom1.5px #8050ed;
   flex-flow: column;
   justify-content: space-between;
   align-items: center;
@@ -1309,7 +1309,7 @@ figcaption {
   grid-row-gap: 0px;
   outline-offset: 0px;
   background-color: #08062a;
-  border: 1px #000;
+  border: 1.5px #000;
   outline: 3px #1a1b1f;
   flex-flow: column;
   grid-template-rows: auto auto;
@@ -1412,7 +1412,7 @@ figcaption {
 .text-block.blue {
   color: #0092bc;
   text-align: center;
-  border: 1px #0092bc;
+  border: 1.5px #0092bc;
   width: 100%;
 }
 
@@ -1538,7 +1538,7 @@ figcaption {
   grid-column-gap: 1.5rem;
   grid-row-gap: 1.5rem;
   background-color: #0000;
-  border: .25px #fff0;
+  border1.5px #fff0;
   flex-flow: column;
   justify-content: space-around;
   align-items: stretch;
@@ -1630,7 +1630,7 @@ figcaption {
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   background-color: #0000;
-  border: .0125px #fff;
+  border1.5px #fff;
   border-radius: .5rem;
   grid-template-rows: auto;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -2205,7 +2205,7 @@ figcaption {
 
 .hero-video-landing:active {
   background-color: #0000;
-  border: 1px solid #0092bc;
+  border: 1.5px solid #0092bc;
 }
 
 .hero-video-landing.cc-jumbo-button {
@@ -2238,7 +2238,7 @@ figcaption {
 .hero-video-landing.land {
   color: #08062a;
   background-color: #00eb8000;
-  border: 1px solid #00eb80;
+  border: 1.5px solid #00eb80;
   border-radius: .5rem;
   transition-property: none;
 }
@@ -2247,7 +2247,7 @@ figcaption {
   box-shadow: none;
   background-color: #8050ed00;
   border-style: solid;
-  border-width: 1px;
+  border-width: 1.5px;
   padding-top: 0;
   padding-left: 0;
   padding-right: 0;
@@ -2257,7 +2257,7 @@ figcaption {
 .hero-video-landing.vid-3 {
   outline-offset: 0px;
   background-color: #0092bc00;
-  border: 1px solid #0092bc;
+  border: 1.5px solid #0092bc;
   border-radius: .5rem;
   outline: 1px #0092bc;
   padding: 0;
@@ -2266,7 +2266,7 @@ figcaption {
 
 .hero-video-landing.vid-2, .hero-video-landing.vid-1 {
   background-color: #0092bc00;
-  border: 1px solid #0092bc;
+  border: 1.5px solid #0092bc;
 }
 
 .hero-text-button {
@@ -2286,7 +2286,7 @@ figcaption {
 .hero-text-button.blue {
   color: #0092bc;
   text-align: center;
-  border: 1px #0092bc;
+  border: 1.5px #0092bc;
   width: 100%;
 }
 
@@ -8839,7 +8839,7 @@ figcaption {
 
   .b1-rest {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     border-radius: .5rem;
     padding: 0;
     display: none;
@@ -8851,7 +8851,7 @@ figcaption {
   }
 
   .b2-rest {
-    border: 1px #000;
+    border: 1.5px #000;
     padding: 0;
     display: none;
   }
@@ -8871,7 +8871,7 @@ figcaption {
 
   .b3-rest {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     height: auto;
     padding: 0;
     display: none;
@@ -8892,7 +8892,7 @@ figcaption {
 
   .b5-rest {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     padding: 0;
     display: none;
   }
@@ -8904,7 +8904,7 @@ figcaption {
 
   .b4-rest {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     padding: 0;
     display: none;
   }
@@ -8967,7 +8967,7 @@ figcaption {
 
   .solutions-b5 {
     border-top: 1.5px solid #0093bc;
-    border-radius: .5px;
+    border-radius: 1.5px;
     flex-flow: column;
     height: 100%;
     padding: 2rem;
@@ -9594,7 +9594,7 @@ figcaption {
   }
 
   .primary-button.space, .primary-button.vid-3 {
-    border-width: 1px;
+    border-width: 1.5px;
     width: 100%;
   }
 
@@ -9787,7 +9787,7 @@ figcaption {
 
   .vid-1-details {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     justify-content: space-around;
     align-items: stretch;
     width: 100%;
@@ -9800,20 +9800,20 @@ figcaption {
 
   .video-3-details {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     padding: 2rem;
   }
 
   .video-embed-1 {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     border-top-left-radius: .5rem;
     border-bottom-right-radius: 0;
     height: 25vh;
   }
 
   .video-embed-2 {
-    border-width: 2px 2px 0;
+    border-width1.5px 2px 0;
     border-top-right-radius: .5rem;
     border-bottom-left-radius: 0;
     height: 25vh;
@@ -9821,7 +9821,7 @@ figcaption {
 
   .video-3-embed {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     border-top-left-radius: .5rem;
     border-bottom-right-radius: 0;
     height: 25vh;
@@ -9838,7 +9838,7 @@ figcaption {
 
   .intro-row-details {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     width: 100%;
     padding-top: 0;
     padding-left: 0;
@@ -9950,7 +9950,7 @@ figcaption {
 
   .hero-embed {
     border-style: solid;
-    border-width: 2px 2px 0;
+    border-width1.5px 2px 0;
     height: 25vh;
   }
 
@@ -9962,7 +9962,7 @@ figcaption {
 
   .hero-embed-body {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     height: auto;
     padding-left: 0;
     padding-right: 0;
@@ -10029,7 +10029,7 @@ figcaption {
   }
 
   .hero-video-landing.space, .hero-video-landing.vid-3 {
-    border-width: 1px;
+    border-width: 1.5px;
     width: 100%;
   }
 
@@ -10039,13 +10039,13 @@ figcaption {
 
   .video-playlist-details {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     padding: 2rem;
   }
 
   .client-video-embed {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     border-top-left-radius: .5rem;
     border-bottom-right-radius: 0;
     height: auto;
@@ -10079,7 +10079,7 @@ figcaption {
 
   .video-playlist-thumbnail {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     border-top-left-radius: .5rem;
     border-bottom-right-radius: 0;
     height: 25vh;
@@ -10125,7 +10125,7 @@ figcaption {
 
   .client-video-embed-1 {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     border-top-left-radius: .5rem;
     border-bottom-right-radius: 0;
     height: auto;
@@ -10133,7 +10133,7 @@ figcaption {
 
   .client-video-embed-2 {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     border-top-left-radius: .5rem;
     border-bottom-right-radius: 0;
     justify-content: center;
@@ -10154,7 +10154,7 @@ figcaption {
 
   .index-graph {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     border-top-left-radius: .5rem;
     border-bottom-right-radius: 0;
     height: 25vh;
@@ -10370,7 +10370,7 @@ figcaption {
 
   .thought-leadership-video {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     border-top-left-radius: .5rem;
     border-bottom-right-radius: 0;
     height: auto;
@@ -10489,7 +10489,7 @@ figcaption {
 
   .mnav-thought-leadership {
     color: #9e9e9e;
-    border-top: .75px solid #0092bc;
+    border-top1.5px solid #0092bc;
     justify-content: center;
     align-items: center;
     padding: 1rem;
@@ -10510,7 +10510,7 @@ figcaption {
 
   .mnav-client-spotlights {
     color: #9e9e9e;
-    border-top: .75px solid #0092bc;
+    border-top1.5px solid #0092bc;
     justify-content: center;
     align-items: center;
     padding: 1rem;
@@ -10530,7 +10530,7 @@ figcaption {
 
   .mnav-solutions {
     color: #9e9e9e;
-    border-top: .75px solid #0092bc;
+    border-top1.5px solid #0092bc;
     justify-content: center;
     align-items: center;
     padding: 1rem;
@@ -10581,7 +10581,7 @@ figcaption {
 
   .client-video-embed-3 {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     border-top-left-radius: .5rem;
     border-bottom-right-radius: 0;
     height: auto;
@@ -10589,7 +10589,7 @@ figcaption {
 
   .client-video-embed-4 {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     border-top-left-radius: .5rem;
     border-bottom-right-radius: 0;
     justify-content: center;
@@ -10845,7 +10845,7 @@ figcaption {
 
   .client-video-embed-2-2 {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     border-top-left-radius: .5rem;
     border-bottom-right-radius: 0;
     justify-content: center;
@@ -10855,7 +10855,7 @@ figcaption {
 
   .client-video-embed-1-2 {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     border-top-left-radius: .5rem;
     border-bottom-right-radius: 0;
     height: auto;
@@ -10873,7 +10873,7 @@ figcaption {
 
   .client-video-embed-2-3 {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     border-top-left-radius: .5rem;
     border-bottom-right-radius: 0;
     justify-content: center;
@@ -10883,7 +10883,7 @@ figcaption {
 
   .client-video-embed-1-3 {
     border-style: none;
-    border-width: 1px;
+    border-width: 1.5px;
     border-top-left-radius: .5rem;
     border-bottom-right-radius: 0;
     height: auto;

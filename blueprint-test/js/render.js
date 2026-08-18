@@ -1,9 +1,14 @@
 (function () {
   'use strict';
 
+  function param(name) {
+    try { return new URLSearchParams(location.search).get(name); } catch (e) { return null; }
+  }
+
+  var LANG = param('lang');
+
   var CONTENT_URL = (function () {
-    var q = null;
-    try { q = new URLSearchParams(location.search).get('content'); } catch (e) {}
+    var q = param('content');
     var meta = document.querySelector('meta[name="blueprint-content"]');
     return q || window.BLUEPRINT_CONTENT_URL || (meta && meta.content) || 'content.json';
   })();
@@ -14,11 +19,12 @@
     return raw ? String(raw).split(',').map(function (s) { return s.trim(); }).filter(Boolean) : null;
   })();
 
+  // reassigned when ?lang= points at a different content file
   var CONTENT_BASE = (function () {
     try { return new URL(CONTENT_URL, document.baseURI).href; } catch (e) { return document.baseURI; }
   })();
 
-  var CACHE_KEY = 'bp-content-cache-v1:' + CONTENT_BASE;
+  var CACHE_KEY = 'bp-content-cache-v1:' + CONTENT_BASE + (LANG ? ':' + LANG : '');
 
   function esc(s) {
     return String(s == null ? '' : s)
@@ -65,6 +71,9 @@
   // anchor slug -> how to reveal it. Populated during render from the `anchor`
   // field on any feature or spotlight, so a new deep link is a JSON edit.
   var ANCHORS = {};
+
+  // section id -> selector fn, so a deep link can drive any video list
+  var VIDEO_SECTIONS = {};
 
   function absUrl(path) {
     if (!path) return '';
@@ -127,10 +136,26 @@
     return 'https://cdn.jwplayer.com/players/' + v.jwMedia + '-' + player + '.html';
   }
 
+  // JW only serves posters at a fixed set of widths; anything else 404s.
+  var JW_WIDTHS = [320, 480, 640, 720, 1280, 1920];
+
+  function jwMediaId(v) {
+    if (!v) return '';
+    if (v.jwMedia) return v.jwMedia;
+    // A player URL carries the media id: /players/{media}-{player}.html
+    var src = v.url || v.iframe || '';
+    var m = /\/players\/([A-Za-z0-9]+)-[A-Za-z0-9]+\.html/.exec(src)
+         || /\/(?:videos|manifests)\/([A-Za-z0-9]+)[-.]/.exec(src);
+    return m ? m[1] : '';
+  }
+
   function jwPoster(v, width) {
     if (v && v.poster) return imgUrl(v.poster);
-    if (!v || !v.jwMedia) return '';
-    return 'https://cdn.jwplayer.com/v2/media/' + v.jwMedia + '/poster.jpg?width=' + (width || 720);
+    var id = jwMediaId(v);
+    if (!id) return '';
+    var want = width || 720;
+    var w = JW_WIDTHS.filter(function (x) { return x >= want; })[0] || JW_WIDTHS[JW_WIDTHS.length - 1];
+    return 'https://cdn.jwplayer.com/v2/media/' + id + '/poster.jpg?width=' + w;
   }
 
   // Players are mounted on demand, never up front. The export put a live iframe
@@ -240,6 +265,21 @@
     return hits.length ? hits : null;
   }
 
+  // Shown only when config.languages lists more than one entry, so a
+  // single-language site has no toggle at all.
+  function renderLanguages() {
+    var list = (CFG.languages || []).filter(function (l) { return l && l.code; });
+    if (list.length < 2) return '';
+    var current = LANG || CFG.defaultLanguage || list[0].code;
+    return '<div class="bp-lang" role="group" aria-label="Language">'
+      + list.map(function (l) {
+          return '<a class="bp-lang-item' + (l.code === current ? ' is-active' : '') + '"'
+            + ' hreflang="' + esc(l.code) + '" href="?lang=' + encodeURIComponent(l.code) + '">'
+            + esc(l.label || l.code.toUpperCase()) + '</a>';
+        }).join('')
+      + '</div>';
+  }
+
   function renderNav(nav) {
     if (!nav) return '';
     var items = nav.items || [];
@@ -269,7 +309,7 @@
       + '<a href="' + esc(brand.href || '#home') + '" class="mobile-title-nav w-nav-brand"><div class="mobile-nav-title">'
       + '<div class="subnav-home-span">' + esc(brand.line1) + '</div>'
       + '<div class="subnav-home">' + esc(brand.line2) + '</div></div></a>'
-      + '<nav role="navigation" class="mobile-nav-menu w-nav-menu">' + mobileLinks + '</nav>'
+      + '<nav role="navigation" class="mobile-nav-menu w-nav-menu">' + mobileLinks + renderLanguages() + '</nav>'
       + '<div id="mobile-nav-button" class="mobile-nav-button w-nav-button"><div class="hamburger-icon w-icon-nav-menu"></div></div>'
       + '</div></div>'
 
@@ -278,7 +318,8 @@
       + '<div class="subnav-home-span">' + esc(brand.line1) + '</div>'
       + '<div class="subnav-home">' + esc(brand.line2) + '</div></a>'
       + '<div class="line"></div>'
-      + '<div class="sections-container"><div class="sections">' + deskLinks + dd + '</div></div>'
+      + '<div class="sections-container"><div class="sections">' + deskLinks + dd + '</div>'
+      + renderLanguages() + '</div>'
       + '</nav>';
   }
 
@@ -300,7 +341,10 @@
             ? '<div class="lottie-open" data-animation-type="lottie" data-src="' + esc(absUrl(d.scrollLottie))
               + '" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg"'
               + ' data-default-duration="0" data-duration="2" data-loading="eager"></div>'
-            : '')
+            : '<div class="bp-scroll-arrow" aria-hidden="true">'
+              + '<svg viewBox="0 0 24 14" xmlns="http://www.w3.org/2000/svg">'
+              + '<path d="M1 1L12 12L23 1" fill="none" stroke="currentColor" stroke-width="2"'
+              + ' stroke-linecap="round" stroke-linejoin="round"/></svg></div>')
         + '</div></div>';
     };
 
@@ -330,269 +374,231 @@
       + '</header>'
       + '<div class="hero-container"><div id="hero-video" class="hero-embed-body">' + videoEmbed(v) + '</div></div>';
   }
-  function epsQuote(q) {
-    if (!q || !q.text) return '';
-    return '<div class="bp-eps-quote">'
-      + '<img class="quote" src="' + esc(chromeUrl('images/quote_white.svg')) + '" loading="lazy" alt="">'
-      + '<p class="paragraph-light">' + richText(q.text) + '</p>'
-      + (q.name
-          ? '<div class="bp-eps-attrib">'
-            + (q.headshot ? '<div class="bp-headshot" ' + bgAttrs({ image: q.headshot }) + '></div>' : '')
-            + '<div class="name-container"><div class="name">' + esc(q.name) + '</div>'
-            + (q.role ? '<div class="title">' + esc(q.role) + '</div>' : '') + '</div></div>'
-          : '')
+  function vsButtons(v) {
+    var list = v.ctas || (v.cta ? [v.cta] : []);
+    if (!list.length) return '';
+    // Same two-part shape as the Solutions body link: label block plus arrow block.
+    return '<div class="bp-vs-actions">'
+      + list.map(function (b) {
+          if (!b || !b.url) return '';
+          return '<a class="bp-vs-cta" href="' + esc(b.url) + '" target="_blank" rel="noopener">'
+            + '<span class="bp-vs-cta-label">' + richText(b.label || '') + '</span>'
+            + '<span class="bp-vs-cta-arrow">'
+            + '<img src="' + esc(chromeUrl('images/arrow-dark.svg')) + '" alt="" aria-hidden="true">'
+            + '</span></a>';
+        }).join('')
       + '</div>';
   }
 
-  function renderThoughtLeadership(d, feed) {
+  function vsQuote(q) {
+    if (!q || !q.text) return '';
+    return '<blockquote class="bp-vs-quote">'
+      + '<img class="quote" src="' + esc(chromeUrl('images/quote_white.svg')) + '" loading="lazy" alt="">'
+      + '<p class="paragraph-light">' + richText(q.text) + '</p>'
+      + (q.name
+          ? '<footer class="bp-vs-attrib">'
+            + (q.headshot ? '<div class="bp-headshot" ' + bgAttrs({ image: q.headshot }) + '></div>' : '')
+            + '<div class="name-container"><div class="name">' + esc(q.name) + '</div>'
+            + (q.role ? '<div class="title">' + esc(q.role) + '</div>' : '') + '</div></footer>'
+          : '')
+      + '</blockquote>';
+  }
+
+  // One module for every video list on the page. Player on the left, playlist
+  // on the right, everything about the playing video underneath it.
+  function renderVideoSection(d, feed, data) {
     if (!d) return '';
-    var features = (d.features || []).slice();
-    var fromFeed = routed(feed, 'feature');
+    var items = (d.features || d.videos || []).slice();
+    var fromFeed = routed(feed, d.route || (d.features ? 'feature' : 'spotlight'));
     if (fromFeed) {
-      features = features.map(function (f, i) {
-        var m = fromFeed.filter(function (v) { return v.jwMedia === (f.video && f.video.jwMedia); })[0] || fromFeed[i];
-        return m ? Object.assign({}, f, { video: Object.assign({}, f.video, m), title: f.title || m.title }) : f;
+      items = items.map(function (v, i) {
+        var m = fromFeed.filter(function (x) { return x.jwMedia === jwMediaId(v.video || v); })[0] || fromFeed[i];
+        return m ? Object.assign({}, v, { video: Object.assign({}, v.video || v, m) }) : v;
       });
     }
-    if (!features.length) return '';
-
-    features.forEach(function (f, i) {
-      if (f.anchor) ANCHORS[f.anchor] = { type: 'feature', index: i };
-    });
-
-    var thumbs = features.map(function (f, i) {
-      var img = f.thumbnail || f.cardImage;
-      var src = img ? imgUrl(img) : jwPoster(f.video, 640);
-      return '<button type="button" class="bp-eps-thumb' + (i === 0 ? ' is-active' : '') + '"'
-        + ' role="tab" aria-selected="' + (i === 0 ? 'true' : 'false') + '" data-eps="' + i + '"'
-        + (f.anchor ? ' data-anchor="' + esc(f.anchor) + '"' : '') + '>'
-        + '<span class="bp-eps-thumb-media">'
-        + (src ? '<img src="' + esc(src) + '" alt="" loading="lazy">' : '')
-        + (f.badge ? '<span class="bp-eps-badge">' + esc(f.badge) + '</span>' : '')
-        + '</span>'
-        + '<span class="bp-eps-thumb-title">' + richText(f.title) + '</span>'
-        + '</button>';
-    }).join('');
-
-    var panels = features.map(function (f, i) {
-      var body = (f.body || []).map(function (p) {
-        return '<p class="bp-eps-para">' + richText(p) + '</p>';
-      }).join('');
-      return '<div class="bp-eps-panel' + (i === 0 ? ' is-active" ' : '" ')
-        + (f.anchor ? 'id="' + esc(f.anchor) + '" ' : '')
-        + 'data-eps-panel="' + i + '" role="tabpanel">'
-        + '<div class="bp-eps-video">' + videoEmbed(f.video) + '</div>'
-        + '<aside class="bp-eps-info">'
-        + '<h3 class="bp-eps-title">' + richText(f.title) + '</h3>'
-        + (body ? '<div class="bp-eps-body">' + body + '</div>' : '')
-        + epsQuote(f.quote)
-        + '</aside>'
-        + '</div>';
-    }).join('');
-
-    var arrows = features.length > 1
-      ? '<div class="bp-eps-nav">'
-        + '<button type="button" class="bp-eps-arrow prev" aria-label="' + esc(UI.prev || 'Previous') + '">'
-        + '<svg viewBox="0 0 35.8 61.4" aria-hidden="true"><path d="M30.4,5.7L5.4,30.7l25,25"></path></svg></button>'
-        + '<button type="button" class="bp-eps-arrow next" aria-label="' + esc(UI.next || 'Next') + '">'
-        + '<svg viewBox="0 0 35.8 61.4" aria-hidden="true"><path d="M5.4,55.7l25-25L5.4,5.7"></path></svg></button>'
-        + '</div>'
-      : '';
-
-    return ''
-      + '<header id="' + esc(d.id || 'thought-leadership') + '" class="tl-container bp-eps">'
-      + '<div class="bp-eps-inner">'
-      + (d.headline ? '<p class="bp-eps-headline">' + richText(d.headline) + '</p>' : '')
-      + '<div class="bp-eps-detail">' + panels + '</div>'
-      + '<div class="bp-eps-railhead">'
-      + '<span class="bp-eps-eyebrow">' + esc(d.railLabel || d.cue || '') + '</span>'
-      + arrows
-      + '</div>'
-      + '<div class="bp-eps-rail" role="tablist">' + thumbs + '</div>'
-      + '</div>'
-      + '<div class="background-image-2" ' + bgAttrs({ image: d.backgroundImage }) + '></div>'
-      + '</header>';
-  }
-  // ------------------------------------------------------------ Video library
-  // Winning Formula pattern: one featured player, filter pills, and a grid of
-  // every video. Sources are read from the sections that already hold them, so
-  // no video data is duplicated in the JSON.
-  function libraryItems(d, data, feed) {
-    var out = [];
-    (d.filters || []).forEach(function (f) {
-      var src = data[f.from];
-      if (!src) return;
-      var list = src.features || src.videos || [];
-      var routeFeed = routed(feed, f.route || (src.features ? 'feature' : 'spotlight'));
-      if (routeFeed) list = routeFeed;
-      list.forEach(function (v) {
-        out.push({
-          title: v.title,
-          description: (v.body && v.body[0]) || v.description || '',
-          thumbnail: v.thumbnail || v.cardImage,
-          video: v.video || v,
-          anchor: v.anchor,
-          badge: v.badge,
-          filterId: f.id,
-          filterLabel: f.label
-        });
-      });
-    });
-    return out;
-  }
-
-  function renderVideoLibrary(d, feed, data) {
-    if (!d) return '';
-    var items = libraryItems(d, data, feed);
     if (!items.length) return '';
 
+    var sid = d.id || 'videos';
+
     items.forEach(function (v, i) {
-      if (v.anchor) ANCHORS[v.anchor] = { type: 'library', index: i };
+      if (v.anchor) ANCHORS[v.anchor] = { type: 'video', section: sid, index: i };
     });
 
-    var featured = items.map(function (v, i) {
-      return '<div class="bp-lib-feature' + (i === 0 ? ' is-active" ' : '" ')
+    var stage = items.map(function (v, i) {
+      var body = (v.body || (v.description ? [v.description] : [])).map(function (t) {
+        return '<p class="bp-vs-para">' + richText(t) + '</p>';
+      }).join('');
+      return '<article class="bp-vs-item' + (i === 0 ? ' is-active" ' : '" ')
         + (v.anchor ? 'id="' + esc(v.anchor) + '" ' : '')
-        + 'data-lib-feature="' + i + '">'
-        + videoEmbed(v.video)
-        + '<div class="bp-lib-meta">'
-        + (v.filterLabel ? '<span class="bp-lib-tag">' + esc(v.filterLabel) + '</span>' : '')
-        + '<h4 class="bp-lib-title">' + richText(v.title) + '</h4>'
-        + (v.description ? '<p class="bp-lib-desc">' + richText(v.description) + '</p>' : '')
-        + '</div></div>';
+        + 'data-vs-item="' + i + '">'
+        + '<div class="bp-vs-player">' + videoEmbed(v.video || v) + '</div>'
+        + '<div class="bp-vs-lower">'
+        + '<div class="bp-vs-meta">'
+        + '<h4 class="bp-vs-title">' + richText(v.title) + '</h4>'
+        + (body ? '<div class="bp-vs-body">' + body + '</div>' : '')
+        + vsButtons(v)
+        + '</div>'
+        + vsQuote(v.quote)
+        + '</div>'
+        + '</article>';
     }).join('');
 
-    var pills = '';
-    if (d.showFilters !== false && (d.filters || []).length > 1) {
-      pills = '<div class="bp-lib-filters">'
-        + '<button type="button" class="bp-lib-pill is-active" data-filter="all">'
-        + esc(d.allLabel || 'All') + '</button>'
-        + (d.filters || []).map(function (f) {
-            return '<button type="button" class="bp-lib-pill" data-filter="' + esc(f.id) + '">'
-              + esc(f.label) + '</button>';
-          }).join('')
-        + '</div>';
-    }
-
-    var grid = items.map(function (v, i) {
-      var img = v.thumbnail ? imgUrl(v.thumbnail) : jwPoster(v.video, 640);
-      return '<button type="button" class="bp-lib-card' + (i === 0 ? ' is-active' : '') + '"'
-        + ' data-lib="' + i + '" data-filter="' + esc(v.filterId) + '"'
-        + (v.anchor ? ' data-anchor="' + esc(v.anchor) + '"' : '') + '>'
-        + '<span class="bp-lib-card-media">'
-        + (img ? '<img src="' + esc(img) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '')
-        + '<span class="bp-lib-card-play"><img src="' + esc(chromeUrl('images/play-button.svg')) + '" alt=""></span>'
-        + (v.badge ? '<span class="bp-eps-badge">' + esc(v.badge) + '</span>' : '')
+    var rows = items.map(function (v, i) {
+      var badge = v.badge || (i === 0 ? d.newBadge : '');
+      var img = v.thumbnail || v.cardImage;
+      var src = img ? imgUrl(img) : jwPoster(v.video || v, 480);
+      return '<button type="button" class="bp-vs-row' + (i === 0 ? ' is-active' : '') + '"'
+        + ' data-vs="' + i + '"' + (v.anchor ? ' data-anchor="' + esc(v.anchor) + '"' : '') + '>'
+        + '<span class="bp-vs-row-media">'
+        + (src ? '<img src="' + esc(src) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '')
+        + '<span class="bp-vs-row-index">' + (i + 1) + '</span>'
+        + (badge ? '<span class="bp-vs-badge">' + esc(badge) + '</span>' : '')
         + '</span>'
-        + '<span class="bp-lib-card-tag">' + esc(v.filterLabel || '') + '</span>'
-        + '<span class="bp-lib-card-title">' + richText(v.title) + '</span>'
-        + '</button>';
+        + '<span class="bp-vs-row-meta">'
+        + '<span class="bp-vs-row-title">' + richText(v.title) + '</span>'
+        + '<span class="bp-vs-row-now">' + esc(d.nowPlayingLabel || 'Now playing') + '</span>'
+        + '</span></button>';
     }).join('');
+
+    // Sections whose videos carry quotes park them beside the player, where the
+    // playlist would otherwise leave a column of dead space.
+    var hasQuotes = items.some(function (v) { return v.quote && v.quote.text; });
 
     return ''
-      + '<section id="' + esc(d.id || 'videos') + '" class="bp-lib">'
-      + '<div class="bp-lib-inner">'
+      + '<section id="' + esc(sid) + '" class="bp-vs' + (hasQuotes ? ' has-quotes' : '') + '">'
+      + '<div class="bp-vs-inner">'
       + (d.headline ? '<h3 class="cs-headline">' + richText(d.headline) + '</h3>' : '')
-      + (d.intro ? '<p class="bp-lib-intro">' + richText(d.intro) + '</p>' : '')
-      + '<div class="bp-lib-stage">' + featured + '</div>'
-      + (d.railLabel ? '<div class="bp-lib-railhead"><span class="bp-eps-eyebrow">' + esc(d.railLabel) + '</span></div>' : '')
-      + pills
-      + '<div class="bp-lib-grid">' + grid + '</div>'
+      + (d.intro ? '<p class="bp-vs-intro">' + richText(d.intro) + '</p>' : '')
+      + '<div class="bp-vs-layout">'
+      + '<div class="bp-vs-stage">' + stage + '</div>'
+      + '<div class="bp-vs-list">'
+      + '<button type="button" class="bp-vs-list-arrow up" aria-label="' + esc(UI.prev || 'Previous') + '">'
+      + '<svg viewBox="0 0 24 14" aria-hidden="true"><path d="M1 13L12 2L23 13" fill="none" stroke="currentColor"'
+      + ' stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'
+      + '<div class="bp-vs-list-scroll">' + rows + '</div>'
+      + '<button type="button" class="bp-vs-list-arrow down" aria-label="' + esc(UI.next || 'Next') + '">'
+      + '<svg viewBox="0 0 24 14" aria-hidden="true"><path d="M1 1L12 12L23 1" fill="none" stroke="currentColor"'
+      + ' stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'
       + '</div>'
-      + '<div class="background-image-2" ' + bgAttrs({ image: d.backgroundImage }) + '></div>'
+      + '</div></div>'
+      + (d.backgroundImage
+          ? '<div class="background-image-2" '
+            + bgAttrs({
+                image: d.backgroundImage,
+                overlay: d.backgroundOverlay || '',
+                size: 'cover',
+                position: '50%',
+                repeat: 'no-repeat'
+              }) + '></div>'
+          : '')
       + '</section>';
   }
 
-  function initVideoLibrary() {
-    var root = document.querySelector('.bp-lib');
-    if (!root) return;
-    var cards = Array.prototype.slice.call(root.querySelectorAll('.bp-lib-card'));
-    var features = Array.prototype.slice.call(root.querySelectorAll('.bp-lib-feature'));
-    var pills = Array.prototype.slice.call(root.querySelectorAll('.bp-lib-pill'));
-    var stage = root.querySelector('.bp-lib-stage');
-    if (!cards.length) return;
+  function initVideoSections() {
+    Array.prototype.slice.call(document.querySelectorAll('.bp-vs')).forEach(function (root) {
+      var rows = Array.prototype.slice.call(root.querySelectorAll('.bp-vs-row'));
+      var items = Array.prototype.slice.call(root.querySelectorAll('.bp-vs-item'));
+      var scroller = root.querySelector('.bp-vs-list-scroll');
+      if (!rows.length) return;
 
-    function select(i, play) {
-      if (i < 0 || i >= cards.length) return;
-      unmountVideo();
-      cards.forEach(function (c, n) { c.classList.toggle('is-active', n === i); });
-      features.forEach(function (f, n) { f.classList.toggle('is-active', n === i); });
-      if (play) {
-        var box = features[i].querySelector('.bp-video');
-        if (box) mountVideo(box);
+      // The playlist is capped against the left column so it never sets the
+      // section's height itself. With a quote beside it that means the player;
+      // without one it may run the full height of the player plus its copy.
+      // Both are measured from the left column only, so the two cannot chase
+      // each other.
+      var measure = function () {
+        var active = items.filter(function (a) { return a.classList.contains('is-active'); })[0] || items[0];
+        if (!active) return;
+        var player = active.querySelector('.bp-vs-player');
+        var meta = active.querySelector('.bp-vs-lower');
+        if (!player) return;
+        var ph = Math.round(player.getBoundingClientRect().height);
+        if (ph > 0) root.style.setProperty('--player-h', ph + 'px');
+        if (meta) {
+          var ch = Math.round(meta.getBoundingClientRect().bottom - player.getBoundingClientRect().top);
+          if (ch > 0) root.style.setProperty('--col-h', ch + 'px');
+        }
+      };
+      measure();
+      window.addEventListener('resize', measure);
+      if (window.ResizeObserver && items[0] && items[0].querySelector('.bp-vs-player')) {
+        new ResizeObserver(measure).observe(items[0].querySelector('.bp-vs-player'));
       }
-    }
 
-    function filter(id) {
-      pills.forEach(function (b) { b.classList.toggle('is-active', b.getAttribute('data-filter') === id); });
-      cards.forEach(function (c) {
-        c.hidden = !(id === 'all' || c.getAttribute('data-filter') === id);
-      });
-      var active = cards.filter(function (c) { return c.classList.contains('is-active'); })[0];
-      if (active && active.hidden) {
-        var first = cards.filter(function (c) { return !c.hidden; })[0];
-        if (first) select(cards.indexOf(first));
+      function select(i, play) {
+        if (i < 0 || i >= rows.length) return;
+        unmountVideo();
+        rows.forEach(function (r, n) { r.classList.toggle('is-active', n === i); });
+        items.forEach(function (a, n) { a.classList.toggle('is-active', n === i); });
+        if (typeof measure === 'function') measure();
+        if (scroller) {
+          var r = rows[i];
+          var top = r.offsetTop - scroller.clientHeight / 2 + r.offsetHeight / 2;
+          scroller.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+          setTimeout(function () { var e = new Event('scroll'); scroller.dispatchEvent(e); }, 400);
+        }
+        if (play) {
+          var box = items[i].querySelector('.bp-video');
+          if (box) mountVideo(box);
+        }
       }
-    }
 
-    cards.forEach(function (c, i) {
-      c.addEventListener('click', function () {
-        select(i, true);
-        var slug = c.getAttribute('data-anchor');
-        if (slug && location.hash !== '#' + slug) history.replaceState(null, '', '#' + slug);
-        if (stage) stage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // The list never shows a scrollbar. When the rows do not fit, arrows
+      // appear above and below and step the list one row at a time.
+      var listBox = root.querySelector('.bp-vs-list');
+      var upBtn = root.querySelector('.bp-vs-list-arrow.up');
+      var downBtn = root.querySelector('.bp-vs-list-arrow.down');
+
+      function step() { return rows[0] ? rows[0].getBoundingClientRect().height : 80; }
+
+      function syncArrows() {
+        if (!scroller || !listBox) return;
+        var over = scroller.scrollHeight - scroller.clientHeight;
+        listBox.classList.toggle('is-scrollable', over > 2);
+        if (upBtn) upBtn.disabled = scroller.scrollTop <= 1;
+        if (downBtn) downBtn.disabled = scroller.scrollTop >= over - 1;
+      }
+
+      if (upBtn) upBtn.addEventListener('click', function () {
+        scroller.scrollBy({ top: -step(), behavior: 'smooth' });
       });
-    });
-    pills.forEach(function (b) {
-      b.addEventListener('click', function () { filter(b.getAttribute('data-filter')); });
-    });
+      if (downBtn) downBtn.addEventListener('click', function () {
+        scroller.scrollBy({ top: step(), behavior: 'smooth' });
+      });
+      if (scroller) {
+        scroller.addEventListener('scroll', syncArrows, { passive: true });
+        window.addEventListener('resize', syncArrows);
+        if (window.ResizeObserver) new ResizeObserver(syncArrows).observe(scroller);
+        setTimeout(syncArrows, 0);
+      }
 
-    window.__bpSelectLibrary = function (i) {
-      var c = cards[i];
-      if (c && c.hidden) filter('all');
-      select(i);
-      root.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
+      rows.forEach(function (r, i) {
+        r.addEventListener('click', function () {
+          select(i, true);
+          var slug = r.getAttribute('data-anchor');
+          if (slug && location.hash !== '#' + slug) history.replaceState(null, '', '#' + slug);
+          if (window.matchMedia('(max-width: 991px)').matches && items[i]) {
+            items[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      VIDEO_SECTIONS[root.id] = function (i) {
+        select(i);
+        // Stacked view has every video on the page, so jump to the one asked for
+        // rather than the top of the section.
+        var stacked = window.matchMedia('(max-width: 991px)').matches;
+        var target = stacked ? items[i] : root;
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      };
+    });
   }
 
-  function renderClientSpotlights(d, feed) {
-    if (!d) return '';
-    var videos = (d.videos || []).slice();
-    var fromFeed = routed(feed, 'spotlight');
-    if (fromFeed) videos = fromFeed;
-    if (!videos.length) return '';
-
-    videos.forEach(function (v, i) {
-      if (v.anchor) ANCHORS[v.anchor] = { type: 'spotlight', index: i };
-    });
-    d.__videos = videos;
-
-    return ''
-      + '<section id="' + esc(d.id || 'client-spotlights') + '" class="client-spotlights-archive">'
-      + '<h3 class="cs-headline">' + richText(d.headline) + '</h3>'
-      + '<div class="video-group-playlist"><div id="video-player-section">'
-      + '<div class="desktop-tablet-view">'
-      + '<div class="main-video-wrapper" id="main-video-container"><iframe id="main-video-iframe" src="" allowfullscreen allow="autoplay; fullscreen"></iframe></div>'
-      + '<div style="margin-top:2rem;"><h3 id="video-title"></h3><p id="video-description"></p></div>'
-      + '<div class="playlist-carousel">'
-      + '<button class="carousel-nav prev" id="prev-btn" aria-label="' + esc(UI.prev || 'Previous') + '"><svg viewBox="0 0 35.8 61.4"><path d="M30.4,5.7L5.4,30.7l25,25"></path></svg></button>'
-      + '<div class="carousel-wrapper"><div class="playlist-container" id="playlist-container"></div></div>'
-      + '<button class="carousel-nav next" id="next-btn" aria-label="' + esc(UI.next || 'Next') + '"><svg viewBox="0 0 35.8 61.4"><path d="M5.4,55.7l25-25L5.4,5.7"></path></svg></button>'
-      + '<div class="carousel-indicators" id="carousel-indicators"></div>'
-      + '</div></div>'
-      + '<div class="mobile-video-stack" id="mobile-video-stack"></div>'
-      + '<div class="see-more-container" id="see-more-container">'
-      + '<div class="see-more-arrow"><svg viewBox="0 0 60.7 33"><path d="M5.7,5.3l25,25L55.7,5.3"></path></svg></div>'
-      + '<div class="see-more-text">' + esc(d.seeMoreLabel || 'SEE MORE') + '</div>'
-      + '</div>'
-      + '</div></div></section>';
-  }
 
   var CARD_CONTAINER = { 1: 'income-gen-container', 2: 'mega-trends-container' };
 
   // The export used a 2-up grid only where the count filled it evenly (4 cards).
-  // Everything else stacked. An odd count or fewer than four falls back to a stack
-  // so no row is left half empty.
+  // Anything odd or under four stacks, so no row is left half empty.
   function cardColumns(b) {
     if (b.cardColumns) return b.cardColumns;
     var n = (b.cards || []).length;
@@ -718,90 +724,29 @@
     };
     var logo = d.logo || {};
     var year = new Date().getFullYear();
+    var copy = esc(String(d.copyright || '').replace('{year}', year));
+
+    // Desktop stacks logo, copyright and social in the right column. Below
+    // 992px the export switches to its own arrangement, so that markup is kept
+    // as-is and the two are swapped by media query.
     return ''
       + '<footer id="' + esc(d.id || 'footer') + '" class="footer-wrapper"><section class="footer-container">'
       + '<div class="column-container"><div class="columns">' + cols + '</div>'
-      + '<div class="social-icons-container"><div class="social-icons-mobile">' + social(true) + '</div></div>'
-      + '<div class="nasdaq-logo-container-full"><a href="' + esc(logo.url || '#') + '" target="_blank" rel="noopener" class="nasdaq-logo-footer w-inline-block">'
-      + '<img loading="lazy" src="' + esc(imgUrl(logo.src)) + '" alt="' + esc(logo.alt || '') + '" class="nasdaq-logo"></a></div></div>'
+      + '<div class="nasdaq-logo-container-full">'
+      + '<a href="' + esc(logo.url || '#') + '" target="_blank" rel="noopener" class="nasdaq-logo-footer w-inline-block">'
+      + '<img loading="lazy" src="' + esc(imgUrl(logo.src)) + '" alt="' + esc(logo.alt || '') + '" class="nasdaq-logo"></a>'
+      + '<div class="copyright-inline-2">' + copy + '</div>'
+      + '<div class="social-icons">' + social(false) + '</div>'
+      + '</div></div>'
       + '<div class="logo-copyright-container">'
-      + '<div class="nasdaq-logo-container"><img loading="lazy" src="' + esc(imgUrl(logo.src)) + '" alt="" class="nasdaq-logo"></div>'
-      + '<div class="social-copyright-container"><div class="social-icons">' + social(false) + '</div>'
-      + '<div class="copyright-inline-2">' + esc(String(d.copyright || '').replace('{year}', year)) + '</div>'
-      + '</div></div></section></footer>';
+      + '<div class="nasdaq-logo-container">'
+      + '<a href="' + esc(logo.url || '#') + '" target="_blank" rel="noopener" class="nasdaq-logo-footer w-inline-block">'
+      + '<img loading="lazy" src="' + esc(imgUrl(logo.src)) + '" alt="' + esc(logo.alt || '') + '" class="nasdaq-logo"></a></div>'
+      + '<div class="copyright-inline-2">' + copy + '</div>'
+      + '<div class="social-icons">' + social(false) + '</div>'
+      + '</div>'
+      + '</section></footer>';
   }
-  function initThoughtLeadership() {
-    var root = document.querySelector('.bp-eps');
-    if (!root) return;
-    var thumbs = Array.prototype.slice.call(root.querySelectorAll('.bp-eps-thumb'));
-    var panels = Array.prototype.slice.call(root.querySelectorAll('.bp-eps-panel'));
-    var rail = root.querySelector('.bp-eps-rail');
-    if (!thumbs.length) return;
-
-    var current = 0;
-
-    function select(i, scrollRail) {
-      if (i < 0 || i >= thumbs.length) return;
-      current = i;
-      unmountVideo();
-      thumbs.forEach(function (t, n) {
-        var on = n === i;
-        t.classList.toggle('is-active', on);
-        t.setAttribute('aria-selected', on ? 'true' : 'false');
-      });
-      panels.forEach(function (p, n) { p.classList.toggle('is-active', n === i); });
-      if (scrollRail !== false && rail) {
-        var t = thumbs[i];
-        var left = t.offsetLeft - (rail.clientWidth - t.offsetWidth) / 2;
-        rail.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
-      }
-    }
-
-    thumbs.forEach(function (t, i) {
-      t.addEventListener('click', function () {
-        select(i);
-        var slug = t.getAttribute('data-anchor');
-        if (slug && location.hash !== '#' + slug) history.replaceState(null, '', '#' + slug);
-      });
-    });
-
-    rail.addEventListener('keydown', function (e) {
-      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-      e.preventDefault();
-      var next = current + (e.key === 'ArrowRight' ? 1 : -1);
-      if (next < 0 || next >= thumbs.length) return;
-      select(next);
-      thumbs[next].focus();
-    });
-
-    var prev = root.querySelector('.bp-eps-arrow.prev');
-    var next = root.querySelector('.bp-eps-arrow.next');
-
-    function pageRail(dir) {
-      if (!rail) return;
-      rail.scrollBy({ left: dir * Math.round(rail.clientWidth * 0.8), behavior: 'smooth' });
-    }
-    function syncArrows() {
-      if (!prev || !next || !rail) return;
-      var max = rail.scrollWidth - rail.clientWidth - 1;
-      prev.disabled = rail.scrollLeft <= 0;
-      next.disabled = rail.scrollLeft >= max;
-    }
-    if (prev) prev.addEventListener('click', function () { pageRail(-1); });
-    if (next) next.addEventListener('click', function () { pageRail(1); });
-    if (rail) {
-      rail.addEventListener('scroll', syncArrows, { passive: true });
-      window.addEventListener('resize', syncArrows);
-      syncArrows();
-    }
-
-    window.__bpOpenFeature = function (i) {
-      select(i);
-      root.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
-    window.__bpCloseFeature = function () {};
-  }
-
   function initSolutions() {
     var wrap = document.querySelector('.solutions-container');
     if (!wrap) return;
@@ -828,141 +773,6 @@
     select(0);
   }
 
-  function initClientSpotlights(data) {
-    var d = data.clientSpotlights;
-    if (!d) return;
-    var videos = d.__videos || d.videos || [];
-    if (!videos.length || !document.getElementById('playlist-container')) return;
-
-    var current = 0, offset = 0, perSlide = 3, mobile = false, expanded = false;
-    var INITIAL = d.mobileInitialCount || 4;
-
-    var els = {
-      list: document.getElementById('playlist-container'),
-      prev: document.getElementById('prev-btn'),
-      next: document.getElementById('next-btn'),
-      dots: document.getElementById('carousel-indicators'),
-      frame: document.getElementById('main-video-iframe'),
-      title: document.getElementById('video-title'),
-      desc: document.getElementById('video-description'),
-      stack: document.getElementById('mobile-video-stack'),
-      more: document.getElementById('see-more-container')
-    };
-
-    var isMobile = function () { return window.innerWidth < 768; };
-    var maxOffset = function () { return Math.max(0, videos.length - perSlide); };
-
-    function drawCarousel() {
-      els.list.innerHTML = '';
-      for (var i = offset; i < Math.min(offset + perSlide, videos.length); i++) {
-        (function (i) {
-          var v = videos[i];
-          var item = document.createElement('div');
-          item.className = 'playlist-item' + (i === current ? ' active' : '');
-          item.innerHTML = '<div class="playlist-item-thumbnail-wrapper"><div class="playlist-item-thumbnail">'
-            + '<img src="' + esc(jwPoster(v, 720)) + '" alt="' + esc(v.title) + '" loading="lazy">'
-            + '<div class="now-playing-overlay">' + esc(d.nowPlayingLabel || 'NOW PLAYING') + '</div>'
-            + '</div></div><div class="playlist-item-title-container"><div class="playlist-item-title">' + esc(v.title) + '</div></div>';
-          item.onclick = function () { load(i); };
-          els.list.appendChild(item);
-        })(i);
-      }
-      els.prev.disabled = offset <= 0;
-      els.next.disabled = offset >= maxOffset();
-      Array.prototype.forEach.call(els.dots.children, function (dot, n) {
-        dot.classList.toggle('active', n === offset);
-      });
-    }
-
-    function drawDots() {
-      els.dots.innerHTML = '';
-      for (var i = 0; i <= maxOffset(); i++) {
-        (function (i) {
-          var dot = document.createElement('div');
-          dot.className = 'indicator' + (i === offset ? ' active' : '');
-          dot.onclick = function () { offset = i; drawCarousel(); };
-          els.dots.appendChild(dot);
-        })(i);
-      }
-    }
-
-    function load(i) {
-      current = i;
-      var v = videos[i];
-      var src = jwPlayerUrl(v);
-      els.frame.src = src + (src.indexOf('?') > -1 ? '&' : '?') + 'autoplay=true';
-      els.title.textContent = v.title || '';
-      els.desc.textContent = v.description || '';
-      if (i < offset) offset = i;
-      else if (i >= offset + perSlide) offset = Math.min(i - perSlide + 1, maxOffset());
-      drawCarousel();
-    }
-
-    function drawStack() {
-      els.stack.innerHTML = '';
-      videos.forEach(function (v, i) {
-        var box = document.createElement('div');
-        box.className = 'cs-video ' + (i < INITIAL ? 'visible' : 'hidden');
-        box.innerHTML = videoEmbed(v, 'client-video-embed')
-          + '<div class="client-video-details"><h3 class="cs-video-title">' + esc(v.title) + '</h3>'
-          + '<p class="text-intro">' + esc(v.description || '') + '</p></div>';
-        els.stack.appendChild(box);
-      });
-      els.more.style.display = videos.length > INITIAL ? 'flex' : 'none';
-    }
-
-    function toggleMore() {
-      expanded = !expanded;
-      Array.prototype.forEach.call(els.stack.children, function (box, i) {
-        if (i < INITIAL) return;
-        box.classList.toggle('hidden', !expanded);
-        box.classList.toggle('visible', expanded);
-      });
-      els.more.querySelector('.see-more-text').textContent = expanded
-        ? (d.seeLessLabel || 'SEE LESS') : (d.seeMoreLabel || 'SEE MORE');
-      els.more.classList.toggle('expanded', expanded);
-    }
-
-    window.__bpSelectSpotlight = function (i) {
-      if (i < 0 || i >= videos.length) return;
-      if (isMobile()) {
-        if (!expanded && i >= INITIAL) toggleMore();
-        var box = els.stack.children[i];
-        if (box) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      } else {
-        load(i);
-        var rail = document.querySelector('.client-spotlights-archive');
-        if (rail) rail.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    };
-
-    els.prev.onclick = function () { if (offset > 0) { offset--; drawCarousel(); } };
-    els.next.onclick = function () { if (offset < maxOffset()) { offset++; drawCarousel(); } };
-    els.more.onclick = toggleMore;
-
-    if (d.autoAdvance !== false) {
-      window.addEventListener('message', function (e) {
-        if (e.origin !== 'https://cdn.jwplayer.com') return;
-        try {
-          var msg = JSON.parse(e.data);
-          if (msg.event === 'complete' && current + 1 < videos.length) load(current + 1);
-        } catch (err) {  }
-      });
-    }
-
-    function sync() {
-      var now = isMobile();
-      if (now !== mobile) {
-        mobile = now;
-        if (mobile) { drawStack(); expanded = false; }
-        else { els.more.style.display = 'none'; drawDots(); load(current); }
-      }
-    }
-    mobile = isMobile();
-    perSlide = d.itemsPerSlide || 3;
-    if (mobile) drawStack(); else { drawDots(); load(0); }
-    window.addEventListener('resize', sync);
-  }
 
   function applyFonts() {
     if (!CFG.fontsHref) return;
@@ -995,14 +805,13 @@
 
   var SECTIONS = {
     hero: renderHero,
-    thoughtLeadership: renderThoughtLeadership,
-    videoLibrary: renderVideoLibrary,
-    clientSpotlights: renderClientSpotlights,
+    thoughtLeadership: renderVideoSection,
+    clientSpotlights: renderVideoSection,
     solutions: renderSolutions,
     cityscape: renderCityscape
   };
 
-  var INNER = { thoughtLeadership: 1, videoLibrary: 1, clientSpotlights: 1, solutions: 1, cityscape: 1 };
+  var INNER = { thoughtLeadership: 1, clientSpotlights: 1, solutions: 1, cityscape: 1 };
 
   function render(data, feed) {
     CFG = data.config || {};
@@ -1047,10 +856,8 @@
 
   function afterRender(data) {
     initVideos();
-    initThoughtLeadership();
-    initVideoLibrary();
+    initVideoSections();
     initSolutions();
-    initClientSpotlights(data);
     initAnchors();
 
     loadScript('js/vendor/jquery.min.js')
@@ -1071,10 +878,10 @@
     }
     // Jumping to anything other than a feature closes an open article panel,
     // otherwise the panel covers whatever the reader just navigated to.
-    if (target.type !== 'feature' && window.__bpCloseFeature) window.__bpCloseFeature();
-    if (target.type === 'feature' && window.__bpOpenFeature) window.__bpOpenFeature(target.index);
-    if (target.type === 'spotlight' && window.__bpSelectSpotlight) window.__bpSelectSpotlight(target.index);
-    if (target.type === 'library' && window.__bpSelectLibrary) window.__bpSelectLibrary(target.index);
+    if (target.type === 'video') {
+      var go = VIDEO_SECTIONS[target.section];
+      if (go) go(target.index);
+    }
     return true;
   }
 
@@ -1107,6 +914,17 @@
     document.body.classList.add('bp-ready');
   }
 
+  // A language is just another content file. index.html stays the same page;
+  // ?lang=xx picks which JSON it loads.
+  function resolveLanguage(data) {
+    var list = (data.config && data.config.languages) || [];
+    if (!LANG || list.length < 2) return null;
+    var hit = list.filter(function (l) { return l.code === LANG; })[0];
+    if (!hit || !hit.content) return null;
+    var url = absUrl(hit.content);
+    return url === CONTENT_BASE ? null : url;
+  }
+
   function boot() {
     fetch(CONTENT_URL, { cache: 'no-cache' })
       .then(function (r) { if (!r.ok) throw new Error(CONTENT_URL + ' returned ' + r.status); return r.json(); })
@@ -1114,6 +932,20 @@
         try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch (e) {}
         CFG = data.config || {};
         UI = data.ui || {};
+        var alt = resolveLanguage(data);
+        if (alt) {
+          CONTENT_BASE = alt;
+          return fetch(alt, { cache: 'no-cache' })
+            .then(function (r) { if (!r.ok) throw new Error(alt + ' returned ' + r.status); return r.json(); })
+            .then(function (translated) {
+              CFG = translated.config || CFG;
+              UI = translated.ui || UI;
+              return fetchPlaylist().then(function (feed) {
+                render(translated, feed);
+                afterRender(translated);
+              });
+            });
+        }
         return fetchPlaylist().then(function (feed) {
           render(data, feed);
           afterRender(data);

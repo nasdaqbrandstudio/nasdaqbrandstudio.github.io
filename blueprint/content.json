@@ -9,6 +9,14 @@
   "config": {
     "imagePath": "images/",
     "videoPath": "videos/",
+    "defaultLanguage": "en",
+    "languages": [
+      {
+        "code": "en",
+        "label": "EN",
+        "content": "content.json"
+      }
+    ],
     "jw": {
       "playerId": "jO5YHc4l",
       "playlistId": "",
@@ -106,7 +114,7 @@
           "headshot": "icon-placeholder.svg"
         },
         "cta": {
-          "label": "Explore Nasdaq-100 Index Options",
+          "label": "Explore Nasdaq-100 Index® Options",
           "url": "https://www.nasdaq.com/products/north-american-markets/nasdaq-100-options-xnd-ndx"
         }
       },
