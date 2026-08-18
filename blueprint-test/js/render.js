@@ -1,6 +1,15 @@
 (function () {
   'use strict';
 
+  // Bumped on every build. Check which file a page is actually running with:
+  //   BLUEPRINT_BUILD          -> the version string
+  //   BLUEPRINT_BUILD.features -> what that build supports
+  var BUILD = {
+    version: '2026-08-18.2001',
+    features: ['languages', 'playlist-arrows', 'video-cta', 'lazy-players', 'anchors']
+  };
+  window.BLUEPRINT_BUILD = BUILD;
+
   function param(name) {
     try { return new URLSearchParams(location.search).get(name); } catch (e) { return null; }
   }
@@ -849,6 +858,9 @@
       });
 
     document.body.classList.add('bp-ready');
+    if (window.console && console.info) {
+      console.info('[blueprint] build ' + BUILD.version + ' | ' + LANGUAGES.length + ' language(s)');
+    }
   }
 
   function loadScript(src) {
@@ -918,6 +930,9 @@
       });
 
     document.body.classList.add('bp-ready');
+    if (window.console && console.info) {
+      console.info('[blueprint] build ' + BUILD.version + ' | ' + LANGUAGES.length + ' language(s)');
+    }
   }
 
   // A language is just another content file. index.html stays the same page;
