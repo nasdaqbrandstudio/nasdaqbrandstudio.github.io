@@ -71,7 +71,6 @@
     "headline": "<span class=\"rt-accent rt-serif\">Blueprint</span> of Tomorrow",
     "intro": "Explore how Nasdaq indexes are shaping the modern economy – igniting innovation, unlocking opportunity, and building the financial infrastructure of the future",
     "scrollLabel": "Scroll to Continue",
-    "scrollLottie": "./documents/scroll-arrow-blue.json",
     "backgroundVideo": {
       "mp4": "https://cdn.jwplayer.com/videos/FLwg9bSz-qgCdanU1.mp4",
       "poster": "./images/hero-poster.webp"
@@ -92,7 +91,7 @@
         "anchor": "tl-index-options",
         "title": "Nasdaq-100 Index Options",
         "video": {
-          "url": "https://cdn.jwplayer.com/players/jeOazJCj-jO5YHc4l.html",
+          "jwMedia": "jeOazJCj",
           "title": "Nasdaq-100 Index Options",
           "route": "@feature"
         },
@@ -215,7 +214,7 @@
         "image": "building-nasdaq-100",
         "intro": "The Nasdaq-100® is a globally recognized index of 100 of the most innovative large-cap companies listed on the Nasdaq Stock Market®.",
         "embed": {
-          "url": "https://www.nasdaq.com/campaign/test245/",
+          "url": "https://www.nasdaq.com/campaign/nasdaq-100-chart-ndx-spx/",
           "height": 460,
           "heightMobile": 450,
           "title": "Nasdaq-100®",
