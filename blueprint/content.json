@@ -549,6 +549,12 @@
         "label": "Pinterest",
         "url": "https://www.pinterest.com/nasdaq/",
         "icon": "./images/pinterest-social.svg"
+      },
+      {
+        "id": "youtube",
+        "label": "YouTube",
+        "url": "https://www.youtube.com/user/NASDAQ",
+        "icon": "./images/youtube-social.svg"
       }
     ],
     "logo": {
