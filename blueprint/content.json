@@ -470,10 +470,6 @@
           "url": "https://www.nasdaq.com/about/careers"
         },
         {
-          "label": "Mobile Apps",
-          "url": "https://www.nasdaq.com/app/nasdaq-markets"
-        },
-        {
           "label": "Trust Center",
           "url": "https://www.nasdaq.com/trust-center"
         },
@@ -534,29 +530,29 @@
         "id": "x",
         "label": "X",
         "url": "https://x.com/Nasdaq",
-        "icon": "https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa64_x-social.svg"
+        "icon": "./images/x-social.svg"
       },
       {
         "id": "linkedin",
         "label": "LinkedIn",
         "url": "https://www.linkedin.com/company/nasdaq/",
-        "icon": "https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa65_linkedin-social.svg"
+        "icon": "./images/linkedin-social.svg"
       },
       {
         "id": "instagram",
         "label": "Instagram",
         "url": "https://www.instagram.com/nasdaq",
-        "icon": "https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa58_instagram-social.svg"
+        "icon": "./images/instagram-social.svg"
       },
       {
         "id": "pinterest",
         "label": "Pinterest",
         "url": "https://www.pinterest.com/nasdaq/",
-        "icon": "https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa59_pinterest-social.svg"
+        "icon": "./images/pinterest-social.svg"
       }
     ],
     "logo": {
-      "src": "https://cdn.prod.website-files.com/6839c425c3deb28fc8a0f9f3/6839c425c3deb28fc8a0fa5b_nasdaq-logo.svg",
+      "src": "./images/nasdaq-logo.svg",
       "url": "https://www.nasdaq.com/",
       "alt": "Nasdaq"
     },
