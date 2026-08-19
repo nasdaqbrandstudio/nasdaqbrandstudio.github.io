@@ -5,7 +5,7 @@
   //   BLUEPRINT_BUILD          -> the version string
   //   BLUEPRINT_BUILD.features -> what that build supports
   var BUILD = {
-    version: '2026-08-18.2001',
+    version: '2026-08-19.2101',
     features: ['languages', 'playlist-arrows', 'video-cta', 'lazy-players', 'anchors']
   };
   window.BLUEPRINT_BUILD = BUILD;
@@ -982,7 +982,7 @@
 
     loadScript('js/vendor/jquery.min.js')
       .then(function () { return loadScript('js/webflow.js'); })
-      .then(function () { return loadScript('js/animate.js'); })
+      .then(function () { return loadScript('js/animate.js?v=' + BUILD.version); })
       .catch(function (e) { console.warn('[blueprint]', e); });
   }
 

@@ -25,7 +25,7 @@
     "prev": "Previous",
     "next": "Next",
     "loadError": "This page could not load its content.",
-    "language": "Language"
+    "language": "Languages"
   },
   "sectionOrder": [
     "hero",
@@ -85,6 +85,7 @@
   "thoughtLeadership": {
     "id": "thought-leadership",
     "headline": "Nasdaq and its partners are empowering global investors and shaping tomorrow’s markets through index-based solutions.",
+    "mobileTheme": "light",
     "backgroundImage": "blue-background",
     "features": [
       {
@@ -155,12 +156,18 @@
     ],
     "route": "feature",
     "nowPlayingLabel": "Now playing",
+    "mobileInitialCount": 4,
+    "seeMoreLabel": "See More",
+    "seeLessLabel": "See Less",
     "newBadge": "New"
   },
   "clientSpotlights": {
     "id": "client-spotlights",
     "headline": "<span class=\"rt-accent\">Building Tomorrow, Together:</span> Hear from Nasdaq’s Global Partners",
     "nowPlayingLabel": "Now playing",
+    "mobileInitialCount": 4,
+    "seeMoreLabel": "See More",
+    "seeLessLabel": "See Less",
     "videos": [
       {
         "jwMedia": "hRuzYana",
@@ -544,12 +551,6 @@
         "label": "Instagram",
         "url": "https://www.instagram.com/nasdaq",
         "icon": "./images/instagram-social.svg"
-      },
-      {
-        "id": "pinterest",
-        "label": "Pinterest",
-        "url": "https://www.pinterest.com/nasdaq/",
-        "icon": "./images/pinterest-social.svg"
       },
       {
         "id": "youtube",

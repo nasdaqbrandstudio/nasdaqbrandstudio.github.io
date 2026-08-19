@@ -32,7 +32,7 @@
     "prev": "Anterior",
     "next": "Siguiente",
     "loadError": "Esta página no pudo cargar su contenido.",
-    "language": "Idioma"
+    "language": "Idiomas"
   },
   "sectionOrder": [
     "hero",
@@ -92,6 +92,7 @@
   "thoughtLeadership": {
     "id": "thought-leadership",
     "headline": "Nasdaq y sus socios impulsan a los inversionistas globales y dan forma a los mercados del mañana mediante soluciones basadas en índices.",
+    "mobileTheme": "light",
     "backgroundImage": "blue-background",
     "features": [
       {
@@ -162,12 +163,18 @@
     ],
     "route": "feature",
     "nowPlayingLabel": "Reproduciendo",
+    "mobileInitialCount": 4,
+    "seeMoreLabel": "Ver más",
+    "seeLessLabel": "Ver menos",
     "newBadge": "Nuevo"
   },
   "clientSpotlights": {
     "id": "client-spotlights",
     "headline": "<span class=\"rt-accent\">Construyendo el Mañana, Juntos:</span> Escucha a los Socios Globales de Nasdaq",
     "nowPlayingLabel": "Reproduciendo",
+    "mobileInitialCount": 4,
+    "seeMoreLabel": "Ver más",
+    "seeLessLabel": "Ver menos",
     "videos": [
       {
         "jwMedia": "hRuzYana",
@@ -551,12 +558,6 @@
         "label": "Instagram",
         "url": "https://www.instagram.com/nasdaq",
         "icon": "./images/instagram-social.svg"
-      },
-      {
-        "id": "pinterest",
-        "label": "Pinterest",
-        "url": "https://www.pinterest.com/nasdaq/",
-        "icon": "./images/pinterest-social.svg"
       },
       {
         "id": "youtube",
