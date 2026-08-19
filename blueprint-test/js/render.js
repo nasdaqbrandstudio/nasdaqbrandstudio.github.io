@@ -15,6 +15,41 @@
   }
 
   var LANG = param('lang');
+  var LANG_STORE = 'bp-lang';
+  var LANG_AUTO = true;
+
+  // A static page cannot see the visitor's country, but it can see the
+  // languages their browser asks for. Match those against what we publish.
+  function detectLanguage(list) {
+    var codes = list.map(function (l) { return String(l.code).toLowerCase(); });
+    var wanted = [];
+    try {
+      wanted = (navigator.languages && navigator.languages.length)
+        ? navigator.languages.slice()
+        : [navigator.language || ''];
+    } catch (e) { return ''; }
+
+    for (var i = 0; i < wanted.length; i++) {
+      var tag = String(wanted[i] || '').toLowerCase();
+      if (!tag) continue;
+      var exact = codes.indexOf(tag);
+      if (exact > -1) return list[exact].code;
+      // es-MX and es-419 both fall back to es
+      var base = tag.split('-')[0];
+      for (var j = 0; j < codes.length; j++) {
+        if (codes[j] === base || codes[j].split('-')[0] === base) return list[j].code;
+      }
+    }
+    return '';
+  }
+
+  function storedLanguage() {
+    try { return localStorage.getItem(LANG_STORE) || ''; } catch (e) { return ''; }
+  }
+
+  function rememberLanguage(code) {
+    try { localStorage.setItem(LANG_STORE, code); } catch (e) {}
+  }
 
   var CONTENT_URL = (function () {
     var q = param('content');
@@ -282,17 +317,39 @@
 
   // Shown only when the language list has more than one entry, so a
   // single-language site has no toggle at all.
+  function languageLabel(l) {
+    return l.name || l.label || l.code.toUpperCase();
+  }
+
   function renderLanguages() {
     var list = LANGUAGES.filter(function (l) { return l && l.code; });
     if (list.length < 2) return '';
+
+    // Sorted for the reader, not by however the file happens to list them.
+    // Accents sort naturally: Español after English, Deutsch before both.
+    list = list.slice().sort(function (a, b) {
+      return languageLabel(a).localeCompare(languageLabel(b), undefined, { sensitivity: 'base' });
+    });
     var current = LANG || LANG_DEFAULT || list[0].code;
-    return '<div class="bp-lang" role="group" aria-label="Language">'
+    var active = list.filter(function (l) { return l.code === current; })[0] || list[0];
+
+    // A badge that opens a menu: the footprint stays one chip however many
+    // languages are published.
+    return '<div class="bp-lang">'
+      + '<button type="button" class="bp-lang-toggle" aria-haspopup="true" aria-expanded="false"'
+      + ' aria-label="' + esc(UI.language || 'Language') + '">'
+      + '<span class="bp-lang-word">' + esc(UI.language || 'Language') + '</span>'
+      + '<span class="bp-lang-code">' + esc(active.label || active.code.toUpperCase()) + '</span>'
+      + '<svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1L5 5L9 1" fill="none"'
+      + ' stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      + '</button>'
+      + '<div class="bp-lang-menu" role="menu">'
       + list.map(function (l) {
-          return '<a class="bp-lang-item' + (l.code === current ? ' is-active' : '') + '"'
+          return '<a class="bp-lang-item' + (l.code === current ? ' is-active' : '') + '" role="menuitem"'
             + ' hreflang="' + esc(l.code) + '" href="?lang=' + encodeURIComponent(l.code) + '">'
-            + esc(l.label || l.code.toUpperCase()) + '</a>';
+            + esc(languageLabel(l)) + '</a>';
         }).join('')
-      + '</div>';
+      + '</div></div>';
   }
 
   function renderNav(nav) {
@@ -319,13 +376,14 @@
           src: imgUrl(logo.src), loading: 'eager', class: 'vectors-wrapper-4'
         }) + '></a></div></nav>'
 
-      + '<div data-animation="default" data-collapse="tiny" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="mobile-nav w-nav">'
+      + '<div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="mobile-nav w-nav">'
       + '<div class="nav-container w-container">'
       + '<a href="' + esc(brand.href || '#home') + '" class="mobile-title-nav w-nav-brand"><div class="mobile-nav-title">'
       + '<div class="subnav-home-span">' + esc(brand.line1) + '</div>'
       + '<div class="subnav-home">' + esc(brand.line2) + '</div></div></a>'
       + '<nav role="navigation" class="mobile-nav-menu w-nav-menu">' + mobileLinks + renderLanguages() + '</nav>'
-      + '<div id="mobile-nav-button" class="mobile-nav-button w-nav-button"><div class="hamburger-icon w-icon-nav-menu"></div></div>'
+      + '<div id="mobile-nav-button" class="mobile-nav-button w-nav-button">'
+      + '<div class="hamburger-icon"><span></span><span></span><span></span></div></div>'
       + '</div></div>'
 
       + '<nav id="subnav" class="nasdaq-subnav">'
@@ -434,6 +492,8 @@
     if (!items.length) return '';
 
     var sid = d.id || 'videos';
+    // How many videos the stacked view shows before asking to expand.
+    var initialCount = d.mobileInitialCount == null ? 4 : d.mobileInitialCount;
 
     items.forEach(function (v, i) {
       if (v.anchor) ANCHORS[v.anchor] = { type: 'video', section: sid, index: i };
@@ -443,7 +503,8 @@
       var body = (v.body || (v.description ? [v.description] : [])).map(function (t) {
         return '<p class="bp-vs-para">' + richText(t) + '</p>';
       }).join('');
-      return '<article class="bp-vs-item' + (i === 0 ? ' is-active" ' : '" ')
+      return '<article class="bp-vs-item' + (i >= initialCount ? ' is-extra' : '')
+        + (i === 0 ? ' is-active" ' : '" ')
         + (v.anchor ? 'id="' + esc(v.anchor) + '" ' : '')
         + 'data-vs-item="' + i + '">'
         + '<div class="bp-vs-player">' + videoEmbed(v.video || v) + '</div>'
@@ -480,7 +541,10 @@
     var hasQuotes = items.some(function (v) { return v.quote && v.quote.text; });
 
     return ''
-      + '<section id="' + esc(sid) + '" class="bp-vs' + (hasQuotes ? ' has-quotes' : '') + '">'
+      + '<section id="' + esc(sid) + '" class="bp-vs' + (hasQuotes ? ' has-quotes' : '')
+      + '" data-initial="' + initialCount + '"'
+      + (d.mobileTheme ? ' data-mobile-theme="' + esc(d.mobileTheme) + '"' : '')
+      + ' data-less="' + esc(d.seeLessLabel || 'See Less') + '">'
       + '<div class="bp-vs-inner">'
       + (d.headline ? '<h3 class="cs-headline">' + richText(d.headline) + '</h3>' : '')
       + (d.intro ? '<p class="bp-vs-intro">' + richText(d.intro) + '</p>' : '')
@@ -495,7 +559,15 @@
       + '<svg viewBox="0 0 24 14" aria-hidden="true"><path d="M1 1L12 12L23 1" fill="none" stroke="currentColor"'
       + ' stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'
       + '</div>'
-      + '</div></div>'
+      + '</div>'
+      + (items.length > initialCount
+          ? '<button type="button" class="bp-vs-more">'
+            + '<svg viewBox="0 0 24 14" aria-hidden="true"><path d="M1 1L12 12L23 1" fill="none"'
+            + ' stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            + '<span>' + esc(d.seeMoreLabel || 'See More') + '</span>'
+            + '</button>'
+          : '')
+      + '</div>'
       + (d.backgroundImage
           ? '<div class="background-image-2" '
             + bgAttrs({
@@ -598,13 +670,40 @@
         });
       });
 
+      // See more: the stacked view shows the first few and expands on request.
+      var moreBtn = root.querySelector('.bp-vs-more');
+      var labels = {
+        more: (moreBtn && moreBtn.querySelector('span').textContent) || 'See More',
+        less: root.getAttribute('data-less') || ''
+      };
+
+      function expand(on) {
+        root.classList.toggle('is-expanded', on);
+        if (moreBtn) {
+          moreBtn.querySelector('span').textContent = on ? (labels.less || labels.more) : labels.more;
+          moreBtn.setAttribute('aria-expanded', on ? 'true' : 'false');
+        }
+      }
+      if (moreBtn) {
+        moreBtn.setAttribute('aria-expanded', 'false');
+        moreBtn.addEventListener('click', function () {
+          expand(!root.classList.contains('is-expanded'));
+        });
+      }
+
       VIDEO_SECTIONS[root.id] = function (i) {
         select(i);
         // Stacked view has every video on the page, so jump to the one asked for
-        // rather than the top of the section.
+        // rather than the top of the section. A deep link past the cut has to
+        // open the expanded view first or its target is display:none.
         var stacked = window.matchMedia('(max-width: 991px)').matches;
+        if (stacked && items[i] && items[i].classList.contains('is-extra')) expand(true);
         var target = stacked ? items[i] : root;
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (target) {
+          requestAnimationFrame(function () {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        }
       };
     });
   }
@@ -859,7 +958,8 @@
 
     document.body.classList.add('bp-ready');
     if (window.console && console.info) {
-      console.info('[blueprint] build ' + BUILD.version + ' | ' + LANGUAGES.length + ' language(s)');
+      console.info('[blueprint] build ' + BUILD.version + ' | ' + LANGUAGES.length
+        + ' language(s) | showing ' + (document.documentElement.lang || 'default'));
     }
   }
 
@@ -876,7 +976,9 @@
     initVideos();
     initVideoSections();
     initSolutions();
+    trackNavHeight();
     initAnchors();
+    initLanguageMemory();
 
     loadScript('js/vendor/jquery.min.js')
       .then(function () { return loadScript('js/webflow.js'); })
@@ -901,6 +1003,50 @@
       if (go) go(target.index);
     }
     return true;
+  }
+
+  function initLanguageMemory() {
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('.bp-lang-item');
+      if (a) {
+        var code = (a.getAttribute('href') || '').split('lang=')[1];
+        if (code) rememberLanguage(decodeURIComponent(code));
+        return;
+      }
+      var btn = e.target.closest && e.target.closest('.bp-lang-toggle');
+      var open = btn ? btn.parentNode : null;
+      Array.prototype.slice.call(document.querySelectorAll('.bp-lang')).forEach(function (box) {
+        var on = box === open && box.getAttribute('data-open') !== 'true';
+        box.setAttribute('data-open', on ? 'true' : 'false');
+        var t = box.querySelector('.bp-lang-toggle');
+        if (t) t.setAttribute('aria-expanded', on ? 'true' : 'false');
+      });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      Array.prototype.slice.call(document.querySelectorAll('.bp-lang')).forEach(function (box) {
+        box.setAttribute('data-open', 'false');
+        var t = box.querySelector('.bp-lang-toggle');
+        if (t) t.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  // Measured rather than assumed, so the offset follows the bar if its height
+  // ever changes.
+  function trackNavHeight() {
+    var update = function () {
+      var bars = Array.prototype.slice.call(document.querySelectorAll('.nasdaq-subnav, .mobile-nav'));
+      var visible = bars.filter(function (b) { return b.offsetParent !== null; })[0];
+      var h = visible ? Math.round(visible.getBoundingClientRect().height) : 0;
+      document.documentElement.style.setProperty('--bp-nav-h', (h || 80) + 'px');
+    };
+    update();
+    window.addEventListener('resize', update);
+    if (window.ResizeObserver) {
+      var bar = document.querySelector('.nasdaq-subnav') || document.querySelector('.mobile-nav');
+      if (bar) new ResizeObserver(update).observe(bar);
+    }
   }
 
   function initAnchors() {
@@ -931,7 +1077,8 @@
 
     document.body.classList.add('bp-ready');
     if (window.console && console.info) {
-      console.info('[blueprint] build ' + BUILD.version + ' | ' + LANGUAGES.length + ' language(s)');
+      console.info('[blueprint] build ' + BUILD.version + ' | ' + LANGUAGES.length
+        + ' language(s) | showing ' + (document.documentElement.lang || 'default'));
     }
   }
 
@@ -956,6 +1103,7 @@
         var list = Array.isArray(j) ? j : j.languages;
         if (!Array.isArray(list)) return null;
         LANG_DEFAULT = (j && j.default) || '';
+        if (j && j.autoDetect === false) LANG_AUTO = false;
         return list;
       })
       .catch(function () { return null; });
@@ -974,6 +1122,15 @@
         UI = data.ui || {};
         LANGUAGES = both[1] || CFG.languages || [];
         LANG_DEFAULT = LANG_DEFAULT || CFG.defaultLanguage || '';
+
+        // ?lang= wins, then whatever the visitor last chose, then the browser.
+        // An explicit choice is never overridden by detection.
+        if (LANG) {
+          rememberLanguage(LANG);
+        } else if (LANGUAGES.length > 1) {
+          LANG = storedLanguage() || (LANG_AUTO ? detectLanguage(LANGUAGES) : '');
+        }
+
         var alt = resolveLanguage();
         if (alt) {
           CONTENT_BASE = alt;

@@ -130,14 +130,19 @@ body.bp-panel-open { overflow: hidden; }
 @media screen and (max-width: 767px) {
   .sections .nav-item { width: auto; font-size: 1rem; }
 }
-@media screen and (max-width: 479px) {
+/* Menu rows: centred with a rule between them, matching the export. This has
+   to cover the whole collapsed range, not just phones. */
+@media screen and (max-width: 991px) {
   .mobile-nav-menu .mnav-item {
-    color: #9e9e9e;
-    border-top: 1.5px solid #0092bc;
+    color: #08062a;
+    border-top: var(--stroke) solid #d5d5d5;
     justify-content: center;
     align-items: center;
     padding: 1rem;
     font-size: 1rem;
+    /* the export leaves these at 200, which reads far lighter than the
+       language row sitting directly beneath them */
+    font-weight: 400;
     line-height: 1.25rem;
     text-decoration: none;
     display: flex;
@@ -285,6 +290,7 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
 .bp-vs-stage { display: contents; }
 .bp-vs-item { display: none; }
 .bp-vs-item.is-active { display: contents; }
+.bp-vs-more { display: none; }
 .bp-vs-meta {
   display: flex;
   flex-direction: column;
@@ -457,6 +463,32 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
   .bp-vs-list { display: none; }
   .bp-vs-item,
   .bp-vs-item.is-active { display: block; padding-bottom: 3rem; }
+
+  /* Stacked view opens with the first few videos; the rest arrive on request. */
+  .bp-vs:not(.is-expanded) .bp-vs-item.is-extra,
+  .bp-vs:not(.is-expanded) .bp-vs-item.is-extra.is-active { display: none; }
+  .bp-vs-more {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+    width: 100%;
+    margin-top: 1rem;
+    padding: 1rem 0;
+    background: none;
+    border: 0;
+    color: #0092bc;
+    font-family: Inter, sans-serif;
+    font-size: .875rem;
+    font-weight: 400;
+    letter-spacing: .25rem;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .bp-vs-more svg { width: 1.5rem; height: auto; transition: transform .3s ease; }
+  .bp-vs.is-expanded .bp-vs-more svg { transform: rotate(180deg); }
+  .bp-vs-more:hover { color: #fff; }
+  .bp-vs-more:focus-visible { outline: 2px solid #0092bc; outline-offset: 2px; }
   .bp-vs-item + .bp-vs-item { border-top: var(--stroke) solid #0092bc33; padding-top: 3rem; }
   /* The panel already closes each block, so a rule between them is noise -- and
      without the rule the pair of paddings reads as a gap twice as wide. */
@@ -472,9 +504,22 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
   .bp-vs-row { grid-template-columns: 5.5rem 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .bp-vs-row, .bp-vs-row-title { transition: none; }
+  .bp-vs-row, .bp-vs-row-title, .bp-vs-more svg { transition: none; }
   .bp-vs-list-scroll { scroll-behavior: auto; }
 }
+
+/* Anchor targets stop under the sticky bar. --bp-nav-h is the bar's measured
+   height, set by render.js, so the offset follows it instead of guessing. The
+   extra 1.5rem keeps a title or player from sitting flush against the edge. */
+:root { --bp-nav-h: 80px; }
+.bp-vs-item,
+.bp-vs,
+.solutions,
+.cityscape,
+.footer-wrapper,
+.cs-video,
+[id^="tl-"],
+[id^="cl-"] { scroll-margin-top: calc(var(--bp-nav-h) + 1.5rem); }
 
 /* Video CTA */
 .bp-vs-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .25rem; }
@@ -575,8 +620,99 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
 .nasdaq-subnav .who-we-serve:hover { color: #0092bc; }
 .nasdaq-subnav .menu-arrow-svg { color: #08062a; }
 
-/* Mobile bar mirrors the secondary nav */
-@media screen and (max-width: 479px) {
+/* The three nav labels plus the language badge stop fitting well before the
+   export's 479px collapse, so the handover happens at the tablet breakpoint.
+   The nav is rendered with data-collapse="medium" so Webflow's own nav script
+   agrees with these rules. */
+@media screen and (max-width: 991px) {
+  .nasdaq-subnav { display: none; }
+  .mobile-nav { display: block; }
+}
+
+/* Mobile bar mirrors the secondary nav.
+   The export only lays this bar out below 479px, so its layout rules are
+   restated here for the wider range the collapse now covers. */
+@media screen and (max-width: 991px) {
+  .mobile-nav {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    min-height: auto;
+    display: flex;
+    /* The export only makes the desktop subnav sticky, so the collapsed bar
+       scrolled away. Same treatment, same z-index. */
+    position: sticky;
+    top: 0;
+    z-index: 500;
+  }
+  /* Matching hairline, since this bar is white against the content too. */
+  .mobile-nav::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background-color: #08062a;
+    transform: scaleY(.5);
+    transform-origin: 50% 100%;
+    pointer-events: none;
+  }
+  .mobile-nav .nav-container {
+    grid-column-gap: .5rem;
+    grid-row-gap: .5rem;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    padding: 0 2rem;
+    display: flex;
+  }
+  .mobile-nav .mobile-title-nav {
+    justify-content: flex-start;
+    align-items: center;
+    width: auto;
+    padding-left: 0;
+    text-decoration: none;
+    display: flex;
+  }
+  .mobile-nav .mobile-nav-title {
+    grid-column-gap: .3rem;
+    grid-row-gap: .3rem;
+    flex-flow: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: 0;
+    display: flex;
+  }
+  .mobile-nav .mobile-nav-button { padding: 0; margin-left: auto; background-color: transparent; }
+  .mobile-nav .mobile-nav-button.w--open { background-color: transparent; }
+  .mobile-nav .hamburger-icon {
+    position: relative;
+    width: 1.5rem;
+    height: 1.125rem;
+    background: none;
+    display: block;
+  }
+  .mobile-nav .hamburger-icon span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #08062a;
+    border-radius: 1px;
+    transition: transform .25s ease, opacity .2s ease, top .25s ease;
+  }
+  .mobile-nav .hamburger-icon span:nth-child(1) { top: 0; }
+  .mobile-nav .hamburger-icon span:nth-child(2) { top: calc(50% - 1px); }
+  .mobile-nav .hamburger-icon span:nth-child(3) { top: calc(100% - 2px); }
+  .mobile-nav .w--open .hamburger-icon span:nth-child(1) { top: calc(50% - 1px); transform: rotate(45deg); }
+  .mobile-nav .w--open .hamburger-icon span:nth-child(2) { opacity: 0; }
+  .mobile-nav .w--open .hamburger-icon span:nth-child(3) { top: calc(50% - 1px); transform: rotate(-45deg); }
+  .mobile-nav .mobile-nav-menu { flex: 0 auto; }
+
   .mobile-nav,
   .mobile-nav .nav-container,
   .mobile-nav-menu { background-color: #fff; }
@@ -586,9 +722,6 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
   .mobile-nav .mobile-nav-button,
   .mobile-nav .hamburger-icon { background-color: transparent; color: #08062a; }
   .mobile-nav .hamburger-line { background-color: #08062a; border-color: #08062a; }
-  .mobile-nav-menu .mnav-item { color: #08062a; border-top-color: #d5d5d5; }
-  .mobile-nav-menu .mnav-item:hover,
-  .mobile-nav-menu .mnav-item:active { color: #0092bc; }
 }
 
 /* Below 992px: logo top-left with the copyright directly under it. On tablet
@@ -770,21 +903,148 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
 /* ==========================================================================
    Language toggle — rendered only when config.languages has more than one
    ========================================================================== */
-.bp-lang { display: flex; align-items: center; gap: .25rem; margin-left: auto; }
-.bp-lang-item {
-  color: #08062a;
+.bp-lang { position: relative; flex: none; margin-left: auto; }
+.bp-lang-toggle {
+  display: flex;
+  align-items: center;
+  gap: .375rem;
+  background-color: #0092bc;
+  border: 0;
+  border-radius: .25rem;
+  color: #fff;
+  font-family: Inter, sans-serif;
   font-size: .875rem;
   font-weight: 500;
   line-height: 1;
-  padding: .375rem .5rem;
+  padding: .5rem .625rem;
+  cursor: pointer;
+  transition: background-color .2s ease;
+}
+.bp-lang-toggle svg { width: .5rem; height: auto; transition: transform .2s ease; }
+.bp-lang-toggle:hover { background-color: #007ea3; }
+.bp-lang-toggle:focus-visible { outline: 2px solid #08062a; outline-offset: 2px; }
+.bp-lang[data-open="true"] .bp-lang-toggle svg { transform: rotate(180deg); }
+
+.bp-lang-menu {
+  position: absolute;
+  top: calc(100% + .5rem);
+  right: 0;
+  min-width: 9rem;
+  background-color: #fff;
+  border: var(--stroke) solid #0092bc;
+  border-radius: .5rem;
+  padding: .375rem;
+  box-shadow: 0 .5rem 1.5rem #08062a26;
+  display: none;
+  flex-direction: column;
+  z-index: 600;
+}
+.bp-lang[data-open="true"] .bp-lang-menu { display: flex; }
+.bp-lang-item {
+  color: #08062a;
+  font-size: .875rem;
+  font-weight: 400;
+  line-height: 1.25;
+  padding: .5rem .625rem;
   border-radius: .25rem;
   text-decoration: none;
+  white-space: nowrap;
   transition: color .2s ease, background-color .2s ease;
 }
-.bp-lang-item:hover { color: #0092bc; }
+.bp-lang-item:hover { background-color: #0092bc1a; color: #0092bc; }
 .bp-lang-item.is-active { background-color: #0092bc; color: #fff; }
-.bp-lang-item:focus-visible { outline: 2px solid #0092bc; outline-offset: 2px; }
-@media screen and (max-width: 479px) {
-  .mobile-nav-menu .bp-lang { justify-content: center; padding: 1rem; margin-left: 0; }
+.bp-lang-item:focus-visible { outline: 2px solid #0092bc; outline-offset: -2px; }
+
+/* Desktop shows the code alone. */
+.bp-lang-word { display: none; }
+
+/* In the collapsed menu the control reads as another row -- "Languages" with
+   the current code beside it -- and expands into a scrollable list in place. */
+.mobile-nav-menu .bp-lang { margin: 0; padding: 0; }
+.mobile-nav-menu .bp-lang-toggle {
+  width: 100%;
+  justify-content: center;
+  gap: .5rem;
+  background: none;
+  border-top: var(--stroke) solid #d5d5d5;
+  border-radius: 0;
+  color: #08062a;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  padding: 1rem;
 }
-@media (prefers-reduced-motion: reduce) { .bp-lang-item { transition: none; } }
+.mobile-nav-menu .bp-lang-toggle:hover { background: none; color: #0092bc; }
+.mobile-nav-menu .bp-lang-word { display: inline; }
+.mobile-nav-menu .bp-lang-code {
+  background-color: #0092bc;
+  color: #fff;
+  font-size: .8125rem;
+  font-weight: 500;
+  line-height: 1;
+  padding: .25rem .375rem;
+  border-radius: .25rem;
+}
+.mobile-nav-menu .bp-lang-menu {
+  position: static;
+  min-width: 0;
+  max-height: 12rem;
+  overflow-y: auto;
+  border: 0;
+  border-top: var(--stroke) solid #d5d5d5;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0;
+  padding: .5rem 1rem 1rem;
+}
+.mobile-nav-menu .bp-lang-item { text-align: center; padding: .75rem; font-size: 1rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bp-lang-toggle, .bp-lang-toggle svg, .bp-lang-item { transition: none; }
+}
+
+/* ==========================================================================
+   Light theme for the stacked view
+   Set per section with "mobileTheme": "light". The texture is dropped for a
+   flat colour, since one cover image stretched down a very long stacked page
+   scales badly. Colours are darkened rather than reused: brand blue on this
+   background falls under 3:1, so headings take a deeper blue.
+   ========================================================================== */
+@media screen and (max-width: 991px) {
+  .bp-vs[data-mobile-theme="light"] {
+    --light-bg: #c0e3f5;
+    --light-ink: #08062a;
+    --light-blue: #005f7a;
+    background-color: var(--light-bg);
+    border-top-color: #08062a26;
+  }
+  /* the texture is what got stretched, so it goes */
+  .bp-vs[data-mobile-theme="light"] .background-image-2 { display: none; }
+
+  .bp-vs[data-mobile-theme="light"] .cs-headline,
+  .bp-vs[data-mobile-theme="light"] .bp-vs-title { color: var(--light-blue); }
+  .bp-vs[data-mobile-theme="light"] .cs-headline .rt-accent { color: var(--light-blue); }
+  .bp-vs[data-mobile-theme="light"] .bp-vs-headline,
+  .bp-vs[data-mobile-theme="light"] .bp-vs-intro,
+  .bp-vs[data-mobile-theme="light"] .bp-vs-para { color: var(--light-ink); }
+
+  /* The quote keeps its dark card, which is what gives the section its anchor. */
+  .bp-vs[data-mobile-theme="light"] .bp-vs-quote {
+    background-color: #08062a;
+    border-radius: .5rem;
+    padding: 1.5rem;
+    border-top: 0;
+  }
+
+  .bp-vs[data-mobile-theme="light"] .bp-vs-item + .bp-vs-item { border-top-color: #08062a26; }
+  .bp-vs[data-mobile-theme="light"] .bp-vs-more { color: var(--light-blue); }
+  .bp-vs[data-mobile-theme="light"] .bp-vs-more:hover { color: var(--light-ink); }
+
+  /* White on light blue is too faint, so the CTA inverts instead. */
+  .bp-vs[data-mobile-theme="light"] .bp-vs-cta { background-color: var(--light-ink); }
+  .bp-vs[data-mobile-theme="light"] .bp-vs-cta-label { color: #fff; }
+  .bp-vs[data-mobile-theme="light"] .bp-vs-cta-arrow img { filter: invert(1) brightness(2); }
+  .bp-vs[data-mobile-theme="light"] .bp-vs-cta:hover { background-color: var(--light-blue); }
+
+  .bp-vs[data-mobile-theme="light"] .bp-video { background: #08062a; }
+}

@@ -1801,10 +1801,6 @@ figcaption {
   display: flex;
 }
 
-.pinterest {
-  height: 1rem;
-}
-
 .copyright-inline {
   color: #818181;
   text-align: right;
@@ -9877,10 +9873,6 @@ figcaption {
 
   .link-block-4, .social-icons {
     display: none;
-  }
-
-  .pinterest {
-    height: 1rem;
   }
 
   .copyright-inline {

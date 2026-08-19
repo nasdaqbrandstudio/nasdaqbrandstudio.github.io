@@ -24,7 +24,8 @@
     "close": "Close",
     "prev": "Previous",
     "next": "Next",
-    "loadError": "This page could not load its content."
+    "loadError": "This page could not load its content.",
+    "language": "Language"
   },
   "sectionOrder": [
     "hero",

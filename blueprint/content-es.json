@@ -31,7 +31,8 @@
     "close": "Cerrar",
     "prev": "Anterior",
     "next": "Siguiente",
-    "loadError": "Esta página no pudo cargar su contenido."
+    "loadError": "Esta página no pudo cargar su contenido.",
+    "language": "Idioma"
   },
   "sectionOrder": [
     "hero",
