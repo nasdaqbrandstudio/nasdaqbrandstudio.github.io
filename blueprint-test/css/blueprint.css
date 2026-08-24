@@ -1,18 +1,6 @@
 :root {
   --white: white;
   --black: black;
-
-  /* Brand palette. Single source for every colour the page uses -- change it
-     here, not in overrides.css. overrides.css references these by name.
-       --nasdaq-blue       the primary, used on the dark layout
-       --nasdaq-blue-deep  the same blue darkened for light backgrounds, where
-                           the primary only reaches 2.66:1
-       --nasdaq-ink        the near-black used for fills and body copy
-       --nasdaq-blue-pale  the flat background behind the stacked light view */
-  --nasdaq-blue: #0092bc;
-  --nasdaq-blue-deep: #0679a1;
-  --nasdaq-ink: #08062a;
-  --nasdaq-blue-pale: #c0e3f5;
 }
 .w-layout-blockcontainer {
   max-width: 940px;

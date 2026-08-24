@@ -36,12 +36,10 @@
   <!-- Non-Latin stack. One family per script, matching the codes in languages.json.
        Google Fonts ships unicode-range on every @font-face here, so a visitor only
        downloads the slices their page actually renders. An English visitor gets none.
-       Kept as a separate <link> on purpose: a bad family spec 400s the whole request,
-       and this way that can never take Inter and Bitter down with it.
-       Sans only. The Noto Serif faces are deliberately not loaded: Mincho and
-       Myeongjo have no italic and no equivalent to Bitter's display role, so
-       the accent word uses weight instead. See overrides.css.
-       Adding a language = add its family here + a block in overrides.css. -->
+       Separate <link> on purpose: a bad family spec 400s the whole request, and this
+       way that can never take Inter and Bitter down with it.
+       Sans only -- Mincho and Myeongjo have no italic and no equivalent to Bitter's
+       display role, so the accent word uses weight instead. See overrides.css. -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 
   <style>

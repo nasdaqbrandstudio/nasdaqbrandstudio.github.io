@@ -70,9 +70,9 @@
 
   // Where images/ and videos/ live. Pinned to the DEFAULT content file and never
   // reassigned, so translations can sit in a subfolder (languages/content-ja.json)
-  // without dragging asset lookups into that folder with them. Keep this separate
-  // from CONTENT_BASE: pointing the page at a remote content.json should still
-  // pull that deployment's assets, which is why neither uses document.baseURI.
+  // without dragging asset lookups into that folder with them. Kept separate from
+  // CONTENT_BASE: pointing the page at a remote content.json should still pull
+  // that deployment's assets, which is why neither uses document.baseURI.
   var ASSET_BASE = CONTENT_BASE;
 
   var CACHE_KEY = 'bp-content-cache-v1:' + CONTENT_BASE + (LANG ? ':' + LANG : '');
@@ -885,6 +885,7 @@
       });
       panels.forEach(function (p, n) { p.classList.toggle('is-active', n === i); });
     }
+
     tiles.forEach(function (t, i) {
       t.addEventListener('click', function () { select(i); });
       t.addEventListener('keydown', function (e) {
@@ -979,15 +980,15 @@
     });
   }
 
-  // Replaces the w-nav script, which was the only thing webflow.js still did on
-  // this page: the rebuild emits no data-w-id, so IX2, sliders, lightbox, tabs,
-  // forms and CMS bindings are all dead. That was 830KB of webflow.js behind
-  // 89KB of jQuery to toggle one class.
+  // Replaces the w-nav script, the only thing webflow.js still did on this page:
+  // the rebuild emits no data-w-id, so IX2, sliders, lightbox, tabs, forms and
+  // CMS bindings are all dead. That was 830KB of webflow.js behind 89KB of jQuery
+  // to toggle one class.
   //
-  // Webflow's own implementation reparents the menu into a generated
-  // .w-nav-overlay. Not reproduced -- the menu is styled as a plain panel in
-  // overrides.css instead, which is fewer moving parts. The .w--open class on
-  // the button is kept because the hamburger-to-X animation is keyed off it.
+  // Webflow reparented the menu into a generated .w-nav-overlay, which is what
+  // made the item dividers size to their text instead of the panel. Not
+  // reproduced: the menu is a plain column panel in overrides.css. The .w--open
+  // class stays on the button because the hamburger-to-X animation keys off it.
   function initMobileNav() {
     var nav = document.querySelector('.mobile-nav');
     if (!nav) return;
@@ -1018,8 +1019,8 @@
       if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') toggle(e);
     });
 
-    // Any nav link closes it. The language toggle is a <button>, so opening the
-    // language list inside the menu deliberately does not close the menu.
+    // Any nav link closes it. The language control is a <button>, so opening the
+    // language list inside the menu deliberately leaves the menu open.
     menu.addEventListener('click', function (e) {
       if (e.target.closest && e.target.closest('a')) setOpen(false);
     });
@@ -1029,7 +1030,7 @@
     document.addEventListener('click', function (e) {
       if (!nav.contains(e.target)) setOpen(false);
     });
-    // Resizing past the breakpoint leaves the panel orphaned otherwise.
+    // Resizing past the breakpoint would otherwise leave the panel orphaned.
     window.addEventListener('resize', function () {
       if (window.innerWidth > 991) setOpen(false);
     });
