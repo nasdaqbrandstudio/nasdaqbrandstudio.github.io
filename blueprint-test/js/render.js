@@ -979,6 +979,62 @@
     });
   }
 
+  // Replaces the w-nav script, which was the only thing webflow.js still did on
+  // this page: the rebuild emits no data-w-id, so IX2, sliders, lightbox, tabs,
+  // forms and CMS bindings are all dead. That was 830KB of webflow.js behind
+  // 89KB of jQuery to toggle one class.
+  //
+  // Webflow's own implementation reparents the menu into a generated
+  // .w-nav-overlay. Not reproduced -- the menu is styled as a plain panel in
+  // overrides.css instead, which is fewer moving parts. The .w--open class on
+  // the button is kept because the hamburger-to-X animation is keyed off it.
+  function initMobileNav() {
+    var nav = document.querySelector('.mobile-nav');
+    if (!nav) return;
+    var btn = nav.querySelector('.mobile-nav-button');
+    var menu = nav.querySelector('.mobile-nav-menu');
+    if (!btn || !menu) return;
+
+    // The export renders the button as a div, so it needs the button semantics
+    // Webflow used to attach at runtime.
+    btn.setAttribute('role', 'button');
+    btn.setAttribute('tabindex', '0');
+    btn.setAttribute('aria-label', (UI && UI.menu) || 'Menu');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-controls', menu.id || (menu.id = 'mobile-nav-menu'));
+
+    function setOpen(on) {
+      btn.classList.toggle('w--open', on);
+      menu.classList.toggle('is-open', on);
+      btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+    }
+    function toggle(e) {
+      e.preventDefault();
+      setOpen(!menu.classList.contains('is-open'));
+    }
+
+    btn.addEventListener('click', toggle);
+    btn.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') toggle(e);
+    });
+
+    // Any nav link closes it. The language toggle is a <button>, so opening the
+    // language list inside the menu deliberately does not close the menu.
+    menu.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('a')) setOpen(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' || e.key === 'Esc') setOpen(false);
+    });
+    document.addEventListener('click', function (e) {
+      if (!nav.contains(e.target)) setOpen(false);
+    });
+    // Resizing past the breakpoint leaves the panel orphaned otherwise.
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 991) setOpen(false);
+    });
+  }
+
   function afterRender(data) {
     initVideos();
     initVideoSections();
@@ -986,10 +1042,11 @@
     trackNavHeight();
     initAnchors();
     initLanguageMemory();
+    initMobileNav();
 
-    loadScript('js/vendor/jquery.min.js')
-      .then(function () { return loadScript('js/webflow.js'); })
-      .then(function () { return loadScript('js/animate.js?v=' + BUILD.version); })
+    // animate.js only needs gsap, ScrollTrigger and Swiper, all loaded in
+    // index.html. It never touched jQuery, so it no longer waits on anything.
+    loadScript('js/animate.js?v=' + BUILD.version)
       .catch(function (e) { console.warn('[blueprint]', e); });
   }
 

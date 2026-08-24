@@ -268,7 +268,12 @@ body.lang-ja, body.lang-jp {
   --bp-serif: var(--bp-sans);
   --bp-serif-style: normal;
   --bp-display-lh: 1.35;
-  --bp-display-weight: 400;
+
+  --bp-w-display: 400;   /* export uses 200 */
+  --bp-w-heading: 500;   /* export uses 300 */
+  --bp-w-body:    400;   /* export uses 200 */
+  --bp-w-ui:      500;   /* export uses 300-500 */
+  --bp-w-strong:  700;   /* export uses 600-700 */
 }
 
 body.lang-ko {
@@ -276,7 +281,12 @@ body.lang-ko {
   --bp-serif: var(--bp-sans);
   --bp-serif-style: normal;
   --bp-display-lh: 1.35;
-  --bp-display-weight: 400;
+
+  --bp-w-display: 400;
+  --bp-w-heading: 500;
+  --bp-w-body:    400;
+  --bp-w-ui:      500;
+  --bp-w-strong:  700;
 }
 
 /* Add a language: one block above, one family in the index.html Noto <link>,
@@ -298,25 +308,93 @@ body:is(.lang-ja, .lang-jp, .lang-ko) {
   font-family: var(--bp-sans);
 }
 
-body:is(.lang-ja, .lang-jp, .lang-ko) :is(.heading, .tl-headline, .cs-headline) {
-  /* .heading is 5rem/5rem, and 3.5rem/3.255rem at one breakpoint. Both clip
-     CJK ascenders and descenders, which sit outside the Latin em box. */
-  line-height: var(--bp-display-lh);
-  /* .heading is weight 200 and the headlines 300. CJK strokes are far denser
-     than Latin at the same weight, so thin reads as broken rather than light. */
-  font-weight: var(--bp-display-weight);
+/* Never italic, anywhere. There is no true italic in any of these faces, so the
+   browser shears the upright and it reads as a rendering fault rather than
+   emphasis. Blanket rule on purpose: it catches .subnav-home-span (blueprint
+   sets italic there), .rt-serif, and any <em> that turns up in translated copy.
+   Japanese and Korean mark emphasis with weight or dots, not slant. */
+body:is(.lang-ja, .lang-jp, .lang-ko),
+body:is(.lang-ja, .lang-jp, .lang-ko) * {
+  font-style: normal;
 }
 
-/* Hero accent word. Latin keeps Bitter italic; every non-Latin language gets
-   its own Noto Sans at normal style, differentiated by weight below. */
+/* Line-height. .heading is 5rem/5rem, and 3.5rem/3.255rem at one breakpoint.
+   Both clip CJK ascenders and descenders, which sit outside the Latin em box. */
+body:is(.lang-ja, .lang-jp, .lang-ko) :is(.heading, .tl-headline, .cs-headline) {
+  line-height: var(--bp-display-lh);
+}
+
+/* --- Weight ramp --------------------------------------------------------- */
+/* The export runs a six-step Latin ramp (200/300/400/500/600/700). CJK strokes
+   are far denser than Latin at the same nominal weight, so 200 and 300 read as
+   broken hairlines rather than as light. Collapsed to four steps below, driven
+   by the variables in each language block so a new language sets four numbers
+   and inherits every mapping. Every class listed was verified as one render.js
+   actually emits -- the rest of blueprint.css is Webflow residue. */
+
+body:is(.lang-ja, .lang-jp, .lang-ko) .heading {
+  font-weight: var(--bp-w-display);
+}
+
+body:is(.lang-ja, .lang-jp, .lang-ko) :is(
+  .tl-headline,
+  .cs-headline,
+  .solutions-headline,
+  .bp-vs-title
+) { font-weight: var(--bp-w-heading); }
+
+body:is(.lang-ja, .lang-jp, .lang-ko) :is(
+  .paragraph,
+  .title,
+  .text-intro,
+  .info-card,
+  .head-paragraph,
+  .bp-vs-intro,
+  .bp-vs-para,
+  .rt-light,
+  .rt-eyebrow
+) { font-weight: var(--bp-w-body); }
+
+body:is(.lang-ja, .lang-jp, .lang-ko) :is(
+  .subnav-home,
+  .subnav-home-span,
+  .nav-link,
+  .nav-item,
+  .who-we-serve,
+  .mnav-item,
+  .footer-link,
+  .copyright-inline-2,
+  .scroll-text,
+  .name,
+  .solutions-category,
+  .link-text,
+  .body-link,
+  .hover-text-block,
+  .arrow-overlay-hover,
+  .text-block-12,
+  .paragraph-light,
+  .rt-serif,
+  .bp-vs-row-title,
+  .bp-vs-row-index,
+  .bp-vs-cta-label,
+  .bp-vs-more,
+  .bp-lang-toggle,
+  .bp-lang-code,
+  .bp-lang-item
+) { font-weight: var(--bp-w-ui); }
+
+body:is(.lang-ja, .lang-jp, .lang-ko) :is(
+  .category,
+  .bp-vs-badge,
+  .bp-vs-row-now
+) { font-weight: var(--bp-w-strong); }
+
+/* Hero accent word. Latin keeps Bitter italic; non-Latin gets its own Noto Sans
+   upright, and the weight ramp above is what separates it from the body text. */
 .rt-serif {
   font-family: var(--bp-serif);
   font-style: var(--bp-serif-style);
   font-weight: 400;
-}
-
-body:is(.lang-ja, .lang-jp, .lang-ko) .rt-serif {
-  font-weight: 500;   /* weight carries the accent where italic can't */
 }
 
 
@@ -817,6 +895,24 @@ body:is(.lang-ja, .lang-jp, .lang-ko) .rt-serif {
   .mobile-nav .w--open .hamburger-icon span:nth-child(3) { top: calc(50% - 1px); transform: rotate(-45deg); }
   .mobile-nav .mobile-nav-menu { flex: 0 auto; }
 
+  /* Collapsed menu panel. components.css hides .w-nav-menu below 992px and
+     Webflow used to reveal it by reparenting into a generated .w-nav-overlay.
+     render.js drops a .is-open class instead, so the panel is just positioned
+     under the bar. Selector carries .w-nav to out-specify the (0,3,0) rule in
+     components.css rather than relying on stylesheet order. */
+  .mobile-nav.w-nav .mobile-nav-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    float: none;
+    flex-flow: column;
+    background-color: #fff;
+    border-top: var(--stroke) solid #d5d5d5;
+    box-shadow: 0 .5rem 1rem #08062a14;
+  }
+  .mobile-nav.w-nav .mobile-nav-menu.is-open { display: flex; }
+
   .mobile-nav,
   .mobile-nav .nav-container,
   .mobile-nav-menu { background-color: #fff; }
@@ -1111,14 +1207,21 @@ body:is(.lang-ja, .lang-jp, .lang-ko) .rt-serif {
    Light theme for the stacked view
    Set per section with "mobileTheme": "light". The texture is dropped for a
    flat colour, since one cover image stretched down a very long stacked page
-   scales badly. Colours are darkened rather than reused: brand blue on this
-   background falls under 3:1, so headings take a deeper blue.
+   scales badly. The three vars below are aliases onto the brand palette in
+   blueprint.css; nothing here holds a hex of its own.
+
+   Colours are darkened rather than reused: --nasdaq-blue only clears 2.66:1 on
+   this background, so headings take --nasdaq-blue-deep at 3.65:1, which passes
+   AA for large text. The one item below that bar is .bp-vs-more at .875rem,
+   which needs 4.5:1 -- it takes --light-ink instead. See the note there.
    ========================================================================== */
 @media screen and (max-width: 991px) {
   .bp-vs[data-mobile-theme="light"] {
-    --light-bg: #c0e3f5;
-    --light-ink: #08062a;
-    --light-blue: #005f7a;
+    /* Aliases only. The hex values live in the :root block at the top of
+       blueprint.css -- change them there, not here. */
+    --light-bg: var(--nasdaq-blue-pale);
+    --light-ink: var(--nasdaq-ink);
+    --light-blue: var(--nasdaq-blue-deep);
     background-color: var(--light-bg);
     border-top-color: #08062a26;
   }
@@ -1141,14 +1244,17 @@ body:is(.lang-ja, .lang-jp, .lang-ko) .rt-serif {
   }
 
   .bp-vs[data-mobile-theme="light"] .bp-vs-item + .bp-vs-item { border-top-color: #08062a26; }
-  .bp-vs[data-mobile-theme="light"] .bp-vs-more { color: var(--light-blue); }
-  .bp-vs[data-mobile-theme="light"] .bp-vs-more:hover { color: var(--light-ink); }
+  /* Small text, so it needs 4.5:1 and --light-blue gives 3.65:1. Ink on hover
+     as before; swap this to --light-blue if you would rather match the headings. */
+  .bp-vs[data-mobile-theme="light"] .bp-vs-more { color: var(--light-ink); }
+  .bp-vs[data-mobile-theme="light"] .bp-vs-more:hover { color: var(--light-blue); }
 
-  /* White on light blue is too faint, so the CTA inverts instead. */
-  .bp-vs[data-mobile-theme="light"] .bp-vs-cta { background-color: var(--light-ink); }
+  /* Blue fill, darkening to ink on hover. White label holds on both: 4.93:1 on
+     the blue, 19.63:1 on the ink, so the arrow stays inverted throughout. */
+  .bp-vs[data-mobile-theme="light"] .bp-vs-cta { background-color: var(--light-blue); }
   .bp-vs[data-mobile-theme="light"] .bp-vs-cta-label { color: #fff; }
   .bp-vs[data-mobile-theme="light"] .bp-vs-cta-arrow img { filter: invert(1) brightness(2); }
-  .bp-vs[data-mobile-theme="light"] .bp-vs-cta:hover { background-color: var(--light-blue); }
+  .bp-vs[data-mobile-theme="light"] .bp-vs-cta:hover { background-color: var(--light-ink); }
 
   .bp-vs[data-mobile-theme="light"] .bp-video { background: #08062a; }
 }
