@@ -247,13 +247,25 @@ body.bp-panel-open { overflow: hidden; }
    inherit from <body>. They only need the weight floor below. */
 
 /* --- One block per language --------------------------------------------- */
-/* Inter stays in the stack after each Noto: Latin runs inside CJK copy
+/* Two rules for every non-Latin language:
+
+   1. Sans only. --bp-serif points back at --bp-sans rather than at a Noto Serif.
+      Bitter's job in the hero is a Latin display gesture with no equivalent in
+      Mincho or Myeongjo, and forcing one makes the accent word look imported
+      from another document. Noto Sans covers both roles; weight carries the
+      accent instead (see .rt-serif below).
+
+   2. Never italic. --bp-serif-style goes to normal. No CJK, Arabic, Hebrew,
+      Devanagari or Thai face has a true italic, so leaving it produces a
+      synthesised oblique -- a sheared bitmap, not a typeface.
+
+   Inter stays in the stack after each Noto: Latin runs inside CJK copy
    (Nasdaq-100, ETF, QQQ) keep rendering in Inter rather than the CJK face's
    proportional Latin, which is noticeably wider and lighter. */
 
 body.lang-ja, body.lang-jp {
   --bp-sans: 'Noto Sans JP', Inter, sans-serif;
-  --bp-serif: 'Noto Serif JP', serif;
+  --bp-serif: var(--bp-sans);
   --bp-serif-style: normal;
   --bp-display-lh: 1.35;
   --bp-display-weight: 400;
@@ -261,7 +273,7 @@ body.lang-ja, body.lang-jp {
 
 body.lang-ko {
   --bp-sans: 'Noto Sans KR', Inter, sans-serif;
-  --bp-serif: 'Noto Serif KR', serif;
+  --bp-serif: var(--bp-sans);
   --bp-serif-style: normal;
   --bp-display-lh: 1.35;
   --bp-display-weight: 400;
@@ -269,13 +281,13 @@ body.lang-ko {
 
 /* Add a language: one block above, one family in the index.html Noto <link>,
    one entry in languages.json, one content-xx.json. Nothing else.
-   Reference values for the next few:
-     zh-Hans  'Noto Sans SC' / 'Noto Serif SC'   lh 1.35  weight 400
-     zh-Hant  'Noto Sans TC' / 'Noto Serif TC'   lh 1.35  weight 400
-     ar       'Noto Sans Arabic' / 'Noto Naskh Arabic'  lh 1.5  weight 400
-     he       'Noto Sans Hebrew' / 'Noto Serif Hebrew'  lh 1.5  weight 400
-     hi, mr   'Noto Sans Devanagari' / 'Noto Serif Devanagari'  lh 1.6  weight 400
-     th       'Noto Sans Thai' / 'Noto Serif Thai'      lh 1.6  weight 400
+   Copy a block above and change the family. Sans only, serif-style normal:
+     zh-Hans  'Noto Sans SC'          lh 1.35  weight 400
+     zh-Hant  'Noto Sans TC'          lh 1.35  weight 400
+     ar       'Noto Sans Arabic'      lh 1.5   weight 400   (also needs dir=rtl)
+     he       'Noto Sans Hebrew'      lh 1.5   weight 400   (also needs dir=rtl)
+     hi, mr   'Noto Sans Devanagari'  lh 1.6   weight 400
+     th       'Noto Sans Thai'        lh 1.6   weight 400
    Latin-script languages (es, pt, fr, de, it, nl, pl, tr, vi) and Greek and
    Cyrillic need no block at all -- Inter already ships those subsets. */
 
@@ -295,8 +307,8 @@ body:is(.lang-ja, .lang-jp, .lang-ko) :is(.heading, .tl-headline, .cs-headline) 
   font-weight: var(--bp-display-weight);
 }
 
-/* Hero accent word. Bitter is Latin only, and Mincho has no italic, so without
-   this the accented span gets a synthesised oblique on a fallback face. */
+/* Hero accent word. Latin keeps Bitter italic; every non-Latin language gets
+   its own Noto Sans at normal style, differentiated by weight below. */
 .rt-serif {
   font-family: var(--bp-serif);
   font-style: var(--bp-serif-style);
