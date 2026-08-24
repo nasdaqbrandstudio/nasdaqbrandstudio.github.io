@@ -1,29 +1,10 @@
 {
-  "_readme": "The only file you edit to add or remove a language. Every content file reads this list, so translations never need to know about each other.",
-  "_howToAddALanguage": "1. Copy content.json to content-<code>.json and translate it. 2. Add a line to the array below. That is all - no HTML change, and no edit to the other content files.",
-  "_codes": "Use a standard language code (en, es, fr, ja, ko, pt-br). It becomes the ?lang= value and the <html lang> attribute.",
-  "_labels": "label is what appears in the toggle. Short is better - EN, ES, FR - since it sits in the nav bar.",
-  "_content": "content is resolved relative to this file, so a plain filename means the same folder.",
-  "_toggleVisibility": "The toggle only appears when this array has two or more entries. With one entry the site renders with no language UI at all.",
-  "_default": "default is the language used when no ?lang= is present. It should match the content file the page points at.",
-  "_autoDetect": "When true (the default), a first-time visitor whose browser asks for a language you publish gets that language automatically. Set to false to always start on the default and only switch when someone clicks the toggle.",
-  "_precedence": "?lang= in the URL wins, then the visitor’s last explicit choice, then the browser language, then default. Clicking the toggle is remembered, so detection never overrides a deliberate choice.",
-  "_regionCodes": "A browser asking for es-MX or es-419 matches an \"es\" entry. Publish a region code (pt-br) only if you have a file specifically for it.",
   "default": "en",
   "autoDetect": true,
   "languages": [
-    {
-      "code": "en",
-      "label": "EN",
-      "content": "content.json",
-      "name": "English"
-    },
-    {
-      "code": "es",
-      "label": "ES",
-      "content": "content-es.json",
-      "name": "Español"
-    }
-  ],
-  "_name": "name is the language written in itself (English, Espanol, Francais). It appears in the dropdown. label is the short code shown on the badge."
+    { "code": "en", "label": "EN", "name": "English",  "content": "content.json" },
+    { "code": "es", "label": "ES", "name": "Español",  "content": "languages/content-es.json" },
+    { "code": "ja", "label": "JA", "name": "日本語",    "content": "languages/content-ja.json" },
+    { "code": "ko", "label": "KO", "name": "한국어",    "content": "languages/content-ko.json" }
+  ]
 }

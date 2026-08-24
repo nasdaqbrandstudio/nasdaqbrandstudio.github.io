@@ -1,0 +1,579 @@
+{
+  "_readme": "한국어 콘텐츠 파일입니다. 구조는 content.json과 동일하며 사용자에게 표시되는 문구만 다릅니다.",
+  "_whatIsTranslated": "본문, 헤드라인, 라벨, 인용문, 링크 텍스트, 푸터 라벨, UI 문구.",
+  "_whatIsNotTranslated": "id, 앵커, URL, 이미지 및 동영상 파일명, sectionOrder, 브랜드 및 제품명(Nasdaq-100, QQQ, eVestment, Dorsey Wright, 파트너사명).",
+  "_anchorsAreShared": "앵커 슬러그는 영어로 유지되어 모든 언어에서 동일한 딥링크가 작동합니다.",
+  "_localizedVideos": "jwMedia ID는 기존 ko-kr.html에서 추출한 한국어 버전 영상으로 교체했습니다. hero=Mirht10q, liquidity-ecosystem=xVxRo86M, tech-driven-economy=NinIyP99, CME=NUE2aZn6, Samsung=kUtcNE0t, Amova=p0K1Kr02, Mirae=V6zInJVL.",
+  "_missingLocalizedVideos": "한국어 버전이 없어 영어 ID를 그대로 사용합니다: thoughtLeadership/index-options (jeOazJCj), clientSpotlights/Goldman Sachs (hRuzYana), clientSpotlights/Invesco (bGVFuVLb). 한국어 버전이 준비되면 교체하세요.",
+  "_placeholderCopy": "Nasdaq-100 Index Options 항목은 영어 파일에도 로렘 입숨이 남아 있어 여기서도 번역하지 않았습니다. 두 파일을 함께 교체하세요.",
+  "_brandLines": "nav.brand는 line1=내일의 / line2=청사진 순서로 설정했습니다. 템플릿이 line1을 강조(세리프)로 표시한다면 순서를 바꾸세요.",
+  "_reviewNeeded": "기계 번역입니다. 게시 전에 원어민과 법무 검토를 받으세요. 특히 제품명, 저작권 문구, 규제 관련 표현을 확인하세요.",
+  "_howToAddALanguage": "언어 목록은 languages.json에서 관리합니다. 이 파일을 복사해 번역한 뒤 languages.json에 한 줄을 추가하세요.",
+  "meta": {
+    "title": "나스닥 글로벌 지수 | 내일의 청사진",
+    "description": "나스닥 지수가 현대 경제를 어떻게 이끌어 가는지 확인해 보세요. 혁신을 촉진하고, 기회를 열며, 미래의 금융 인프라를 구축하고 있습니다.",
+    "ogTitle": "나스닥 | 내일의 청사진",
+    "ogImage": "",
+    "lang": "ko"
+  },
+  "config": {
+    "imagePath": "images/",
+    "videoPath": "videos/",
+    "jw": {
+      "playerId": "jO5YHc4l",
+      "playlistId": "",
+      "useLiveFeed": false,
+      "cacheMinutes": 15,
+      "routeTag": "@",
+      "labelTag": "#",
+      "headlineTag": "*"
+    }
+  },
+  "ui": {
+    "play": "동영상 재생",
+    "close": "닫기",
+    "prev": "이전",
+    "next": "다음",
+    "loadError": "이 페이지의 콘텐츠를 불러오지 못했습니다.",
+    "language": "언어"
+  },
+  "sectionOrder": [
+    "hero",
+    "thoughtLeadership",
+    "clientSpotlights",
+    "solutions",
+    "cityscape"
+  ],
+  "nav": {
+    "logo": {
+      "src": "./images/Vectors-Wrapper.svg",
+      "alt": "나스닥 로고",
+      "href": "https://www.nasdaq.com/",
+      "width": 85,
+      "height": 24
+    },
+    "brand": {
+      "line1": "내일의",
+      "line2": "청사진",
+      "href": "#home"
+    },
+    "items": [
+      {
+        "label": "사고 리더십",
+        "href": "#thought-leadership"
+      },
+      {
+        "label": "고객 주목",
+        "href": "#client-spotlights"
+      },
+      {
+        "label": "글로벌 인덱스 솔루션",
+        "href": "#solutions"
+      }
+    ],
+    "dropdown": {
+      "label": "고객 유형",
+      "items": []
+    }
+  },
+  "hero": {
+    "id": "header",
+    "eyebrow": "나스닥 글로벌 지수",
+    "headline": "내일의 <span class=\"rt-accent rt-serif\">청사진</span>",
+    "intro": "나스닥 지수가 현대 경제를 어떻게 이끌어 가는지 확인해 보세요. 혁신을 촉진하고, 기회를 열며, 미래의 금융 인프라를 구축하고 있습니다.",
+    "scrollLabel": "계속 보기",
+    "backgroundVideo": {
+      "mp4": "https://cdn.jwplayer.com/videos/FLwg9bSz-qgCdanU1.mp4",
+      "poster": "./images/hero-poster.webp"
+    },
+    "video": {
+      "jwMedia": "Mirht10q",
+      "title": "내일의 청사진",
+      "route": "@hero"
+    }
+  },
+  "thoughtLeadership": {
+    "id": "thought-leadership",
+    "headline": "나스닥과 파트너사들은 지수 기반 솔루션을 통해 글로벌 투자자들에게 힘을 실어주고 미래 시장을 만들어가고 있습니다.",
+    "mobileTheme": "light",
+    "backgroundImage": "blue-background",
+    "features": [
+      {
+        "id": "index-options",
+        "anchor": "tl-index-options",
+        "title": "Nasdaq-100 지수 옵션",
+        "video": {
+          "jwMedia": "jeOazJCj",
+          "title": "Nasdaq-100 지수 옵션",
+          "route": "@feature"
+        },
+        "body": [
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore."
+        ],
+        "quote": {
+          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.”",
+          "name": "예시 이름",
+          "role": "예시 직함, 나스닥",
+          "headshot": "icon-placeholder.svg"
+        },
+        "cta": {
+          "label": "Nasdaq-100 Index® 옵션 살펴보기",
+          "url": "https://www.nasdaq.com/products/north-american-markets/nasdaq-100-options-xnd-ndx"
+        }
+      },
+      {
+        "id": "liquidity-ecosystem",
+        "title": "유동성 생태계",
+        "video": {
+          "jwMedia": "xVxRo86M",
+          "title": "유동성 생태계",
+          "route": "@feature"
+        },
+        "body": [
+          "나스닥이 어떻게 포괄적인 유동성 생태계를 구축하는지 살펴보세요. 상품 혁신, 전략적 파트너십, 원활한 시장 접근을 통해 투자 여정의 모든 단계를 지원합니다."
+        ],
+        "quote": {
+          "text": "투자자들이 어떤 매체를 통해서든 우리의 전략에 참여하고 접근할 수 있도록 보장하는 것이 핵심입니다.”",
+          "name": "Emily Spurling",
+          "role": "나스닥 글로벌 지수 총괄 책임자, 나스닥",
+          "headshot": "headshot-emily-spurling"
+        },
+        "anchor": "tl-liquidity-ecosystem",
+        "thumbnail": "tl-liquidity-ecosystem"
+      },
+      {
+        "id": "tech-driven-economy",
+        "title": "기술 주도 경제",
+        "video": {
+          "jwMedia": "NinIyP99",
+          "title": "기술 주도 경제",
+          "route": "@feature"
+        },
+        "body": [
+          "AI의 발전부터 반도체 혁신까지, 기술은 글로벌 자본 시장을 재편하고 있습니다.",
+          "나스닥 지수가 아모바자산운용, 미래에셋자산운용, 삼성자산운용과의 파트너십을 통해 아태지역(APAC) 투자자들이 기술 혁신의 미래와 내일의 경제를 이끌 핵심 분야에 참여할 수 있도록 어떻게 지원하는지 확인해 보세요."
+        ],
+        "quote": {
+          "text": "나스닥 지수는 가장 혁신적인 당사 상품들의 든든한 기반이 되어 왔습니다. 저희는 글로벌 메가트렌드를 보다 쉽게 접할 수 있는 길을 열어, 투자자들이 미래를 만들어가는 여정에 함께할 수 있도록 최선을 다하고 있습니다.”",
+          "name": "아론 정",
+          "role": "글로벌 ETF 전략 매니저, 미래에셋자산운용",
+          "headshot": "headshot-aaron-jung"
+        },
+        "anchor": "tl-tech-driven-economy",
+        "thumbnail": "tl-tech-economy"
+      }
+    ],
+    "route": "feature",
+    "nowPlayingLabel": "재생 중",
+    "mobileInitialCount": 4,
+    "seeMoreLabel": "더 보기",
+    "seeLessLabel": "간략히 보기",
+    "newBadge": "신규"
+  },
+  "clientSpotlights": {
+    "id": "client-spotlights",
+    "headline": "<span class=\"rt-accent\">함께 만들어가는 미래:</span> 나스닥 글로벌 파트너사의 이야기",
+    "nowPlayingLabel": "재생 중",
+    "mobileInitialCount": 4,
+    "seeMoreLabel": "더 보기",
+    "seeLessLabel": "간략히 보기",
+    "videos": [
+      {
+        "jwMedia": "hRuzYana",
+        "title": "Goldman Sachs Asset Management",
+        "description": "골드만삭스자산운용과 나스닥이 경쟁이 치열한 ETF 시장에서 투자자들을 어떻게 돕는지 알아보세요. GPIQ와 같은 전략을 통해 혁신, 성장, 인컴에 대한 접근성을 넓히고 있습니다.",
+        "anchor": "cl-goldman-sachs"
+      },
+      {
+        "jwMedia": "bGVFuVLb",
+        "title": "Invesco",
+        "description": "QQQ부터 인컴 창출형 QQA까지, 나스닥과 인베스코가 어떻게 협력하여 전 세계 투자자에게 혁신과 접근성을 제공하는지 살펴보세요.",
+        "anchor": "cl-invesco"
+      },
+      {
+        "jwMedia": "NUE2aZn6",
+        "title": "CME 그룹",
+        "description": "CME 그룹이 나스닥 100에 대한 접근을 어떻게 대중화시키고 있는지 알아보세요. 모든 유형의 투자자들이 첨단 선물 상품을 통해 혁신에 참여할 수 있도록 지원합니다.",
+        "anchor": "cl-cme"
+      },
+      {
+        "jwMedia": "kUtcNE0t",
+        "title": "삼성자산운용",
+        "description": "삼성자산운용이 나스닥과 협력하여 대한민국 투자자들에게 새로운 기회를 열어주는 선도적인 투자 솔루션을 제공하는 방식을 살펴보세요.",
+        "anchor": "cl-samsung"
+      },
+      {
+        "jwMedia": "p0K1Kr02",
+        "title": "아모바자산운용",
+        "description": "아모바자산운용이 나스닥 지수를 활용해 주요 미국 기업에 대한 간소화된 통화 헤지 접근을 제공함으로써 글로벌 기술 노출에 대한 일본의 증가하는 수요를 충족하는 방법을 알아보세요.",
+        "anchor": "cl-amova"
+      },
+      {
+        "jwMedia": "V6zInJVL",
+        "title": "미래에셋자산운용",
+        "description": "미래에셋자산운용이 나스닥과의 파트너십을 통해 한국의 투자 환경에서 혁신을 주도하고 있는 방법을 알아보세요. AI와 반도체와 같은 글로벌 트렌드를 국내 투자자에게 접근 가능한 기회로 전환하는 기술 중심 ETF를 제공합니다.",
+        "anchor": "cl-mirae"
+      }
+    ],
+    "route": "spotlight",
+    "backgroundImage": "",
+    "newBadge": "신규"
+  },
+  "solutions": {
+    "id": "solutions",
+    "headline": "나스닥의 글로벌 지수 솔루션",
+    "intro": "내일의 청사진은 하루아침에 그려지지 않습니다. 다양한 자산군, 섹터, 지역을 아우르는 포괄적 지수를 통해 나스닥 글로벌 지수는 역동적인 시장 환경에 부합하는 강력한 벤치마크를 설계합니다.",
+    "swipeLabel": "더 보려면 스와이프하세요",
+    "buildings": [
+      {
+        "id": "nasdaq-100",
+        "label": "Nasdaq-100®",
+        "image": "building-nasdaq-100",
+        "intro": "나스닥 100(Nasdaq-100®)은 나스닥 증권거래소(Nasdaq Stock Market®)에 상장된 가장 혁신적인 대형주 100개 기업으로 구성된, 전 세계적으로 인정받는 지수입니다.",
+        "embed": {
+          "url": "https://www.nasdaq.com/campaign/nasdaq-100-chart-ndx-spx/",
+          "height": 460,
+          "heightMobile": 450,
+          "title": "Nasdaq-100®",
+          "bleedMobile": true
+        },
+        "bodyLink": {
+          "text": "나스닥 100이 중요한 이유와 투자 전략에서 어떻게 활용될 수 있는지 확인해 보세요",
+          "url": "https://www.nasdaq.com/solutions/global-indexes/Nasdaq-100/ways-to-invest"
+        },
+        "links": [
+          {
+            "eyebrow": "체험:",
+            "text": "나스닥 100의 하루",
+            "url": "https://www.nasdaq.com/campaign/nasdaq-100-day-in-the-life/"
+          },
+          {
+            "eyebrow": "입문:",
+            "text": "나스닥 100: 21세기의 벤치마크",
+            "url": "https://www.nasdaq.com/docs/nasdaq-100-benchmark-21-century"
+          },
+          {
+            "eyebrow": "영상:",
+            "text": "나스닥 100 주간 보고서",
+            "url": "https://www.nasdaq.com/news-and-insights/nasdaq-100-in-100"
+          },
+          {
+            "eyebrow": "인사이트:",
+            "text": "Nasdaq-100 Index® 옵션",
+            "url": "https://www.nasdaq.com/nasdaq-100-options-xnd-ndx"
+          }
+        ]
+      },
+      {
+        "id": "income-generation",
+        "label": "인컴 창출 및 포트폴리오 보호",
+        "image": "building-income-generation",
+        "intro": "성공은 혁신을 기반으로 합니다. 이러한 지수 기반 전략은 투자자 포트폴리오에서 인컴 창출, 리스크 관리 수익, 목표 성과 달성과 같은 특화된 역할을 수행하도록 설계되었습니다.",
+        "cards": [
+          {
+            "title": "인컴 창출",
+            "body": "인컴 창출 전략은 배당과 이자 수익을 우선시하며, 안정적이고 신뢰할 수 있는 수익을 추구하는 투자자에게 최적화된 전략입니다.",
+            "url": "https://www.nasdaq.com/solutions/global-indexes/quantitative/income-generation",
+            "image": "income-generation",
+            "cta": "자세히 알아보기"
+          },
+          {
+            "title": "관리형 리스크",
+            "body": "관리형 리스크 전략은 사전에 설정된 위험과 수익 매개변수를 기반으로, 투자자에게 구조화된 솔루션을 제공합니다.",
+            "url": "https://www.nasdaq.com/solutions/global-indexes/quantitative/managed-risk/",
+            "image": "managed-risk",
+            "cta": "자세히 알아보기"
+          },
+          {
+            "title": "보험 솔루션",
+            "body": "변동성 목표 전략은 오늘날 지수 연계형 연금 시장을 위해 설계된 혁신적 나스닥 지수의 성장 잠재력을 활용합니다.",
+            "url": "https://www.nasdaq.com/solutions/global-indexes/insurance/volatility-control/",
+            "image": "insurance-solutions",
+            "cta": "자세히 알아보기"
+          }
+        ],
+        "links": [
+          {
+            "eyebrow": "기사:",
+            "text": "옵션을 활용한 ETF 완전 해부",
+            "url": "https://www.nasdaq.com/articles/all-about-etfs-options"
+          },
+          {
+            "eyebrow": "기사:",
+            "text": "고객 포트폴리오에 인컴 제공",
+            "url": "https://www.nasdaq.com/articles/index/evolving-income-portfolio-strategies-for-financial-advisors"
+          },
+          {
+            "eyebrow": "인사이트:",
+            "text": "Nasdaq Advisor Hub 살펴보기",
+            "url": "https://www.nasdaq.com/solutions/global-indexes/advisor-insights-hub"
+          },
+          {
+            "eyebrow": "살펴보기:",
+            "text": "지수 옵션으로 수익 창출하기",
+            "url": "https://www.nasdaq.com/nasdaq-100-options-xnd-ndx"
+          }
+        ]
+      },
+      {
+        "id": "megatrends",
+        "label": "메가트렌드",
+        "image": "building-megatrends",
+        "intro": "나스닥 글로벌 지수는 기술과 혁신의 새로운 메가트렌드를 선도하는 선구적 지수를 설계합니다. 이 중 다수는 오늘날 21세기 경제를 형성하는 메가트렌드로 자리 잡았습니다.",
+        "cards": [
+          {
+            "title": "AI 및 클라우드",
+            "body": "나스닥 AI 및 클라우드 지수는 차세대 인공지능과 클라우드를 구축하는 기업들을 추적합니다.",
+            "url": "https://www.nasdaq.com/solutions/global-indexes/thematic/artificial-intelligence-cloud/",
+            "image": "megatrend-ai-cloud",
+            "cta": "자세히 알아보기"
+          },
+          {
+            "title": "사이버 보안",
+            "body": "나스닥 사이버 보안 지수는 디지털 보안과 데이터 보호 분야의 선두 기업들을 추적합니다.",
+            "url": "https://www.nasdaq.com/solutions/global-indexes/thematic/cybersecurity/",
+            "image": "megatrend-cybersecurity",
+            "cta": "자세히 알아보기"
+          },
+          {
+            "title": "반도체",
+            "body": "나스닥 반도체 지수는 반도체 산업 기업들의 성과를 추적하는 섹터별 벤치마크입니다.",
+            "url": "https://www.nasdaq.com/solutions/global-indexes/beta/semiconductors/",
+            "image": "megatrend-semiconductors",
+            "cta": "자세히 알아보기"
+          },
+          {
+            "title": "에너지 인프라",
+            "body": "나스닥 에너지 인프라 지수는 21세기 경제를 움직이는 기업들을 추적합니다.",
+            "url": "https://www.nasdaq.com/solutions/global-indexes/thematic/energy-infrastructure/",
+            "image": "megatrend-energy-infrastructure",
+            "cta": "자세히 알아보기"
+          }
+        ],
+        "links": [
+          {
+            "eyebrow": "기사:",
+            "text": "소프트웨어가 하락하는 동안 AI의 가치는 어디에 쌓였나",
+            "url": "https://www.nasdaq.com/articles/global-indexes/nygbig-spotlight-where-ai-value-accrued-software-sold"
+          },
+          {
+            "eyebrow": "리서치:",
+            "text": "새로운 반도체 사이클 항해하기",
+            "url": "https://www.nasdaq.com/articles/global-indexes/ai-tailwinds-and-memory-shortages-navigating-new-semiconductor-cycle"
+          },
+          {
+            "eyebrow": "리서치:",
+            "text": "다음 글로벌 전환을 이끄는 힘",
+            "url": "https://www.nasdaq.com/articles/global-indexes/age-electricity-powering-next-global-transformation"
+          }
+        ]
+      },
+      {
+        "id": "digital-assets",
+        "label": "디지털 자산",
+        "image": "building-digital-assets",
+        "intro": "나스닥 글로벌 지수는 디지털 자산 분야의 지수 솔루션을 선도합니다.",
+        "cards": [
+          {
+            "title": "나스닥 CME 크립토™ 지수(NCI™)",
+            "body": "나스닥 CME 크립토™ 지수(NCI™)는 진화하는 디지털 자산 환경에 최적화된 투자 기회를 제공합니다. 이 지수는 투자 적합성을 유지하면서 성숙해가는 암호화폐 시장을 역동적으로 반영합니다.",
+            "url": "https://www.nasdaq.com/solutions/global-indexes/thematic/crypto",
+            "image": "digital-crypto",
+            "cta": "자세히 알아보기"
+          },
+          {
+            "title": "나스닥 블록체인 이코노미™ 지수",
+            "body": "나스닥 블록체인 이코노미 지수는 자사 또는 타사의 사용을 위해 블록체인 기술을 개발, 연구, 지원, 혁신 또는 활용하는 데 실질적인 자원을 투입하는 기업들의 수익률을 측정하도록 설계되었습니다.",
+            "url": "https://indexes.nasdaqomx.com/Index/Overview/RSBLCN",
+            "image": "digital-blockchain",
+            "cta": "자세히 알아보기"
+          }
+        ],
+        "links": [
+          {
+            "eyebrow": "인사이트:",
+            "text": "나스닥 CME 크립토 지수 살펴보기",
+            "url": "https://www.nasdaq.com/solutions/global-indexes/thematic/crypto/"
+          },
+          {
+            "eyebrow": "발표:",
+            "text": "나스닥과 CME 그룹이 암호화폐 분야에서 파트너십 체결",
+            "url": "https://www.nasdaq.com/articles/nasdaq-and-cme-group-deepen-partnership-advance-new-era-crypto-investing"
+          },
+          {
+            "eyebrow": "발표:",
+            "text": "토큰화된 증권에 대한 나스닥의 새로운 제안",
+            "url": "https://www.nasdaq.com/newsroom/qa-nasdaqs-new-proposal-tokenized-securities"
+          },
+          {
+            "eyebrow": "영상:",
+            "text": "Talk Your Ticker – Hashdex NCIQ",
+            "url": "https://www.nasdaq.com/videos/talk-your-ticker-nciq"
+          }
+        ]
+      },
+      {
+        "id": "private-markets",
+        "label": "사모 시장",
+        "image": "building-private-markets",
+        "intro": "사모 시장 투자가 기관 투자자의 포트폴리오 구성과 자산 배분에서 점점 더 중심적인 역할을 하면서, 나스닥은 견고하고 대표성 있으며 높은 품질의 벤치마킹 솔루션에 대한 수요에 부응하고 있습니다.",
+        "bodyLink": {
+          "text": "Nasdaq Dorsey Wright와 모든 Nasdaq Advisory Solutions에 대해 자세히 알아보기",
+          "url": "https://www.nasdaq.com/solutions/global-indexes/nasdaq-dorsey-wright"
+        },
+        "cards": [
+          {
+            "title": "Nasdaq Private Capital Indexes",
+            "body": "나스닥 eVestment의 기관 투자자급 사모 시장 데이터를 기반으로 구축된 투명하고 대표성 있으며 견고한 사모 자본 벤치마크입니다.",
+            "url": "https://www.nasdaq.com/solutions/global-indexes/beta/private-capital-indexes",
+            "image": "private-capital-indexes",
+            "cta": "자세히 알아보기"
+          },
+          {
+            "title": "Nasdaq eVestment Private Fund Universe",
+            "body": "LP가 검증한 사모 펀드 정보를 제공해 비교와 경쟁 분석을 지원하며, 투자 기회를 평가하고 트렌드를 앞서 파악할 수 있도록 돕습니다.",
+            "url": "https://www.nasdaq.com/solutions/evestment/private-markets",
+            "image": "private-fund-universe",
+            "cta": "자세히 알아보기"
+          },
+          {
+            "title": "Nasdaq eVestment TopQ+",
+            "body": "기관 투자자와 컨설턴트의 실사를 지원하는 동시에 GP의 자금 조달 활동을 뒷받침하는 사모 펀드 리서치 및 분석 플랫폼입니다.",
+            "url": "https://www.nasdaq.com/solutions/evestment/private-markets/topq",
+            "image": "private-topq",
+            "cta": "자세히 알아보기"
+          },
+          {
+            "title": "Nasdaq eVestment Fund and Deal Benchmarking",
+            "body": "펀드 및 딜 데이터세트와 성과를 비교해 상대적 결과를 파악하고 정보에 기반한 투자 결정을 지원합니다.",
+            "url": "https://www.nasdaq.com/solutions/evestment/private-markets/private-markets-fund-managers",
+            "image": "private-benchmarking",
+            "cta": "자세히 알아보기"
+          }
+        ],
+        "links": [
+          {
+            "eyebrow": "백서:",
+            "text": "Nasdaq Private Capital Indexes 입문",
+            "url": "https://www.nasdaq.com/docs/intro-to-the-nasdaq-private-capital-indexes"
+          },
+          {
+            "eyebrow": "팩트시트:",
+            "text": "Nasdaq Private Capital Global Index",
+            "url": "https://www.nasdaq.com/docs/NPCPC-Factsheet-2025-Q4"
+          },
+          {
+            "eyebrow": "리서치:",
+            "text": "2025 나스닥 사모 시장 펀드 동향 보고서",
+            "url": "https://www.nasdaq.com/solutions/analytics/evestment/research/private-markets-fund-2025"
+          }
+        ]
+      }
+    ]
+  },
+  "cityscape": {
+    "id": "cityscape"
+  },
+  "footer": {
+    "id": "footer",
+    "columns": [
+      [
+        {
+          "label": "투자자 정보",
+          "url": "http://ir.nasdaq.com/"
+        },
+        {
+          "label": "채용",
+          "url": "https://www.nasdaq.com/about/careers"
+        },
+        {
+          "label": "트러스트 센터",
+          "url": "https://www.nasdaq.com/trust-center"
+        },
+        {
+          "label": "접근성",
+          "url": "https://www.nasdaq.com/nasdaq-accessibility-commitment"
+        }
+      ],
+      [
+        {
+          "label": "문의하기",
+          "url": "https://www.nasdaq.com/contact-us"
+        },
+        {
+          "label": "광고 문의",
+          "url": "https://www.nasdaq.com/advertising"
+        },
+        {
+          "label": "Nasdaq Marketsite",
+          "url": "https://www.nasdaq.com/marketsite"
+        },
+        {
+          "label": "뉴스레터",
+          "url": "https://www.nasdaq.com/newsletters"
+        }
+      ],
+      [
+        {
+          "label": "개인정보 처리방침",
+          "url": "https://www.nasdaq.com/privacy-statement",
+          "muted": true
+        },
+        {
+          "label": "쿠키",
+          "url": "https://www.nasdaq.com/cookie-statement",
+          "muted": true
+        },
+        {
+          "label": "법적 고지",
+          "url": "https://www.nasdaq.com/legal",
+          "muted": true
+        },
+        {
+          "label": "쿠키 설정",
+          "url": "https://www.nasdaq.com/",
+          "muted": true
+        }
+      ]
+    ],
+    "social": [
+      {
+        "id": "facebook",
+        "label": "Facebook",
+        "url": "https://www.facebook.com/Nasdaq/",
+        "icon": "./images/facebook-social.svg"
+      },
+      {
+        "id": "x",
+        "label": "X",
+        "url": "https://x.com/Nasdaq",
+        "icon": "./images/x-social.svg"
+      },
+      {
+        "id": "linkedin",
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/company/nasdaq/",
+        "icon": "./images/linkedin-social.svg"
+      },
+      {
+        "id": "instagram",
+        "label": "Instagram",
+        "url": "https://www.instagram.com/nasdaq",
+        "icon": "./images/instagram-social.svg"
+      },
+      {
+        "id": "youtube",
+        "label": "YouTube",
+        "url": "https://www.youtube.com/user/NASDAQ",
+        "icon": "./images/youtube-social.svg"
+      }
+    ],
+    "logo": {
+      "src": "./images/nasdaq-logo.svg",
+      "url": "https://www.nasdaq.com/",
+      "alt": "Nasdaq"
+    },
+    "copyright": "© {year}, Nasdaq, Inc. 모든 권리 보유."
+  }
+}

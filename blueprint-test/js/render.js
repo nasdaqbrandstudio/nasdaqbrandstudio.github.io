@@ -68,6 +68,13 @@
     try { return new URL(CONTENT_URL, document.baseURI).href; } catch (e) { return document.baseURI; }
   })();
 
+  // Where images/ and videos/ live. Pinned to the DEFAULT content file and never
+  // reassigned, so translations can sit in a subfolder (languages/content-ja.json)
+  // without dragging asset lookups into that folder with them. Keep this separate
+  // from CONTENT_BASE: pointing the page at a remote content.json should still
+  // pull that deployment's assets, which is why neither uses document.baseURI.
+  var ASSET_BASE = CONTENT_BASE;
+
   var CACHE_KEY = 'bp-content-cache-v1:' + CONTENT_BASE + (LANG ? ':' + LANG : '');
 
   function esc(s) {
@@ -125,11 +132,11 @@
   // section id -> selector fn, so a deep link can drive any video list
   var VIDEO_SECTIONS = {};
 
-  function absUrl(path) {
+  function absUrl(path, base) {
     if (!path) return '';
     if (/^(https?:)?\/\//.test(path)) return path;
     if (path.indexOf('./') === 0) return chromeUrl(path.slice(2));
-    try { return new URL(path, CONTENT_BASE).href; } catch (e) { return path; }
+    try { return new URL(path, base || CONTENT_BASE).href; } catch (e) { return path; }
   }
 
   function chromeUrl(path) {
@@ -143,13 +150,13 @@
     if (/^(https?:)?\/\//.test(name) || name.charAt(0) === '/') return name;
     if (name.indexOf('./') === 0) return chromeUrl(name.slice(2));
     var file = /\.(webp|png|jpe?g|svg|gif|avif|ico)$/i.test(name) ? name : name + '.webp';
-    return absUrl((CFG.imagePath || 'images/') + file);
+    return absUrl((CFG.imagePath || 'images/') + file, ASSET_BASE);
   }
 
   function videoUrl(name) {
     if (!name) return '';
     if (/^(https?:)?\/\//.test(name) || name.charAt(0) === '/') return name;
-    return absUrl((CFG.videoPath || 'videos/') + name);
+    return absUrl((CFG.videoPath || 'videos/') + name, ASSET_BASE);
   }
 
   function bgStyle(spec) {
@@ -1095,7 +1102,7 @@
   // Missing or malformed is not an error -- it just means one language.
   function fetchLanguages() {
     var url;
-    try { url = new URL('languages.json', CONTENT_BASE).href; } catch (e) { return Promise.resolve(null); }
+    try { url = new URL('languages.json', ASSET_BASE).href; } catch (e) { return Promise.resolve(null); }
     return fetch(url, { cache: 'no-cache' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
