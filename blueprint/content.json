@@ -73,7 +73,7 @@
     "intro": "Explore how Nasdaq indexes are shaping the modern economy – igniting innovation, unlocking opportunity, and building the financial infrastructure of the future",
     "scrollLabel": "Scroll to Continue",
     "backgroundVideo": {
-      "mp4": "https://cdn.jwplayer.com/videos/FLwg9bSz-qgCdanU1.mp4"
+      "mp4": "https://cdn.jwplayer.com/videos/FLwg9bSz-qgCdanU1.mp4",
       "poster": "./images/hero-poster.webp"
     },
     "video": {
