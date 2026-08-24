@@ -688,7 +688,7 @@
           var slug = r.getAttribute('data-anchor');
           if (slug && location.hash !== '#' + slug) history.replaceState(null, '', '#' + slug);
           if (window.matchMedia('(max-width: 991px)').matches && items[i]) {
-            items[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+            scrollToEl(items[i]);
           }
         });
       });
@@ -721,12 +721,11 @@
         // open the expanded view first or its target is display:none.
         var stacked = window.matchMedia('(max-width: 991px)').matches;
         if (stacked && items[i] && items[i].classList.contains('is-extra')) expand(true);
+        // Stacked: the item itself, so the bar lands on its top border -- the
+        // divider between videos. Desktop: the section, since the active item is
+        // display:contents there and has no box of its own.
         var target = stacked ? items[i] : root;
-        if (target) {
-          requestAnimationFrame(function () {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          });
-        }
+        if (target) requestAnimationFrame(function () { scrollToEl(target); });
       };
     });
   }
@@ -1067,6 +1066,64 @@
       .catch(function (e) { console.warn('[blueprint]', e); });
   }
 
+  // Measured height of whichever sticky bar is showing. Written by
+  // trackNavHeight, read here so JS and CSS agree on one number.
+  function navOffset() {
+    var v = getComputedStyle(document.documentElement).getPropertyValue('--bp-nav-h');
+    var n = parseFloat(v);
+    return isFinite(n) && n > 0 ? n : 80;
+  }
+
+  // scrollIntoView fires once and trusts the layout it finds. That layout is
+  // still moving: the JW iframe and its poster resolve their height late, the
+  // stacked view may have just expanded, and selecting a video swaps which item
+  // is displayed. Any of those shifts the target after the scroll has finished,
+  // which is what leaves an anchor sitting above or below the bar.
+  //
+  // So: aim, then re-measure a few times and correct if the target drifted.
+  // Bails the moment the reader scrolls themselves -- fighting someone for
+  // control of the scroll position is worse than landing slightly off.
+  function scrollToEl(el) {
+    if (!el) return;
+    // display:contents (the active item on desktop) generates no box, so it has
+    // nothing to measure. Fall back to the section that contains it.
+    var r = el.getBoundingClientRect();
+    if (!r.height && !r.width) {
+      el = el.closest && el.closest('.bp-vs, section, [id]');
+      if (!el) return;
+    }
+
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var want = function () {
+      return Math.max(0, Math.round(
+        el.getBoundingClientRect().top + window.pageYOffset - navOffset()));
+    };
+
+    var cancelled = false;
+    var stop = function () { cancelled = true; };
+    window.addEventListener('wheel', stop, { passive: true });
+    window.addEventListener('touchstart', stop, { passive: true });
+    window.addEventListener('keydown', stop);
+
+    window.scrollTo({ top: want(), behavior: reduce ? 'auto' : 'smooth' });
+
+    // First pass waits out the smooth scroll, then corrects on a short interval
+    // until the number stops changing or the budget runs out.
+    var tries = 0;
+    var settle = function () {
+      if (cancelled || tries++ > 5) {
+        window.removeEventListener('wheel', stop);
+        window.removeEventListener('touchstart', stop);
+        window.removeEventListener('keydown', stop);
+        return;
+      }
+      var t = want();
+      if (Math.abs(window.pageYOffset - t) > 2) window.scrollTo({ top: t, behavior: 'auto' });
+      setTimeout(settle, 140);
+    };
+    setTimeout(settle, reduce ? 60 : 520);
+  }
+
   function goToAnchor(hash) {
     var slug = String(hash || '').replace(/^#/, '');
     if (!slug) return false;
@@ -1074,7 +1131,7 @@
     if (!target) {
       // not a registered video anchor -- let it behave as a normal page anchor
       var el = document.getElementById(slug);
-      if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); return true; }
+      if (el) { scrollToEl(el); return true; }
       return false;
     }
     // Jumping to anything other than a feature closes an open article panel,
@@ -1131,7 +1188,9 @@
   }
 
   function initAnchors() {
-    if (location.hash) setTimeout(function () { goToAnchor(location.hash); }, 400);
+    // On first load the bar has just been measured and the players have not
+    // sized yet, so scrollToEl's settle pass does the real work here.
+    if (location.hash) setTimeout(function () { goToAnchor(location.hash); }, 300);
     window.addEventListener('hashchange', function () { goToAnchor(location.hash); });
     document.addEventListener('click', function (e) {
       var a = e.target.closest && e.target.closest('a[href^="#"]');

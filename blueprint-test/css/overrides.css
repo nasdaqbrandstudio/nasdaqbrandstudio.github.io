@@ -510,9 +510,24 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
 }
 
 /* Anchor targets stop under the sticky bar. --bp-nav-h is the bar's measured
-   height, set by render.js, so the offset follows it instead of guessing. The
-   extra 1.5rem keeps a title or player from sitting flush against the edge. */
-:root { --bp-nav-h: 80px; }
+   height, set by render.js on load and on resize, so the offset follows the bar
+   instead of guessing: 80px for the desktop subnav, 60px for the mobile one.
+
+   --bp-anchor-gap is 0 on purpose. A deep link should land with the bar sitting
+   exactly on the section's top edge, and in the stacked view on the video
+   divider, since .bp-vs-item's top border is that divider. Any positive value
+   here drops the target below the bar and leaves a band of the previous section
+   showing. Raise it only if you want breathing room above the target. */
+:root {
+  --bp-nav-h: 80px;
+  --bp-anchor-gap: 0px;
+}
+
+/* scroll-padding on the scrolling element covers the browser's own hash jump,
+   which happens before render.js gets involved. scroll-margin covers the
+   programmatic scrolls. Both are needed; neither one catches every case. */
+html { scroll-padding-top: calc(var(--bp-nav-h) + var(--bp-anchor-gap)); }
+
 .bp-vs-item,
 .bp-vs,
 .solutions,
@@ -520,7 +535,7 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
 .footer-wrapper,
 .cs-video,
 [id^="tl-"],
-[id^="cl-"] { scroll-margin-top: calc(var(--bp-nav-h) + 1.5rem); }
+[id^="cl-"] { scroll-margin-top: calc(var(--bp-nav-h) + var(--bp-anchor-gap)); }
 
 /* Video CTA */
 .bp-vs-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .25rem; }
