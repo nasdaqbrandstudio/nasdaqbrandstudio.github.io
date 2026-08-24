@@ -50,6 +50,15 @@
   function rememberLanguage(code) {
     try { localStorage.setItem(LANG_STORE, code); } catch (e) {}
   }
+  function forgetLanguage() {
+    try { localStorage.removeItem(LANG_STORE); } catch (e) {}
+  }
+  // A code is only usable if languages.json actually lists it. Anything else --
+  // a typo in a shared link, a language that was removed from the file -- is
+  // discarded so resolution carries on to the next source instead of sticking.
+  function knownLanguage(code) {
+    return !!code && LANGUAGES.some(function (l) { return l.code === code; });
+  }
 
   var CONTENT_URL = (function () {
     var q = param('content');
@@ -1195,12 +1204,49 @@
         LANGUAGES = both[1] || CFG.languages || [];
         LANG_DEFAULT = LANG_DEFAULT || CFG.defaultLanguage || '';
 
-        // ?lang= wins, then whatever the visitor last chose, then the browser.
-        // An explicit choice is never overridden by detection.
+        // Resolution order: ?lang= wins, then whatever the visitor last chose,
+        // then the browser. An explicit choice is never overridden by detection.
+        // At every step the code must exist in languages.json; if it does not,
+        // that source is discarded and the next one is tried, so an unlisted
+        // language always ends at the default content file -- English.
+        var source = '';
+        if (LANG && !knownLanguage(LANG)) {
+          LANG = '';           // unlisted ?lang=, ignore it rather than store it
+        }
         if (LANG) {
+          source = 'param';
           rememberLanguage(LANG);
         } else if (LANGUAGES.length > 1) {
-          LANG = storedLanguage() || (LANG_AUTO ? detectLanguage(LANGUAGES) : '');
+          var saved = storedLanguage();
+          if (knownLanguage(saved)) {
+            LANG = saved;
+            source = 'stored';
+          } else {
+            // A stale code left in storage is truthy, so without clearing it
+            // detection would never run again for this browser.
+            if (saved) forgetLanguage();
+            if (LANG_AUTO) {
+              LANG = detectLanguage(LANGUAGES);
+              if (LANG) source = 'detected';
+            }
+          }
+        }
+
+        // Keep the URL honest. Without this a visitor whose browser asks for
+        // Spanish gets Spanish at the bare root -- no ?lang=es -- so the address
+        // bar disagrees with the page, the URL is not shareable, and the root
+        // looks like it publishes something other than English. The default
+        // language never takes a parameter, so the clean root is always English.
+        // replaceState rather than a redirect: no second page load and no extra
+        // history entry for Back to catch on.
+        if (window.history && history.replaceState) {
+          try {
+            var u = new URL(location.href);
+            var want = (LANG && LANG !== LANG_DEFAULT && resolveLanguage()) ? LANG : null;
+            if (want) u.searchParams.set('lang', want);
+            else u.searchParams.delete('lang');
+            if (u.href !== location.href) history.replaceState(null, '', u.href);
+          } catch (e) {}
         }
 
         var alt = resolveLanguage();
