@@ -73,7 +73,7 @@
     "intro": "Explore how Nasdaq indexes are shaping the modern economy – igniting innovation, unlocking opportunity, and building the financial infrastructure of the future",
     "scrollLabel": "Scroll to Continue",
     "backgroundVideo": {
-      "mp4": "https://cdn.jwplayer.com/videos/R0z98Ika-qgCdanU1.mp4"
+      "mp4": "https://cdn.jwplayer.com/videos/FLwg9bSz-qgCdanU1.mp4"
       "poster": "./images/hero-poster.webp"
     },
     "video": {
@@ -93,7 +93,7 @@
         "anchor": "tl-index-options",
         "title": "Nasdaq-100 Index® Options",
         "video": {
-          "jwMedia": "jeOazJCj",
+          "jwMedia": "R0z98Ika",
           "title": "Nasdaq-100 Index Options",
           "route": "@feature"
         },
@@ -101,10 +101,10 @@
           ""
         ],
         "quote": {
-          "text": "",
-          "name": "",
-          "role": "",
-          "headshot": ""
+          "text": "null",
+          "name": "null",
+          "role": "null",
+          "headshot": "null"
         },
         "cta": {
           "label": "Explore Nasdaq-100 Index® Options",

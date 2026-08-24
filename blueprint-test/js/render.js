@@ -507,9 +507,16 @@
     });
 
     var stage = items.map(function (v, i) {
-      var body = (v.body || (v.description ? [v.description] : [])).map(function (t) {
-        return '<p class="bp-vs-para">' + richText(t) + '</p>';
-      }).join('');
+      // Tolerant on purpose: this file is hand-edited. A bare string where an
+      // array belongs used to throw and blank the whole page, and empty strings
+      // left behind by removed copy rendered as empty <p> tags that still carry
+      // their margins. Both are normalised here instead.
+      var raw = v.body != null ? v.body : (v.description ? [v.description] : []);
+      if (!Array.isArray(raw)) raw = [raw];
+      var body = raw
+        .filter(function (t) { return t != null && String(t).trim() !== ''; })
+        .map(function (t) { return '<p class="bp-vs-para">' + richText(t) + '</p>'; })
+        .join('');
       return '<article class="bp-vs-item' + (i >= initialCount ? ' is-extra' : '')
         + (i === 0 ? ' is-active" ' : '" ')
         + (v.anchor ? 'id="' + esc(v.anchor) + '" ' : '')
