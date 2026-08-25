@@ -230,12 +230,41 @@
   // you would hear all of them. Here each slot renders a poster and mounts its
   // iframe only when asked, and mounting one unmounts whatever was playing.
   var mounted = null;
+  var mountedPlayer = null;
+  var playerSeq = 0;
+
+  // JW returns whatever code was typed in the dashboard -- three-letter here
+  // (eng/spa/jpn/kor), two-letter elsewhere -- so normalise both sides to the
+  // two-letter form the page's lang attribute uses before comparing.
+  var ISO3 = {
+    eng: 'en', spa: 'es', jpn: 'ja', kor: 'ko', fra: 'fr', fre: 'fr',
+    deu: 'de', ger: 'de', ita: 'it', por: 'pt', nld: 'nl', dut: 'nl',
+    rus: 'ru', ara: 'ar', heb: 'he', hin: 'hi', tha: 'th', vie: 'vi',
+    zho: 'zh', chi: 'zh', tur: 'tr', pol: 'pl', swe: 'sv', dan: 'da',
+    nor: 'no', fin: 'fi', ell: 'el', gre: 'el', ind: 'id', ron: 'ro', rum: 'ro'
+  };
+  function langKey(code) {
+    var c = String(code || '').toLowerCase().replace('_', '-').split('-')[0];
+    return ISO3[c] || c;
+  }
+
+  // A pinned track id from the JSON, e.g. "xEz3HWk9". The player reports each
+  // track's id as its full URL, so match on the stem rather than by equality.
+  function trackMatchesId(track, wanted) {
+    if (!wanted) return false;
+    var id = String(track.id || track.file || '');
+    return id.indexOf('/' + wanted + '.') > -1 || id === wanted;
+  }
 
   function videoEmbed(v, extraClass) {
+    var media = jwMediaId(v);
     var src = jwPlayerUrl(v);
-    if (!src) return '';
+    if (!media && !src) return '';
     var poster = jwPoster(v, 1280);
-    return '<div class="bp-video ' + (extraClass || '') + '" data-video="' + esc(src) + '"'
+    return '<div class="bp-video ' + (extraClass || '') + '"'
+      + ' data-video="' + esc(src) + '"'
+      + ' data-jw-media="' + esc(media) + '"'
+      + (v.captionTrack ? ' data-caption-track="' + esc(v.captionTrack) + '"' : '')
       + ' role="button" tabindex="0" aria-label="' + esc(UI.play || 'Play') + (v.title ? ': ' + esc(v.title) : '') + '">'
       + (poster ? '<img class="bp-video-poster" src="' + esc(poster) + '" alt="" loading="lazy"'
           + ' onerror="this.style.display=\'none\'">' : '')
@@ -246,24 +275,95 @@
 
   function unmountVideo() {
     if (!mounted) return;
+    if (mountedPlayer) {
+      try { mountedPlayer.remove(); } catch (e) {}
+      mountedPlayer = null;
+    }
     var frame = mounted.querySelector('iframe');
     if (frame) frame.remove();
+    var host = mounted.querySelector('.bp-video-stage');
+    if (host) host.remove();
     mounted.classList.remove('is-playing');
     mounted = null;
+  }
+
+  // Picks the caption track for the current page language.
+  //   1. data-caption-track from the JSON wins outright -- immune to a missing
+  //      or wrong language code on the JW side.
+  //   2. otherwise match the track's language against <html lang>.
+  //   3. no match leaves captions off rather than defaulting to English, which
+  //      on a Japanese page is worse than showing none.
+  function applyCaptions(player, box) {
+    var wantId = box.getAttribute('data-caption-track') || '';
+    var wantLang = langKey(document.documentElement.lang || LANG || 'en');
+    var done = false;
+
+    player.on('captionsList', function (e) {
+      // captionsList always carries the Off entry and fires again once the
+      // tracks finish loading, so a single-item list means nothing is ready.
+      var tracks = (e && e.tracks) || [];
+      if (done || tracks.length < 2) return;
+
+      var idx = -1, i;
+      for (i = 1; i < tracks.length; i++) {
+        if (trackMatchesId(tracks[i], wantId)) { idx = i; break; }
+      }
+      if (idx < 0 && wantLang) {
+        for (i = 1; i < tracks.length; i++) {
+          if (langKey(tracks[i].language) === wantLang) { idx = i; break; }
+        }
+      }
+      if (idx > 0) {
+        done = true;
+        try { player.setCurrentCaptions(idx); } catch (err) {}
+      }
+    });
   }
 
   function mountVideo(box, autoplay) {
     if (!box || box.classList.contains('is-playing')) return;
     unmountVideo();
-    var src = box.getAttribute('data-video');
-    if (!src) return;
-    if (autoplay !== false) src += (src.indexOf('?') > -1 ? '&' : '?') + 'autoplay=true';
-    var frame = document.createElement('iframe');
-    frame.src = src;
-    frame.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
-    frame.setAttribute('allowfullscreen', 'true');
-    frame.setAttribute('frameborder', '0');
-    box.appendChild(frame);
+
+    var media = box.getAttribute('data-jw-media');
+
+    // Without the library, or without a media id (a raw iframe URL in the JSON),
+    // fall back to the old iframe so a video never simply fails to play.
+    if (!media || typeof window.jwplayer !== 'function') {
+      var src = box.getAttribute('data-video');
+      if (!src) return;
+      if (autoplay !== false) src += (src.indexOf('?') > -1 ? '&' : '?') + 'autoplay=true';
+      var frame = document.createElement('iframe');
+      frame.src = src;
+      frame.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+      frame.setAttribute('allowfullscreen', 'true');
+      frame.setAttribute('frameborder', '0');
+      box.appendChild(frame);
+      box.classList.add('is-playing');
+      mounted = box;
+      return;
+    }
+
+    // jwplayer() attaches by element id, so the stage needs one.
+    var host = document.createElement('div');
+    host.className = 'bp-video-stage';
+    host.id = 'bp-jw-' + (++playerSeq);
+    box.appendChild(host);
+
+    var p;
+    try {
+      p = window.jwplayer(host.id).setup({
+        playlist: 'https://cdn.jwplayer.com/v2/media/' + media,
+        autostart: autoplay !== false,
+        width: '100%',
+        aspectratio: '16:9'
+      });
+    } catch (e) {
+      host.remove();
+      return;
+    }
+
+    applyCaptions(p, box);
+    mountedPlayer = p;
     box.classList.add('is-playing');
     mounted = box;
   }

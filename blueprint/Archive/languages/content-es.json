@@ -86,8 +86,7 @@
     "video": {
       "jwMedia": "8oiWG9v2",
       "title": "Blueprint del Mañana",
-      "route": "@hero",
-      "captionTrack": null
+      "route": "@hero"
     }
   },
   "thoughtLeadership": {
@@ -103,8 +102,7 @@
         "video": {
           "jwMedia": "TsgsaG2K",
           "title": "Dentro de las Opciones sobre el Índice Nasdaq-100®",
-          "route": "@feature",
-          "captionTrack": "rwJMKhM5"
+          "route": "@feature"
         },
         "body": [
           "Diseñadas para los mercados actuales, las Opciones sobre el Índice Nasdaq-100® permiten a los inversores mantener su exposición a la innovación mientras construyen carteras más resilientes."
@@ -126,8 +124,7 @@
         "video": {
           "jwMedia": "vj8X2VKe",
           "title": "El Ecosistema de Liquidez",
-          "route": "@feature",
-          "captionTrack": null
+          "route": "@feature"
         },
         "body": [
           "Descubre cómo Nasdaq impulsa un ecosistema de liquidez de espectro completo, que respalda cada etapa del recorrido de inversión mediante innovación de productos, alianzas estratégicas y un acceso al mercado sin fricciones."
@@ -147,8 +144,7 @@
         "video": {
           "jwMedia": "tzNuJWRB",
           "title": "Una Economía Impulsada por la Tecnología",
-          "route": "@feature",
-          "captionTrack": null
+          "route": "@feature"
         },
         "body": [
           "Desde los avances en inteligencia artificial hasta la innovación en semiconductores, la tecnología está transformando los mercados globales.",
@@ -183,43 +179,37 @@
         "jwMedia": "hRuzYana",
         "title": "Goldman Sachs Asset Management",
         "description": "Descubre cómo Goldman Sachs Asset Management y Nasdaq ayudan a los inversionistas a navegar un mercado de ETF saturado, ampliando el acceso a la innovación, el crecimiento y los ingresos mediante estrategias como GPIQ.",
-        "anchor": "cl-goldman-sachs",
-        "captionTrack": null
+        "anchor": "cl-goldman-sachs"
       },
       {
         "jwMedia": "bGVFuVLb",
         "title": "Invesco",
         "description": "Desde QQQ hasta QQA, generador de ingresos, explora cómo Nasdaq e Invesco se han asociado para ofrecer innovación y acceso a inversionistas de todo el mundo.",
-        "anchor": "cl-invesco",
-        "captionTrack": null
+        "anchor": "cl-invesco"
       },
       {
         "jwMedia": "f0XSsq0z",
         "title": "CME Group",
         "description": "Conoce cómo CME Group está democratizando el acceso al Nasdaq-100, permitiendo que inversionistas de todo tipo participen en la innovación mediante productos de futuros de vanguardia.",
-        "anchor": "cl-cme",
-        "captionTrack": null
+        "anchor": "cl-cme"
       },
       {
         "jwMedia": "osx7QYT9",
         "title": "Samsung Asset Management",
         "description": "Descubre cómo Samsung Asset Management se asocia con Nasdaq para ofrecer soluciones de inversión con visión de futuro que abren nuevas oportunidades a los inversionistas coreanos.",
-        "anchor": "cl-samsung",
-        "captionTrack": null
+        "anchor": "cl-samsung"
       },
       {
         "jwMedia": "X0mQYn16",
         "title": "Amova Asset Management",
         "description": "Descubre cómo Amova Asset Management responde a la creciente demanda de exposición tecnológica global en Japón, utilizando los índices de Nasdaq para ofrecer un acceso simplificado y con cobertura cambiaria a las principales empresas estadounidenses.",
-        "anchor": "cl-amova",
-        "captionTrack": null
+        "anchor": "cl-amova"
       },
       {
         "jwMedia": "bykA1XjJ",
         "title": "Mirae Asset Global Investments",
         "description": "Explora cómo Mirae Asset Global Investments impulsa la innovación en el panorama de inversión de Corea a través de su alianza con Nasdaq, con ETF enfocados en tecnología que convierten tendencias globales como la inteligencia artificial y los semiconductores en oportunidades accesibles para los inversionistas locales.",
-        "anchor": "cl-mirae",
-        "captionTrack": null
+        "anchor": "cl-mirae"
       }
     ],
     "route": "spotlight",

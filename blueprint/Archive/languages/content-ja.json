@@ -89,8 +89,7 @@
     "video": {
       "jwMedia": "v6tIFjSf",
       "title": "未来の設計図",
-      "route": "@hero",
-      "captionTrack": null
+      "route": "@hero"
     }
   },
   "thoughtLeadership": {
@@ -106,8 +105,7 @@
         "video": {
           "jwMedia": "TsgsaG2K",
           "title": "Nasdaq-100 Index® オプションの内側",
-          "route": "@feature",
-          "captionTrack": "xEz3HWk9"
+          "route": "@feature"
         },
         "body": [
           "今日の市場環境に合わせて設計されたNasdaq-100 Index® オプションは、イノベーションへのエクスポージャーを保ちながら、より強靭なポートフォリオを築くことを可能にします。"
@@ -129,8 +127,7 @@
         "video": {
           "jwMedia": "aAavZZ6t",
           "title": "流動性エコシステム",
-          "route": "@feature",
-          "captionTrack": null
+          "route": "@feature"
         },
         "body": [
           "商品イノベーション、戦略的パートナーシップ、そしてシームレスな市場アクセスを通じて、投資のあらゆる段階を支える包括的な流動性エコシステムを、ナスダックが推進する取り組みをご案内します。"
@@ -150,8 +147,7 @@
         "video": {
           "jwMedia": "Y5BhuNSl",
           "title": "テクノロジー主導の経済",
-          "route": "@feature",
-          "captionTrack": null
+          "route": "@feature"
         },
         "body": [
           "AIの到来から半導体のイノベーションまで、テクノロジーは世界の市場の形を作り変えています。",
@@ -186,43 +182,37 @@
         "jwMedia": "hRuzYana",
         "title": "Goldman Sachs Asset Management",
         "description": "ゴールドマン・サックス・アセット・マネジメントとナスダックが、競争の激しいETF市場で投資家をどのように支えているかをご覧ください。GPIQなどの戦略を通じて、イノベーション、成長、インカムへのアクセスを広げています。",
-        "anchor": "cl-goldman-sachs",
-        "captionTrack": null
+        "anchor": "cl-goldman-sachs"
       },
       {
         "jwMedia": "bGVFuVLb",
         "title": "Invesco",
         "description": "QQQからインカム創出型のQQAまで、ナスダックとインベスコがどのように連携し、世界中の投資家にイノベーションとアクセスを届けているかをご覧ください。",
-        "anchor": "cl-invesco",
-        "captionTrack": null
+        "anchor": "cl-invesco"
       },
       {
         "jwMedia": "6HnwBOGU",
         "title": "CMEグループ",
         "description": "CMEグループがどのようにしてナスダック100へのアクセスを広め、あらゆるタイプの投資家が未来を見据えた最先端の商品を通じてイノベーションに参加できるようにしているかをご確認ください。",
-        "anchor": "cl-cme",
-        "captionTrack": null
+        "anchor": "cl-cme"
       },
       {
         "jwMedia": "yplqFN9R",
         "title": "サムスン・アセット・マネジメント",
         "description": "未来を見据え、新しい機会を開拓する投資ソリューションを韓国の投資家に提供するため、サムスン・アセット・マネジメントがナスダックとどのように連携しているかをご覧ください。",
-        "anchor": "cl-samsung",
-        "captionTrack": null
+        "anchor": "cl-samsung"
       },
       {
         "jwMedia": "Wk0ORDIZ",
         "title": "アモーヴァ・アセット・マネジメント",
         "description": "ナスダック指数を活用して、主要米国企業への通貨ヘッジ付きで効率的なアクセスを提供することで、日本におけるグローバルなテクノロジー投資への需要の高まりに対応するアモーヴァのアプローチをご紹介します。",
-        "anchor": "cl-amova",
-        "captionTrack": null
+        "anchor": "cl-amova"
       },
       {
         "jwMedia": "k1zoUKOH",
         "title": "ミレーアセット・グローバル・インベストメンツ",
         "description": "ナスダックとのパートナーシップを通じて、AIや半導体といった世界的なトレンドを韓国国内の投資家にとって身近な投資機会に変えるテクノロジー特化型ETFを提供することで、韓国の投資環境におけるイノベーションを推進するミレーアセットの取り組みをご覧ください。",
-        "anchor": "cl-mirae",
-        "captionTrack": null
+        "anchor": "cl-mirae"
       }
     ],
     "route": "spotlight",

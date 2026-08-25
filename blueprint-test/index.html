@@ -60,6 +60,12 @@
 
   <div class="w-layout-blockcontainer site-container w-container"></div>
 
+  <!-- JW cloud-hosted player library. Loading it here rather than embedding an
+       iframe is what makes captions selectable: the player runs in this page,
+       so it reads the lang attribute set by render.js and its JavaScript API
+       (setCurrentCaptions) is reachable. A cross-origin iframe is neither. -->
+  <script src="https://cdn.jwplayer.com/libraries/jO5YHc4l.js"></script>
+
   <script src="js/vendor/gsap.min.js"></script>
   <script src="js/vendor/ScrollTrigger.min.js"></script>
   <script src="js/vendor/swiper-bundle.min.js"></script>
