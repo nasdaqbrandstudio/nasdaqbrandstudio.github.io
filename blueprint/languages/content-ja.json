@@ -101,20 +101,20 @@
       {
         "id": "index-options",
         "anchor": "tl-index-options",
-        "title": "Nasdaq-100 インデックス・オプション",
+        "title": "Nasdaq-100 Index® オプションの内側",
         "video": {
-          "jwMedia": "R0z98Ika",
-          "title": "Nasdaq-100 インデックス・オプション",
+          "jwMedia": "TsgsaG2K",
+          "title": "Nasdaq-100 Index® オプションの内側",
           "route": "@feature"
         },
         "body": [
-          ""
+          "今日の市場環境に合わせて設計されたNasdaq-100 Index® オプションは、イノベーションへのエクスポージャーを保ちながら、より強靭なポートフォリオを築くことを可能にします。"
         ],
         "quote": {
-          "text": "",
-          "name": "",
-          "role": "",
-          "headshot": ""
+          "text": "市場がより複雑になり、ボラティリティの波が長期化するなかで、インデックス・オプションは現代のポートフォリオを支える基盤となっています。”",
+          "name": "ケビン・ダビット",
+          "role": "インデックス・オプション・コンテンツ責任者",
+          "headshot": "headshot-kevin-davitt"
         },
         "cta": {
           "label": "Nasdaq-100 Index® オプションを見る",

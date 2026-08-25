@@ -101,20 +101,20 @@
       {
         "id": "index-options",
         "anchor": "tl-index-options",
-        "title": "Nasdaq-100 지수 옵션",
+        "title": "Nasdaq-100 Index® 옵션 들여다보기",
         "video": {
-          "jwMedia": "R0z98Ika",
-          "title": "Nasdaq-100 지수 옵션",
+          "jwMedia": "TsgsaG2K",
+          "title": "Nasdaq-100 Index® 옵션 들여다보기",
           "route": "@feature"
         },
         "body": [
-          ""
+          "오늘날의 시장 환경에 맞춰 설계된 Nasdaq-100 Index® 옵션은 투자자가 혁신에 대한 노출을 유지하면서 더욱 견고한 포트폴리오를 구축할 수 있도록 지원합니다."
         ],
         "quote": {
-          "text": "",
-          "name": "",
-          "role": "",
-          "headshot": ""
+          "text": "시장이 한층 복잡해지고 변동성 국면이 장기화되면서, 지수 옵션은 현대 포트폴리오의 핵심 구성 요소로 자리 잡았습니다.”",
+          "name": "Kevin Davitt",
+          "role": "지수 옵션 콘텐츠 총괄",
+          "headshot": "headshot-kevin-davitt"
         },
         "cta": {
           "label": "Nasdaq-100 Index® 옵션 살펴보기",
