@@ -265,6 +265,7 @@
       + ' data-video="' + esc(src) + '"'
       + ' data-jw-media="' + esc(media) + '"'
       + (v.captionTrack ? ' data-caption-track="' + esc(v.captionTrack) + '"' : '')
+      + (v.burnedInCaptions ? ' data-burned-in="true"' : '')
       + ' role="button" tabindex="0" aria-label="' + esc(UI.play || 'Play') + (v.title ? ': ' + esc(v.title) : '') + '">'
       + (poster ? '<img class="bp-video-poster" src="' + esc(poster) + '" alt="" loading="lazy"'
           + ' onerror="this.style.display=\'none\'">' : '')
@@ -288,12 +289,36 @@
   }
 
   // Picks the caption track for the current page language.
-  //   1. data-caption-track from the JSON wins outright -- immune to a missing
-  //      or wrong language code on the JW side.
-  //   2. otherwise match the track's language against <html lang>.
-  //   3. no match leaves captions off rather than defaulting to English, which
-  //      on a Japanese page is worse than showing none.
+  //
+  //   1. burnedInCaptions: true  -> never auto-select. Some older cuts have the
+  //      captions rendered into the video, and switching a track on there stacks
+  //      two sets of subtitles on top of each other.
+  //   2. captionTrack pinned     -> always select it. Explicit intent, and the
+  //      way to force captions on for a video that only has one language.
+  //   3. otherwise               -> only select when the media carries tracks in
+  //      two or more distinct languages.
+  //
+  // Rule 3 is the one that does the work today, and it needs no per-video
+  // marking. A burned-in cut carries at most one machine-generated track in the
+  // source language, so it fails the test on its own. A deliberately captioned
+  // video carries one track per language and passes. The cost is that a video
+  // with a single uploaded SRT and no burn-in also stays off -- pin its
+  // captionTrack to override that.
+  //
+  // Nothing here hides the CC menu. A viewer can still turn captions on by hand
+  // on a burned-in video; this only governs what happens automatically.
+  function distinctLanguages(tracks) {
+    var seen = {}, n = 0;
+    for (var i = 1; i < tracks.length; i++) {
+      var k = langKey(tracks[i].language);
+      if (k && !seen[k]) { seen[k] = 1; n++; }
+    }
+    return n;
+  }
+
   function applyCaptions(player, box) {
+    if (box.getAttribute('data-burned-in') === 'true') return;
+
     var wantId = box.getAttribute('data-caption-track') || '';
     var wantLang = langKey(document.documentElement.lang || LANG || 'en');
     var done = false;
@@ -308,11 +333,14 @@
       for (i = 1; i < tracks.length; i++) {
         if (trackMatchesId(tracks[i], wantId)) { idx = i; break; }
       }
-      if (idx < 0 && wantLang) {
+
+      // Language matching only applies to genuinely multilingual media.
+      if (idx < 0 && wantLang && distinctLanguages(tracks) > 1) {
         for (i = 1; i < tracks.length; i++) {
           if (langKey(tracks[i].language) === wantLang) { idx = i; break; }
         }
       }
+
       if (idx > 0) {
         done = true;
         try { player.setCurrentCaptions(idx); } catch (err) {}
