@@ -93,7 +93,7 @@
         "anchor": "tl-index-options",
         "title": "Nasdaq-100 Index® Options",
         "video": {
-          "jwMedia": "R0z98Ika",
+          "jwMedia": "TsgsaG2K",
           "title": "Nasdaq-100 Index Options",
           "route": "@feature"
         },
@@ -101,10 +101,10 @@
           ""
         ],
         "quote": {
-          "text": "",
-          "name": "",
-          "role": "",
-          "headshot": ""
+          "text": "As markets have become more complex and volatility swirls have become more persistent, index options have become a foundational building block of the modern portfolio.”",
+          "name": "Kevin Davitt",
+          "role": "Head of Index Options Content",
+          "headshot": "headshot-kevin-davitt"
         },
         "cta": {
           "label": "Explore Nasdaq-100 Index® Options",
