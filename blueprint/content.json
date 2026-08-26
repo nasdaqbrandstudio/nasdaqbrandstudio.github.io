@@ -79,8 +79,7 @@
     "video": {
       "jwMedia": "8oiWG9v2",
       "title": "Blueprint of Tomorrow",
-      "route": "@hero",
-      "captionTrack": null
+      "route": "@hero"
     }
   },
   "thoughtLeadership": {
@@ -92,15 +91,14 @@
       {
         "id": "index-options",
         "anchor": "tl-index-options",
-        "title": "Nasdaq-100 Index® Options",
+        "title": "Building a Resilient Portfolio",
         "video": {
           "jwMedia": "TsgsaG2K",
-          "title": "Inside Nasdaq-100 Index® Options",
-          "route": "@feature",
-          "captionTrack": "M82vmm33"
+          "title": "Building a Resilient Portfolio",
+          "route": "@feature"
         },
         "body": [
-          "Designed for today’s markets, Nasdaq-100 Index® Options enable investors to stay exposed to innovation while building more resilient portfolios."
+          "In a market defined by volatility, index options are a foundational building block of modern portfolio construction. Discover how Nasdaq-100 Index® Options help investors hedge risk, generate income, and manage exposure with greater precision."
         ],
         "quote": {
           "text": "As markets have become more complex and volatility swirls have become more persistent, index options have become a foundational building block of the modern portfolio.”",
@@ -109,7 +107,7 @@
           "headshot": "headshot-kevin-davitt"
         },
         "cta": {
-          "label": "Explore Nasdaq-100 Index® Options",
+          "label": "Learn More",
           "url": "https://www.nasdaq.com/products/north-american-markets/nasdaq-100-options-xnd-ndx"
         }
       },
@@ -119,8 +117,7 @@
         "video": {
           "jwMedia": "vj8X2VKe",
           "title": "The Liquidity Ecosystem",
-          "route": "@feature",
-          "captionTrack": null
+          "route": "@feature"
         },
         "body": [
           "Watch how Nasdaq powers a full-spectrum liquidity ecosystem – supporting every stage of the investment journey through product innovation, strategic partnerships, and seamless market access."
@@ -140,8 +137,7 @@
         "video": {
           "jwMedia": "tzNuJWRB",
           "title": "A Tech-Driven Economy",
-          "route": "@feature",
-          "captionTrack": null
+          "route": "@feature"
         },
         "body": [
           "From AI breakthroughs to semiconductor innovation, technology is reshaping the global markets.",
@@ -176,43 +172,37 @@
         "jwMedia": "hRuzYana",
         "title": "Goldman Sachs Asset Management",
         "description": "Discover how Goldman Sachs Asset Management and Nasdaq help investors navigate a crowded ETF market — expanding access to innovation, growth and income through strategies like GPIQ.",
-        "anchor": "cl-goldman-sachs",
-        "captionTrack": null
+        "anchor": "cl-goldman-sachs"
       },
       {
         "jwMedia": "bGVFuVLb",
         "title": "Invesco",
         "description": "From QQQ to the income-generating QQA, explore how Nasdaq and Invesco have partnered to deliver innovation and access to investors across the globe.",
-        "anchor": "cl-invesco",
-        "captionTrack": null
+        "anchor": "cl-invesco"
       },
       {
         "jwMedia": "f0XSsq0z",
         "title": "CME Group",
         "description": "Learn how CME Group is democratizing access to the Nasdaq-100 — empowering investors of all types to participate in innovation through cutting-edge futures products.",
-        "anchor": "cl-cme",
-        "captionTrack": null
+        "anchor": "cl-cme"
       },
       {
         "jwMedia": "osx7QYT9",
         "title": "Samsung Asset Management",
         "description": "Watch how Samsung Asset Management is partnering with Nasdaq to deliver forward-thinking investment solutions that unlock new opportunities for Korean investors.",
-        "anchor": "cl-samsung",
-        "captionTrack": null
+        "anchor": "cl-samsung"
       },
       {
         "jwMedia": "X0mQYn16",
         "title": "Amova Asset Management",
         "description": "Discover how Amova Asset Management is meeting Japan's growing demand for global tech exposure by using Nasdaq indexes to deliver streamlined, currency-hedged access to leading U.S. companies.",
-        "anchor": "cl-amova",
-        "captionTrack": null
+        "anchor": "cl-amova"
       },
       {
         "jwMedia": "bykA1XjJ",
         "title": "Mirae Asset Global Investments",
         "description": "Explore how Mirae Asset Global Investments is driving innovation in Korea's investment landscape through its partnership with Nasdaq, offering tech-focused ETFs that turn global trends like AI and semiconductors into accessible opportunities for local investors.",
-        "anchor": "cl-mirae",
-        "captionTrack": null
+        "anchor": "cl-mirae"
       }
     ],
     "route": "spotlight",
