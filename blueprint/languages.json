@@ -2,8 +2,8 @@
   "default": "en",
   "autoDetect": true,
   "languages": [
-    { "code": "en", "label": "EN", "name": "English",  "content": "content.json" },
-    { "code": "ja", "label": "JA", "name": "日本語",    "content": "languages/content-ja.json" },
-    { "code": "ko", "label": "KO", "name": "한국어",    "content": "languages/content-ko.json" }
+    { "code": "en", "label": "EN", "name": "EN | English",  "content": "content.json" },
+    { "code": "ja", "label": "JA", "name": "JA | 日本語",    "content": "languages/content-ja.json" },
+    { "code": "ko", "label": "KO", "name": "KO | 한국어",    "content": "languages/content-ko.json" }
   ]
 }
