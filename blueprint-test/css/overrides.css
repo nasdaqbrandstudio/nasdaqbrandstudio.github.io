@@ -343,6 +343,7 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
 .bp-vs-quote .quote {
   grid-column: 1;
   grid-row: 1;
+  width: var(--bp-quote-cell);
   font-family: var(--bp-quote-font);
   font-weight: var(--bp-quote-weight);
   font-size: var(--bp-quote-size);
@@ -350,6 +351,8 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
   color: #fff;
   display: block;
   margin-top: var(--bp-quote-shift);
+  overflow: visible;
+  white-space: nowrap;
   user-select: none;
 }
 /* No mark in the copy means no empty first column. */
@@ -529,6 +532,8 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
   .bp-vs-lower { margin-top: 1.5rem; }
   .bp-vs.has-quotes .bp-vs-lower { grid-template-columns: 1fr; gap: 1.5rem; }
   .bp-vs-quote { padding-left: 0; border-left: 0; padding-top: 1.5rem; border-top: var(--stroke) solid #0092bc4d; }
+  /* The export shrank the SVG to 1.5rem here; keep the glyph in proportion. */
+  .bp-vs-quote .quote { --bp-quote-cell: 1.5rem; --bp-quote-size: 2.5rem; --bp-quote-shift: .2rem; }
 
   .bp-vs-title { font-size: 1.5rem; line-height: 1.875rem; }
 }
@@ -1190,11 +1195,17 @@ html { scroll-padding-top: calc(var(--bp-nav-h) + var(--bp-anchor-gap)); }
   --bp-serif-style: italic;
 
   /* Opening quote mark. Arial for Latin: Inter's curly quote is comparatively
-     small and light, and this is a display element rather than running text. */
+     small and light, and this is a display element rather than running text.
+
+     --bp-quote-cell is the width of the grid column, fixed at the 2.5rem the
+     old SVG declared. Without it the column is auto-sized to the glyph's advance
+     width, which is wider than its ink and shoves the paragraph right. The glyph
+     is free to overflow that box; only the column width is pinned. */
   --bp-quote-font: Arial, Helvetica, sans-serif;
   --bp-quote-weight: 700;
-  --bp-quote-size: 3rem;
-  --bp-quote-shift: -.75rem;
+  --bp-quote-size: 3.75rem;
+  --bp-quote-shift: .35rem;
+  --bp-quote-cell: 2.5rem;
 }
 
 /* --- Reclaim the classes blueprint.css hardcodes ------------------------- */
@@ -1240,8 +1251,9 @@ body.lang-ja, body.lang-jp {
      em box, so it needs less size and a different shift than the Latin mark. */
   --bp-quote-font: 'Noto Sans JP', sans-serif;
   --bp-quote-weight: 700;
-  --bp-quote-size: 2.5rem;
+  --bp-quote-size: 3rem;
   --bp-quote-shift: -.25rem;
+  --bp-quote-cell: 2.5rem;
 
   --bp-sans: 'Noto Sans JP', Inter, sans-serif;
   --bp-serif: var(--bp-sans);
@@ -1260,8 +1272,9 @@ body.lang-ko {
      changes -- the corner bracket is for titles of works, not quotations. */
   --bp-quote-font: 'Noto Sans KR', Arial, sans-serif;
   --bp-quote-weight: 700;
-  --bp-quote-size: 3rem;
-  --bp-quote-shift: -.75rem;
+  --bp-quote-size: 3.75rem;
+  --bp-quote-shift: .35rem;
+  --bp-quote-cell: 2.5rem;
 
   --bp-sans: 'Noto Sans KR', Inter, sans-serif;
   --bp-serif: var(--bp-sans);
