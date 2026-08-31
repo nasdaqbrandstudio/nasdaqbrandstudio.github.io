@@ -327,7 +327,10 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
   border-left: var(--stroke) solid #0092bc4d;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  column-gap: 1rem;
+  /* Per-language: a Japanese opening bracket carries its blank space on the left
+     and its ink hard against the right edge of a full-width em box, so at the
+     gap that suits a curly quote it sits noticeably tighter to the copy. */
+  column-gap: var(--bp-quote-gap);
   row-gap: 1.25rem;
   align-items: start;
 }
@@ -541,6 +544,7 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
      inherits down. Japanese needs its own pair here or it would take the
      Latin-tuned numbers with a corner bracket. */
   body:is(.lang-ja, .lang-jp) .bp-vs-quote .quote { --bp-quote-size: 2.3rem; --bp-quote-shift: -.4rem; }
+  body:is(.lang-ja, .lang-jp) .bp-vs-quote { --bp-quote-gap: 1.25rem; }
 
   .bp-vs-title { font-size: 1.5rem; line-height: 1.875rem; }
 }
@@ -1213,6 +1217,7 @@ html { scroll-padding-top: calc(var(--bp-nav-h) + var(--bp-anchor-gap)); }
   --bp-quote-size: 4.25rem;
   --bp-quote-shift: -.5rem;
   --bp-quote-cell: 2.5rem;
+  --bp-quote-gap: 1rem;
 }
 
 /* --- Reclaim the classes blueprint.css hardcodes ------------------------- */
@@ -1261,6 +1266,7 @@ body.lang-ja, body.lang-jp {
   --bp-quote-size: 3.4rem;
   --bp-quote-shift: -.6rem;
   --bp-quote-cell: 2.5rem;
+  --bp-quote-gap: 1.75rem;
 
   --bp-sans: 'Noto Sans JP', Inter, sans-serif;
   --bp-serif: var(--bp-sans);
