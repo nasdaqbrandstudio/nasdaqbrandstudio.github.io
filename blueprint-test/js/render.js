@@ -607,11 +607,30 @@
       + '</div>';
   }
 
+  // The opening mark is the first character of quote.text, so a translator only
+  // ever edits one field and the right mark travels with the copy: " for English,
+  // Spanish and Korean, 「 for Japanese. It gets lifted out into its own grid cell
+  // so it still renders large and outdented beside the paragraph, the way the SVG
+  // it replaces did. Whitelisted rather than blindly taking [0], so a quote that
+  // starts with a letter or an HTML tag is left alone instead of losing a char.
+  var QUOTE_MARKS = '\u201C\u201F\u2018\u201B\u0022\u300C\u300E\u00AB\u3008\u3010';
+  function splitQuoteMark(text) {
+    var t = String(text || '');
+    var first = t.charAt(0);
+    if (QUOTE_MARKS.indexOf(first) > -1) {
+      return { mark: first, rest: t.slice(1).replace(/^\s+/, '') };
+    }
+    return { mark: '', rest: t };
+  }
+
   function vsQuote(q) {
     if (!q || !q.text) return '';
-    return '<blockquote class="bp-vs-quote">'
-      + '<img class="quote" src="' + esc(chromeUrl('images/quote_white.svg')) + '" loading="lazy" alt="">'
-      + '<p class="paragraph-light">' + richText(q.text) + '</p>'
+    var parts = splitQuoteMark(q.text);
+    return '<blockquote class="bp-vs-quote' + (parts.mark ? ' has-mark' : '') + '">'
+      + (parts.mark
+          ? '<span class="quote" aria-hidden="true">' + esc(parts.mark) + '</span>'
+          : '')
+      + '<p class="paragraph-light">' + richText(parts.rest) + '</p>'
       + (q.name
           ? '<footer class="bp-vs-attrib">'
             + (q.headshot ? '<div class="bp-headshot" ' + bgAttrs({ image: q.headshot }) + '></div>' : '')

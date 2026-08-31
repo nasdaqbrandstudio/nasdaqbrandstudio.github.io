@@ -331,7 +331,30 @@ body.lang-ja h3.solutions-headline, body.lang-jp h3.solutions-headline, body.lan
   row-gap: 1.25rem;
   align-items: start;
 }
-.bp-vs-quote .quote { width: 1.5rem; height: auto; grid-column: 1; grid-row: 1; margin-top: .2rem; }
+/* The opening mark, lifted out of quote.text by render.js. A glyph rather than
+   the old SVG so it can be the correct mark for the language -- " for Latin and
+   Korean, the corner bracket for Japanese. Three variables drive it; each
+   language block near the end of this file overrides them.
+
+   Size and shift are per-language on purpose. The Japanese bracket is a
+   full-width glyph that sits high and left inside its em box, so at the same
+   font-size it reads much lighter and lands in a different place than a Latin
+   curly quote. The numbers below are a starting point -- adjust to taste. */
+.bp-vs-quote .quote {
+  grid-column: 1;
+  grid-row: 1;
+  font-family: var(--bp-quote-font);
+  font-weight: var(--bp-quote-weight);
+  font-size: var(--bp-quote-size);
+  line-height: 1;
+  color: #fff;
+  display: block;
+  margin-top: var(--bp-quote-shift);
+  user-select: none;
+}
+/* No mark in the copy means no empty first column. */
+.bp-vs-quote:not(.has-mark) { grid-template-columns: minmax(0, 1fr); }
+.bp-vs-quote:not(.has-mark) .paragraph-light { grid-column: 1; }
 .bp-vs-quote .paragraph-light { grid-column: 2; grid-row: 1; font-size: 1.125rem; line-height: 1.5rem; margin: 0; }
 .bp-vs-attrib { grid-column: 2; grid-row: 2; display: flex; align-items: center; gap: 1rem; }
 .bp-vs-attrib .bp-headshot { width: 3.5rem; height: 3.5rem; flex: none; }
@@ -1165,6 +1188,13 @@ html { scroll-padding-top: calc(var(--bp-nav-h) + var(--bp-anchor-gap)); }
   --bp-sans: Inter, sans-serif;
   --bp-serif: Bitter, serif;
   --bp-serif-style: italic;
+
+  /* Opening quote mark. Arial for Latin: Inter's curly quote is comparatively
+     small and light, and this is a display element rather than running text. */
+  --bp-quote-font: Arial, Helvetica, sans-serif;
+  --bp-quote-weight: 700;
+  --bp-quote-size: 3rem;
+  --bp-quote-shift: -.75rem;
 }
 
 /* --- Reclaim the classes blueprint.css hardcodes ------------------------- */
@@ -1206,6 +1236,13 @@ html { scroll-padding-top: calc(var(--bp-nav-h) + var(--bp-anchor-gap)); }
    proportional Latin, which is noticeably wider and lighter. */
 
 body.lang-ja, body.lang-jp {
+  /* Corner bracket, not a curly quote. Full-width and top-left aligned in its
+     em box, so it needs less size and a different shift than the Latin mark. */
+  --bp-quote-font: 'Noto Sans JP', sans-serif;
+  --bp-quote-weight: 700;
+  --bp-quote-size: 2.5rem;
+  --bp-quote-shift: -.25rem;
+
   --bp-sans: 'Noto Sans JP', Inter, sans-serif;
   --bp-serif: var(--bp-sans);
   --bp-serif-style: normal;
@@ -1219,6 +1256,13 @@ body.lang-ja, body.lang-jp {
 }
 
 body.lang-ko {
+  /* Korean uses the same curly marks as English for speech, so only the font
+     changes -- the corner bracket is for titles of works, not quotations. */
+  --bp-quote-font: 'Noto Sans KR', Arial, sans-serif;
+  --bp-quote-weight: 700;
+  --bp-quote-size: 3rem;
+  --bp-quote-shift: -.75rem;
+
   --bp-sans: 'Noto Sans KR', Inter, sans-serif;
   --bp-serif: var(--bp-sans);
   --bp-serif-style: normal;
