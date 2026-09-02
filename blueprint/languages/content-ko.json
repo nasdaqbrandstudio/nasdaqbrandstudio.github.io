@@ -114,7 +114,7 @@
         ],
         "quote": {
           "text": "“시장이 한층 복잡해지고 변동성 국면이 장기화되면서, 지수 옵션은 현대 포트폴리오의 핵심 구성 요소로 자리 잡았습니다.”",
-          "name": "Kevin Davitt",
+          "name": "Kevin Davitt (케빈 데빗)",
           "role": "지수 옵션 콘텐츠 총괄",
           "headshot": "headshot-kevin-davitt"
         },
@@ -185,21 +185,21 @@
       {
         "jwMedia": "hRuzYana",
         "title": "Goldman Sachs Asset Management",
-        "description": "골드만삭스자산운용과 나스닥이 경쟁이 치열한 ETF 시장에서 투자자들을 어떻게 돕는지 알아보세요. GPIQ와 같은 전략을 통해 혁신, 성장, 인컴에 대한 접근성을 넓히고 있습니다.",
+        "description": "골드만삭스 자산운용과 나스닥이 경쟁이 치열한 ETF 시장에서 투자자들을 어떻게 돕는지 알아보세요. GPIQ와 같은 전략을 통해 혁신, 성장, 인컴에 대한 접근성을 넓히고 있습니다.",
         "anchor": "cl-goldman-sachs",
         "captionTrack": null
       },
       {
         "jwMedia": "bGVFuVLb",
         "title": "Invesco",
-        "description": "QQQ부터 인컴 창출형 QQA까지, 나스닥과 인베스코가 어떻게 협력하여 전 세계 투자자에게 혁신과 접근성을 제공하는지 살펴보세요.",
+        "description": "QQQ부터 인컴 창출형 QQA까지, 나스닥과 인베스코가 어떻게 협력하여 전 세계 투자자들에게 혁신과 접근성을 제공하는지 살펴보세요.",
         "anchor": "cl-invesco",
         "captionTrack": null
       },
       {
         "jwMedia": "NUE2aZn6",
         "title": "CME 그룹",
-        "description": "CME 그룹이 나스닥 100에 대한 접근을 어떻게 대중화시키고 있는지 알아보세요. 모든 유형의 투자자들이 첨단 선물 상품을 통해 혁신에 참여할 수 있도록 지원합니다.",
+        "description": "CME 그룹이 나스닥 100에 대한 접근을 어떻게 대중화하고 있는지 알아보세요. 모든 유형의 투자자들이 첨단 선물 상품을 통해 혁신에 참여할 수 있도록 지원합니다.",
         "anchor": "cl-cme",
         "captionTrack": null
       },
