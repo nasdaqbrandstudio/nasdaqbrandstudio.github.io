@@ -5,8 +5,8 @@
   //   BLUEPRINT_BUILD          -> the version string
   //   BLUEPRINT_BUILD.features -> what that build supports
   var BUILD = {
-    version: '2026-08-19.2101',
-    features: ['languages', 'playlist-arrows', 'video-cta', 'lazy-players', 'anchors']
+    version: '2026-09-11.1100',
+    features: ['languages', 'playlist-arrows', 'video-cta', 'lazy-players', 'anchors', 'track']
   };
   window.BLUEPRINT_BUILD = BUILD;
 
@@ -123,6 +123,17 @@
   function attr(o) {
     return Object.keys(o).filter(function (k) { return o[k] != null && o[k] !== false && o[k] !== ''; })
       .map(function (k) { return k + '="' + esc(o[k]) + '"'; }).join(' ');
+  }
+
+  // Analytics hook: data-track="blueprint-<id>" on each Learn More link, so a
+  // tag manager click rule can tell identical labels apart. Visitors never see
+  // it. A "track" field on a cta or card in content.json overrides the id.
+  function trackAttr(id) {
+    return id ? ' data-track="' + esc('blueprint-' + String(id).toLowerCase()) + '"' : '';
+  }
+  function urlSlug(u) {
+    var parts = String(u || '').split(/[?#]/)[0].split('/').filter(Boolean);
+    return parts.length > 1 ? parts[parts.length - 1] : '';
   }
 
   var CFG = {};
@@ -596,9 +607,11 @@
     if (!list.length) return '';
     // Same two-part shape as the Solutions body link: label block plus arrow block.
     return '<div class="bp-vs-actions">'
-      + list.map(function (b) {
+      + list.map(function (b, i) {
           if (!b || !b.url) return '';
-          return '<a class="bp-vs-cta" href="' + esc(b.url) + '" target="_blank" rel="noopener">'
+          var base = v.anchor || v.id;
+          var track = b.track || (base ? base + (i ? '-' + (i + 1) : '') : '');
+          return '<a class="bp-vs-cta" href="' + esc(b.url) + '"' + trackAttr(track) + ' target="_blank" rel="noopener">'
             + '<span class="bp-vs-cta-label">' + richText(b.label || '') + '</span>'
             + '<span class="bp-vs-cta-arrow">'
             + '<img src="' + esc(chromeUrl('images/arrow-dark.svg')) + '" alt="" aria-hidden="true">'
@@ -900,6 +913,15 @@
       + '</div>';
   }
 
+  // Card ids are the building id plus the last part of the card's URL,
+  // e.g. megatrends-cybersecurity. Where they match, the building id alone.
+  function cardTrack(b, c) {
+    if (c.track) return c.track;
+    var slug = urlSlug(c.url);
+    if (!slug || slug === b.id) return b.id || slug;
+    return b.id ? b.id + '-' + slug : slug;
+  }
+
   function solBody(b, mobile) {
     var cards = '';
     if (b.cards && b.cards.length) {
@@ -913,7 +935,7 @@
         };
         return '<div class="sol-card">'
           + '<div class="sol-card-rest" ' + bg + '><div class="block-spacer"><div class="info-card">' + richText(c.title) + '</div></div>' + arrow(false) + '</div>'
-          + '<a href="' + esc(c.url) + '" target="_blank" rel="noopener" class="sol-card-active" ' + bg + '>'
+          + '<a href="' + esc(c.url) + '"' + trackAttr(cardTrack(b, c)) + ' target="_blank" rel="noopener" class="sol-card-active" ' + bg + '>'
           + '<div class="block-spacer"><div class="info-card">' + richText(c.title) + '</div>'
           + '<div class="info-card-details">' + richText(c.body) + '</div></div>' + arrow(true) + '</a>'
           + '</div>';
