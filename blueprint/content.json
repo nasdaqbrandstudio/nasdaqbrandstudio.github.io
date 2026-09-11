@@ -115,6 +115,8 @@
       },
       {
         "id": "liquidity-ecosystem",
+        "anchor": "tl-liquidity-ecosystem",
+        "thumbnail": "tl-liquidity-ecosystem",
         "title": "The Liquidity Ecosystem",
         "video": {
           "jwMedia": "vj8X2VKe",
@@ -131,11 +133,15 @@
           "role": "Head of Nasdaq Global Indexes, Nasdaq",
           "headshot": "headshot-emily-spurling"
         },
-        "anchor": "tl-liquidity-ecosystem",
-        "thumbnail": "tl-liquidity-ecosystem"
+        "cta": {
+          "label": "Learn More",
+          "url": "https://www.nasdaq.com/products/global-indexes/nasdaq-100"
+        }
       },
       {
         "id": "tech-driven-economy",
+        "anchor": "tl-tech-driven-economy",
+        "thumbnail": "tl-tech-economy",
         "title": "A Tech-Driven Economy",
         "video": {
           "jwMedia": "tzNuJWRB",
@@ -153,8 +159,10 @@
           "role": "Global ETF Strategy Manager, Mirae Asset Global Investments",
           "headshot": "headshot-aaron-jung"
         },
-        "anchor": "tl-tech-driven-economy",
-        "thumbnail": "tl-tech-economy"
+        "cta": {
+          "label": "Learn More",
+          "url": "https://www.nasdaq.com/products/global-indexes/thematic"
+        }
       }
     ],
     "route": "feature",
