@@ -90,6 +90,30 @@
     "backgroundImage": "blue-background",
     "features": [
       {
+        "id": "rethinking-income",
+        "anchor": "tl-rethinking-income",
+        "title": "Rethinking Income for Modern Investors",
+        "video": {
+          "jwMedia": "b2v2ED5X",
+          "title": "Inside Nasdaq-100 Index® Options",
+          "route": "@feature",
+          "captionTrack": "MciieYm1"
+        },
+        "body": [
+          "As investors increasingly seek income beyond traditional approaches, Nasdaq, Invesco, and Goldman Sachs are innovating through options-based and ETF strategies designed to help investors generate income, manage risk, and stay invested in innovation."
+        ],
+        "quote": {
+          "text": "“The Nasdaq-100® provides a great foundation for investors to build income generating portfolios.”",
+          "name": "Ben Jones",
+          "role": "Head of Americas Index Licensing, Nasdaq",
+          "headshot": "headshot-ben-jones"
+        },
+        "cta": {
+          "label": "Learn More",
+          "url": "https://www.nasdaq.com/products/global-indexes/quantitative/income-generation"
+        }
+      },
+      {
         "id": "index-options",
         "anchor": "tl-index-options",
         "title": "Building a Resilient Portfolio",
