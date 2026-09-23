@@ -5,7 +5,7 @@
   //   BLUEPRINT_BUILD          -> the version string
   //   BLUEPRINT_BUILD.features -> what that build supports
   var BUILD = {
-    version: '2026-09-23.1530',
+    version: '2026-09-23.1545',
     features: ['languages', 'playlist-arrows', 'video-cta', 'lazy-players', 'anchors', 'track', 'caption-style']
   };
   window.BLUEPRINT_BUILD = BUILD;
@@ -403,7 +403,7 @@
         captions: {
           color: '#FFFFFF',
           fontFamily: pageFont(),
-          fontSize: 14,
+          fontSize: 10,
           fontOpacity: 100,
           backgroundOpacity: 0,
           windowOpacity: 0,
