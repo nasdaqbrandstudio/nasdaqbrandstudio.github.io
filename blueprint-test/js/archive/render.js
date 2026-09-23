@@ -5,8 +5,8 @@
   //   BLUEPRINT_BUILD          -> the version string
   //   BLUEPRINT_BUILD.features -> what that build supports
   var BUILD = {
-    version: '2026-09-23.1100',
-    features: ['languages', 'playlist-arrows', 'video-cta', 'lazy-players', 'anchors', 'track', 'caption-style']
+    version: '2026-09-11.1100',
+    features: ['languages', 'playlist-arrows', 'video-cta', 'lazy-players', 'anchors', 'track']
   };
   window.BLUEPRINT_BUILD = BUILD;
 
@@ -394,20 +394,7 @@
         playlist: 'https://cdn.jwplayer.com/v2/media/' + media,
         autostart: autoplay !== false,
         width: '100%',
-        aspectratio: '16:9',
-        // Captions styled to match the Premiere text style. renderCaptionsNatively
-        // must stay false or the browser draws them and fontSize is ignored.
-        renderCaptionsNatively: false,
-        captions: {
-          color: '#FFFFFF',
-          fontFamily: 'Inter, Arial, sans-serif',
-          fontSize: 16,
-          fontOpacity: 100,
-          backgroundColor: '#000000',
-          backgroundOpacity: 75,
-          edgeStyle: 'none',
-          windowOpacity: 0
-        }
+        aspectratio: '16:9'
       });
     } catch (e) {
       host.remove();
