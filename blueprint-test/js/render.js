@@ -5,7 +5,7 @@
   //   BLUEPRINT_BUILD          -> the version string
   //   BLUEPRINT_BUILD.features -> what that build supports
   var BUILD = {
-    version: '2026-09-23.1100',
+    version: '2026-09-23.1500',
     features: ['languages', 'playlist-arrows', 'video-cta', 'lazy-players', 'anchors', 'track', 'caption-style']
   };
   window.BLUEPRINT_BUILD = BUILD;
@@ -389,24 +389,26 @@
     box.appendChild(host);
 
     var p;
+    captionWeight();
     try {
       p = window.jwplayer(host.id).setup({
         playlist: 'https://cdn.jwplayer.com/v2/media/' + media,
         autostart: autoplay !== false,
         width: '100%',
         aspectratio: '16:9',
-        // Captions styled to match the Premiere text style. renderCaptionsNatively
-        // must stay false or the browser draws them and fontSize is ignored.
+        // Captions styled to match the Premiere text style: white text, drop
+        // shadow, no box. renderCaptionsNatively must stay false or the browser
+        // draws them and fontSize is ignored.
         renderCaptionsNatively: false,
         captions: {
           color: '#FFFFFF',
-          fontFamily: 'Inter, Arial, sans-serif',
+          fontFamily: pageFont(),
           fontSize: 16,
           fontOpacity: 100,
-          backgroundColor: '#000000',
-          backgroundOpacity: 75,
-          edgeStyle: 'none',
-          windowOpacity: 0
+          backgroundOpacity: 0,
+          windowOpacity: 0,
+          edgeStyle: 'dropshadow',
+          edgeColor: '#000000'
         }
       });
     } catch (e) {
@@ -418,6 +420,22 @@
     mountedPlayer = p;
     box.classList.add('is-playing');
     mounted = box;
+  }
+
+  // Captions follow whatever font the page is using, so the JA and KO files get
+  // their own font automatically. JW has no font-weight option, so one injected
+  // rule covers the semibold weight and keeps the change inside this file.
+  function pageFont() {
+    var f = '';
+    try { f = getComputedStyle(document.body).fontFamily || ''; } catch (e) {}
+    return f || 'Inter, Arial, sans-serif';
+  }
+  function captionWeight() {
+    if (document.getElementById('bp-caption-style')) return;
+    var st = document.createElement('style');
+    st.id = 'bp-caption-style';
+    st.textContent = '.jw-text-track-display,.jw-text-track-cue{font-weight:600!important;}';
+    document.head.appendChild(st);
   }
 
   function initVideos() {
