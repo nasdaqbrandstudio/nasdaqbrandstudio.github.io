@@ -5,7 +5,7 @@
   //   BLUEPRINT_BUILD          -> the version string
   //   BLUEPRINT_BUILD.features -> what that build supports
   var BUILD = {
-    version: '2026-09-23.1500',
+    version: '2026-09-23.1530',
     features: ['languages', 'playlist-arrows', 'video-cta', 'lazy-players', 'anchors', 'track', 'caption-style']
   };
   window.BLUEPRINT_BUILD = BUILD;
@@ -403,12 +403,13 @@
         captions: {
           color: '#FFFFFF',
           fontFamily: pageFont(),
-          fontSize: 16,
+          fontSize: 14,
           fontOpacity: 100,
           backgroundOpacity: 0,
           windowOpacity: 0,
-          edgeStyle: 'dropshadow',
-          edgeColor: '#000000'
+          // Shadow comes from the injected rule below, which allows a softer,
+          // wider spread than JW's fixed dropshadow.
+          edgeStyle: 'none'
         }
       });
     } catch (e) {
@@ -423,8 +424,8 @@
   }
 
   // Captions follow whatever font the page is using, so the JA and KO files get
-  // their own font automatically. JW has no font-weight option, so one injected
-  // rule covers the semibold weight and keeps the change inside this file.
+  // their own font automatically. JW has no font-weight or shadow-spread option,
+  // so one injected rule covers both and keeps the change inside this file.
   function pageFont() {
     var f = '';
     try { f = getComputedStyle(document.body).fontFamily || ''; } catch (e) {}
@@ -434,7 +435,10 @@
     if (document.getElementById('bp-caption-style')) return;
     var st = document.createElement('style');
     st.id = 'bp-caption-style';
-    st.textContent = '.jw-text-track-display,.jw-text-track-cue{font-weight:600!important;}';
+    st.textContent = '.jw-text-track-display,.jw-text-track-cue{'
+      + 'font-weight:500!important;'
+      + 'text-shadow:0 1px 3px rgba(0,0,0,.85),0 0 10px rgba(0,0,0,.65),0 0 20px rgba(0,0,0,.45)!important;'
+      + '}';
     document.head.appendChild(st);
   }
 
