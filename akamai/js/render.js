@@ -11,7 +11,7 @@
   var SITE = 'BLUEPRINT';
   var LANG_KEY = 'bp-lang';
   var CACHE_KEY = 'bp-content-cache';
-  var BUILD_VERSION = '2026-10-01.1133';
+  var BUILD_VERSION = '2026-10-01.1149';
 
   window[SITE + '_BUILD'] = {
     version: BUILD_VERSION,
@@ -1083,7 +1083,7 @@
       overlay.addEventListener('click', activate);
       overlay.setAttribute('tabindex', '0');
       overlay.setAttribute('role', 'button');
-      overlay.setAttribute('aria-label', title || 'Play video');
+      overlay.setAttribute('aria-label', container.getAttribute('data-jw-title') || 'Play video');
       overlay.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') activate(e);
       });
