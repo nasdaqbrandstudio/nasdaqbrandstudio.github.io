@@ -1,0 +1,354 @@
+/* =============================================================================
+ * Blueprint of Tomorrow — overrides.css
+ * Every change to the export lives here. Loaded last, after blueprint.css.
+ * ============================================================================= */
+
+/* --------------------------------------------------------------------------
+ * 1. Visibility — hide container until render finishes, then reveal.
+ * -------------------------------------------------------------------------- */
+body:not(.bp-ready) .site-container {
+  visibility: hidden;
+}
+
+/* --------------------------------------------------------------------------
+ * 2. CSS custom properties — font families and nav height.
+ * -------------------------------------------------------------------------- */
+:root {
+  --bp-sans: 'Inter', sans-serif;
+  --bp-serif: 'Bitter', serif;
+  --bp-serif-style: italic;
+  --bp-nav-h: 0px;
+}
+
+/* --------------------------------------------------------------------------
+ * 3. Scroll — anchor targets land below the sticky nav.
+ * -------------------------------------------------------------------------- */
+html {
+  scroll-padding-top: var(--bp-nav-h);
+}
+
+[id] {
+  scroll-margin-top: var(--bp-nav-h);
+}
+
+/* --------------------------------------------------------------------------
+ * 4. Rich-text span classes (used by the sanitizer).
+ * -------------------------------------------------------------------------- */
+.rt-accent {
+  color: #0092BC;
+}
+
+.rt-serif {
+  font-family: var(--bp-serif);
+  font-style: var(--bp-serif-style);
+}
+
+.rt-muted {
+  opacity: 0.7;
+}
+
+.rt-light {
+  font-weight: 200;
+}
+
+.rt-nowrap {
+  white-space: nowrap;
+}
+
+.rt-eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+ * 5. Video poster overlay — play button shown before mount.
+ * -------------------------------------------------------------------------- */
+.bp-video-poster-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.15);
+  transition: background 0.2s;
+  z-index: 5;
+}
+
+.bp-video-poster-overlay:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.bp-play-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(0, 146, 188, 0.9);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.bp-video-poster-overlay:hover .bp-play-btn {
+  transform: scale(1.1);
+  background: #0092BC;
+}
+
+/* --------------------------------------------------------------------------
+ * 6. Mobile nav toggle.
+ * -------------------------------------------------------------------------- */
+.bp-nav-open {
+  display: block !important;
+}
+
+.mobile-nav-menu {
+  display: none;
+}
+
+.mobile-nav-menu.bp-nav-open {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  z-index: 100;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* --------------------------------------------------------------------------
+ * 7. Language switcher menu.
+ * -------------------------------------------------------------------------- */
+.bp-lang-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 0.25rem;
+  min-width: 160px;
+  z-index: 100;
+  padding: 0.5rem 0;
+}
+
+.bp-lang-menu.bp-hidden {
+  display: none;
+}
+
+.bp-lang-link {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: #333;
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: background 0.15s;
+}
+
+.bp-lang-link:hover {
+  background: #f5f5f5;
+}
+
+.bp-lang-link.active {
+  color: #0092BC;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+ * 8. See More / See Less hidden items.
+ * -------------------------------------------------------------------------- */
+.bp-hidden {
+  display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+ * 9. Menu arrow SVG fill.
+ * -------------------------------------------------------------------------- */
+.menu-arrow svg {
+  fill: currentColor;
+}
+
+/* --------------------------------------------------------------------------
+ * 10. Background video controls hidden.
+ * -------------------------------------------------------------------------- */
+.background-video {
+  pointer-events: none !important;
+}
+
+.background-video::-webkit-media-controls,
+.background-video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+ * 11. Headline container pointer events.
+ * -------------------------------------------------------------------------- */
+.headline-container-2 {
+  pointer-events: none;
+}
+
+.headline-container-2 .interactive-child {
+  pointer-events: auto;
+}
+
+/* --------------------------------------------------------------------------
+ * 12. Navigation link styling overrides (from export head).
+ * -------------------------------------------------------------------------- */
+.mnav-thought-leadership,
+.mnav-client-spotlights,
+.mnav-solutions {
+  color: #9e9e9e !important;
+}
+
+.mnav-thought-leadership:hover,
+.mnav-thought-leadership:focus,
+.mnav-thought-leadership:active,
+.mnav-thought-leadership.w--current,
+.mnav-client-spotlights:hover,
+.mnav-client-spotlights:focus,
+.mnav-client-spotlights:active,
+.mnav-client-spotlights.w--current,
+.mnav-solutions:hover,
+.mnav-solutions:focus,
+.mnav-solutions:active,
+.mnav-solutions.w--current {
+  color: #0092BC !important;
+}
+
+/* --------------------------------------------------------------------------
+ * 13. Hero video containers — hidden initially (from export head style).
+ * -------------------------------------------------------------------------- */
+.hero-container,
+.hero-container-mobile,
+.hero-embed-body {
+  opacity: 0;
+}
+
+body.bp-ready .hero-container,
+body.bp-ready .hero-container-mobile,
+body.bp-ready .hero-embed-body {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+/* --------------------------------------------------------------------------
+ * 14. Playlist item active state.
+ * -------------------------------------------------------------------------- */
+.playlist-item {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.playlist-item:not(.active) {
+  opacity: 0.6;
+}
+
+.playlist-item:hover {
+  opacity: 1;
+}
+
+.now-playing-badge {
+  font-size: 0.75rem;
+  color: #0092BC;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+/* --------------------------------------------------------------------------
+ * 15. CJK font overrides — Japanese.
+ * -------------------------------------------------------------------------- */
+body.lang-ja {
+  --bp-sans: 'Noto Sans JP', 'Inter', sans-serif;
+  --bp-serif: 'Noto Sans JP', 'Inter', sans-serif;
+  --bp-serif-style: normal;
+}
+
+body.lang-ja .rt-serif,
+body.lang-ja .headline-1,
+body.lang-ja .text-span-2 {
+  font-family: var(--bp-serif);
+  font-style: normal;
+  font-weight: 700;
+}
+
+body.lang-ja .heading,
+body.lang-ja .heading-2,
+body.lang-ja .cs-headline,
+body.lang-ja .solutions-headline,
+body.lang-ja .tl-headline {
+  font-family: var(--bp-sans);
+  line-height: 1.3;
+}
+
+body.lang-ja .head-paragraph,
+body.lang-ja .paragraph,
+body.lang-ja .tl-intro,
+body.lang-ja .first-line,
+body.lang-ja p {
+  font-family: var(--bp-sans);
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+body.lang-ja .category,
+body.lang-ja .nav-thought-leadership,
+body.lang-ja .nav-client-spotlights,
+body.lang-ja .nav-solutions,
+body.lang-ja .mnav-thought-leadership,
+body.lang-ja .mnav-client-spotlights,
+body.lang-ja .mnav-solutions {
+  font-family: var(--bp-sans);
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+ * 16. CJK font overrides — Korean.
+ * -------------------------------------------------------------------------- */
+body.lang-ko {
+  --bp-sans: 'Noto Sans KR', 'Inter', sans-serif;
+  --bp-serif: 'Noto Sans KR', 'Inter', sans-serif;
+  --bp-serif-style: normal;
+}
+
+body.lang-ko .rt-serif,
+body.lang-ko .headline-1,
+body.lang-ko .text-span-2 {
+  font-family: var(--bp-serif);
+  font-style: normal;
+  font-weight: 700;
+}
+
+body.lang-ko .heading,
+body.lang-ko .heading-2,
+body.lang-ko .cs-headline,
+body.lang-ko .solutions-headline,
+body.lang-ko .tl-headline {
+  font-family: var(--bp-sans);
+  line-height: 1.3;
+}
+
+body.lang-ko .head-paragraph,
+body.lang-ko .paragraph,
+body.lang-ko .tl-intro,
+body.lang-ko .first-line,
+body.lang-ko p {
+  font-family: var(--bp-sans);
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+body.lang-ko .category,
+body.lang-ko .nav-thought-leadership,
+body.lang-ko .nav-client-spotlights,
+body.lang-ko .nav-solutions,
+body.lang-ko .mnav-thought-leadership,
+body.lang-ko .mnav-client-spotlights,
+body.lang-ko .mnav-solutions {
+  font-family: var(--bp-sans);
+  font-weight: 500;
+}
