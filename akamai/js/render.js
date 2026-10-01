@@ -11,7 +11,7 @@
   var SITE = 'BLUEPRINT';
   var LANG_KEY = 'bp-lang';
   var CACHE_KEY = 'bp-content-cache';
-  var BUILD_VERSION = '2026-10-01.1149';
+  var BUILD_VERSION = '2026-10-01.1200';
 
   window[SITE + '_BUILD'] = {
     version: BUILD_VERSION,
