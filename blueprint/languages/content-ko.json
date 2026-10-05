@@ -100,6 +100,29 @@
     "backgroundImage": "blue-background",
     "features": [
       {
+        "id": "rethinking-income",
+        "anchor": "tl-rethinking-income",
+        "title": "현대 투자자를 위한 소득 전략의 재정의",
+        "video": {
+          "jwMedia": "b2v2ED5X",
+          "title": "나스닥-100 지수® 옵션 심층 분석",
+          "route": "@feature",
+          "captionTrack": "koM0mqu3"
+        },
+        "body": [
+          "전통적인 방식을 넘어 소득을 추구하는 투자자가 늘어나면서, 나스닥과 인베스코, 골드만삭스는 투자자가 소득을 창출하고 리스크를 관리하며 혁신에 대한 투자를 유지할 수 있도록 옵션 기반 전략과 ETF 전략을 통해 혁신을 이어가고 있습니다."
+        ],
+        "quote": {
+          "text": "“나스닥-100®은 투자자가 소득 창출형 포트폴리오를 구축할 수 있는 훌륭한 기반을 제공합니다.”",
+          "name": "벤 존스",
+          "role": "나스닥 미주 지수 라이선싱 총괄",
+          "headshot": "headshot-ben-jones"
+        },
+        "cta": {
+          "label": "자세히 보기",
+          "url": "https://www.nasdaq.com/products/global-indexes/quantitative/income-generation"
+        }
+      },{
         "id": "index-options",
         "anchor": "tl-index-options",
         "title": "견고한 포트폴리오 구축",
