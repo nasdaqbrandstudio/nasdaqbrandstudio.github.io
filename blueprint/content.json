@@ -560,11 +560,6 @@
           "label": "Legal",
           "url": "https://www.nasdaq.com/legal",
           "muted": true
-        },
-        {
-          "label": "Cookie Settings",
-          "url": "https://www.nasdaq.com/",
-          "muted": true
         }
       ]
     ],
