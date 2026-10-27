@@ -1,0 +1,30 @@
+{
+  "pages": {
+    "/products/global-indexes/thematic": {
+      "settings": {
+        "live": true,
+        "player": "UINd0LJW",
+        "otherLanguages": "hide",
+        "cardBackground": "auto",
+        "startMuted": true,
+        "maxWidth": 1400,
+        "headroom": 120
+      },
+      "videos": {
+        "en": {
+          "media": "Gb69E1PM",
+          "title": "Blueprint of Tomorrow | Client Spotlight: Xtrackers DAM",
+          "description": "",
+          "cta": { "text": "Learn More", "url": "https://www.nasdaq.com/campaign/global-indexes/blueprint-of-tomorrow/", "newTab": true }
+        },
+        "de": {
+          "media": "W6okbmtA",
+          "title": "Blueprint of Tomorrow | Kunden im Fokus: Xtrackers DAM",
+          "description": "",
+          "cta": { "text": "Mehr erfahren", "url": "https://www.nasdaq.com/campaign/global-indexes/blueprint-of-tomorrow/", "newTab": true }
+        }
+      }
+    },
+    "/locale-video-test": "/products/global-indexes/thematic"
+  }
+}
