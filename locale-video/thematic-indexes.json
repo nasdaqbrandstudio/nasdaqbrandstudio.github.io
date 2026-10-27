@@ -1,6 +1,6 @@
 {
   "settings": {
-    "live": false,
+    "live": true,
     "otherLanguages": "hide",
     "cardBackground": "auto",
     "startMuted": true,
