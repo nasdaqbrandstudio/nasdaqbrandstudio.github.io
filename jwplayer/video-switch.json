@@ -2,7 +2,7 @@
   "pages": {
     "/products/global-indexes/thematic": {
       "settings": {
-        "live": true,
+        "live": false,
         "player": "UINd0LJW",
         "otherLanguages": "hide",
         "cardBackground": "auto",
