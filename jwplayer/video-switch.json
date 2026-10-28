@@ -2,13 +2,16 @@
   "pages": {
     "/products/global-indexes/thematic": {
       "settings": {
-        "live": false,
+        "live": true,
         "player": "UINd0LJW",
         "otherLanguages": "hide",
         "cardBackground": "auto",
         "startMuted": true,
         "maxWidth": 1400,
-        "headroom": 120
+        "padding": {
+          "topBottom": { "desktop": 36, "tablet": 24, "phone": 24 },
+          "sides":     { "desktop": 0,  "tablet": 0,  "phone": 0 }
+        }
       },
       "videos": {
         "en": {
