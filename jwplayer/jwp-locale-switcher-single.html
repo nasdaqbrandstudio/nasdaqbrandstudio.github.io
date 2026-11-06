@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Locale Video</title>
+<style>
+  @font-face { font-family: Inter; font-weight: 400; font-display: swap;
+    src: url(/themes/custom/nsdq_mercury/dist_mercury/assets/fonts/Inter.woff2) format("woff2"),
+         url(/themes/custom/nsdq_mercury/dist_mercury/assets/fonts/inter/Inter-Regular.woff) format("woff"); }
+  @font-face { font-family: Inter; font-weight: 600; font-display: swap;
+    src: url(/themes/custom/nsdq_mercury/dist_mercury/assets/fonts/Inter.woff2) format("woff2"),
+         url(/themes/custom/nsdq_mercury/dist_mercury/assets/fonts/inter/Inter-SemiBold.woff) format("woff"); }
+
+  :root, .nef-light { --card-bg: #fafafa; --card-border: #e6e6e6; --title: #171717; --desc: #3d3d3d; --link: #6f46ce; }
+  .nef-dark         { --card-bg: #181e33; --card-border: #2b3d6c; --title: #ffffff; --desc: #e6e9f5; --link: #b79bf7; }
+
+  html, body { margin: 0; background: transparent; overflow: hidden; }
+  body { font-family: Inter, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  [hidden] { display: none !important; }
+
+  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; overflow: hidden; }
+  .card__media { aspect-ratio: 16 / 9; background: #000; }
+  .card__body { padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .card__title { margin: 0; font-size: 24px; line-height: 28px; font-weight: 600; color: var(--title); }
+  .card__desc { margin: 0; font-size: 16px; line-height: 24px; color: var(--desc); }
+  .card__footer { border-top: 1px solid var(--card-border); padding: 8px 16px; }
+  .card__cta { display: inline-flex; align-items: center; gap: 6px; font-size: 16px; line-height: 24px; font-weight: 600; color: var(--link); text-decoration: none; }
+  .card__cta:hover { text-decoration: underline; }
+  .card__cta svg { width: 16px; height: 16px; }
+
+  /* Shown only to CMS editors, never to site visitors */
+  .placeholder { aspect-ratio: 16 / 9; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 24px; text-align: center;
+    background: #f3f4f9; border: 2px dashed #4d8fd4; }
+  .placeholder strong { display: flex; align-items: center; gap: 12px; font-size: 18px; line-height: 24px; font-weight: 600; color: #1335aa; }
+  .placeholder svg { width: 22px; height: 22px; fill: #787878; flex: none; }
+  .placeholder span { font-size: 15px; line-height: 22px; color: #5d5d5d; }
+
+</style>
+</head>
+<body>
+
+<div id="wrap">
+<div class="placeholder" id="placeholder" hidden>
+  <strong><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Video Switch Preview</strong>
+  <span id="placeholder-text"></span>
+</div>
+<article class="card" id="card" hidden>
+  <div class="card__media"><div id="player"></div></div>
+  <div class="card__body" id="body" hidden>
+    <h3 class="card__title" id="title" hidden></h3>
+    <p class="card__desc" id="desc" hidden></p>
+  </div>
+  <div class="card__footer" id="footer" hidden>
+    <a class="card__cta" id="cta">
+      <span id="cta-text"></span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.01 11H4v2h12.01v3L20 12l-3.99-4v3z"/></svg>
+    </a>
+  </div>
+</article>
+</div>
+
+<script>
+(function () {
+  var CONTENT_URL = "https://nasdaqbrandstudio.github.io/jwplayer/video-switch.json";
+  var LOCALE = /^\/([a-z]{2})-[a-z]{2}(?=\/|$)/i;
+  var frame = null;
+  try { frame = window.frameElement; } catch (e) {}
+
+  var $ = function (id) { return document.getElementById(id); };
+  // Parent page URL path: from the page itself, or the referrer if blocked
+  function parentPath() {
+    try { return parent.location.pathname; }
+    catch (e) { try { return new URL(document.referrer).pathname; } catch (e2) { return "/"; } }
+  }
+
+  // Language: /xx-xx/ prefix, then <html lang>
+  function getLang(path) {
+    var m = path.match(LOCALE);
+    if (m) return m[1].toLowerCase();
+    try { var hl = parent.document.documentElement.lang; if (hl) return hl.slice(0, 2).toLowerCase(); } catch (e) {}
+    return "en";
+  }
+
+  // Page key for video-switch.json: path without the locale prefix or trailing slash
+  function pageKey(path) {
+    return (path.replace(LOCALE, "").replace(/\/+$/, "") || "/").toLowerCase();
+  }
+
+  // Card colors from the CMS section the iframe sits in
+  function applyColors(mode) {
+    var root = document.documentElement;
+    var map = {
+      "--card-bg":     ["--block-background-color", "--nef-semantic-color-background-xsubtle"],
+      "--card-border": ["--nef-semantic-color-border-subtle"],
+      "--title":       ["--nef-semantic-color-content-default"],
+      "--desc":        ["--nef-semantic-color-content-subtle"],
+      "--link":        ["--nef-semantic-color-content-brand-clickable"]
+    };
+    try {
+      var theme = frame.closest(".nef-dark, .nef-light");
+      if (theme) root.className = theme.classList.contains("nef-dark") ? "nef-dark" : "nef-light";
+      var cs = parent.getComputedStyle(frame);
+      Object.keys(map).forEach(function (mine) {
+        map[mine].some(function (token) {
+          var v = cs.getPropertyValue(token).trim();
+          if (v && (v !== "transparent" || token === "--block-background-color")) { root.style.setProperty(mine, v); return true; }
+        });
+      });
+    } catch (e) {}
+    if (mode === "none") { root.style.setProperty("--card-bg", "transparent"); root.style.setProperty("--card-border", "transparent"); }
+    else if (mode && mode !== "auto") root.style.setProperty("--card-bg", mode);
+  }
+
+  // Padding for the current breakpoint (nasdaq.com's: phone <= 768, tablet <= 1024).
+  // A value is one size for every breakpoint, or { desktop, tablet, phone }.
+  // A size is a number (px) or any CSS length: "2rem", "5%", "24px".
+  function byBreakpoint(v) {
+    if (v && typeof v === "object") {
+      var w = 1440;
+      try { w = parent.innerWidth; } catch (e) {}
+      v = w <= 768 ? v.phone : w <= 1024 ? v.tablet : v.desktop;
+    }
+    if (v == null || v === "") return "0";
+    return typeof v === "number" ? v + "px" : String(v);
+  }
+
+  // Iframe size: full width of the CMS container up to maxWidth, 16:9 video,
+  // plus the text below and the top/bottom padding
+  function sizeFrame(settings) {
+    var wrap = $("wrap");
+    function fitWidth() {
+      var pad = settings.padding || {};
+      wrap.style.padding = byBreakpoint(pad.topBottom) + " " + byBreakpoint(pad.sides);
+      if (!frame) return;
+      var cs = getComputedStyle(wrap);
+      var padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+      var s = frame.style;
+      s.setProperty("display", "block", "important");
+      s.setProperty("width", "100%", "important");
+      s.setProperty("max-width", Math.round(settings.maxWidth + padX) + "px", "important");
+      s.setProperty("margin", "0 auto", "important");
+      s.setProperty("border", "0", "important");
+    }
+    function fitHeight() {
+      var h = Math.ceil(wrap.getBoundingClientRect().height);
+      if (h && frame) frame.style.setProperty("height", h + "px", "important");
+    }
+    try {
+      fitWidth(); fitHeight();
+      parent.addEventListener("resize", function () { fitWidth(); fitHeight(); });
+      new ResizeObserver(fitHeight).observe(wrap);
+    } catch (e) {}
+  }
+
+  // Same dataLayer events as nasdaq.com's own JW players
+  function trackPlayer(p) {
+    var dl;
+    try { dl = parent.dataLayer = parent.dataLayer || []; } catch (e) { return; }
+    function push(event, interaction) {
+      var item = p.getPlaylistItem() || {};
+      dl.push({
+        event: event, jwp_player_id: p.id, jwp_video_name: item.title || "not set",
+        jwp_interaction: interaction, jwp_video_url: item.file,
+        jwp_duration: p.getDuration(), jwp_width: p.getWidth(), jwp_height: p.getHeight(),
+        jwp_position: p.getPosition(), jwp_volume: p.getVolume(), jwp_player_type: p.renderingMode,
+        jwp_resolutions: [].map.call(p.getQualityLevels() || [], function (q) { return q.label; })
+      });
+    }
+    p.on("setupError", function (e) { push("setup-error", e.message); });
+    p.on("play",       function () { push("playback-play", p.getPosition() < 2 ? "Play" : "Resume"); });
+    p.on("pause",      function () { push("playback-pause", "Pause"); });
+    p.on("complete",   function () { push("playback-complete", "Complete"); });
+    p.on("error",      function (e) { push("playback-error", e.message); });
+    p.on("seek",       function () { push("playback-seek", "Seek"); });
+  }
+
+  // CMS editors: the edit screen (a /node/123 path, an admin path, or a parent page we
+  // can't read) or the Drupal admin toolbar on a live page
+  function inEditorPath() {
+    try {
+      // Editor previews that render from a temporary address (blob:, about:srcdoc)
+      if (!/^https?:$/.test(parent.location.protocol)) return true;
+      return /^\/(node|admin|layout_builder|batch)(\/|$)/.test(parent.location.pathname);
+    } catch (e) { return true; }
+  }
+  function inEditor() {
+    if (inEditorPath()) return true;
+    try { return !!parent.document.getElementById("toolbar-administration"); } catch (e) { return true; }
+  }
+
+  // Visitors see nothing. Editors see a labeled box saying why.
+  function hide(reason) {
+    if (inEditor()) {
+      $("placeholder-text").textContent = typeof reason === "string" ? reason
+        : "The video set for this page will appear here on the live site.";
+      $("placeholder").hidden = false;
+      $("card").hidden = true;
+      sizeFrame({ maxWidth: 1400 });
+      return;
+    }
+    if (frame) frame.style.setProperty("display", "none", "important");
+  }
+
+  function render(data) {
+    // Find this page's entry. A string entry points to another page's entry.
+    var key = pageKey(parentPath());
+    var pages = data.pages || {};
+    var page = pages[key];
+    if (typeof page === "string") page = pages[page];
+    if (!page) return hide(inEditorPath() ? null : "Hidden here: no video is set for this page.");
+
+    // Settings: built-in defaults < page "settings" < language "settings"
+    var settings = Object.assign({
+      live: true, player: "UINd0LJW", otherLanguages: "hide", cardBackground: "auto",
+      startMuted: true, maxWidth: 1400, padding: {}
+    }, page.settings);
+
+    data = page;
+    var detected = getLang(parentPath());
+    var lang = data.videos[detected] ? detected
+             : settings.otherLanguages && settings.otherLanguages !== "hide" && data.videos[settings.otherLanguages] ? settings.otherLanguages
+             : null;
+    if (!lang) return hide("Hidden here: no video is set for this language (" + detected + ").");
+
+    var v = data.videos[lang];
+    settings = Object.assign(settings, v.settings);
+    if (settings.live === false) return hide("Hidden here: this video isn't live yet.");
+    document.documentElement.lang = lang;
+    applyColors(settings.cardBackground || "auto");
+
+    if (v.title)       { $("title").textContent = v.title; $("title").hidden = false; }
+    if (v.description) { $("desc").textContent = v.description; $("desc").hidden = false; }
+    $("body").hidden = !(v.title || v.description);
+    if (v.cta && v.cta.text && v.cta.url) {
+      $("cta").href = v.cta.url;
+      $("cta").target = v.cta.newTab === false ? "_top" : "_blank";
+      $("cta").rel = "noopener";
+      $("cta-text").textContent = v.cta.text;
+      $("footer").hidden = false;
+    }
+    $("card").hidden = false;
+    sizeFrame(settings);
+
+    var playerId = settings.player || "UINd0LJW";
+    var lib = document.createElement("script");
+    lib.src = "https://cdn.jwplayer.com/libraries/" + playerId + ".js";
+    lib.onload = function () { startPlayer(v, settings); };
+    document.head.appendChild(lib);
+  }
+
+  function startPlayer(v, settings) {
+    try {
+      var player = jwplayer("player").setup({
+        playlist: "https://cdn.jwplayer.com/v2/media/" + v.media,
+        width: "100%",
+        aspectratio: "16:9",
+        mute: settings.startMuted !== false
+      });
+      trackPlayer(player);
+    } catch (e) {}
+  }
+
+  fetch(CONTENT_URL, { cache: "no-cache" })
+    .then(function (r) { if (!r.ok) throw new Error("video-switch.json " + r.status); return r.json(); })
+    .then(render)
+    .catch(function () { hide("The video settings couldn't be loaded."); });
+})();
+</script>
+</body>
+</html>

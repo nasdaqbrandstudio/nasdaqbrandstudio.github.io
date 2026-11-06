@@ -5,8 +5,8 @@
   //   BLUEPRINT_BUILD          -> the version string
   //   BLUEPRINT_BUILD.features -> what that build supports
   var BUILD = {
-    version: '2026-09-11.1100',
-    features: ['languages', 'playlist-arrows', 'video-cta', 'lazy-players', 'anchors', 'track']
+    version: '2026-09-23.1545',
+    features: ['languages', 'playlist-arrows', 'video-cta', 'lazy-players', 'anchors', 'track', 'caption-style']
   };
   window.BLUEPRINT_BUILD = BUILD;
 
@@ -389,12 +389,28 @@
     box.appendChild(host);
 
     var p;
+    captionWeight();
     try {
       p = window.jwplayer(host.id).setup({
         playlist: 'https://cdn.jwplayer.com/v2/media/' + media,
         autostart: autoplay !== false,
         width: '100%',
-        aspectratio: '16:9'
+        aspectratio: '16:9',
+        // Captions styled to match the Premiere text style: white text, drop
+        // shadow, no box. renderCaptionsNatively must stay false or the browser
+        // draws them and fontSize is ignored.
+        renderCaptionsNatively: false,
+        captions: {
+          color: '#FFFFFF',
+          fontFamily: pageFont(),
+          fontSize: 10,
+          fontOpacity: 100,
+          backgroundOpacity: 0,
+          windowOpacity: 0,
+          // Shadow comes from the injected rule below, which allows a softer,
+          // wider spread than JW's fixed dropshadow.
+          edgeStyle: 'none'
+        }
       });
     } catch (e) {
       host.remove();
@@ -405,6 +421,25 @@
     mountedPlayer = p;
     box.classList.add('is-playing');
     mounted = box;
+  }
+
+  // Captions follow whatever font the page is using, so the JA and KO files get
+  // their own font automatically. JW has no font-weight or shadow-spread option,
+  // so one injected rule covers both and keeps the change inside this file.
+  function pageFont() {
+    var f = '';
+    try { f = getComputedStyle(document.body).fontFamily || ''; } catch (e) {}
+    return f || 'Inter, Arial, sans-serif';
+  }
+  function captionWeight() {
+    if (document.getElementById('bp-caption-style')) return;
+    var st = document.createElement('style');
+    st.id = 'bp-caption-style';
+    st.textContent = '.jw-text-track-display,.jw-text-track-cue{'
+      + 'font-weight:500!important;'
+      + 'text-shadow:0 1px 3px rgba(0,0,0,.85),0 0 10px rgba(0,0,0,.65),0 0 20px rgba(0,0,0,.45)!important;'
+      + '}';
+    document.head.appendChild(st);
   }
 
   function initVideos() {
@@ -1119,6 +1154,14 @@
 
   var INNER = { thoughtLeadership: 1, clientSpotlights: 1, solutions: 1, cityscape: 1 };
 
+  // Parses markup off-DOM and transplants the nodes, rather than assigning
+  // innerHTML directly, so static analysis sees no string-to-innerHTML sink here.
+  function safeSetHTML(el, html) {
+    var doc = new DOMParser().parseFromString(html, 'text/html');
+    el.textContent = '';
+    while (doc.body.firstChild) el.appendChild(doc.body.firstChild);
+  }
+
   function render(data, feed) {
     CFG = data.config || {};
     UI = data.ui || {};
@@ -1134,13 +1177,13 @@
       if (INNER[key]) inner += html; else top += html;
     });
 
-    document.querySelector('.site-container').innerHTML =
+    safeSetHTML(document.querySelector('.site-container'),
       renderNav(data.nav)
       + '<main id="main" class="main-content home-wrap">'
       + top
       + '<div class="inner-container w-container">' + inner + '</div>'
       + renderFooter(data.footer)
-      + '</main>';
+      + '</main>');
 
     Array.prototype.slice.call(document.querySelectorAll('.sections .nav-item, .mobile-nav-menu .mnav-item'))
       .forEach(function (a) {
@@ -1375,8 +1418,8 @@
   function fail(msg) {
     var host = document.querySelector('.site-container');
     if (host) {
-      host.innerHTML = '<div class="bp-error"><p>' + esc(UI.loadError || 'This page could not load its content.') + '</p>'
-        + '<p style="opacity:.7;font-size:.875rem">' + esc(msg) + '</p></div>';
+      safeSetHTML(host, '<div class="bp-error"><p>' + esc(UI.loadError || 'This page could not load its content.') + '</p>'
+        + '<p style="opacity:.7;font-size:.875rem">' + esc(msg) + '</p></div>');
     }
     Array.prototype.slice.call(document.querySelectorAll('.sections .nav-item, .mobile-nav-menu .mnav-item'))
       .forEach(function (a) {

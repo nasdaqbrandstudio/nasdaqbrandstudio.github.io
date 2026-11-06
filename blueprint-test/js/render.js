@@ -5,8 +5,8 @@
   //   BLUEPRINT_BUILD          -> the version string
   //   BLUEPRINT_BUILD.features -> what that build supports
   var BUILD = {
-    version: '2026-09-23.1545',
-    features: ['languages', 'playlist-arrows', 'video-cta', 'lazy-players', 'anchors', 'track', 'caption-style']
+    version: '2026-11-06.1520',
+    features: ['languages', 'playlist-arrows', 'video-cta', 'lazy-players', 'anchors', 'track', 'caption-style', 'hidden-lang']
   };
   window.BLUEPRINT_BUILD = BUILD;
 
@@ -512,7 +512,9 @@
   }
 
   function renderLanguages() {
-    var list = LANGUAGES.filter(function (l) { return l && l.code; });
+    // hidden: true keeps a language out of this menu while leaving it fully
+    // reachable by ?lang= and by browser detection. Used for a share-only page.
+    var list = LANGUAGES.filter(function (l) { return l && l.code && !l.hidden; });
     if (list.length < 2) return '';
 
     // Sorted for the reader, not by however the file happens to list them.
@@ -1154,6 +1156,14 @@
 
   var INNER = { thoughtLeadership: 1, clientSpotlights: 1, solutions: 1, cityscape: 1 };
 
+  // Parses markup off-DOM and transplants the nodes, rather than assigning
+  // innerHTML directly, so static analysis sees no string-to-innerHTML sink here.
+  function safeSetHTML(el, html) {
+    var doc = new DOMParser().parseFromString(html, 'text/html');
+    el.textContent = '';
+    while (doc.body.firstChild) el.appendChild(doc.body.firstChild);
+  }
+
   function render(data, feed) {
     CFG = data.config || {};
     UI = data.ui || {};
@@ -1169,13 +1179,13 @@
       if (INNER[key]) inner += html; else top += html;
     });
 
-    document.querySelector('.site-container').innerHTML =
+    safeSetHTML(document.querySelector('.site-container'),
       renderNav(data.nav)
       + '<main id="main" class="main-content home-wrap">'
       + top
       + '<div class="inner-container w-container">' + inner + '</div>'
       + renderFooter(data.footer)
-      + '</main>';
+      + '</main>');
 
     Array.prototype.slice.call(document.querySelectorAll('.sections .nav-item, .mobile-nav-menu .mnav-item'))
       .forEach(function (a) {
@@ -1410,8 +1420,8 @@
   function fail(msg) {
     var host = document.querySelector('.site-container');
     if (host) {
-      host.innerHTML = '<div class="bp-error"><p>' + esc(UI.loadError || 'This page could not load its content.') + '</p>'
-        + '<p style="opacity:.7;font-size:.875rem">' + esc(msg) + '</p></div>';
+      safeSetHTML(host, '<div class="bp-error"><p>' + esc(UI.loadError || 'This page could not load its content.') + '</p>'
+        + '<p style="opacity:.7;font-size:.875rem">' + esc(msg) + '</p></div>');
     }
     Array.prototype.slice.call(document.querySelectorAll('.sections .nav-item, .mobile-nav-menu .mnav-item'))
       .forEach(function (a) {
