@@ -4,6 +4,7 @@
   "languages": [
     { "code": "en", "label": "EN", "name": "EN | English",  "content": "content.json" },
     { "code": "ja", "label": "JA", "name": "JA | 日本語",    "content": "languages/content-ja.json" },
-    { "code": "ko", "label": "KO", "name": "KO | 한국어",    "content": "languages/content-ko.json" }
+    { "code": "ko", "label": "KO", "name": "KO | 한국어",    "content": "languages/content-ko.json" },
+    { "code": "de", "label": "DE", "name": "DE | Deutsch", "content": "languages/content-de.json", "hidden": true }
   ]
 }
