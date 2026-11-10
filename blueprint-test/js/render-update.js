@@ -5,7 +5,7 @@
   //   BLUEPRINT_BUILD          -> the version string
   //   BLUEPRINT_BUILD.features -> what that build supports
   var BUILD = {
-    version: '2026-11-06.1520',
+    version: '2026-11-06.1610',
     features: ['languages', 'playlist-arrows', 'video-cta', 'lazy-players', 'anchors', 'track', 'caption-style', 'hidden-lang']
   };
   window.BLUEPRINT_BUILD = BUILD;
@@ -58,6 +58,26 @@
   // discarded so resolution carries on to the next source instead of sticking.
   function knownLanguage(code) {
     return !!code && LANGUAGES.some(function (l) { return l.code === code; });
+  }
+
+  // A hidden language stays out of the menu until this browser has actually
+  // landed on it. After that it is listed like any other, so a visitor who
+  // switches to English still has a way back. One code per browser, kept
+  // separate from LANG_STORE because that one is overwritten on every switch.
+  var LANG_SEEN = 'bp-lang-seen';
+  function seenLanguages() {
+    try { return (localStorage.getItem(LANG_SEEN) || '').split(',').filter(Boolean); } catch (e) { return []; }
+  }
+  function rememberSeen(code) {
+    if (!code) return;
+    var list = seenLanguages();
+    if (list.indexOf(code) > -1) return;
+    list.push(code);
+    try { localStorage.setItem(LANG_SEEN, list.join(',')); } catch (e) {}
+  }
+  function hiddenLanguage(code) {
+    var hit = LANGUAGES.filter(function (l) { return l.code === code; })[0];
+    return !!(hit && hit.hidden);
   }
 
   var CONTENT_URL = (function () {
@@ -512,9 +532,15 @@
   }
 
   function renderLanguages() {
-    // hidden: true keeps a language out of this menu while leaving it fully
-    // reachable by ?lang= and by browser detection. Used for a share-only page.
-    var list = LANGUAGES.filter(function (l) { return l && l.code && !l.hidden; });
+    // hidden: true keeps a language out of this menu until the visitor is on it
+    // or has been on it before. Reachable by ?lang= and by browser detection
+    // either way. Used for a page that is only partly translated.
+    var current = LANG || LANG_DEFAULT || '';
+    var revealed = seenLanguages();
+    var list = LANGUAGES.filter(function (l) {
+      if (!l || !l.code) return false;
+      return !l.hidden || l.code === current || revealed.indexOf(l.code) > -1;
+    });
     if (list.length < 2) return '';
 
     // Sorted for the reader, not by however the file happens to list them.
@@ -522,7 +548,7 @@
     list = list.slice().sort(function (a, b) {
       return languageLabel(a).localeCompare(languageLabel(b), undefined, { sensitivity: 'base' });
     });
-    var current = LANG || LANG_DEFAULT || list[0].code;
+    if (!current) current = list[0].code;
     var active = list.filter(function (l) { return l.code === current; })[0] || list[0];
 
     // A badge that opens a menu: the footprint stays one chip however many
@@ -1504,6 +1530,10 @@
             }
           }
         }
+
+        // Landing on a hidden language -- by link or by detection -- is what
+        // puts it in this browser's menu from here on.
+        if (LANG && hiddenLanguage(LANG)) rememberSeen(LANG);
 
         // Keep the URL honest. Without this a visitor whose browser asks for
         // Spanish gets Spanish at the bare root -- no ?lang=es -- so the address
